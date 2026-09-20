@@ -1,0 +1,77 @@
+import { BRAND, siteUrl } from "@/lib/brand";
+import { stripHtml } from "@/lib/utils";
+import type { Locale } from "@/i18n/messages";
+
+/** Renders a <script type="application/ld+json"> block. */
+export function JsonLd({ data }: { data: Record<string, unknown> }) {
+  return (
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }} />
+  );
+}
+
+export function organizationLd() {
+  const base = siteUrl();
+  return {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: BRAND.name,
+    url: base,
+    logo: `${base}/icon.svg`,
+    email: BRAND.email,
+    areaServed: "CA",
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: "Montréal",
+      addressRegion: "QC",
+      addressCountry: "CA",
+    },
+  };
+}
+
+export function productLd(
+  p: {
+    slug: string;
+    nameEn: string;
+    nameFr: string;
+    descriptionEn: string | null;
+    descriptionFr: string | null;
+    priceCents: number;
+    images: string[];
+  },
+  locale: Locale = "en",
+) {
+  const base = siteUrl();
+  const name = locale === "fr" ? p.nameFr : p.nameEn;
+  const desc = locale === "fr" ? p.descriptionFr : p.descriptionEn;
+  return {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name,
+    description: stripHtml(desc ?? "").slice(0, 400),
+    image: p.images.map((i) => (i.startsWith("http") ? i : `${base}${i}`)),
+    brand: { "@type": "Brand", name: BRAND.name },
+    offers: {
+      "@type": "Offer",
+      url: `${base}/shop/${p.slug}`,
+      priceCurrency: "CAD",
+      price: (p.priceCents / 100).toFixed(2),
+      availability: "https://schema.org/InStock",
+      shippingDetails: {
+        "@type": "OfferShippingDetails",
+        shippingDestination: { "@type": "DefinedRegion", addressCountry: "CA" },
+      },
+    },
+  };
+}
+
+export function faqLd(items: { q: string; a: string }[]) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: items.map((i) => ({
+      "@type": "Question",
+      name: i.q,
+      acceptedAnswer: { "@type": "Answer", text: i.a },
+    })),
+  };
+}

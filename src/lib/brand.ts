@@ -1,0 +1,48 @@
+/**
+ * Fixed brand facts for CMAC Beauty. Single source of truth for anything
+ * repeated across the storefront (shipping rule, returns, warranty, delivery
+ * estimate). Do not embellish — no invented reviews, awards or stats.
+ *
+ * COPY RULE (Health Canada): every device is marketed as a COSMETIC, at-home
+ * tool. Copy must stay appearance-only ("the look of", "appearance of").
+ * Never "treats", "heals", "stimulates collagen", "reduces inflammation",
+ * "clinically proven", or any disease word.
+ */
+export const BRAND = {
+  name: "CMAC Beauty",
+  shortName: "CMAC",
+  tagline: "Beauty tech · Montréal",
+  domain: "https://cmacbeauty.ca",
+  area: "Montréal & L'Assomption, Québec",
+  areaFr: "Montréal et L'Assomption, Québec",
+  /** Owner-supplied admin mailbox; public contact until a branded mailbox exists. */
+  email: "cmac.13@outlook.com",
+  currency: "CAD",
+  country: "CA",
+  timeZone: "America/Toronto",
+} as const;
+
+/** Shipping rule — owner's choice. Flat rate, free above the threshold. */
+export const SHIPPING = {
+  flatCents: 999,
+  freeThresholdCents: 7500,
+  /** Business-day handling window before the parcel leaves the supplier. */
+  processingDays: { min: 1, max: 3 },
+  /** Delivery estimate shown everywhere (CJdropshipping from China). */
+  deliveryWeeks: { min: 2, max: 4 },
+} as const;
+
+export const POLICY = {
+  returnDays: 30,
+  warrantyMonths: 12,
+  damageReportDays: 7,
+  refundProcessingDays: 5,
+} as const;
+
+export function shippingCentsFor(subtotalCents: number): number {
+  return subtotalCents >= SHIPPING.freeThresholdCents ? 0 : SHIPPING.flatCents;
+}
+
+export function siteUrl(): string {
+  return process.env.NEXT_PUBLIC_SITE_URL || BRAND.domain;
+}

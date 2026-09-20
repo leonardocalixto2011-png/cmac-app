@@ -1,0 +1,174 @@
+// CMAC Beauty — data model.
+// Storefront products + orders, newsletter subscribers, contact messages,
+// plus Auth.js models for the single admin login.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// ----------------------------------------------------------------------------
+// Catalogue
+// ----------------------------------------------------------------------------
+
+model Product {
+  id             String   @id @default(cuid())
+  slug           String   @unique
+  nameFr         String
+  nameEn         String
+  // Short one-liner under the title ("Hands-free glow, 10 minutes a night")
+  tagline        String?
+  taglineFr      String?
+  // HTML: intro + <h3>How to use</h3> + <h3>Good to know</h3>
+  descriptionFr  String?
+  descriptionEn  String?
+  priceCents     Int
+  // "Was" price shown struck through when greater than priceCents
+  compareAtCents Int?
+  // Collection membership: "glow" | "sculpt" | "cool" (+ free-form tags, "new")
+  tags           String[] @default([])
+  images         Json     @default("[]") // string[] of image URLs
+  // [{ nameFr, nameEn, values: [{ value, labelFr, labelEn }] }] — e.g. Colour
+  options        Json     @default("[]")
+  stock          Int? // null = not tracked
+  active         Boolean  @default(true)
+  sortOrder      Int      @default(0)
+  // Fulfilment (admin-only): supplier listing + SKU, internal note
+  supplierUrl    String?
+  supplierSku    String?
+  shippingNote   String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+// ----------------------------------------------------------------------------
+// Orders
+// ----------------------------------------------------------------------------
+
+enum OrderStatus {
+  PENDING
+  PAID
+  FULFILLED
+  CANCELLED
+  REFUNDED
+}
+
+model Order {
+  id                      String      @id @default(cuid())
+  reference               String      @unique @default(cuid())
+  status                  OrderStatus @default(PENDING)
+  contactEmail            String
+  contactName             String?
+  // [{ productId, slug, nameFr, nameEn, priceCents, qty, options: {name: label}, optionsEn: {...} }]
+  items                   Json        @default("[]")
+  subtotalCents           Int
+  shippingCents           Int         @default(0)
+  totalCents              Int
+  shippingJson            Json? // Stripe-collected shipping address
+  locale                  String      @default("en")
+  stripeCheckoutSessionId String?
+  stripePaymentIntentId   String?
+  // Fulfilment
+  trackingNumber          String?
+  trackingUrl             String?
+  supplierOrderId         String?
+  fulfilledAt             DateTime?
+  customerId              String?
+  customer                Customer?   @relation(fields: [customerId], references: [id])
+  createdAt               DateTime    @default(now())
+  updatedAt               DateTime    @updatedAt
+
+  @@index([status])
+  @@index([createdAt])
+}
+
+// Minimal customer record (one per email), filled from paid orders.
+model Customer {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  locale    String   @default("en")
+  orders    Order[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ----------------------------------------------------------------------------
+// Newsletter + contact form
+// ----------------------------------------------------------------------------
+
+model Subscriber {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  locale    String   @default("en")
+  createdAt DateTime @default(now())
+}
+
+model ContactMessage {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  message   String
+  locale    String   @default("en")
+  createdAt DateTime @default(now())
+}
+
+// ----------------------------------------------------------------------------
+// Auth.js (v5) — Prisma adapter models (admin credentials login)
+// ----------------------------------------------------------------------------
+
+enum UserRole {
+  CUSTOMER
+  ADMIN
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  role          UserRole  @default(CUSTOMER)
+  passwordHash  String? // set for ADMIN credentials login
+  accounts      Account[]
+  sessions      Session[]
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}

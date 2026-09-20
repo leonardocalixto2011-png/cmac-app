@@ -1,0 +1,41 @@
+import type { Metadata } from "next";
+import { notFound } from "next/navigation";
+import { getProduct } from "@/lib/shop";
+import { serverLocale } from "@/i18n/server";
+import { stripHtml } from "@/lib/utils";
+import { ProductDetail } from "@/components/shop/ProductDetail";
+import { JsonLd, productLd } from "@/components/JsonLd";
+
+export const dynamic = "force-dynamic";
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
+  const locale = await serverLocale();
+  const p = await getProduct(slug).catch(() => null);
+  if (!p) return { title: "Shop" };
+  const name = locale === "fr" ? p.nameFr : p.nameEn;
+  const tagline = locale === "fr" ? p.taglineFr ?? p.tagline : p.tagline;
+  const desc = stripHtml((locale === "fr" ? p.descriptionFr : p.descriptionEn) ?? "").slice(0, 155);
+  return {
+    title: tagline ? `${name} — ${tagline}` : name,
+    description: desc || undefined,
+    alternates: { canonical: `/shop/${p.slug}` },
+    openGraph: { images: p.images.length ? [p.images[0]] : undefined },
+  };
+}
+
+export default async function ProductPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const locale = await serverLocale();
+  const product = await getProduct(slug);
+  if (!product) notFound();
+
+  return (
+    <section className="section-pad">
+      <JsonLd data={productLd(product, locale)} />
+      <div className="wrap">
+        <ProductDetail product={product} />
+      </div>
+    </section>
+  );
+}
