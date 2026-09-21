@@ -107,7 +107,7 @@ Single baseline migration `prisma/migrations/0_init` (generated with
 
 ## Env vars (`.env.example`)
 
-`DATABASE_URL`, `DATABASE_URL_UNPOOLED`, `AUTH_SECRET`, `AUTH_URL`, `NEXT_PUBLIC_SITE_URL`,
+`POSTGRES_PRISMA_URL`, `POSTGRES_URL_NON_POOLING`, `AUTH_SECRET`, `AUTH_URL`, `NEXT_PUBLIC_SITE_URL`,
 `ADMIN_EMAIL`, `ADMIN_PASSWORD`, `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`,
 `RESEND_API_KEY`, `EMAIL_FROM`, `OWNER_NOTIFY_EMAIL`. Never commit `.env`.
 
@@ -116,7 +116,7 @@ Single baseline migration `prisma/migrations/0_init` (generated with
 ```bash
 npm install
 npx prisma dev --name cmac        # local Postgres; daemonises; port per machine
-# .env DATABASE_URL = its URL + ?sslmode=disable&pgbouncer=true&connection_limit=1
+# .env POSTGRES_PRISMA_URL = its URL + ?sslmode=disable&pgbouncer=true&connection_limit=1
 npm run db:push                   # or db:migrate
 npm run db:seed                   # 4 products + admin (ADMIN_EMAIL/ADMIN_PASSWORD)
 npm run dev                       # http://localhost:3000
@@ -131,15 +131,15 @@ overwrite copy/prices from the seed file.
 ## Deploy runbook (owner)
 
 1. **GitHub**: push this repo (branch `main`).
-2. **Neon**: create a project → copy the **pooled** string to `DATABASE_URL`
-   and the **direct** string to `DATABASE_URL_UNPOOLED`.
+2. **Neon**: create a project → copy the **pooled** string to `POSTGRES_PRISMA_URL`
+   and the **direct** string to `POSTGRES_URL_NON_POOLING`.
 3. **Vercel**: import the GitHub repo. Add every env var from `.env.example`
    (`AUTH_URL` / `NEXT_PUBLIC_SITE_URL` = `https://cmacbeauty.ca`,
    `AUTH_SECRET` from `npx auth secret`, strong `ADMIN_PASSWORD`). Vercel runs
    `vercel-build` (`prisma generate && prisma migrate deploy && next build`)
    automatically, applying `0_init`.
 4. **Seed once** from the owner's machine against prod:
-   `DATABASE_URL=<neon pooled> DATABASE_URL_UNPOOLED=<neon direct> ADMIN_EMAIL=… ADMIN_PASSWORD=… npx prisma db seed`
+   `POSTGRES_PRISMA_URL=<neon pooled> POSTGRES_URL_NON_POOLING=<neon direct> ADMIN_EMAIL=… ADMIN_PASSWORD=… npx prisma db seed`
 5. **Domain**: point `cmacbeauty.ca` at Vercel (Vercel → Domains).
 6. **Stripe** (CMAC's own account): API keys → `STRIPE_SECRET_KEY`. Developers →
    Webhooks → add endpoint `https://cmacbeauty.ca/api/stripe/webhook`, event
