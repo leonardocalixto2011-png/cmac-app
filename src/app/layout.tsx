@@ -32,6 +32,8 @@ export async function generateMetadata(): Promise<Metadata> {
   const free = formatWholeDollars(SHIPPING.freeThresholdCents, locale);
   return {
     metadataBase: new URL(siteUrl()),
+    // Google Merchant Center / Search Console site ownership
+    verification: { google: "3Y5jJTLPAdn8fgAlviB09-w9Aae8hd2F2yHkenbFbfI" },
     title: {
       default: translate(locale, "meta.title"),
       template: `%s | ${BRAND.name}`,

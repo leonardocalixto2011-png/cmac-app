@@ -15,8 +15,8 @@ export const BRAND = {
   domain: "https://cmacbeauty.ca",
   area: "Montréal & L'Assomption, Québec",
   areaFr: "Montréal et L'Assomption, Québec",
-  /** Owner-supplied admin mailbox; public contact until a branded mailbox exists. */
-  email: "cmac.13@outlook.com",
+  /** Public contact mailbox (owner-created 2026-09-21). */
+  email: "cmacbeauty.ca@outlook.com",
   currency: "CAD",
   country: "CA",
   timeZone: "America/Toronto",
