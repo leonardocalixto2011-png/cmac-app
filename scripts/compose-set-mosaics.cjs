@@ -24,7 +24,7 @@ function layout(n) {
     const cells = layout(comps.length); const layers = [];
     for (let i = 0; i < comps.length; i++) {
       const c = comps[i], k = cells[i], w = Math.round(k.w), h = Math.round(k.h);
-      const tile = await sharp(await buf(img[c.slug].replace('/f_auto/', '/f_jpg/'))).resize(w, h, { fit: 'cover', position: 'centre' })
+      const tile = await sharp(await buf(img[c.slug].replace('/f_auto/', '/f_jpg/'))).resize(Math.round(w*0.92), Math.round(h*0.92), { fit: 'contain', background: BG }).extend({ top: Math.round(h*0.04), bottom: h - Math.round(h*0.92) - Math.round(h*0.04), left: Math.round(w*0.04), right: w - Math.round(w*0.92) - Math.round(w*0.04), background: BG })
         .composite([{ input: roundMask(w, h), blend: 'dest-in' }]).png().toBuffer();
       layers.push({ input: tile, left: Math.round(k.x), top: Math.round(k.y) });
       layers.push({ input: Buffer.from(`<svg width="${w}" height="${h}"><rect x="1" y="1" width="${w-2}" height="${h-2}" rx="${R}" ry="${R}" fill="none" stroke="#E4D9CB" stroke-width="2"/></svg>`), left: Math.round(k.x), top: Math.round(k.y) });
