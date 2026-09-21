@@ -69,6 +69,8 @@ export async function checkout(lines: CartLineInput[], rawLocale: string): Promi
       shipping_address_collection: { allowed_countries: ["CA"] },
       phone_number_collection: { enabled: true },
       automatic_tax: { enabled: false },
+      // Lets customers enter promo codes created in the Stripe dashboard (Products > Coupons)
+      allow_promotion_codes: true,
       shipping_options: [
         {
           shipping_rate_data: {
