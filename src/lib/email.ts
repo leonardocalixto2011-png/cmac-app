@@ -8,7 +8,7 @@
 import type { Locale } from "@/i18n/messages";
 import { BRAND, SHIPPING, POLICY, siteUrl } from "./brand";
 import { formatMoneyFromCents } from "./utils";
-import { orderItems, shippingLines } from "./shop";
+import { orderItems, setRecipes, shippingLines } from "./shop";
 
 // ---------------------------------------------------------------------------
 // Transport
@@ -227,12 +227,28 @@ export async function sendOwnerOrderNotice(d: OrderEmailData): Promise<void> {
   const table = itemsTable({ ...d, locale: "en" });
   const addr = shippingLines(d.shippingJson);
   const subject = `New order · ${money(d.totalCents)} · ${ref}`;
+  // Sets: show the CJ recipe so the owner knows which components to order.
+  const recipes = await setRecipes(orderItems(d.items).map((i) => i.slug)).catch(() => new Map<string, string>());
+  const recipeRows = orderItems(d.items).flatMap((i) => {
+    const r = recipes.get(i.slug);
+    return r ? [{ label: `${i.qty} × ${i.nameEn}`, recipe: r }] : [];
+  });
+  const recipeHtml = recipeRows
+    .map((x) => `<p style="margin:0 0 10px;font-size:13px;line-height:1.55;"><strong>${esc(x.label)}</strong><br>${esc(x.recipe)}</p>`)
+    .join("");
   const inner = `
     ${card("Order", table.html)}
+    ${recipeRows.length ? card("Set contents to order on CJ", recipeHtml) : ""}
     ${card("Customer", `<p style="margin:0;font-size:14px;line-height:1.6;">${esc(d.contactName ?? "—")}<br><a href="mailto:${esc(d.contactEmail)}" style="color:${C.terra};">${esc(d.contactEmail)}</a><br>Locale: ${d.locale}</p>`)}
     ${addr.length ? card("Ship to", `<p style="margin:0;font-size:14px;line-height:1.6;">${addr.map(esc).join("<br>")}</p>`) : ""}
     <p style="margin:0;"><a href="${siteUrl()}/admin/orders" style="display:inline-block;padding:10px 18px;border-radius:999px;background:${C.ink};color:#fff;text-decoration:none;font-size:13px;font-weight:600;">Open in admin → place the supplier order</a></p>`;
-  const text = [subject, "", ...table.text, "", `Customer: ${d.contactName ?? "—"} <${d.contactEmail}> (${d.locale})`, ...addr, "", `${siteUrl()}/admin/orders`].join("\n");
+  const text = [
+    subject,
+    "",
+    ...table.text,
+    ...(recipeRows.length ? ["", "SET CONTENTS TO ORDER ON CJ:", ...recipeRows.map((x) => `${x.label}: ${x.recipe}`)] : []),
+    "",
+    `Customer: ${d.contactName ?? "—"} <${d.contactEmail}> (${d.locale})`, ...addr, "", `${siteUrl()}/admin/orders`].join("\n");
   await sendEmail({ to, subject, html: frame("en", "New order", inner), text, replyTo: d.contactEmail });
 }
 

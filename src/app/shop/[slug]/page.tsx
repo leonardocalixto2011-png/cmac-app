@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getProduct } from "@/lib/shop";
+import { getProduct, getSetComponents } from "@/lib/shop";
 import { serverLocale } from "@/i18n/server";
 import { stripHtml } from "@/lib/utils";
 import { ProductDetail } from "@/components/shop/ProductDetail";
@@ -29,12 +29,13 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
   const locale = await serverLocale();
   const product = await getProduct(slug);
   if (!product) notFound();
+  const components = await getSetComponents(product.slug);
 
   return (
     <section className="section-pad">
       <JsonLd data={productLd(product, locale)} />
       <div className="wrap">
-        <ProductDetail product={product} />
+        <ProductDetail product={product} components={components} />
       </div>
     </section>
   );

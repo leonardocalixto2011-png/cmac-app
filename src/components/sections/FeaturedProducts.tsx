@@ -6,24 +6,34 @@ import { Icon } from "@/components/Icon";
 import { ProductCard } from "@/components/shop/ProductCard";
 import type { ProductView } from "@/lib/shop";
 
-/** Server page fetches active products and passes them in. */
-export function FeaturedProducts({ products }: { products: ProductView[] }) {
+/**
+ * Server page fetches active products and passes them in. `variant="sets"`
+ * renders the homepage "Curated sets" band with the same cards.
+ */
+export function FeaturedProducts({ products, variant = "edit" }: { products: ProductView[]; variant?: "edit" | "sets" }) {
   const { t } = useLocale();
+  const sets = variant === "sets";
+  if (sets && products.length === 0) return null;
 
   return (
-    <section className="cmac-featured" id="shop">
+    <section className={sets ? "cmac-featured cmac-featured--sets" : "cmac-featured"} id={sets ? "sets" : "shop"}>
       <div className="wrap">
         <div className="cmac-featured__head">
           <div>
             <p className="eyebrow" data-reveal>
-              {t("featured.eyebrow")}
+              {t(sets ? "sets.eyebrow" : "featured.eyebrow")}
             </p>
             <h2 data-reveal style={{ "--d": "80ms" } as React.CSSProperties}>
-              {t("featured.title")}
+              {t(sets ? "sets.title" : "featured.title")}
             </h2>
           </div>
-          <Link className="btn btn--ghost" href="/shop" data-reveal style={{ "--d": "160ms" } as React.CSSProperties}>
-            {t("featured.link")}
+          <Link
+            className="btn btn--ghost"
+            href={sets ? "/collections/sets" : "/shop"}
+            data-reveal
+            style={{ "--d": "160ms" } as React.CSSProperties}
+          >
+            {t(sets ? "sets.link" : "featured.link")}
             <Icon name="arrow" />
           </Link>
         </div>

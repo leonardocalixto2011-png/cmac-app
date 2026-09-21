@@ -25,6 +25,7 @@
  */
 import { PrismaClient, type Prisma } from "@prisma/client";
 import bcrypt from "bcryptjs";
+import { SET_CONTENTS } from "../src/lib/sets";
 
 const prisma = new PrismaClient();
 
@@ -384,6 +385,419 @@ const PRODUCTS: SeedProduct[] = [
   },
 ];
 
+// ---------------------------------------------------------------------------
+// SETS — curated bundles (contents + CJ variants in src/lib/sets.ts).
+// No options (colours picked by us). Images = components' current images.
+// compareAtCents = sum of component sale prices × qty, so the store shows
+// "Save X%". Fulfilment recipe lives in shippingNote (admin + owner email).
+// ---------------------------------------------------------------------------
+
+type SeedSet = {
+  slug: string;
+  nameEn: string;
+  nameFr: string;
+  tagline: string;
+  taglineFr: string;
+  priceCents: number;
+  tags: string[];
+  sortOrder: number;
+  hookEn: string;
+  hookFr: string;
+  routineEn: string[];
+  routineFr: string[];
+  goodEn: string[];
+  goodFr: string[];
+  /** No electric device inside: hygiene footer, no warranty line. */
+  hygieneOnly?: boolean;
+};
+
+const COSMETIC_EN = "Cosmetic at-home devices, not medical devices.";
+const COSMETIC_FR = "Appareils cosmétiques à usage domestique, pas des dispositifs médicaux.";
+const PICKED_EN = "Colours are picked by us to suit the set.";
+const PICKED_FR = "Les couleurs sont choisies par nous pour s'agencer au coffret.";
+const PARCELS_EN = "Items may ship in separate parcels.";
+const PARCELS_FR = "Les articles peuvent arriver en colis séparés.";
+const hygieneEn = (items: string) => `Hygiene items (${items}) are returnable only if unopened.`;
+const hygieneFr = (items: string) => `Articles d'hygiène (${items}) : retours acceptés seulement s'ils sont non ouverts.`;
+
+const SETS: SeedSet[] = [
+  {
+    slug: "set-full-ritual",
+    nameEn: "The Full Ritual",
+    nameFr: "Le Rituel complet",
+    tagline: "Cool, lift, glow: the whole routine in one box",
+    taglineFr: "Fraîcheur, lift, éclat : toute la routine dans une boîte",
+    priceCents: 15999,
+    tags: ["sets", "glow", "sculpt", "cool", "essentials", "gift"],
+    sortOrder: 20,
+    hookEn:
+      "<p><strong>The complete CMAC routine, in the order we actually use it.</strong> Cool to wake the skin up, lift for a more defined look, glow to wind down. Four pieces, one evening ritual, and the most complete set we make.</p>",
+    hookFr:
+      "<p><strong>La routine CMAC au complet, dans l'ordre où on l'utilise vraiment.</strong> La fraîcheur pour réveiller la peau, le lift pour un air plus défini, l'éclat pour décrocher. Quatre pièces, un rituel du soir, et notre coffret le plus complet.</p>",
+    routineEn: [
+      "Headband on, then cleanse. <strong>Cool:</strong> glide the ice roller from the nose outward for about 60 seconds.",
+      "<strong>Lift:</strong> apply a water-based conductive gel and make slow upward passes with the microcurrent device for 5 minutes. Rinse off the gel.",
+      "<strong>Glow:</strong> fit the LED mask and lie back for a 10-minute session, eyes closed.",
+      "Serum, moisturizer, headband off. Done.",
+    ],
+    routineFr: [
+      "Bandeau en place, puis nettoyage. <strong>Fraîcheur :</strong> glissez le rouleau de glace du nez vers l'extérieur pendant environ 60 secondes.",
+      "<strong>Lift :</strong> appliquez un gel conducteur à base d'eau et faites des passages lents vers le haut avec l'appareil microcourant pendant 5 minutes. Rincez le gel.",
+      "<strong>Éclat :</strong> ajustez le masque LED et allongez-vous pour une séance de 10 minutes, les yeux fermés.",
+      "Sérum, hydratant, on retire le bandeau. C'est fait.",
+    ],
+    goodEn: [
+      COSMETIC_EN,
+      "Do not use the devices if you are pregnant, have a pacemaker or implanted electronic device, epilepsy, metal implants in the face, are photosensitive or on light-sensitizing medication, or have an active skin condition. Ask your doctor if unsure.",
+      "Keep eyes closed during LED sessions. Always use the microcurrent device with a conductive gel (not included), never over the thyroid or the eyes.",
+      "Keep the ice roller moving and don't press hard under the eyes.",
+      PICKED_EN,
+      hygieneEn("ice roller, headband"),
+      PARCELS_EN,
+    ],
+    goodFr: [
+      COSMETIC_FR,
+      "Ne pas utiliser les appareils si vous êtes enceinte, portez un stimulateur cardiaque ou un dispositif électronique implanté, souffrez d'épilepsie, avez des implants métalliques au visage, êtes photosensible ou sous médication photosensibilisante, ou avez une affection cutanée active. En cas de doute, consultez votre médecin.",
+      "Gardez les yeux fermés pendant les séances LED. Utilisez toujours l'appareil microcourant avec un gel conducteur (non inclus), jamais sur la thyroïde ni sur les yeux.",
+      "Gardez le rouleau de glace en mouvement et n'appuyez pas fort sous les yeux.",
+      PICKED_FR,
+      hygieneFr("rouleau de glace, bandeau"),
+      PARCELS_FR,
+    ],
+  },
+  {
+    slug: "set-7am-reset",
+    nameEn: "The 7 AM Reset",
+    nameFr: "Le Reset de 7 h",
+    tagline: "From pillow face to ready in 5 minutes",
+    taglineFr: "De l'oreiller à la porte en 5 minutes",
+    priceCents: 7699,
+    tags: ["sets", "cool", "glow", "essentials"],
+    sortOrder: 21,
+    hookEn:
+      "<p><strong>For mornings that start with an alarm and end at the door.</strong> Commuters, 9-to-5ers, parents doing three things at once: this is the quickest way we know to look more awake before the coffee kicks in. A cold glide, a little warmth around the eyes, hair out of the way, done.</p>",
+    hookFr:
+      "<p><strong>Pour les matins qui commencent avec le cadran et finissent à la porte.</strong> Navetteurs, 9 à 5, parents qui font trois choses à la fois : c'est la façon la plus rapide qu'on connaisse d'avoir l'air plus réveillé avant que le café fasse effet. Un passage froid, un peu de chaleur autour des yeux, les cheveux dégagés, c'est réglé.</p>",
+    routineEn: [
+      "Headband on, splash of water or your cleanser.",
+      "Glide the ice roller from the nose outward, under the eyes and along the jaw. About 60 seconds.",
+      "Apply eye cream, then the glow wand for a minute per side, inner corner outward.",
+      "Headband off, sunscreen or makeup, out the door.",
+    ],
+    routineFr: [
+      "Bandeau en place, un peu d'eau ou votre nettoyant.",
+      "Glissez le rouleau de glace du nez vers l'extérieur, sous les yeux et le long de la mâchoire. Environ 60 secondes.",
+      "Appliquez votre crème contour des yeux, puis la baguette éclat une minute par côté, du coin interne vers l'extérieur.",
+      "On retire le bandeau, écran solaire ou maquillage, et on part.",
+    ],
+    goodEn: [
+      COSMETIC_EN,
+      "Do not use the glow wand if you are pregnant, have a pacemaker or implanted electronic device, epilepsy, are photosensitive or on light-sensitizing medication, or have an active skin condition or broken skin around the eyes. Ask your doctor if unsure.",
+      "Keep eyes closed and never place the wand on the eyeball or eyelid. Keep the ice roller moving and don't press hard under the eyes.",
+      PICKED_EN,
+      hygieneEn("ice roller, headband"),
+      PARCELS_EN,
+    ],
+    goodFr: [
+      COSMETIC_FR,
+      "Ne pas utiliser la baguette éclat si vous êtes enceinte, portez un stimulateur cardiaque ou un dispositif électronique implanté, souffrez d'épilepsie, êtes photosensible ou sous médication photosensibilisante, ou avez une affection cutanée active ou une peau lésée autour des yeux. En cas de doute, consultez votre médecin.",
+      "Gardez les yeux fermés et ne posez jamais la baguette sur le globe oculaire ni sur la paupière. Gardez le rouleau de glace en mouvement et n'appuyez pas fort sous les yeux.",
+      PICKED_FR,
+      hygieneFr("rouleau de glace, bandeau"),
+      PARCELS_FR,
+    ],
+  },
+  {
+    slug: "set-midnight-glow",
+    nameEn: "Midnight Glow Ritual",
+    nameFr: "Rituel Éclat de minuit",
+    tagline: "Cleanse, glow, lights out",
+    taglineFr: "Nettoyage, éclat, extinction des feux",
+    priceCents: 9999,
+    tags: ["sets", "glow", "essentials"],
+    sortOrder: 22,
+    hookEn:
+      "<p><strong>For night owls who save the best part of the day for last.</strong> A soft sonic cleanse, ten minutes under the LED mask, then a satin-feel mask for lights out. It turns the end of the evening into a ritual instead of an afterthought.</p>",
+    hookFr:
+      "<p><strong>Pour les oiseaux de nuit qui gardent le meilleur de la journée pour la fin.</strong> Un nettoyage sonique tout doux, dix minutes sous le masque LED, puis un masque effet satin pour l'extinction des feux. La fin de soirée devient un rituel plutôt qu'une corvée.</p>",
+    routineEn: [
+      "Wet your face, add cleanser and move the sonic brush in small circles for about a minute. Rinse and pat dry.",
+      "Fit the LED mask for a 10-minute session, eyes closed, while you listen to something good.",
+      "Serum and moisturizer. Give them a few minutes to settle.",
+      "Sleep mask on. Lights out.",
+    ],
+    routineFr: [
+      "Mouillez votre visage, ajoutez votre nettoyant et faites de petits cercles avec la brosse sonique pendant environ une minute. Rincez et épongez.",
+      "Ajustez le masque LED pour une séance de 10 minutes, les yeux fermés, en écoutant quelque chose de bon.",
+      "Sérum et hydratant. Laissez-les pénétrer quelques minutes.",
+      "Masque de nuit en place. Bonne nuit.",
+    ],
+    goodEn: [
+      COSMETIC_EN,
+      "Do not use the LED mask if you are pregnant, photosensitive, on light-sensitizing medication, or have an active skin condition. Ask your doctor if unsure. Keep eyes closed during sessions.",
+      "Do not use the cleansing brush on broken, irritated or sunburnt skin, and avoid the eye area.",
+      PICKED_EN,
+      hygieneEn("cleansing brush, sleep mask"),
+      PARCELS_EN,
+    ],
+    goodFr: [
+      COSMETIC_FR,
+      "Ne pas utiliser le masque LED si vous êtes enceinte, photosensible, sous médication photosensibilisante, ou si vous avez une affection cutanée active. En cas de doute, consultez votre médecin. Gardez les yeux fermés pendant les séances.",
+      "Ne pas utiliser la brosse nettoyante sur une peau lésée, irritée ou brûlée par le soleil, et évitez le contour des yeux.",
+      PICKED_FR,
+      hygieneFr("brosse nettoyante, masque de nuit"),
+      PARCELS_FR,
+    ],
+  },
+  {
+    slug: "set-sweater-weather",
+    nameEn: "Sweater Weather Skin Kit",
+    nameFr: "Trousse Temps de pull",
+    tagline: "Your skin's cozy season. Fall limited edition",
+    taglineFr: "La saison douillette de votre peau. Édition limitée d'automne",
+    priceCents: 10999,
+    tags: ["sets", "glow", "essentials", "fall", "limited"],
+    sortOrder: 23,
+    hookEn:
+      "<p><strong>Dark by 5 p.m.? Perfect.</strong> Our fall limited edition is made for long, cozy evenings: ten minutes under the LED mask, a slow scalp massage, a soft headband and a satin-feel mask for lights out. Available until November 30.</p>",
+    hookFr:
+      "<p><strong>Il fait noir à 17 h ? Parfait.</strong> Notre édition limitée d'automne est pensée pour les longues soirées douillettes : dix minutes sous le masque LED, un massage lent du cuir chevelu, un bandeau tout doux et un masque effet satin pour l'extinction des feux. Offerte jusqu'au 30 novembre.</p>",
+    routineEn: [
+      "Tea, blanket, headband on. Cleanse and dry your face.",
+      "Fit the LED mask and settle in for a 10-minute session, eyes closed.",
+      "Serum and moisturizer, then a few minutes with the scalp massager from the crown down to the nape.",
+      "Sleep mask on. Lights out.",
+    ],
+    routineFr: [
+      "Une tisane, une doudou, le bandeau en place. Nettoyez et séchez votre visage.",
+      "Ajustez le masque LED et installez-vous pour une séance de 10 minutes, les yeux fermés.",
+      "Sérum et hydratant, puis quelques minutes de masseur du sommet de la tête jusqu'à la nuque.",
+      "Masque de nuit en place. Bonne nuit.",
+    ],
+    goodEn: [
+      COSMETIC_EN,
+      "Do not use the LED mask if you are pregnant, photosensitive, on light-sensitizing medication, or have an active skin condition. Keep eyes closed during sessions.",
+      "Do not use the scalp massager on broken or irritated skin, or if you have a pacemaker or implanted electronic device. Keep long hair loose. Ask your doctor if unsure.",
+      "Fall limited edition, available until November 30.",
+      PICKED_EN,
+      hygieneEn("sleep mask, headband"),
+      PARCELS_EN,
+    ],
+    goodFr: [
+      COSMETIC_FR,
+      "Ne pas utiliser le masque LED si vous êtes enceinte, photosensible, sous médication photosensibilisante, ou si vous avez une affection cutanée active. Gardez les yeux fermés pendant les séances.",
+      "Ne pas utiliser le masseur sur une peau lésée ou irritée, ni si vous portez un stimulateur cardiaque ou un dispositif électronique implanté. Laissez les cheveux longs détachés. En cas de doute, consultez votre médecin.",
+      "Édition limitée d'automne, offerte jusqu'au 30 novembre.",
+      PICKED_FR,
+      hygieneFr("masque de nuit, bandeau"),
+      PARCELS_FR,
+    ],
+  },
+  {
+    slug: "set-pink-pop",
+    nameEn: "Pink Pop Glow Kit",
+    nameFr: "Trousse Pink Pop",
+    tagline: "Everything pink, everything glow",
+    taglineFr: "Tout en rose, tout en éclat",
+    priceCents: 9499,
+    tags: ["sets", "glow", "cool", "essentials", "gift"],
+    sortOrder: 24,
+    hookEn:
+      "<p><strong>Your vanity called. It wants to be pink.</strong> Four of our favourite tools in their pink (and rose-gold) versions: cleanse, chill, glow, repeat. Made for girly-pop routines, get-ready-with-me videos and the friend who deserves a really good gift.</p>",
+    hookFr:
+      "<p><strong>Votre coiffeuse a appelé. Elle veut du rose.</strong> Quatre de nos outils préférés dans leurs versions roses (et or rose) : on nettoie, on rafraîchit, on illumine, on recommence. Pour les routines girly pop, les vidéos « prépare-toi avec moi » et l'amie qui mérite un vrai beau cadeau.</p>",
+    routineEn: [
+      "Headband on. Pink, obviously.",
+      "Sonic brush with your cleanser for about a minute, then rinse.",
+      "Ice roller from the nose outward for 60 seconds.",
+      "Eye cream, then the glow wand for a minute or two per side. Hit record if you like.",
+    ],
+    routineFr: [
+      "Bandeau en place. Rose, évidemment.",
+      "Brosse sonique avec votre nettoyant pendant environ une minute, puis rincez.",
+      "Rouleau de glace du nez vers l'extérieur pendant 60 secondes.",
+      "Crème contour des yeux, puis la baguette éclat une minute ou deux par côté. On filme si ça nous tente.",
+    ],
+    goodEn: [
+      COSMETIC_EN,
+      "Do not use the glow wand if you are pregnant, have a pacemaker or implanted electronic device, epilepsy, are photosensitive or on light-sensitizing medication, or have an active skin condition or broken skin around the eyes. Ask your doctor if unsure. Never place it on the eyeball or eyelid.",
+      "Do not use the cleansing brush on broken, irritated or sunburnt skin, and avoid the eye area.",
+      "Pink version of every piece; the glow wand comes in rose gold, its pinkest shade.",
+      hygieneEn("cleansing brush, ice roller, headband"),
+      PARCELS_EN,
+    ],
+    goodFr: [
+      COSMETIC_FR,
+      "Ne pas utiliser la baguette éclat si vous êtes enceinte, portez un stimulateur cardiaque ou un dispositif électronique implanté, souffrez d'épilepsie, êtes photosensible ou sous médication photosensibilisante, ou avez une affection cutanée active ou une peau lésée autour des yeux. En cas de doute, consultez votre médecin. Ne la posez jamais sur le globe oculaire ni sur la paupière.",
+      "Ne pas utiliser la brosse nettoyante sur une peau lésée, irritée ou brûlée par le soleil, et évitez le contour des yeux.",
+      "Version rose de chaque pièce ; la baguette éclat est en or rose, sa teinte la plus rose.",
+      hygieneFr("brosse nettoyante, rouleau de glace, bandeau"),
+      PARCELS_FR,
+    ],
+  },
+  {
+    slug: "set-carry-on-glow",
+    nameEn: "Carry-On Glow",
+    nameFr: "Éclat en cabine",
+    tagline: "Pack light, land glowing",
+    taglineFr: "Bagage léger, arrivée éclatante",
+    priceCents: 7699,
+    tags: ["sets", "glow", "essentials"],
+    sortOrder: 25,
+    hookEn:
+      "<p><strong>For red-eyes, road trips and hotel rooms with thin curtains.</strong> A pocket-size eye wand, a satin-feel sleep mask and a headband that folds to nothing: a small kit that fits in a carry-on and makes any seat or hotel bed feel a bit more like home. Made with flight attendants and frequent travellers in mind.</p>",
+    hookFr:
+      "<p><strong>Pour les vols de nuit, les road trips et les chambres d'hôtel aux rideaux trop minces.</strong> Une baguette pour les yeux format poche, un masque de nuit effet satin et un bandeau qui se plie en rien : une petite trousse qui entre dans un bagage de cabine et rend n'importe quel siège ou lit d'hôtel un peu plus comme chez soi. Pensée pour les agents de bord et les grands voyageurs.</p>",
+    routineEn: [
+      "Before boarding or on arrival: headband on, freshen up with water or a cleansing wipe.",
+      "Apply eye cream and glide the glow wand for a minute per side, inner corner outward.",
+      "Headband off, sleep mask on for the flight, the back seat or the hotel night.",
+      "Land, stretch, repeat step 2 if the night was short.",
+    ],
+    routineFr: [
+      "Avant l'embarquement ou à l'arrivée : bandeau en place, on se rafraîchit avec de l'eau ou une lingette nettoyante.",
+      "Appliquez votre crème contour des yeux et glissez la baguette éclat une minute par côté, du coin interne vers l'extérieur.",
+      "On retire le bandeau, masque de nuit en place pour le vol, la banquette arrière ou la nuit à l'hôtel.",
+      "On atterrit, on s'étire, on refait l'étape 2 si la nuit a été courte.",
+    ],
+    goodEn: [
+      COSMETIC_EN,
+      "Do not use the glow wand if you are pregnant, have a pacemaker or implanted electronic device, epilepsy, are photosensitive or on light-sensitizing medication, or have an active skin condition or broken skin around the eyes. Ask your doctor if unsure. Never place it on the eyeball or eyelid.",
+      "Check your airline's rules for electronic devices in carry-on bags.",
+      PICKED_EN,
+      hygieneEn("sleep mask, headband"),
+      PARCELS_EN,
+    ],
+    goodFr: [
+      COSMETIC_FR,
+      "Ne pas utiliser la baguette éclat si vous êtes enceinte, portez un stimulateur cardiaque ou un dispositif électronique implanté, souffrez d'épilepsie, êtes photosensible ou sous médication photosensibilisante, ou avez une affection cutanée active ou une peau lésée autour des yeux. En cas de doute, consultez votre médecin. Ne la posez jamais sur le globe oculaire ni sur la paupière.",
+      "Vérifiez les règles de votre compagnie aérienne pour les appareils électroniques en cabine.",
+      PICKED_FR,
+      hygieneFr("masque de nuit, bandeau"),
+      PARCELS_FR,
+    ],
+  },
+  {
+    slug: "set-bestie-duo",
+    nameEn: "Bestie Glow Duo",
+    nameFr: "Duo Glow entre copines",
+    tagline: "One for you, one for your bestie",
+    taglineFr: "Un pour toi, un pour ta meilleure amie",
+    priceCents: 6999,
+    tags: ["sets", "cool", "essentials", "gift"],
+    sortOrder: 26,
+    hygieneOnly: true,
+    hookEn:
+      "<p><strong>Some things are better in pairs.</strong> Two ice rollers and two spa headbands: one set for you, one for the friend who still answers your texts at 1 a.m. Made for Galentine's Day (Feb 13) and Girlfriends Day (Aug 1), and honestly, any Tuesday.</p>",
+    hookFr:
+      "<p><strong>Certaines choses sont meilleures à deux.</strong> Deux rouleaux de glace et deux bandeaux spa : un ensemble pour toi, un pour l'amie qui répond encore à tes textos à 1 h du matin. Parfait pour la Saint-Valentin entre copines (13 février) et la Journée des copines (1er août), et franchement, pour n'importe quel mardi.</p>",
+    routineEn: [
+      "Fill both moulds and freeze them overnight. Sleepover optional.",
+      "Headbands on.",
+      "Sixty seconds of ice roller each: nose outward, under the eyes, along the jaw.",
+      "Pat dry, carry on with your routines, take the selfie.",
+    ],
+    routineFr: [
+      "Remplissez les deux moules et congelez-les pour la nuit. Pyjama party facultatif.",
+      "Bandeaux en place.",
+      "Soixante secondes de rouleau de glace chacune : du nez vers l'extérieur, sous les yeux, le long de la mâchoire.",
+      "On éponge, on continue la routine, on prend le selfie.",
+    ],
+    goodEn: [
+      "Two different colours of each piece, picked by us, so nobody mixes them up.",
+      "Keep the ice moving and don't press hard under the eyes.",
+      hygieneEn("ice rollers, headbands"),
+      PARCELS_EN,
+    ],
+    goodFr: [
+      "Deux couleurs différentes pour chaque pièce, choisies par nous, pour ne pas les mélanger.",
+      "Gardez la glace en mouvement et n'appuyez pas fort sous les yeux.",
+      hygieneFr("rouleaux de glace, bandeaux"),
+      PARCELS_FR,
+    ],
+  },
+];
+
+const li = (xs: string[]) => xs.map((x) => `<li>${x}</li>`).join("");
+
+function setDescription(s: SeedSet, locale: "en" | "fr"): string {
+  const fr = locale === "fr";
+  const inside = (SET_CONTENTS[s.slug] ?? []).map((c) => {
+    const p = PRODUCTS.find((x) => x.slug === c.slug);
+    const name = p ? (fr ? p.nameFr : p.nameEn) : c.slug;
+    return `${c.qty} × <a href="/shop/${c.slug}">${name}</a>`;
+  });
+  const footer = s.hygieneOnly ? (fr ? FOOTER_HYGIENE_FR : FOOTER_HYGIENE_EN) : fr ? FOOTER_FR : FOOTER_EN;
+  return [
+    fr ? s.hookFr : s.hookEn,
+    `<h3>${fr ? "Dans le coffret" : "What's inside"}</h3><ul>${li(inside)}</ul>`,
+    `<h3>${fr ? "La routine" : "The routine"}</h3><ol>${li(fr ? s.routineFr : s.routineEn)}</ol>`,
+    `<h3>${fr ? "Bon à savoir" : "Good to know"}</h3><ul>${li(fr ? s.goodFr : s.goodEn)}</ul>`,
+    footer,
+  ].join("");
+}
+
+/** Sum of component sale prices × qty (from this file's catalogue). */
+function setCompareAt(slug: string): number {
+  return (SET_CONTENTS[slug] ?? []).reduce((sum, c) => {
+    const p = PRODUCTS.find((x) => x.slug === c.slug);
+    if (!p) throw new Error(`Set ${slug}: unknown component ${c.slug}`);
+    return sum + p.priceCents * c.qty;
+  }, 0);
+}
+
+/** Owner-facing CJ recipe: each component, qty, variant + SKU. */
+function setRecipe(slug: string): string {
+  const parts = (SET_CONTENTS[slug] ?? []).map((c) => {
+    const p = PRODUCTS.find((x) => x.slug === c.slug);
+    return `${c.qty}× ${p?.nameEn ?? c.slug}: ${c.variant}`;
+  });
+  return `SET: order each component on CJ (CJPacket JYSP Sensitive to CA). ${parts.join(" | ")}. Items may ship in separate parcels.`;
+}
+
+async function seedSets(reset: boolean) {
+  for (const s of SETS) {
+    const components = SET_CONTENTS[s.slug];
+    if (!components?.length) throw new Error(`Set ${s.slug} has no contents`);
+
+    // Real photos: first image of each component (contents order), then second images.
+    const rows = await prisma.product.findMany({ where: { slug: { in: components.map((c) => c.slug) } } });
+    const imgs = (slug: string) => {
+      const r = rows.find((x) => x.slug === slug);
+      return Array.isArray(r?.images) ? (r.images as string[]) : [];
+    };
+    const images = [...components.map((c) => imgs(c.slug)[0]), ...components.map((c) => imgs(c.slug)[1])].filter(
+      (u, i, a): u is string => Boolean(u) && a.indexOf(u) === i,
+    );
+
+    const copy = {
+      nameEn: s.nameEn,
+      nameFr: s.nameFr,
+      tagline: s.tagline,
+      taglineFr: s.taglineFr,
+      descriptionEn: setDescription(s, "en"),
+      descriptionFr: setDescription(s, "fr"),
+    };
+    const commerce = { priceCents: s.priceCents, compareAtCents: setCompareAt(s.slug), tags: s.tags };
+    const supplier = { images, supplierUrl: null, supplierSku: "SET", shippingNote: setRecipe(s.slug) };
+
+    const existing = await prisma.product.findUnique({ where: { slug: s.slug } });
+    if (!existing) {
+      await prisma.product.create({
+        data: { slug: s.slug, active: true, sortOrder: s.sortOrder, options: [], ...copy, ...commerce, ...supplier },
+      });
+      console.log(`Set created: ${s.slug} (${images.length} images)`);
+      continue;
+    }
+    const update: Prisma.ProductUpdateInput = { sortOrder: s.sortOrder };
+    if (reset) Object.assign(update, copy, commerce, { options: [] });
+    const hasImages = Array.isArray(existing.images) && existing.images.length > 0;
+    if (!hasImages) Object.assign(update, { images: supplier.images, shippingNote: supplier.shippingNote });
+    await prisma.product.update({ where: { slug: s.slug }, data: update });
+    console.log(`Set ready: ${s.slug}${hasImages ? "" : " (images + recipe filled)"}`);
+  }
+}
+
 async function main() {
   const reset = process.env.RESET_PRODUCTS === "1";
   for (const p of PRODUCTS) {
@@ -425,6 +839,8 @@ async function main() {
     await prisma.product.update({ where: { slug: p.slug }, data: update });
     console.log(`Product ready: ${p.slug}${hasImages ? "" : " (supplier data filled)"}`);
   }
+
+  await seedSets(reset);
 
   // Admin user — from ADMIN_EMAIL / ADMIN_PASSWORD env vars (skipped if unset).
   const adminEmail = process.env.ADMIN_EMAIL?.trim().toLowerCase();

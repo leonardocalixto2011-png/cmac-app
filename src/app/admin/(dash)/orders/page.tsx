@@ -2,7 +2,7 @@ import Link from "next/link";
 import { adminListOrders } from "@/lib/admin";
 import { fmtDateTime } from "@/lib/fmt";
 import { formatMoneyFromCents, cn } from "@/lib/utils";
-import { orderItems, shippingLines } from "@/lib/shop";
+import { orderItems, setRecipes, shippingLines } from "@/lib/shop";
 import { OrderStatusControl, FulfilForm, ORDER_LABEL } from "@/components/admin/ui";
 
 export const dynamic = "force-dynamic";
@@ -13,6 +13,8 @@ export default async function AdminOrders({ searchParams }: { searchParams: Prom
   const { status } = await searchParams;
   const current = status && FILTERS.includes(status) ? status : "ALL";
   const orders = await adminListOrders({ status: current });
+  // Sets are fulfilled as separate CJ items: show each set’s recipe (its shippingNote).
+  const recipes = await setRecipes(orders.flatMap((o) => orderItems(o.items).map((i) => i.slug)));
 
   return (
     <div className="flex flex-col gap-6">
@@ -61,6 +63,11 @@ export default async function AdminOrders({ searchParams }: { searchParams: Prom
                       {it.qty}× {it.nameEn}
                       {it.optionsEn && Object.values(it.optionsEn).length > 0 && (
                         <span className="text-ink-faint"> ({Object.values(it.optionsEn).join(", ")})</span>
+                      )}
+                      {recipes.has(it.slug) && (
+                        <span className="mt-1 block rounded-lg bg-cream-2 px-2 py-1 text-[0.75rem] leading-snug text-ink-soft">
+                          <strong>Set: order on CJ ×{it.qty}</strong> · {recipes.get(it.slug)}
+                        </span>
                       )}
                     </p>
                   ))}

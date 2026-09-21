@@ -1,5 +1,6 @@
 import { prisma } from "./prisma";
 import { shippingCentsFor } from "./brand";
+import { SET_CONTENTS, SET_TAG } from "./sets";
 
 export type ProductOptionValue = { value: string; labelFr: string; labelEn: string };
 export type ProductOption = { nameFr: string; nameEn: string; values: ProductOptionValue[] };
@@ -20,7 +21,7 @@ export type ProductView = {
   active: boolean;
 };
 
-export const COLLECTIONS = ["glow", "sculpt", "cool", "essentials", "the-ritual"] as const;
+export const COLLECTIONS = ["sets", "glow", "sculpt", "cool", "essentials", "the-ritual"] as const;
 export type CollectionHandle = (typeof COLLECTIONS)[number];
 
 export function isCollectionHandle(h: string): h is CollectionHandle {
@@ -63,7 +64,12 @@ export async function listProducts(collection?: CollectionHandle): Promise<Produ
   const rows = await prisma.product.findMany({
     where: {
       active: true,
-      ...(collection && collection !== "the-ritual" ? { tags: { has: collection } } : {}),
+      // "the-ritual" = every single product (bundles excluded); the others are tag-based.
+      ...(collection === "the-ritual"
+        ? { NOT: { tags: { has: SET_TAG } } }
+        : collection
+          ? { tags: { has: collection } }
+          : {}),
     },
     orderBy: { sortOrder: "asc" },
   });
@@ -73,6 +79,38 @@ export async function listProducts(collection?: CollectionHandle): Promise<Produ
 export async function getProduct(slug: string): Promise<ProductView | null> {
   const p = await prisma.product.findUnique({ where: { slug } });
   return p && p.active ? toView(p) : null;
+}
+
+export type SetComponentView = {
+  slug: string;
+  nameEn: string;
+  nameFr: string;
+  image: string | null;
+  qty: number;
+};
+
+/** Components of a set (contents order) for the "What's inside" grid. Empty for non-sets. */
+export async function getSetComponents(slug: string): Promise<SetComponentView[]> {
+  const contents = SET_CONTENTS[slug];
+  if (!contents?.length) return [];
+  const rows = await prisma.product.findMany({ where: { slug: { in: contents.map((c) => c.slug) }, active: true } });
+  return contents.flatMap((c) => {
+    const r = rows.find((x) => x.slug === c.slug);
+    if (!r) return [];
+    const images = Array.isArray(r.images) ? (r.images as string[]) : [];
+    return [{ slug: r.slug, nameEn: r.nameEn, nameFr: r.nameFr, image: images[0] ?? null, qty: c.qty }];
+  });
+}
+
+/** Fulfilment recipes (shippingNote) of ordered items that are sets: slug → recipe. Owner-facing only. */
+export async function setRecipes(slugs: string[]): Promise<Map<string, string>> {
+  const unique = [...new Set(slugs)];
+  if (!unique.length) return new Map();
+  const rows = await prisma.product.findMany({
+    where: { slug: { in: unique }, tags: { has: SET_TAG } },
+    select: { slug: true, shippingNote: true },
+  });
+  return new Map(rows.map((r) => [r.slug, r.shippingNote || "Set: see /admin/products for its contents."]));
 }
 
 export type CartLineInput = { slug: string; qty: number; selected: Record<string, string> };

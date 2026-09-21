@@ -44,7 +44,8 @@ export async function buildGoogleFeed(locale: "en" | "fr"): Promise<Response> {
       <g:availability>in_stock</g:availability>
       <g:condition>new</g:condition>
       <g:brand>${esc(BRAND.name)}</g:brand>
-      <g:identifier_exists>no</g:identifier_exists>
+      <g:identifier_exists>no</g:identifier_exists>${p.tags.includes("sets") ? `
+      <g:is_bundle>yes</g:is_bundle>` : ""}
       <g:google_product_category>Health &amp; Beauty &gt; Personal Care &gt; Cosmetics &gt; Cosmetic Tools &gt; Skin Care Tools</g:google_product_category>
       <g:price>${money(onSale ? p.compareAtCents! : p.priceCents)}</g:price>${onSale ? `
       <g:sale_price>${money(p.priceCents)}</g:sale_price>` : ""}

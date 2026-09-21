@@ -1,4 +1,5 @@
 import { listProducts } from "@/lib/shop";
+import { HOME_SETS, SET_TAG } from "@/lib/sets";
 import { serverLocale } from "@/i18n/server";
 import { faqItems } from "@/content/faq";
 import { SHIPPING } from "@/lib/brand";
@@ -18,6 +19,8 @@ export const dynamic = "force-dynamic";
 export default async function HomePage() {
   const locale = await serverLocale();
   const products = await listProducts().catch(() => []);
+  const singles = products.filter((p) => !p.tags.includes(SET_TAG));
+  const homeSets = HOME_SETS.flatMap((slug) => products.filter((p) => p.slug === slug));
   const productNames = Object.fromEntries(products.map((p) => [p.slug, { en: p.nameEn, fr: p.nameFr }]));
   const faq = faqItems(locale, formatWholeDollars(SHIPPING.freeThresholdCents, locale)).slice(0, 5);
 
@@ -26,7 +29,8 @@ export default async function HomePage() {
       <JsonLd data={faqLd(faq)} />
       <Hero />
       <Marquee />
-      <FeaturedProducts products={products} />
+      <FeaturedProducts products={singles} />
+      <FeaturedProducts products={homeSets} variant="sets" />
       <Benefits />
       <Routine productNames={productNames} />
       <FounderNote />

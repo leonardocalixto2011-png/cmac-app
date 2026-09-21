@@ -311,6 +311,7 @@
 
 /* ---- Featured / product cards ---- */
 .cmac-featured { background: var(--color-cream); padding: var(--section-pad) 0; }
+.cmac-featured--sets { background: var(--color-cream-2); }
 .cmac-featured__head { display: flex; justify-content: space-between; align-items: end; gap: 24px; flex-wrap: wrap; margin-bottom: 38px; }
 .cmac-featured h2 { font-size: clamp(2rem, 4vw, 3.2rem); margin-top: 14px; }
 .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 20px; }

@@ -19,6 +19,7 @@ export function Footer() {
       links: [
         { href: "/shop", label: t("nav.shop") },
         { href: "/collections/the-ritual", label: t("coll.the-ritual.t") },
+        { href: "/collections/sets", label: t("nav.sets") },
         { href: "/collections/glow", label: t("nav.glow") },
         { href: "/collections/sculpt", label: t("nav.sculpt") },
         { href: "/collections/cool", label: t("nav.cool") },

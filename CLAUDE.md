@@ -51,7 +51,7 @@ and server pages. Long-form pages live in `src/content/pages.ts`, FAQ in
 | `/` | Hero, Marquee, FeaturedProducts (DB), Benefits (counting stats), Routine (self-drawing line, links to products), FounderNote (rotating stamp), Faq (details/summary + FAQPage JSON-LD), Newsletter |
 | `/shop` | grid + collection filter chips |
 | `/shop/[slug]` | gallery, tagline, price + compare-at, variant options, add to cart, description HTML (How to use / Good to know), delivery+returns block, Product JSON-LD |
-| `/collections/glow|sculpt|cool|essentials|the-ritual` | tag-based; `the-ritual` = all active |
+| `/collections/sets|glow|sculpt|cool|essentials|the-ritual` | tag-based; `the-ritual` = all active single products (tag `sets` excluded) |
 | `/cart` | localStorage cart (`cmac-cart`), shipping preview, Stripe checkout |
 | `/shop/thanks?order=<ref>` | clears cart |
 | `/about /faq /shipping-returns /contact /privacy /terms /refund-policy` | bilingual; contact stores `ContactMessage` + emails owner |
@@ -61,6 +61,12 @@ and server pages. Long-form pages live in `src/content/pages.ts`, FAQ in
 | `sitemap.xml`, `robots.txt`, `opengraph-image`, `icon.svg` | SEO |
 
 ## Key files
+
+- `src/lib/sets.ts` — curated bundle Sets: contents (slug × qty) + CJ variant per component. A set is a
+  normal Product tagged `sets`, no options, `supplierSku: "SET"`, `shippingNote` = CJ recipe (shown in
+  /admin/orders and the owner new-order email). Seeded in `prisma/seed.ts` (`SETS`, compare-at = sum of
+  components; images = components’ photos). Product page shows a "What’s inside" grid + savings;
+  tag `limited` shows a badge (Sweater Weather: deactivate it in /admin after Nov 30). Feeds add `g:is_bundle`.
 
 - `src/lib/shop.ts` — `listProducts(collection?)`, `getProduct`, `validateCart`
   (re-checks price/options server-side, computes shipping), order helpers.

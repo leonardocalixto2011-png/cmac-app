@@ -8,9 +8,9 @@ import { ProductArt } from "./ProductArt";
 import { Icon } from "@/components/Icon";
 import { formatMoneyFromCents, formatWholeDollars, cn } from "@/lib/utils";
 import { POLICY, SHIPPING } from "@/lib/brand";
-import type { ProductView } from "@/lib/shop";
+import type { ProductView, SetComponentView } from "@/lib/shop";
 
-export function ProductDetail({ product }: { product: ProductView }) {
+export function ProductDetail({ product, components = [] }: { product: ProductView; components?: SetComponentView[] }) {
   const { t, locale } = useLocale();
   const cart = useCart();
 
@@ -18,6 +18,7 @@ export function ProductDetail({ product }: { product: ProductView }) {
   const tagline = locale === "fr" ? product.taglineFr ?? product.tagline : product.tagline;
   const description = locale === "fr" ? product.descriptionFr : product.descriptionEn;
   const onSale = product.compareAtCents != null && product.compareAtCents > product.priceCents;
+  const isSet = product.tags.includes("sets");
   const pct = onSale ? Math.round(((product.compareAtCents! - product.priceCents) / product.compareAtCents!) * 100) : 0;
 
   const [selected, setSelected] = useState<Record<string, string>>(() =>
@@ -92,6 +93,11 @@ export function ProductDetail({ product }: { product: ProductView }) {
         <span className="eyebrow">{t("shop.eyebrow")}</span>
         <h1 className="mt-3 text-[clamp(1.9rem,1.4rem+2vw,3rem)]">{name}</h1>
         {tagline && <p className="mt-2 text-[1.05rem] text-sage">{tagline}</p>}
+        {product.tags.includes("limited") && (
+          <span className="mt-3 inline-block rounded-full border border-terra px-3 py-0.5 font-ui text-[0.72rem] font-semibold uppercase tracking-[0.12em] text-terra">
+            {t("shop.limited")}
+          </span>
+        )}
 
         <p className="mt-4 flex flex-wrap items-baseline gap-3">
           <span className="font-ui text-2xl font-semibold text-ink">{formatMoneyFromCents(product.priceCents, locale)}</span>
@@ -102,6 +108,11 @@ export function ProductDetail({ product }: { product: ProductView }) {
             </>
           )}
         </p>
+        {isSet && onSale && (
+          <p className="mt-2 text-[0.92rem] text-ink-soft">
+            {t("shop.youSave", { amount: formatMoneyFromCents(product.compareAtCents! - product.priceCents, locale), pct })}
+          </p>
+        )}
 
         {product.options.map((o) => (
           <fieldset key={o.nameEn} className="mt-6">
@@ -146,6 +157,30 @@ export function ProductDetail({ product }: { product: ProductView }) {
           <Link href="/cart" className="btn btn--ghost btn--sm mt-3">
             {t("shop.viewCart")} ({cart.count})
           </Link>
+        )}
+
+        {components.length > 0 && (
+          <div className="mt-8 border-t border-[var(--line)] pt-6">
+            <h2 className="mb-3 text-[1.25rem]">{t("shop.inside")}</h2>
+            <ul className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+              {components.map((c) => {
+                const cName = locale === "fr" ? c.nameFr : c.nameEn;
+                return (
+                  <li key={c.slug}>
+                    <Link href={`/shop/${c.slug}`} className="group block text-[0.85rem] leading-snug text-ink-soft hover:text-terra">
+                      <div className="relative mb-2 aspect-square overflow-hidden rounded-xl bg-cream-2">
+                        <ProductArt images={c.image ? [c.image] : []} name={cName} tags={product.tags} sizes="120px" />
+                        {c.qty > 1 && (
+                          <span className="absolute right-1.5 top-1.5 rounded-full bg-ink px-2 py-0.5 text-[0.7rem] font-semibold text-cream">×{c.qty}</span>
+                        )}
+                      </div>
+                      {cName}
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
         )}
 
         {description && (
