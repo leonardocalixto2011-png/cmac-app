@@ -22,6 +22,7 @@ export function Footer() {
         { href: "/collections/glow", label: t("nav.glow") },
         { href: "/collections/sculpt", label: t("nav.sculpt") },
         { href: "/collections/cool", label: t("nav.cool") },
+        { href: "/collections/essentials", label: t("nav.essentials") },
       ],
     },
     {

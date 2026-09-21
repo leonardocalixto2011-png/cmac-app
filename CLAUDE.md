@@ -1,7 +1,7 @@
 # CMAC Beauty — standalone e-commerce app (cmacbeauty.ca)
 
-Montréal / L'Assomption beauty-tech brand selling 4 at-home devices, fulfilled
-via CJdropshipping. **Own project, own Stripe / Resend / Neon accounts** — never
+Montréal / L'Assomption beauty-tech brand selling at-home devices + ritual essentials (10 active
+products), fulfilled via CJdropshipping. **Own project, own Stripe / Resend / Neon accounts** — never
 share keys or code paths with the Couca & Co. app (`C:\Users\leona\couca-app`),
 which it was scaffolded from.
 
@@ -25,7 +25,9 @@ Source: `../OneDrive/Claude projets/cmac-store/research/sourcing-report-2026-09-
 - Currency CAD, Canada-only shipping
 - Shipping: flat **$9.99**, **free at $75+** subtotal (`SHIPPING` const). Hero,
   marquee, FAQ, cart, product page, policies and Stripe all read this constant.
-- Delivery estimate **2–4 weeks** (CJ from China), processing 1–3 business days
+- Delivery: processing 1–3 business days, then **7–15 business days** transit
+  (CJPacket JYSP Sensitive, China → Canada), shown rounded as **about 1–3 weeks**
+  (`SHIPPING.deliveryBusinessDays` / `deliveryWeeks`)
 - Returns **30 days** unused in original packaging; hygiene items unopened
 - Warranty **12 months** against manufacturing defects
 - No invented reviews, awards or stats. Stats shown (10 min / 3x / 60 s) are
@@ -49,7 +51,7 @@ and server pages. Long-form pages live in `src/content/pages.ts`, FAQ in
 | `/` | Hero, Marquee, FeaturedProducts (DB), Benefits (counting stats), Routine (self-drawing line, links to products), FounderNote (rotating stamp), Faq (details/summary + FAQPage JSON-LD), Newsletter |
 | `/shop` | grid + collection filter chips |
 | `/shop/[slug]` | gallery, tagline, price + compare-at, variant options, add to cart, description HTML (How to use / Good to know), delivery+returns block, Product JSON-LD |
-| `/collections/glow|sculpt|cool|the-ritual` | tag-based; `the-ritual` = all active |
+| `/collections/glow|sculpt|cool|essentials|the-ritual` | tag-based; `the-ritual` = all active |
 | `/cart` | localStorage cart (`cmac-cart`), shipping preview, Stripe checkout |
 | `/shop/thanks?order=<ref>` | clears cart |
 | `/about /faq /shipping-returns /contact /privacy /terms /refund-policy` | bilingual; contact stores `ContactMessage` + emails owner |
@@ -90,11 +92,17 @@ Single baseline migration `prisma/migrations/0_init` (generated with
 
 ## STILL PLACEHOLDER — needs the owner
 
-- **Product images**: `images: []` → `ProductArt` renders a branded gradient
-  placeholder. Paste supplier photo URLs in `/admin/products` (one per line).
-- **Ice roller colours** "Pink / White / Sage": placeholder option values. Real
-  colour names + variant SKUs come from the CJ listing (edit Options JSON in admin).
-- **`supplierUrl` / `supplierSku`** empty until the CJ listings are chosen.
+- **Product images** are CJ CDN photos (seeded; research in
+  `../OneDrive/Claude projets/cmac-store/research/cj-catalog-2026-09-21.json`).
+  LED mask has only 1 clean CJ photo (the rest show a bundled serum): replace
+  with own sample photos. `ProductArt` still falls back to the branded gradient
+  when a product has no images. Cards cross-fade to the 2nd image on hover.
+- **Catalogue / supplier data** (`prisma/seed.ts`): real CJ variant names as
+  option values, `supplierUrl` / `supplierSku`, and `shippingNote` mapping each
+  colour to its CJ SKU + landed cost. The seed only fills images/options/
+  supplier fields on rows whose `images` is still empty, so admin edits win.
+- `electronic-gua-sha-massager` is **inactive** (no face gua sha on CJ);
+  replaced by `ems-sculpting-v-roller`.
 - **Hero + founder visuals** are CSS placeholders (`Hero.tsx`, `FounderNote.tsx`).
 - **Contact email** `cmac.13@outlook.com` → replace with a branded mailbox in
   `src/lib/brand.ts` and `EMAIL_FROM` once the Resend domain is verified.
@@ -118,15 +126,15 @@ npm install
 npx prisma dev --name cmac        # local Postgres; daemonises; port per machine
 # .env POSTGRES_PRISMA_URL = its URL + ?sslmode=disable&pgbouncer=true&connection_limit=1
 npm run db:push                   # or db:migrate
-npm run db:seed                   # 4 products + admin (ADMIN_EMAIL/ADMIN_PASSWORD)
+npm run db:seed                   # catalogue + admin (ADMIN_EMAIL/ADMIN_PASSWORD)
 npm run dev                       # http://localhost:3000
 ```
 
 Dev admin: `admin@cmacbeauty.ca` / `cmac-admin-dev` (change for prod).
 `npm run typecheck` · `npm run lint` · `npm run build`. On Windows, stop `next dev`
 before `npm run build` or `prisma generate` hits EPERM on the locked engine DLL.
-Seed is idempotent (only `sortOrder` updated on re-run); `RESET_PRODUCTS=1` to
-overwrite copy/prices from the seed file.
+Seed is idempotent (`sortOrder` always; supplier data only while `images` is
+empty); `RESET_PRODUCTS=1` to overwrite copy/prices/tags/options from the seed.
 
 ## Deploy runbook (owner)
 

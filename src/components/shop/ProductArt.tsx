@@ -20,6 +20,7 @@ export function ProductArt({
   className = "",
   sizes = "(max-width: 700px) 100vw, 480px",
   priority = false,
+  hoverImage,
 }: {
   images: string[];
   name: string;
@@ -27,11 +28,16 @@ export function ProductArt({
   className?: string;
   sizes?: string;
   priority?: boolean;
+  /** Optional second photo, cross-faded in on card hover (see .product-art__hover). */
+  hoverImage?: string;
 }) {
   if (images[0]) {
     return (
       <div className={cn("relative h-full w-full overflow-hidden", className)}>
         <Image src={images[0]} alt={name} fill priority={priority} className="object-cover" sizes={sizes} />
+        {hoverImage && hoverImage !== images[0] && (
+          <Image src={hoverImage} alt="" aria-hidden="true" fill className="product-art__hover object-cover" sizes={sizes} />
+        )}
       </div>
     );
   }

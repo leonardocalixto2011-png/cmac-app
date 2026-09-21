@@ -50,7 +50,7 @@ export default function OpengraphImage() {
           </div>
           <div style={{ display: "flex", marginTop: 24, fontSize: 84, lineHeight: 1.02, color: "#1F2422" }}>Skin that looks rested.</div>
           <div style={{ display: "flex", marginTop: 30, fontSize: 27, color: "#3B423F", fontFamily: "sans-serif" }}>
-            LED · microcurrent · gua sha · ice roller — the 10-minute evening ritual, shipped across Canada.
+            LED · microcurrent · EMS · ice roller — the 10-minute evening ritual, shipped across Canada.
           </div>
           <div style={{ display: "flex", marginTop: 34, fontSize: 22, color: "#4A5D4E", fontFamily: "sans-serif", fontWeight: 600 }}>cmacbeauty.ca</div>
         </div>

@@ -5,7 +5,7 @@ import { useLocale } from "@/i18n/LocaleProvider";
 import { ProductCard } from "./ProductCard";
 import type { ProductView } from "@/lib/shop";
 
-const FILTERS = ["all", "glow", "sculpt", "cool"] as const;
+const FILTERS = ["all", "glow", "sculpt", "cool", "essentials"] as const;
 type Filter = (typeof FILTERS)[number];
 
 export function ProductGrid({

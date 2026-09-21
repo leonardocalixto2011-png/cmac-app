@@ -10,7 +10,7 @@ const FAQ: Record<Locale, FaqItem[]> = {
   en: [
     {
       q: "How long does shipping take?",
-      a: "Orders are processed within 1 to 3 business days. Delivery is typically 2 to 4 weeks, depending on the item and your province; the estimate is shown at checkout before you pay. You'll receive a tracking number by email as soon as your parcel is on its way.",
+      a: "Orders are processed within 1 to 3 business days. Delivery then takes 7 to 15 business days (about 1 to 3 weeks), depending on the item and your province; the estimate is shown at checkout before you pay. You'll receive a tracking number by email as soon as your parcel is on its way.",
     },
     {
       q: "How much is shipping?",
@@ -38,13 +38,13 @@ const FAQ: Record<Locale, FaqItem[]> = {
     },
     {
       q: "Can I use several devices in one session?",
-      a: "Yes. Our suggested order is Cool, Lift, Glow: ice roller first, then microcurrent or gua sha, then the LED mask, then moisturizer.",
+      a: "Yes. Our suggested order is Cool, Lift, Glow: ice roller first, then the microcurrent device or EMS roller, then the LED mask, then moisturizer.",
     },
   ],
   fr: [
     {
       q: "Combien de temps prend la livraison ?",
-      a: "Les commandes sont traitées en 1 à 3 jours ouvrables. La livraison prend généralement de 2 à 4 semaines, selon l'article et votre province ; l'estimation est affichée au moment du paiement, avant de payer. Vous recevrez un numéro de suivi par courriel dès que votre colis sera en route.",
+      a: "Les commandes sont traitées en 1 à 3 jours ouvrables. La livraison prend ensuite de 7 à 15 jours ouvrables (environ 1 à 3 semaines), selon l'article et votre province ; l'estimation est affichée au moment du paiement, avant de payer. Vous recevrez un numéro de suivi par courriel dès que votre colis sera en route.",
     },
     {
       q: "Combien coûte la livraison ?",
@@ -72,7 +72,7 @@ const FAQ: Record<Locale, FaqItem[]> = {
     },
     {
       q: "Puis-je utiliser plusieurs appareils dans une même séance ?",
-      a: "Oui. L'ordre qu'on suggère : Rafraîchir, Lifter, Illuminer — le rouleau de glace d'abord, puis le microcourant ou le gua sha, puis le masque LED, puis l'hydratant.",
+      a: "Oui. L'ordre qu'on suggère : Rafraîchir, Lifter, Illuminer — le rouleau de glace d'abord, puis l'appareil microcourant ou le rouleau EMS, puis le masque LED, puis l'hydratant.",
     },
   ],
 };

@@ -20,7 +20,7 @@ export type ProductView = {
   active: boolean;
 };
 
-export const COLLECTIONS = ["glow", "sculpt", "cool", "the-ritual"] as const;
+export const COLLECTIONS = ["glow", "sculpt", "cool", "essentials", "the-ritual"] as const;
 export type CollectionHandle = (typeof COLLECTIONS)[number];
 
 export function isCollectionHandle(h: string): h is CollectionHandle {

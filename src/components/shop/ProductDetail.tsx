@@ -164,6 +164,8 @@ export function ProductDetail({ product }: { product: ProductView }) {
               {t("shop.delivery", {
                 pmin: SHIPPING.processingDays.min,
                 pmax: SHIPPING.processingDays.max,
+                dmin: SHIPPING.deliveryBusinessDays.min,
+                dmax: SHIPPING.deliveryBusinessDays.max,
                 wmin: SHIPPING.deliveryWeeks.min,
                 wmax: SHIPPING.deliveryWeeks.max,
               })}

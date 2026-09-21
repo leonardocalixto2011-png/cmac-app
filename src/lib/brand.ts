@@ -28,8 +28,10 @@ export const SHIPPING = {
   freeThresholdCents: 7500,
   /** Business-day handling window before the parcel leaves the supplier. */
   processingDays: { min: 1, max: 3 },
-  /** Delivery estimate shown everywhere (CJdropshipping from China). */
-  deliveryWeeks: { min: 2, max: 4 },
+  /** Carrier transit after processing (CJPacket, China → Canada), business days. */
+  deliveryBusinessDays: { min: 7, max: 15 },
+  /** Rounded delivery estimate shown everywhere (CJdropshipping from China). */
+  deliveryWeeks: { min: 1, max: 3 },
 } as const;
 
 export const POLICY = {

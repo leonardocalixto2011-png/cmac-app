@@ -36,7 +36,7 @@ export function ProductCard({ product: p, index = 0 }: { product: ProductView; i
   return (
     <article className="product-card tilt" data-reveal style={{ "--d": `${index * 90}ms` } as React.CSSProperties}>
       <Link className="product-card__media" href={href} aria-label={name}>
-        <ProductArt images={p.images} name={name} tags={p.tags} sizes="(min-width: 990px) 25vw, 50vw" />
+        <ProductArt images={p.images} hoverImage={p.images[1]} name={name} tags={p.tags} sizes="(min-width: 990px) 25vw, 50vw" />
         {onSale ? (
           <span className="product-card__badge">−{pct}%</span>
         ) : p.tags.includes("new") ? (
