@@ -6,7 +6,7 @@ import { useLocale } from "@/i18n/LocaleProvider";
 import { useCart } from "./CartProvider";
 import { Icon } from "@/components/Icon";
 
-export function OrderThanks({ reference, found }: { reference: string; found: boolean }) {
+export function OrderThanks({ reference, found, signedIn = false }: { reference: string; found: boolean; signedIn?: boolean }) {
   const { t } = useLocale();
   const cart = useCart();
 
@@ -29,8 +29,17 @@ export function OrderThanks({ reference, found }: { reference: string; found: bo
       ) : (
         <p className="mt-4 text-sm text-ink-faint">{t("shop.thanksNotFound")}</p>
       )}
-      <Link href="/shop" className="btn btn--ghost mt-7">
-        {t("shop.continue")}
+      {found && !signedIn && (
+        <div className="mt-7 rounded-[var(--radius-card)] bg-warm-white p-5">
+          <p className="text-[0.92rem] text-ink-soft">{t("shop.thanksJoin")}</p>
+          <Link href="/account/register" className="btn btn--sm mt-3">
+            <Icon name="gift" />
+            {t("shop.thanksJoinCta")}
+          </Link>
+        </div>
+      )}
+      <Link href={signedIn ? "/account/orders" : "/shop"} className="btn btn--ghost mt-7">
+        {signedIn ? t("acc.ordersPageTitle") : t("shop.continue")}
       </Link>
     </div>
   );

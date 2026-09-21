@@ -127,9 +127,20 @@ export function ProductDetail({ product, components = [] }: { product: ProductVi
         <h1 className="mt-3 text-[clamp(1.9rem,1.4rem+2vw,3rem)]">{name}</h1>
         {tagline && <p className="mt-2 text-[1.05rem] text-sage">{tagline}</p>}
         {product.tags.includes("limited") && (
-          <span className="mt-3 inline-block rounded-full border border-terra px-3 py-0.5 font-ui text-[0.72rem] font-semibold uppercase tracking-[0.12em] text-terra">
-            {t("shop.limited")}
-          </span>
+          <>
+            <span className="mt-3 inline-flex flex-wrap gap-2">
+              <span className="inline-block rounded-full border border-terra px-3 py-0.5 font-ui text-[0.72rem] font-semibold uppercase tracking-[0.12em] text-terra">
+                {t("shop.limited")}
+              </span>
+              <Link
+                href="/glow-club"
+                className="inline-block rounded-full bg-ink px-3 py-0.5 font-ui text-[0.72rem] font-semibold uppercase tracking-[0.12em] text-cream hover:bg-terra"
+              >
+                {t("shop.membersFirstBadge")}
+              </Link>
+            </span>
+            <p className="mt-2 text-[0.85rem] text-ink-soft">{t("shop.membersFirst")}</p>
+          </>
         )}
 
         <p className="mt-4 flex flex-wrap items-baseline gap-3">

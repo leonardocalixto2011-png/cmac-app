@@ -47,6 +47,7 @@ export const POLICY = {
   refundProcessingDays: 5,
 } as const;
 
+/** Standard (guest) shipping rule. Glow Club tiers: see shippingCentsForTier in loyalty-rules.ts. */
 export function shippingCentsFor(subtotalCents: number): number {
   return subtotalCents >= SHIPPING.freeThresholdCents ? 0 : SHIPPING.flatCents;
 }

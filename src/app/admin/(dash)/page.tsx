@@ -4,17 +4,19 @@ import { fmtDateTime } from "@/lib/fmt";
 import { formatMoneyFromCents } from "@/lib/utils";
 import { orderItems } from "@/lib/shop";
 import { StatusPill } from "@/components/admin/ui";
+import { integrationStatus } from "@/lib/integrations";
 
 export const dynamic = "force-dynamic";
 
 export default async function AdminHome() {
   const d = await dashboardData();
+  const integrations = integrationStatus();
 
   const stats = [
     { label: "To fulfil", value: String(d.pendingFulfil), href: "/admin/orders?status=PAID" },
     { label: "Paid orders (all time)", value: String(d.paidCount), href: "/admin/orders" },
     { label: "Revenue · 30 days", value: formatMoneyFromCents(d.revenue30Cents, "en"), href: "/admin/orders" },
-    { label: "Subscribers", value: String(d.subscribers), href: "/admin/subscribers" },
+    { label: "Confirmed subscribers", value: String(d.subscribers), href: "/admin/newsletter" },
   ];
 
   return (
@@ -29,6 +31,32 @@ export default async function AdminHome() {
           </Link>
         ))}
       </div>
+
+      <section aria-labelledby="integrations-title" className="rounded-2xl bg-warm-white p-4">
+        <h2 id="integrations-title" className="text-[1.05rem]">Integrations</h2>
+        <p className="mt-1 text-[0.8rem] text-ink-faint">
+          Reads whether each environment variable is set in Vercel (values are never shown). Missing ones disable the matching feature gracefully.
+        </p>
+        <ul className="mt-3 flex flex-wrap gap-2">
+          {integrations.map((i) => (
+            <li
+              key={i.key}
+              title={i.env}
+              className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[0.8rem] font-semibold ${i.ok ? "bg-sage/15 text-sage" : "bg-terra/10 text-terra"}`}
+            >
+              <span aria-hidden>{i.ok ? "✓" : "✗"}</span>
+              {i.label}
+              <span className="sr-only-text">{i.ok ? "configured" : "not configured"}</span>
+            </li>
+          ))}
+        </ul>
+        {integrations.some((i) => !i.ok) && (
+          <p className="mt-3 text-[0.8rem] text-ink-soft">
+            Not configured → Resend: no emails are sent (order confirmations, password resets, newsletter). Mailing address: newsletter campaigns,
+            welcome and birthday emails are blocked (CASL). Cron: no birthday rewards. See CLAUDE.md → Owner setup.
+          </p>
+        )}
+      </section>
 
       <section>
         <div className="mb-3 flex items-center justify-between">

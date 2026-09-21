@@ -29,7 +29,7 @@ export function LongForm({ page, eyebrow }: { page: keyof typeof PAGES; eyebrow?
       )}
       <div className="prose mt-6">
         {c.blocks.map((b, i) => (
-          <section key={i}>
+          <section key={i} id={b.id} className={b.id ? "scroll-mt-[calc(var(--nav-h)+16px)]" : undefined}>
             {b.h && <h2>{b.h}</h2>}
             {b.p?.map((p, j) => <p key={j}>{p}</p>)}
             {b.ul && (

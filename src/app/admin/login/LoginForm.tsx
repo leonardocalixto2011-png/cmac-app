@@ -16,7 +16,7 @@ export function LoginForm({ from, initialError }: { from?: string; initialError?
     e.preventDefault();
     setError(null);
     startTransition(async () => {
-      const res = await signIn("credentials", { email, password, redirect: false });
+      const res = await signIn("credentials", { email, password, scope: "admin", redirect: false });
       if (res?.error) {
         setError("Invalid email or password.");
         return;

@@ -13,6 +13,7 @@ import { Routine } from "@/components/sections/Routine";
 import { FounderNote } from "@/components/sections/FounderNote";
 import { Faq } from "@/components/sections/Faq";
 import { Newsletter } from "@/components/sections/Newsletter";
+import { GlowBand } from "@/components/sections/GlowBand";
 
 export const dynamic = "force-dynamic";
 
@@ -35,6 +36,7 @@ export default async function HomePage() {
       <Routine productNames={productNames} />
       <FounderNote />
       <Faq limit={5} />
+      <GlowBand />
       <Newsletter />
     </>
   );

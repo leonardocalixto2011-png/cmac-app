@@ -1,24 +1,53 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import Link from "next/link";
 import { useLocale } from "@/i18n/LocaleProvider";
-import { subscribe } from "@/app/actions/newsletter";
+import { subscribe, type SubscribeResult } from "@/app/actions/newsletter";
+import { BRAND } from "@/lib/brand";
 
+/** Maps a subscribe result to its message key (shared with the popup). */
+export function subscribeMessageKey(res: SubscribeResult): { key: string; ok: boolean } {
+  switch (res) {
+    case "pending":
+      return { key: "news.pending", ok: true };
+    case "pending_no_email":
+      return { key: "news.pendingNoEmail", ok: true };
+    case "already":
+      return { key: "news.already", ok: true };
+    case "invalid":
+      return { key: "news.invalid", ok: false };
+    case "limited":
+      return { key: "news.limited", ok: false };
+    default:
+      return { key: "news.error", ok: false };
+  }
+}
+
+/** Homepage / footer-area signup. CASL: the consent wording sits next to the button; double opt-in follows. */
 export function Newsletter() {
   const { t, locale } = useLocale();
   const [email, setEmail] = useState("");
-  const [state, setState] = useState<"idle" | "ok" | "already" | "invalid" | "error">("idle");
+  const [result, setResult] = useState<SubscribeResult | null>(null);
   const [pending, start] = useTransition();
 
   function submit(e: React.FormEvent) {
     e.preventDefault();
     start(async () => {
-      const res = await subscribe(email, locale);
-      setState(res);
+      const res = await subscribe(email, locale, "footer");
+      setResult(res);
+      if (subscribeMessageKey(res).ok) {
+        try {
+          localStorage.setItem("cmac-news-popup", String(Date.now())); // don't show the popup offer again
+        } catch {
+          /* ignore */
+        }
+      }
     });
   }
 
   const D = (ms: number) => ({ "--d": `${ms}ms` }) as React.CSSProperties;
+  const msg = result ? subscribeMessageKey(result) : null;
 
   return (
     <section className="cmac-news grain" data-glow id="newsletter">
@@ -32,12 +61,12 @@ export function Newsletter() {
         <p className="cmac-news__lead" data-reveal style={D(160)}>
           {t("news.lead")}
         </p>
-        {state === "ok" || state === "already" ? (
+        {msg?.ok ? (
           <p className="cmac-news__ok" role="status">
-            {t(state === "ok" ? "news.ok" : "news.already")}
+            {t(msg.key)}
           </p>
         ) : (
-          <form onSubmit={submit} noValidate>
+          <form onSubmit={submit} noValidate aria-describedby="news-consent">
             <div className="cmac-news__row" data-reveal style={D(240)}>
               <label className="sr-only-text" htmlFor="news-email">
                 {t("contact.email")}
@@ -56,15 +85,18 @@ export function Newsletter() {
                 {pending ? "…" : t("news.button")}
               </button>
             </div>
-            {(state === "invalid" || state === "error") && (
+            {msg && !msg.ok && (
               <p className="cmac-news__err" role="alert">
-                {t(state === "invalid" ? "news.invalid" : "news.error")}
+                {t(msg.key)}
               </p>
             )}
           </form>
         )}
-        <p className="cmac-news__fine" data-reveal style={D(320)}>
-          {t("news.fine")}
+        <p className="cmac-news__fine" id="news-consent" data-reveal style={D(320)}>
+          {t("consent.newsletter", { email: BRAND.email })}{" "}
+          <Link href="/privacy" className="underline underline-offset-2 hover:text-cream">
+            {t("news.privacy")}
+          </Link>
         </p>
       </div>
     </section>

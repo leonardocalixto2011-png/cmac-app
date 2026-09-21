@@ -13,11 +13,25 @@ export type IconName =
   | "snow"
   | "clock"
   | "heart"
-  | "spark";
+  | "spark"
+  | "user"
+  | "gift";
 
 const STROKE = { fill: "none", stroke: "currentColor", strokeLinecap: "round", strokeLinejoin: "round" } as const;
 
 const PATHS: Record<IconName, React.ReactNode> = {
+  user: (
+    <g {...STROKE} strokeWidth="1.7">
+      <circle cx="12" cy="8.2" r="3.6" />
+      <path d="M4.8 20c.9-3.6 3.8-5.6 7.2-5.6s6.3 2 7.2 5.6" />
+    </g>
+  ),
+  gift: (
+    <g {...STROKE} strokeWidth="1.7">
+      <rect x="3.5" y="8.5" width="17" height="4" rx="1" />
+      <path d="M5 12.5V20a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-7.5M12 8.5V21M12 8.5c-1.8 0-4.5-.6-4.5-2.6 0-1.3 1-2 2-2 1.9 0 2.5 2.6 2.5 4.6Zm0 0c1.8 0 4.5-.6 4.5-2.6 0-1.3-1-2-2-2-1.9 0-2.5 2.6-2.5 4.6Z" />
+    </g>
+  ),
   menu: <path d="M3 6h18M3 12h18M3 18h18" {...STROKE} strokeWidth="1.7" />,
   close: <path d="M6 6l12 12M18 6L6 18" {...STROKE} strokeWidth="1.7" />,
   arrow: <path d="M5 12h14M13 6l6 6-6 6" {...STROKE} strokeWidth="2" />,

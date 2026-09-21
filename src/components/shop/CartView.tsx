@@ -7,14 +7,18 @@ import { useCart } from "./CartProvider";
 import { ProductArt } from "./ProductArt";
 import { checkout } from "@/app/shop/actions";
 import { Icon } from "@/components/Icon";
-import { formatMoneyFromCents } from "@/lib/utils";
-import { SHIPPING } from "@/lib/brand";
+import { formatMoneyFromCents, formatWholeDollars } from "@/lib/utils";
+import { BRAND, SHIPPING } from "@/lib/brand";
+import { getTier, pointsFor, type TierId } from "@/lib/loyalty-rules";
 
-export function CartView() {
+export type CartMember = { tier: TierId; freeShippingFromCents: number; quarterPointsPerDollar: number } | null;
+
+export function CartView({ member = null, subscribed = false }: { member?: CartMember; subscribed?: boolean }) {
   const { t, locale } = useLocale();
   const cart = useCart();
   const [pending, start] = useTransition();
   const [error, setError] = useState<string | null>(null);
+  const [optIn, setOptIn] = useState(false); // CASL: unchecked by default
 
   function pay() {
     setError(null);
@@ -22,6 +26,7 @@ export function CartView() {
       const res = await checkout(
         cart.items.map((i) => ({ slug: i.slug, qty: i.qty, selected: i.selected })),
         locale,
+        { newsletter: optIn },
       );
       if (res.ok) {
         window.location.href = res.url;
@@ -35,7 +40,13 @@ export function CartView() {
     });
   }
 
-  const remaining = SHIPPING.freeThresholdCents - cart.subtotalCents;
+  // Preview only — checkout recomputes shipping server-side from the session's tier.
+  const freeFrom = member ? member.freeShippingFromCents : SHIPPING.freeThresholdCents;
+  const shippingCents = cart.items.length && cart.subtotalCents < freeFrom ? SHIPPING.flatCents : 0;
+  const totalCents = cart.subtotalCents + shippingCents;
+  const remaining = freeFrom - cart.subtotalCents;
+  const tierName = member ? t(`tier.${member.tier}`) : "";
+  const earn = member ? pointsFor(cart.subtotalCents, getTier(member.tier)) : 0;
 
   return (
     <div className="mx-auto max-w-[680px]">
@@ -94,25 +105,53 @@ export function CartView() {
             <div className="flex justify-between">
               <dt className="text-ink-soft">{t("shop.shipping")}</dt>
               <dd className="tabular-nums">
-                {cart.shippingCents === 0 ? t("shop.shippingFree") : formatMoneyFromCents(cart.shippingCents, locale)}
+                {shippingCents === 0 ? t("shop.shippingFree") : formatMoneyFromCents(shippingCents, locale)}
               </dd>
             </div>
             <div className="mt-1 flex justify-between border-t border-[var(--line)] pt-3">
               <dt className="font-ui text-[0.78rem] font-semibold uppercase tracking-[0.18em] text-ink-soft">{t("shop.total")}</dt>
-              <dd className="font-display text-2xl font-semibold tabular-nums text-ink">{formatMoneyFromCents(cart.totalCents, locale)}</dd>
+              <dd className="font-display text-2xl font-semibold tabular-nums text-ink">{formatMoneyFromCents(totalCents, locale)}</dd>
             </div>
           </dl>
 
-          <p className="mt-3 rounded-2xl bg-warm-white px-4 py-3 text-[0.85rem] text-sage">
-            {remaining > 0
-              ? t("shop.freeShipAway", { amount: formatMoneyFromCents(remaining, locale) })
-              : t("shop.freeShipUnlocked")}
+          <div className="mt-3 flex flex-col gap-1 rounded-2xl bg-warm-white px-4 py-3 text-[0.85rem] text-sage">
+            {member && member.tier !== "glow" && (
+              <p className="font-semibold text-ink">
+                {freeFrom === 0
+                  ? t("shop.memberPerkAll", { tier: tierName })
+                  : t("shop.memberPerk", { tier: tierName, amount: formatWholeDollars(freeFrom, locale) })}
+              </p>
+            )}
+            <p>
+              {remaining > 0
+                ? t("shop.freeShipAway", { amount: formatMoneyFromCents(remaining, locale) })
+                : t("shop.freeShipUnlocked")}
+            </p>
+          </div>
+          <p className="mt-2 flex flex-wrap items-center gap-x-2 text-[0.82rem] text-ink-soft">
+            {member ? (
+              t("shop.earnPoints", { points: earn })
+            ) : (
+              <>
+                {t("shop.joinNudge")}
+                <Link href="/account/register?from=/cart" className="font-semibold text-terra underline underline-offset-2">
+                  {t("shop.joinFree")}
+                </Link>
+              </>
+            )}
           </p>
           <p className="mt-2 text-[0.8rem] text-ink-faint">{t("shop.taxNote")}</p>
           {error && (
             <p className="mt-3 rounded-2xl bg-terra/10 px-4 py-3 text-sm text-terra" role="alert">
               {error}
             </p>
+          )}
+
+          {!subscribed && (
+            <label className="mt-4 flex items-start gap-3 rounded-2xl border border-[var(--line)] px-4 py-3 text-[0.8rem] leading-relaxed text-ink-soft">
+              <input type="checkbox" className="mt-0.5 h-4 w-4 flex-none accent-[var(--color-terra)]" checked={optIn} onChange={(e) => setOptIn(e.target.checked)} />
+              <span>{t("consent.newsletter", { email: BRAND.email })}</span>
+            </label>
           )}
 
           <button type="button" onClick={pay} disabled={pending} className="btn btn--block mt-5">

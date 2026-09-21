@@ -16,11 +16,11 @@ const LINKS = [
   { href: "/collections/glow", key: "nav.glow" },
   { href: "/collections/sculpt", key: "nav.sculpt" },
   { href: "/collections/cool", key: "nav.cool" },
-  { href: "/#routine", key: "nav.how" },
+  { href: "/glow-club", key: "nav.glowClub" },
   { href: "/about", key: "nav.about" },
 ] as const;
 
-export function Nav() {
+export function Nav({ signedIn = false }: { signedIn?: boolean }) {
   const { t } = useLocale();
   const pathname = usePathname();
   const cart = useCart();
@@ -79,6 +79,15 @@ export function Nav() {
           <div className="flex items-center gap-2">
             <LangToggle />
             <Link
+              href="/account"
+              aria-label={signedIn ? t("nav.account") : t("nav.signIn")}
+              title={signedIn ? t("nav.account") : t("nav.signIn")}
+              className="relative inline-flex h-[42px] w-[42px] items-center justify-center rounded-full border border-[var(--line)] text-ink transition-colors hover:border-ink"
+            >
+              <Icon name="user" width={19} height={19} />
+              {signedIn && <span aria-hidden className="absolute right-[7px] top-[7px] h-2 w-2 rounded-full bg-terra ring-2 ring-cream" />}
+            </Link>
+            <Link
               href="/cart"
               aria-label={`${t("nav.cart")}${cart.count ? ` (${cart.count})` : ""}`}
               className="relative inline-flex h-[42px] items-center gap-1.5 rounded-full bg-ink px-3.5 text-[0.82rem] font-semibold text-cream transition-colors hover:bg-terra"
@@ -124,7 +133,11 @@ export function Nav() {
             {t(l.key)}
           </Link>
         ))}
-        <Link href="/cart" onClick={() => setOpen(false)} className="btn btn--block mt-6">
+        <Link href="/account" onClick={() => setOpen(false)} className="btn btn--ghost btn--block mt-6">
+          <Icon name="user" />
+          {signedIn ? t("nav.account") : t("nav.signIn")}
+        </Link>
+        <Link href="/cart" onClick={() => setOpen(false)} className="btn btn--block mt-3">
           <Icon name="cart" />
           {t("nav.cart")}
           {cart.count > 0 ? ` (${cart.count})` : ""}

@@ -4,11 +4,16 @@ import { getStripe } from "@/lib/stripe";
 import { prisma } from "@/lib/prisma";
 import { sendOrderConfirmation, sendOwnerOrderNotice } from "@/lib/email";
 import { normalizeLocale } from "@/i18n/messages";
+import { creditOrder, markCodesRedeemed } from "@/lib/loyalty";
+import { subscribeEmail } from "@/lib/newsletter";
 
 /**
  * Stripe webhook — `checkout.session.completed` marks the order PAID, stores
  * the collected shipping address + name, then emails the customer (EN/FR per
- * order locale) and the owner. Register this URL in the CMAC Stripe account:
+ * order locale) and the owner. The order is linked to the Customer with the
+ * same email; if that customer is a Glow Club member, points are credited
+ * (idempotent ledger) and any reward code used is marked redeemed. A cart
+ * newsletter opt-in starts the CASL double opt-in. Register this URL in the CMAC Stripe account:
  *   https://cmacbeauty.ca/api/stripe/webhook
  */
 export async function POST(req: NextRequest) {
@@ -48,13 +53,18 @@ export async function POST(req: NextRequest) {
     const contactName = shippingObj?.name ?? session.customer_details?.name ?? null;
     const paymentIntentId = typeof session.payment_intent === "string" ? session.payment_intent : session.payment_intent?.id ?? null;
 
-    const customer = contactEmail
-      ? await prisma.customer.upsert({
-          where: { email: contactEmail.toLowerCase() },
-          update: { name: contactName ?? undefined, locale: order.locale },
-          create: { email: contactEmail.toLowerCase(), name: contactName, locale: order.locale },
-        })
-      : null;
+    // Link to the customer: the signed-in member's (set at checkout) or the one with this email.
+    const linked = order.customerId ? await prisma.customer.findUnique({ where: { id: order.customerId } }) : null;
+    const customer =
+      linked ??
+      (contactEmail
+        ? await prisma.customer.upsert({
+            where: { email: contactEmail.toLowerCase() },
+            update: { name: contactName ?? undefined },
+            create: { email: contactEmail.toLowerCase(), name: contactName, locale: order.locale },
+          })
+        : null);
+    const discountCents = session.total_details?.amount_discount ?? 0;
 
     const updated = await prisma.order.update({
       where: { id: order.id },
@@ -65,9 +75,27 @@ export async function POST(req: NextRequest) {
         shippingJson: (shipping as object) ?? undefined,
         stripePaymentIntentId: paymentIntentId ?? undefined,
         customerId: customer?.id,
+        discountCents,
       },
     });
     console.info(`[shop] order ${updated.reference} paid`);
+
+    // Glow Club — never let loyalty bookkeeping break the payment webhook.
+    try {
+      const points = await creditOrder(updated.id);
+      if (points) console.info(`[loyalty] +${points} pts for order ${updated.reference}`);
+      const promoIds = (session.discounts ?? [])
+        .map((d) => (typeof d.promotion_code === "string" ? d.promotion_code : d.promotion_code?.id))
+        .filter((x): x is string => Boolean(x));
+      await markCodesRedeemed(promoIds);
+    } catch (err) {
+      console.error("[loyalty] webhook bookkeeping failed", err);
+    }
+    if (updated.newsletterOptIn && updated.contactEmail) {
+      await subscribeEmail(updated.contactEmail, normalizeLocale(updated.locale), "checkout").catch((err) =>
+        console.error("[newsletter] checkout opt-in failed", err),
+      );
+    }
 
     const data = {
       reference: updated.reference,

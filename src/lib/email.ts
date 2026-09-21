@@ -1,9 +1,13 @@
 /**
  * Transactional email for CMAC Beauty. Uses Resend (REST) when RESEND_API_KEY
- * is set; otherwise logs to the server console so flows work end-to-end in dev.
+ * is set. Without it, nothing is sent: in development the full message is
+ * logged to the console (so links can be followed); in production only the
+ * recipient + subject are logged (never tokens / reset links).
  *
- * Customer emails are bilingual (per order locale): order confirmation and
- * shipping/tracking notice. Owner emails: new order, contact-form forward.
+ * Customer emails are bilingual (per order locale): order confirmation,
+ * shipping/tracking notice, password reset. Owner emails: new order,
+ * contact-form forward. Marketing email (newsletter, welcome, birthday,
+ * campaigns) lives in ./marketing.ts and reuses this transport + frame.
  */
 import type { Locale } from "@/i18n/messages";
 import { BRAND, SHIPPING, POLICY, siteUrl } from "./brand";
@@ -14,31 +18,57 @@ import { orderItems, setRecipes, shippingLines } from "./shop";
 // Transport
 // ---------------------------------------------------------------------------
 
-type SendInput = { to: string | string[]; subject: string; html: string; text: string; replyTo?: string };
+export type SendInput = {
+  to: string | string[];
+  subject: string;
+  html: string;
+  text: string;
+  replyTo?: string;
+  headers?: Record<string, string>;
+};
 
-export async function sendEmail(input: SendInput): Promise<void> {
-  const apiKey = process.env.RESEND_API_KEY;
-  const from = process.env.EMAIL_FROM || `${BRAND.name} <onboarding@resend.dev>`;
-  if (!apiKey) {
+export function emailFrom(): string {
+  return process.env.EMAIL_FROM || `${BRAND.name} <onboarding@resend.dev>`;
+}
+
+/** Logs an unsent email: full body in dev only (links / tokens never reach production logs). */
+export function logUnsent(input: Pick<SendInput, "to" | "subject" | "text">): void {
+  if (process.env.NODE_ENV !== "production") {
     console.info(`[email:dev] to=${input.to} subject="${input.subject}"\n${input.text}`);
-    return;
+  } else {
+    console.info(`[email] not configured (RESEND_API_KEY unset) — skipped "${input.subject}"`);
+  }
+}
+
+/** Sends one email. Returns true when Resend accepted it. */
+export async function sendEmail(input: SendInput): Promise<boolean> {
+  const apiKey = process.env.RESEND_API_KEY;
+  if (!apiKey) {
+    logUnsent(input);
+    return false;
   }
   try {
     const res = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
       body: JSON.stringify({
-        from,
+        from: emailFrom(),
         to: input.to,
         subject: input.subject,
         html: input.html,
         text: input.text,
         reply_to: input.replyTo,
+        headers: input.headers,
       }),
     });
-    if (!res.ok) console.error(`[email] Resend responded ${res.status}: ${await res.text()}`);
+    if (!res.ok) {
+      console.error(`[email] Resend responded ${res.status}: ${await res.text()}`);
+      return false;
+    }
+    return true;
   } catch (err) {
     console.error("[email] send failed", err);
+    return false;
   }
 }
 
@@ -51,9 +81,9 @@ export function ownerNotifyAddress(): string | null {
 // Shared HTML bits
 // ---------------------------------------------------------------------------
 
-const C = { cream: "#F5F1EA", ink: "#1F2422", soft: "#3B423F", faint: "#8A908D", terra: "#C97B63", sage: "#4A5D4E", line: "#E3DDD2", white: "#FFFDF9" };
+export const C = { cream: "#F5F1EA", ink: "#1F2422", soft: "#3B423F", faint: "#8A908D", terra: "#C97B63", sage: "#4A5D4E", line: "#E3DDD2", white: "#FFFDF9" };
 
-function esc(s: string): string {
+export function esc(s: string): string {
   return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 }
 
@@ -64,7 +94,7 @@ function row(label: string, value: string, strong = false): string {
   </tr>`;
 }
 
-function card(title: string, inner: string): string {
+export function card(title: string, inner: string): string {
   return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 18px;border:1px solid ${C.line};border-radius:18px;background:${C.white};">
     <tr><td style="padding:18px 20px;">
       <p style="margin:0 0 8px;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:${C.terra};font-family:Arial,Helvetica,sans-serif;font-weight:600;">${esc(title)}</p>
@@ -73,14 +103,16 @@ function card(title: string, inner: string): string {
   </table>`;
 }
 
-function frame(locale: Locale, title: string, inner: string): string {
+/** Branded email shell. `footerHtml` replaces the default one-line footer (marketing emails pass the CASL footer). */
+export function frame(locale: Locale, title: string, inner: string, footerHtml?: string, preheader?: string): string {
   return `<!doctype html><html lang="${locale}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"></head>
 <body style="margin:0;padding:24px 12px;background:${C.cream};font-family:Arial,Helvetica,sans-serif;color:${C.ink};">
+${preheader ? `<div style="display:none;max-height:0;overflow:hidden;opacity:0;">${esc(preheader)}</div>` : ""}
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;margin:0 auto;">
   <tr><td style="padding:0 0 14px;font-family:Georgia,serif;font-size:20px;font-weight:600;">CMAC <span style="font-family:Arial,sans-serif;font-size:10px;letter-spacing:0.3em;text-transform:uppercase;color:${C.sage};margin-left:6px;">Beauty</span></td></tr>
   <tr><td style="padding:0 0 16px;font-size:26px;font-family:Georgia,serif;line-height:1.15;">${esc(title)}</td></tr>
   <tr><td>${inner}</td></tr>
-  <tr><td style="padding:18px 4px 0;font-size:12px;color:${C.faint};line-height:1.5;">${esc(BRAND.name)} · ${esc(BRAND.area)} · <a href="mailto:${BRAND.email}" style="color:${C.terra};">${BRAND.email}</a></td></tr>
+  <tr><td style="padding:18px 4px 0;font-size:12px;color:${C.faint};line-height:1.5;">${footerHtml ?? `${esc(BRAND.name)} · ${esc(BRAND.area)} · <a href="mailto:${BRAND.email}" style="color:${C.terra};">${BRAND.email}</a>`}</td></tr>
 </table></body></html>`;
 }
 
@@ -262,4 +294,35 @@ export async function sendContactForward(m: { name: string; email: string; messa
     <p style="margin:0;font-size:13px;color:${C.faint};">Reply directly to this email to answer.</p>`;
   const text = [subject, "", `${m.name} <${m.email}> (${m.locale})`, "", m.message].join("\n");
   await sendEmail({ to, subject, html: frame("en", "New message", inner), text, replyTo: m.email });
+}
+
+// ---------------------------------------------------------------------------
+// Accounts (customer)
+// ---------------------------------------------------------------------------
+
+const RESET = {
+  en: {
+    subject: "Reset your CMAC Beauty password",
+    title: "Reset your password.",
+    lead: "Someone (hopefully you) asked to reset the password of your CMAC Beauty account. This link works once and expires in 1 hour.",
+    cta: "Choose a new password",
+    ignore: "Didn't ask for this? You can ignore this email — your password stays the same.",
+  },
+  fr: {
+    subject: "Réinitialisez votre mot de passe CMAC Beauty",
+    title: "Réinitialisez votre mot de passe.",
+    lead: "Quelqu'un (vous, on l'espère) a demandé de réinitialiser le mot de passe de votre compte CMAC Beauty. Ce lien fonctionne une seule fois et expire dans 1 heure.",
+    cta: "Choisir un nouveau mot de passe",
+    ignore: "Vous n'avez rien demandé ? Ignorez ce courriel — votre mot de passe reste le même.",
+  },
+} as const;
+
+export async function sendPasswordReset(to: string, locale: Locale, url: string): Promise<boolean> {
+  const c = RESET[locale];
+  const inner = `
+    <p style="margin:0 0 18px;font-size:15px;line-height:1.6;color:${C.soft};">${esc(c.lead)}</p>
+    <p style="margin:0 0 18px;"><a href="${esc(url)}" style="display:inline-block;padding:12px 22px;border-radius:999px;background:${C.ink};color:#fff;text-decoration:none;font-size:14px;font-weight:600;">${esc(c.cta)} →</a></p>
+    <p style="margin:0;font-size:13px;line-height:1.6;color:${C.faint};">${esc(c.ignore)}</p>`;
+  const text = [c.lead, "", url, "", c.ignore].join("\n");
+  return sendEmail({ to, subject: c.subject, html: frame(locale, c.title, inner), text, replyTo: BRAND.email });
 }

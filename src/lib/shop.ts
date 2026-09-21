@@ -1,5 +1,5 @@
 import { prisma } from "./prisma";
-import { shippingCentsFor } from "./brand";
+import { shippingCentsForTier, type Tier } from "./loyalty-rules";
 import { SET_CONTENTS, SET_TAG } from "./sets";
 
 export type ProductOptionValue = { value: string; labelFr: string; labelEn: string };
@@ -133,8 +133,15 @@ export type ValidatedLine = {
   optionsEn: Record<string, string>; // nameEn -> labelEn
 };
 
-/** Validate a client cart against the DB. Throws on any invalid line. */
-export async function validateCart(lines: CartLineInput[]): Promise<{
+/**
+ * Validate a client cart against the DB. Throws on any invalid line.
+ * `tier` = the signed-in member's Glow Club tier, resolved server-side from the
+ * session (never from the client); it lowers the free-shipping threshold.
+ */
+export async function validateCart(
+  lines: CartLineInput[],
+  opts: { tier?: Tier | null } = {},
+): Promise<{
   lines: ValidatedLine[];
   subtotalCents: number;
   shippingCents: number;
@@ -175,7 +182,7 @@ export async function validateCart(lines: CartLineInput[]): Promise<{
   }
 
   const subtotalCents = out.reduce((s, l) => s + l.priceCents * l.qty, 0);
-  const shippingCents = shippingCentsFor(subtotalCents);
+  const shippingCents = shippingCentsForTier(subtotalCents, opts.tier ?? null);
   return { lines: out, subtotalCents, shippingCents, totalCents: subtotalCents + shippingCents };
 }
 

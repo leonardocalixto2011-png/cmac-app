@@ -8,6 +8,8 @@ import { CartProvider } from "@/components/shop/CartProvider";
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
 import { Motion } from "@/components/Motion";
+import { NewsletterPopup } from "@/components/NewsletterPopup";
+import { viewerInfo } from "@/lib/account";
 import { JsonLd, organizationLd } from "@/components/JsonLd";
 import { BRAND, SHIPPING, siteUrl } from "@/lib/brand";
 import { formatWholeDollars } from "@/lib/utils";
@@ -51,7 +53,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const locale = await serverLocale();
+  const [locale, viewer] = await Promise.all([serverLocale(), viewerInfo()]);
 
   return (
     <html lang={locale} className={`${fraunces.variable} ${inter.variable} h-full antialiased`}>
@@ -65,12 +67,13 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             >
               {translate(locale, "nav.skip")}
             </a>
-            <Nav />
+            <Nav signedIn={viewer.signedIn} />
             <main id="main" className="flex-1">
               {children}
             </main>
             <Footer />
             <Motion />
+            <NewsletterPopup suppressed={viewer.signedIn && viewer.subscribed} />
           </CartProvider>
         </LocaleProvider>
       </body>

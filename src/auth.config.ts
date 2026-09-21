@@ -11,7 +11,11 @@ declare module "next-auth" {
   }
 }
 
-/** Edge-safe config (no adapter, no Node-only deps). Shared by proxy.ts + auth.ts. */
+/**
+ * Edge-safe config (no adapter, no Node-only deps). Shared by proxy.ts + auth.ts.
+ * `pages.signIn` stays /admin/login (Auth.js error redirects); customers use
+ * /account/login, which calls signIn() with redirect: false.
+ */
 export const authConfig = {
   session: { strategy: "jwt" },
   trustHost: true,

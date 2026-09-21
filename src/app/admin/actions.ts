@@ -8,6 +8,7 @@ import { sendShippingNotice } from "@/lib/email";
 import { normalizeLocale } from "@/i18n/messages";
 import { slugify } from "@/lib/utils";
 import type { OrderStatus } from "@prisma/client";
+import { adjustPoints, creditOrder, reverseOrder } from "@/lib/loyalty";
 
 const ORDER_STATUSES: OrderStatus[] = ["PENDING", "PAID", "FULFILLED", "CANCELLED", "REFUNDED"];
 
@@ -29,7 +30,11 @@ export async function setOrderStatus(id: string, status: string) {
       fulfilledAt: status === "FULFILLED" ? new Date() : status === "PAID" ? null : undefined,
     },
   });
+  // Glow Club: refunded / cancelled after credit → points reversed; (re)paid → credited if never done.
+  if (status === "REFUNDED" || status === "CANCELLED") await reverseOrder(id);
+  else if (status === "PAID" || status === "FULFILLED") await creditOrder(id);
   revalidatePath("/admin");
+  revalidatePath("/admin/customers");
   revalidatePath("/admin/orders");
 }
 
@@ -57,6 +62,7 @@ export async function fulfilOrder(
       supplierOrderId: data.supplierOrderId.trim() || null,
     },
   });
+  await creditOrder(id).catch(() => 0); // no-op when already credited or not a member
 
   if (data.notify && order.contactEmail) {
     await sendShippingNotice({
@@ -174,4 +180,18 @@ export async function deleteProduct(slug: string) {
   await requireAdmin();
   await prisma.product.delete({ where: { slug } });
   revalidateShop();
+}
+
+// ---------------------------------------------------------------------------
+// Glow Club — manual points adjustment
+// ---------------------------------------------------------------------------
+
+export async function adjustCustomerPoints(customerId: string, points: number, reason: string) {
+  await requireAdmin();
+  const delta = Math.trunc(Number(points));
+  const note = String(reason ?? "").trim().slice(0, 200);
+  if (!delta || Math.abs(delta) > 100_000) throw new Error("BAD_POINTS");
+  if (!note) throw new Error("REASON_REQUIRED");
+  await adjustPoints(customerId, delta, `Admin: ${note}`);
+  revalidatePath("/admin/customers");
 }

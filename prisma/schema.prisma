@@ -1,6 +1,7 @@
 // CMAC Beauty — data model.
-// Storefront products + orders, newsletter subscribers, contact messages,
-// plus Auth.js models for the single admin login.
+// Storefront products + orders, customer accounts + Glow Club loyalty ledger,
+// newsletter subscribers (CASL double opt-in) + campaigns, contact messages,
+// plus Auth.js models (admin + customer credentials login).
 
 generator client {
   provider = "prisma-client-js"
@@ -61,18 +62,18 @@ enum OrderStatus {
 }
 
 model Order {
-  id                      String      @id @default(cuid())
-  reference               String      @unique @default(cuid())
-  status                  OrderStatus @default(PENDING)
+  id                      String         @id @default(cuid())
+  reference               String         @unique @default(cuid())
+  status                  OrderStatus    @default(PENDING)
   contactEmail            String
   contactName             String?
   // [{ productId, slug, nameFr, nameEn, priceCents, qty, options: {name: label}, optionsEn: {...} }]
-  items                   Json        @default("[]")
+  items                   Json           @default("[]")
   subtotalCents           Int
-  shippingCents           Int         @default(0)
+  shippingCents           Int            @default(0)
   totalCents              Int
   shippingJson            Json? // Stripe-collected shipping address
-  locale                  String      @default("en")
+  locale                  String         @default("en")
   stripeCheckoutSessionId String?
   stripePaymentIntentId   String?
   // Fulfilment
@@ -80,35 +81,149 @@ model Order {
   trackingUrl             String?
   supplierOrderId         String?
   fulfilledAt             DateTime?
+  // Stripe discounts applied at checkout (promo / reward codes). Merchandise = subtotal - discount.
+  discountCents           Int            @default(0)
+  // Cart checkbox "email me offers" (unchecked by default) → CASL double opt-in on payment
+  newsletterOptIn         Boolean        @default(false)
   customerId              String?
-  customer                Customer?   @relation(fields: [customerId], references: [id])
-  createdAt               DateTime    @default(now())
-  updatedAt               DateTime    @updatedAt
+  customer                Customer?      @relation(fields: [customerId], references: [id])
+  loyaltyEntries          LoyaltyEntry[]
+  createdAt               DateTime       @default(now())
+  updatedAt               DateTime       @updatedAt
 
   @@index([status])
   @@index([createdAt])
 }
 
-// Minimal customer record (one per email), filled from paid orders.
+// One per email. Created from paid orders (guest) or on sign-up. Glow Club member = has a userId.
 model Customer {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  name      String?
-  locale    String   @default("en")
-  orders    Order[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id                 String         @id @default(cuid())
+  email              String         @unique
+  name               String?
+  locale             String         @default("en")
+  // Login account (Auth.js User, role CUSTOMER). Null = guest buyer, not a Glow Club member.
+  userId             String?        @unique
+  user               User?          @relation(fields: [userId], references: [id], onDelete: SetNull)
+  birthMonth         Int?
+  birthDay           Int?
+  // Year the birthday reward was last issued (cron idempotency)
+  birthdayRewardYear Int?
+  // Cached sums of the LoyaltyEntry ledger (source of truth), updated in the same transaction
+  points             Int            @default(0)
+  lifetimeSpendCents Int            @default(0)
+  orders             Order[]
+  loyaltyEntries     LoyaltyEntry[]
+  rewardCodes        RewardCode[]
+  createdAt          DateTime       @default(now())
+  updatedAt          DateTime       @updatedAt
+}
+
+// ----------------------------------------------------------------------------
+// Glow Club — points ledger + reward codes
+// ----------------------------------------------------------------------------
+
+enum LoyaltyReason {
+  ORDER_CREDIT
+  ORDER_REVERSAL
+  REDEEM
+  ADJUSTMENT
+}
+
+// Append-only ledger. (orderId, reason) unique → an order is credited / reversed at most once.
+model LoyaltyEntry {
+  id         String        @id @default(cuid())
+  customerId String
+  customer   Customer      @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  orderId    String?
+  order      Order?        @relation(fields: [orderId], references: [id], onDelete: SetNull)
+  points     Int
+  // Merchandise spend counted toward the tier (+ on credit, - on reversal)
+  spendCents Int           @default(0)
+  reason     LoyaltyReason
+  note       String?
+  createdAt  DateTime      @default(now())
+
+  @@unique([orderId, reason])
+  @@index([customerId, createdAt])
+}
+
+enum RewardKind {
+  POINTS
+  BIRTHDAY
+}
+
+// Single-use Stripe promotion codes issued to a member (points redemption or birthday).
+model RewardCode {
+  id                    String     @id @default(cuid())
+  customerId            String
+  customer              Customer   @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  kind                  RewardKind
+  code                  String     @unique
+  stripePromotionCodeId String     @unique
+  amountOffCents        Int?
+  percentOff            Int?
+  pointsSpent           Int        @default(0)
+  expiresAt             DateTime?
+  redeemedAt            DateTime?
+  createdAt             DateTime   @default(now())
+
+  @@index([customerId])
 }
 
 // ----------------------------------------------------------------------------
 // Newsletter + contact form
 // ----------------------------------------------------------------------------
 
+enum SubscriberStatus {
+  PENDING
+  CONFIRMED
+  UNSUBSCRIBED
+}
+
+// CASL: double opt-in. Consent is recorded (when, where, exact wording) and every
+// marketing email carries a one-click unsubscribe token.
 model Subscriber {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  locale    String   @default("en")
-  createdAt DateTime @default(now())
+  id               String           @id @default(cuid())
+  email            String           @unique
+  locale           String           @default("en")
+  status           SubscriberStatus @default(PENDING)
+  consentAt        DateTime?
+  // footer | popup | register | checkout | account
+  consentSource    String?
+  consentText      String?
+  confirmToken     String?          @unique
+  unsubscribeToken String           @unique @default(cuid())
+  confirmedAt      DateTime?
+  unsubscribedAt   DateTime?
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @default(now()) @updatedAt
+
+  @@index([status])
+}
+
+model Campaign {
+  id           String    @id @default(cuid())
+  subjectEn    String
+  subjectFr    String
+  preheaderEn  String?
+  preheaderFr  String?
+  bodyEn       String
+  bodyFr       String
+  productSlugs String[]  @default([])
+  // SENDING | SENT | PARTIAL | FAILED
+  status       String    @default("SENDING")
+  recipients   Int       @default(0)
+  sentCount    Int       @default(0)
+  failedCount  Int       @default(0)
+  createdAt    DateTime  @default(now())
+  sentAt       DateTime?
+}
+
+// Fixed-window counters for login / register / reset / signup throttling.
+model RateLimit {
+  key     String   @id
+  count   Int      @default(0)
+  resetAt DateTime
 }
 
 model ContactMessage {
@@ -136,7 +251,8 @@ model User {
   emailVerified DateTime?
   image         String?
   role          UserRole  @default(CUSTOMER)
-  passwordHash  String? // set for ADMIN credentials login
+  passwordHash  String? // bcrypt; ADMIN (seeded) and CUSTOMER (sign-up) credentials login
+  customer      Customer?
   accounts      Account[]
   sessions      Session[]
 }

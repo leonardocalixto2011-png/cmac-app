@@ -1,17 +1,27 @@
 import type { Metadata } from "next";
 import { serverT } from "@/i18n/server";
 import { CartView } from "@/components/shop/CartView";
+import { currentMemberTier } from "@/lib/account";
+import { subscriberStatus } from "@/lib/newsletter";
+
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { t } = await serverT();
   return { title: t("shop.cartTitle"), robots: { index: false } };
 }
 
-export default function CartPage() {
+export default async function CartPage() {
+  // Member perks are resolved server-side from the session; checkout re-checks them.
+  const member = await currentMemberTier().catch(() => null);
+  const sub = member ? await subscriberStatus(member.email).catch(() => null) : null;
   return (
     <section className="section-pad">
       <div className="wrap">
-        <CartView />
+        <CartView
+          member={member ? { tier: member.tier.id, freeShippingFromCents: member.tier.freeShippingFromCents, quarterPointsPerDollar: member.tier.quarterPointsPerDollar } : null}
+          subscribed={sub === "CONFIRMED" || sub === "PENDING"}
+        />
       </div>
     </section>
   );

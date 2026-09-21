@@ -6,6 +6,8 @@
  * Copy rule: cosmetic / appearance-only claims. See src/lib/brand.ts.
  */
 
+import { accountEn, accountFr } from "./messages-account";
+
 export type Locale = "en" | "fr";
 export const LOCALES: Locale[] = ["en", "fr"];
 export const DEFAULT_LOCALE: Locale = "en";
@@ -105,16 +107,14 @@ const en: Dict = {
   "faq.lead": "Shipping, returns and how to use the tools. If it's not here, write to us.",
   "faq.more": "See all questions",
 
-  "news.eyebrow": "Glow club",
-  "news.title": "Be first to know",
-  "news.lead": "Join for launch offers, routine guides and the occasional honest device review. No spam, unsubscribe any time.",
+  "news.eyebrow": "The CMAC letter",
+  "news.title": "10% off your first order",
+  "news.lead": "Join for new tools, routine guides and the occasional honest device review. Confirm your email and your welcome code is yours. No spam, unsubscribe in one click.",
   "news.placeholder": "you@email.com",
   "news.button": "Join",
-  "news.ok": "You're in. Welcome to the club.",
   "news.already": "You're already on the list.",
   "news.invalid": "Please enter a valid email address.",
   "news.error": "Something went wrong. Please try again.",
-  "news.fine": "By joining you agree to receive emails from CMAC Beauty. Unsubscribe any time.",
 
   "shop.eyebrow": "CMAC Beauty",
   "shop.title": "Shop",
@@ -303,16 +303,14 @@ const fr: Dict = {
   "faq.lead": "Livraison, retours et mode d'emploi des outils. Si ce n'est pas ici, écrivez-nous.",
   "faq.more": "Voir toutes les questions",
 
-  "news.eyebrow": "Club éclat",
-  "news.title": "Soyez les premiers informés",
-  "news.lead": "Offres de lancement, guides de routine et, de temps en temps, un avis honnête sur un appareil. Pas de pourriel, désabonnement en tout temps.",
+  "news.eyebrow": "L'infolettre CMAC",
+  "news.title": "10 % de rabais sur votre première commande",
+  "news.lead": "Nouveaux outils, guides de routine et, de temps en temps, un avis honnête sur un appareil. Confirmez votre courriel et votre code de bienvenue est à vous. Pas de pourriel, désabonnement en un clic.",
   "news.placeholder": "vous@courriel.com",
   "news.button": "Je m'inscris",
-  "news.ok": "C'est fait. Bienvenue dans le club.",
   "news.already": "Vous êtes déjà sur la liste.",
   "news.invalid": "Veuillez entrer une adresse courriel valide.",
   "news.error": "Une erreur est survenue. Veuillez réessayer.",
-  "news.fine": "En vous inscrivant, vous acceptez de recevoir des courriels de CMAC Beauty. Désabonnement en tout temps.",
 
   "shop.eyebrow": "CMAC Beauty",
   "shop.title": "Boutique",
@@ -409,7 +407,7 @@ const fr: Dict = {
   "error.retry": "Réessayer",
 };
 
-export const MESSAGES: Record<Locale, Dict> = { en, fr };
+export const MESSAGES: Record<Locale, Dict> = { en: { ...en, ...accountEn }, fr: { ...fr, ...accountFr } };
 
 /** Translate a key, with optional {placeholder} interpolation. */
 export function translate(

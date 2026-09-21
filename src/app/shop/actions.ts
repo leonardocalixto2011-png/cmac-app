@@ -6,6 +6,7 @@ import { getStripe } from "@/lib/stripe";
 import { validateCart, type CartLineInput } from "@/lib/shop";
 import { BRAND, SHIPPING } from "@/lib/brand";
 import { normalizeLocale } from "@/i18n/messages";
+import { currentMemberTier } from "@/lib/account";
 
 export type CheckoutResult = { ok: true; url: string } | { ok: false; error: string };
 
@@ -22,12 +23,22 @@ async function siteOrigin(): Promise<string> {
  * Stripe Checkout Session (CAD, Canada-only shipping, flat/free shipping
  * option, no automatic tax). Returns PAYMENT_UNAVAILABLE when Stripe isn't
  * configured so the UI can show a graceful message.
+ *
+ * Signed-in Glow Club members: their tier (from the session, server-side)
+ * sets the free-shipping threshold, the order is linked to their Customer and
+ * Stripe gets their email. `opts.newsletter` = the unchecked-by-default cart
+ * opt-in; the webhook turns it into a CASL double opt-in on payment.
  */
-export async function checkout(lines: CartLineInput[], rawLocale: string): Promise<CheckoutResult> {
+export async function checkout(
+  lines: CartLineInput[],
+  rawLocale: string,
+  opts: { newsletter?: boolean } = {},
+): Promise<CheckoutResult> {
   const locale = normalizeLocale(rawLocale);
+  const member = await currentMemberTier().catch(() => null);
   let validated;
   try {
-    validated = await validateCart(lines);
+    validated = await validateCart(lines, { tier: member?.tier ?? null });
   } catch (err) {
     return { ok: false, error: err instanceof Error ? err.message : "INVALID_CART" };
   }
@@ -53,6 +64,8 @@ export async function checkout(lines: CartLineInput[], rawLocale: string): Promi
       shippingCents: validated.shippingCents,
       totalCents: validated.totalCents,
       locale,
+      customerId: member?.customerId,
+      newsletterOptIn: opts.newsletter === true,
     },
   });
 
@@ -63,6 +76,7 @@ export async function checkout(lines: CartLineInput[], rawLocale: string): Promi
     const origin = await siteOrigin();
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
+      ...(member ? { customer_email: member.email } : {}),
       currency: "cad",
       locale: locale === "fr" ? "fr-CA" : "en",
       billing_address_collection: "auto",
@@ -104,7 +118,7 @@ export async function checkout(lines: CartLineInput[], rawLocale: string): Promi
           },
         };
       }),
-      metadata: { orderId: order.id, reference: order.reference },
+      metadata: { orderId: order.id, reference: order.reference, ...(member ? { glowTier: member.tier.id } : {}) },
       payment_intent_data: {
         description: `${BRAND.name} — order ${shortRef}`,
         metadata: { orderId: order.id, reference: order.reference },

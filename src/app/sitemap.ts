@@ -12,6 +12,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...COLLECTIONS.map((h) => ({ url: `${base}/collections/${h}`, lastModified: now, changeFrequency: "weekly" as const, priority: 0.8 })),
     { url: `${base}/about`, lastModified: now, changeFrequency: "monthly", priority: 0.6 },
     { url: `${base}/faq`, lastModified: now, changeFrequency: "monthly", priority: 0.6 },
+    { url: `${base}/glow-club`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
     { url: `${base}/shipping-returns`, lastModified: now, changeFrequency: "monthly", priority: 0.5 },
     { url: `${base}/contact`, lastModified: now, changeFrequency: "yearly", priority: 0.4 },
     { url: `${base}/privacy`, lastModified: now, changeFrequency: "yearly", priority: 0.2 },

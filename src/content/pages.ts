@@ -6,7 +6,7 @@ import { BRAND, POLICY, SHIPPING } from "@/lib/brand";
  * Plain structured text, bilingual. Legal pages are sensible generic policies
  * for a Québec/Canada online shop — not legal advice; owner should review.
  */
-export type Block = { h?: string; p?: string[]; ul?: string[] };
+export type Block = { id?: string; h?: string; p?: string[]; ul?: string[] };
 export type PageContent = { title: string; lead?: string; blocks: Block[]; updated?: string };
 
 const FREE = { en: `$${SHIPPING.freeThresholdCents / 100} CAD`, fr: `${SHIPPING.freeThresholdCents / 100} $ CA` };
@@ -264,7 +264,8 @@ export const PAGES: Record<string, Record<Locale, PageContent>> = {
           ul: [
             "Order information: name, email, shipping address, phone number (if provided), and the items you buy.",
             "Payment: handled entirely by Stripe. We never see or store your full card number.",
-            "Newsletter: your email address and preferred language, if you subscribe.",
+            "Customer account (Glow Club): name, email, password (stored only as a one-way hash), optional birthday (month and day, no year), preferred language, your orders, points history and reward codes.",
+            "Newsletter: your email address, preferred language, and a record of your consent (date, where you signed up, the exact wording you agreed to, and when you confirmed or unsubscribed).",
             "Contact form: your name, email and message.",
             "Technical data: standard server logs (IP address, browser, pages visited) needed to run and secure the site. We do not use advertising trackers.",
           ],
@@ -274,8 +275,9 @@ export const PAGES: Record<string, Record<Locale, PageContent>> = {
           ul: [
             "To process and ship your order, send order confirmations and tracking updates, and handle returns or warranty claims.",
             "To answer your messages.",
-            "To send newsletter emails you signed up for. You can unsubscribe at any time using the link in each email or by writing to us.",
-            "To keep the site secure and comply with tax and accounting obligations.",
+            "To run your account and the Glow Club: show your orders, count points, apply tier perks (such as free-shipping thresholds), create reward codes, and send your birthday reward if you gave us your birthday.",
+            "To send newsletter emails you signed up for and confirmed (double opt-in). You can unsubscribe at any time in one click using the link in each email, from your account, or by writing to us.",
+            "To keep the site secure (for example, limiting repeated sign-in attempts) and comply with tax and accounting obligations.",
           ],
         },
         {
@@ -287,20 +289,28 @@ export const PAGES: Record<string, Record<Locale, PageContent>> = {
         {
           h: "Cookies",
           p: [
-            "We use a language-preference cookie, a session cookie for the admin area, and your browser's local storage to remember your cart. No third-party advertising cookies.",
+            "We use a language-preference cookie, a sign-in session cookie (customer accounts and the admin area), and your browser's local storage to remember your cart and whether you've closed our newsletter offer. No third-party advertising cookies.",
           ],
         },
         {
           h: "How long we keep it",
           p: [
-            "Order records are kept for as long as required by Canadian tax law (generally seven years). Newsletter emails are kept until you unsubscribe. Contact messages are deleted once resolved, within twelve months.",
+            "Order records are kept for seven years, as required by Canadian and Québec tax law. Accounts (with points and reward codes) are kept until you delete your account. Newsletter data is used until you unsubscribe; after that we keep only a minimal record (email, status and consent history) so we can prove consent and never email you again by mistake. Contact messages are deleted once resolved, within twelve months.",
+            "When you delete your account, your login, profile, points and reward codes are erased right away. Your past orders stay in our accounting records for the rest of the seven-year period, but anonymised: the email is replaced by a one-way code and your name, street address and phone number are removed.",
           ],
         },
         {
           h: "Your rights",
           p: [
-            `You can ask to access, correct or delete your personal information, or withdraw consent to the newsletter, by emailing ${BRAND.email}. We respond within 30 days. The person responsible for the protection of personal information at ${BRAND.name} can be reached at the same address.`,
+            "You have the right to access your personal information, to have it corrected, to have it deleted, to withdraw your consent, and to receive the information you gave us in a structured, commonly used technological format (portability).",
+            "You can see and correct your details yourself in My account → Profile & settings, unsubscribe from the newsletter there or in one click from any email, and delete your account from the same page. For anything else — including a copy of your data — email us; we respond within 30 days.",
           ],
+        },
+        {
+          h: "Person in charge of the protection of personal information",
+          // OWNER: add the name and title of the person in charge (Law 25 requires publishing their title and
+          // contact information), e.g. "<Full name>, owner — CMAC Beauty — cmacbeauty.ca@outlook.com".
+          p: [`${BRAND.name} — ${BRAND.email}. Write to this address for any question, request or complaint about your personal information.`],
         },
         {
           h: "Changes",
@@ -318,7 +328,8 @@ export const PAGES: Record<string, Record<Locale, PageContent>> = {
           ul: [
             "Renseignements de commande : nom, courriel, adresse de livraison, numéro de téléphone (si fourni) et les articles achetés.",
             "Paiement : traité entièrement par Stripe. Nous ne voyons ni ne conservons jamais votre numéro de carte complet.",
-            "Infolettre : votre adresse courriel et votre langue préférée, si vous vous abonnez.",
+            "Compte client (Glow Club) : nom, courriel, mot de passe (conservé uniquement sous forme chiffrée à sens unique), date d'anniversaire facultative (mois et jour, sans l'année), langue préférée, vos commandes, l'historique de vos points et vos codes de récompense.",
+            "Infolettre : votre adresse courriel, votre langue préférée et une preuve de votre consentement (date, endroit de l'inscription, formulation exacte acceptée, et date de confirmation ou de désabonnement).",
             "Formulaire de contact : votre nom, votre courriel et votre message.",
             "Données techniques : journaux de serveur standards (adresse IP, navigateur, pages visitées) nécessaires au fonctionnement et à la sécurité du site. Nous n'utilisons pas de traceurs publicitaires.",
           ],
@@ -328,8 +339,9 @@ export const PAGES: Record<string, Record<Locale, PageContent>> = {
           ul: [
             "Pour traiter et expédier votre commande, envoyer les confirmations et les mises à jour de suivi, et gérer les retours ou les réclamations sous garantie.",
             "Pour répondre à vos messages.",
-            "Pour vous envoyer l'infolettre à laquelle vous vous êtes abonné. Vous pouvez vous désabonner en tout temps via le lien dans chaque courriel ou en nous écrivant.",
-            "Pour assurer la sécurité du site et respecter nos obligations fiscales et comptables.",
+            "Pour gérer votre compte et le Glow Club : afficher vos commandes, calculer vos points, appliquer les avantages de votre niveau (comme les seuils de livraison gratuite), créer vos codes de récompense et vous offrir votre récompense d'anniversaire si vous nous avez donné cette date.",
+            "Pour vous envoyer l'infolettre à laquelle vous vous êtes abonné·e et que vous avez confirmée (double confirmation). Vous pouvez vous désabonner en tout temps, en un clic, avec le lien de chaque courriel, depuis votre compte ou en nous écrivant.",
+            "Pour assurer la sécurité du site (par exemple, limiter les tentatives de connexion répétées) et respecter nos obligations fiscales et comptables.",
           ],
         },
         {
@@ -341,20 +353,27 @@ export const PAGES: Record<string, Record<Locale, PageContent>> = {
         {
           h: "Témoins (cookies)",
           p: [
-            "Nous utilisons un témoin pour votre préférence de langue, un témoin de session pour l'espace d'administration, et le stockage local de votre navigateur pour mémoriser votre panier. Aucun témoin publicitaire tiers.",
+            "Nous utilisons un témoin pour votre préférence de langue, un témoin de session de connexion (comptes clients et espace d'administration), et le stockage local de votre navigateur pour mémoriser votre panier et le fait que vous avez fermé notre offre d'infolettre. Aucun témoin publicitaire tiers.",
           ],
         },
         {
           h: "Durée de conservation",
           p: [
-            "Les dossiers de commande sont conservés aussi longtemps que l'exige la législation fiscale canadienne (généralement sept ans). Les courriels de l'infolettre sont conservés jusqu'à votre désabonnement. Les messages de contact sont supprimés une fois résolus, dans un délai de douze mois.",
+            "Les dossiers de commande sont conservés sept ans, comme l'exigent les lois fiscales du Canada et du Québec. Les comptes (avec les points et les codes de récompense) sont conservés jusqu'à ce que vous supprimiez votre compte. Les données de l'infolettre sont utilisées jusqu'à votre désabonnement ; ensuite, nous ne gardons qu'un dossier minimal (courriel, statut et historique du consentement) pour pouvoir prouver le consentement et ne jamais vous écrire de nouveau par erreur. Les messages de contact sont supprimés une fois résolus, dans un délai de douze mois.",
+            "Quand vous supprimez votre compte, vos identifiants, votre profil, vos points et vos codes sont effacés immédiatement. Vos commandes passées restent dans nos dossiers comptables jusqu'à la fin de la période de sept ans, mais anonymisées : le courriel est remplacé par un code à sens unique et votre nom, votre adresse municipale et votre numéro de téléphone sont retirés.",
           ],
         },
         {
           h: "Vos droits",
           p: [
-            `Vous pouvez demander l'accès à vos renseignements personnels, leur rectification ou leur suppression, ou retirer votre consentement à l'infolettre, en écrivant à ${BRAND.email}. Nous répondons dans un délai de 30 jours. La personne responsable de la protection des renseignements personnels chez ${BRAND.name} peut être jointe à la même adresse.`,
+            "Vous avez le droit d'accéder à vos renseignements personnels, de les faire rectifier, de les faire supprimer, de retirer votre consentement et de recevoir les renseignements que vous nous avez fournis dans un format technologique structuré et couramment utilisé (portabilité).",
+            "Vous pouvez consulter et corriger vos renseignements vous-même dans Mon compte → Profil et paramètres, vous désabonner de l'infolettre au même endroit ou en un clic depuis n'importe quel courriel, et supprimer votre compte depuis la même page. Pour toute autre demande — y compris une copie de vos données — écrivez-nous ; nous répondons dans un délai de 30 jours.",
           ],
+        },
+        {
+          h: "Personne responsable de la protection des renseignements personnels",
+          // OWNER : ajouter le nom et le titre de la personne responsable (la Loi 25 exige de publier son titre et ses coordonnées).
+          p: [`${BRAND.name} — ${BRAND.email}. Écrivez à cette adresse pour toute question, demande ou plainte concernant vos renseignements personnels.`],
         },
         {
           h: "Modifications",
@@ -393,6 +412,19 @@ export const PAGES: Record<string, Record<Locale, PageContent>> = {
         {
           h: "Returns and warranty",
           p: ["See our Refund policy for return eligibility, the 12-month defect coverage, and how to make a claim."],
+        },
+        {
+          id: "glow-club",
+          h: "Glow Club (free membership)",
+          ul: [
+            "The Glow Club is free. Creating a customer account makes you a member; deleting your account ends your membership.",
+            "Points: 1 point per $1 of products paid (after discounts, excluding shipping and taxes), 1.25 points per $1 at the Radiance tier and 1.5 points per $1 at the Icon tier, rounded down. Points are added once payment is confirmed and removed if the order is refunded or cancelled.",
+            "Tiers are based on what you spend on products as a member: Glow from joining, Radiance from $250, Icon from $600. Perks of a new tier apply from your next order. Refunds and cancellations count against your spend.",
+            "Rewards: every 100 points can be exchanged in your account for a single-use code worth $10 (up to $100 per code). One code per order; a code can't be exchanged for cash, and any unused value on an order is lost.",
+            "Birthday reward: if your profile has a birthday, you get a single-use 15% code in your birthday month, valid until the end of the following month.",
+            "Points and codes have no cash value, can't be transferred or sold, and are deleted when you delete your account. Points don't expire while your account is open.",
+            "We may change or end the program with 30 days' notice on this page; points already earned can still be redeemed during that period. Abuse (for example fake orders or multiple accounts) may lead to points being removed.",
+          ],
         },
         {
           h: "Use of the site",
@@ -448,6 +480,19 @@ export const PAGES: Record<string, Record<Locale, PageContent>> = {
         {
           h: "Retours et garantie",
           p: ["Consultez notre Politique de remboursement pour l'admissibilité des retours, la garantie de 12 mois contre les défauts et la marche à suivre pour une réclamation."],
+        },
+        {
+          id: "glow-club",
+          h: "Glow Club (adhésion gratuite)",
+          ul: [
+            "Le Glow Club est gratuit. La création d'un compte client fait de vous un membre ; la suppression de votre compte met fin à votre adhésion.",
+            "Points : 1 point par dollar de produits payés (après rabais, livraison et taxes exclues), 1,25 point par dollar au niveau Radiance et 1,5 point par dollar au niveau Icon, arrondi à l'entier inférieur. Les points sont ajoutés une fois le paiement confirmé et retirés si la commande est remboursée ou annulée.",
+            "Les niveaux dépendent de vos achats de produits en tant que membre : Glow dès l'adhésion, Radiance dès 250 $, Icon dès 600 $. Les avantages d'un nouveau niveau s'appliquent dès votre commande suivante. Les remboursements et annulations sont déduits de vos achats.",
+            "Récompenses : chaque tranche de 100 points peut être échangée dans votre compte contre un code à usage unique de 10 $ (jusqu'à 100 $ par code). Un code par commande ; un code ne peut pas être échangé contre de l'argent et toute valeur non utilisée sur une commande est perdue.",
+            "Récompense d'anniversaire : si votre profil contient une date d'anniversaire, vous recevez un code à usage unique de 15 % durant le mois de votre anniversaire, valide jusqu'à la fin du mois suivant.",
+            "Les points et les codes n'ont aucune valeur monétaire, ne peuvent être ni transférés ni vendus, et sont supprimés si vous supprimez votre compte. Les points n'expirent pas tant que votre compte est ouvert.",
+            "Nous pouvons modifier ou mettre fin au programme avec un préavis de 30 jours sur cette page ; les points déjà obtenus peuvent être échangés pendant cette période. Un usage abusif (par exemple de fausses commandes ou plusieurs comptes) peut entraîner le retrait des points.",
+          ],
         },
         {
           h: "Utilisation du site",
