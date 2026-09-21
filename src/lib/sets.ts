@@ -17,40 +17,49 @@ export type SetComponent = {
 export const SET_CONTENTS: Record<string, SetComponent[]> = {
   "set-full-ritual": [
     { slug: "led-red-light-mask", qty: 1, variant: 'Set = CJPF205440201AZ (ask CJ to remove the "original liquid")' },
-    { slug: "microcurrent-facial-lift-device", qty: 1, variant: "White = CJPF104709102BY" },
+    { slug: "microcurrent-facial-lift-device", qty: 1, variant: "Pink = CJPF104709101AZ" },
     { slug: "facial-ice-roller", qty: 1, variant: "Pink = CJMJ198034901AZ" },
     { slug: "spa-headband", qty: 1, variant: "Beige = CJHL133914107GT" },
+    { slug: "satin-beauty-sleep-set", qty: 1, variant: "Champagne = CJCS148046301AZ (Shipping From: China, not US)" },
   ],
   "set-7am-reset": [
     { slug: "facial-ice-roller", qty: 1, variant: "Pink = CJMJ198034901AZ" },
     { slug: "under-eye-glow-wand", qty: 1, variant: "Rose gold (English) = CJYD202121801AZ" },
-    { slug: "spa-headband", qty: 1, variant: "Beige = CJHL133914107GT" },
+    { slug: "spa-headband", qty: 1, variant: "Pink = CJHL133914102BY" },
+    { slug: "satin-scrunchie", qty: 1, variant: "Champagne = CJTF106711602BY" },
+    { slug: "reusable-cleansing-puff", qty: 1, variant: "CJPF101912105EV (pick a pink swatch)" },
   ],
   "set-midnight-glow": [
     { slug: "sonic-silicone-cleansing-brush", qty: 1, variant: "Pink-USB = CJPF103247301AZ (never Pink Set)" },
     { slug: "led-red-light-mask", qty: 1, variant: 'Set = CJPF205440201AZ (ask CJ to remove the "original liquid")' },
-    { slug: "satin-sleep-mask", qty: 1, variant: "Navy Blue = CJYD198717806FU" },
+    { slug: "satin-beauty-sleep-set", qty: 1, variant: "Champagne = CJCS148046301AZ (Shipping From: China, not US)" },
   ],
   "set-sweater-weather": [
     { slug: "led-red-light-mask", qty: 1, variant: 'Set = CJPF205440201AZ (ask CJ to remove the "original liquid")' },
     { slug: "electric-scalp-massager", qty: 1, variant: "White = CJST110710401AZ" },
     { slug: "satin-sleep-mask", qty: 1, variant: "Light Gray = CJYD198717802BY" },
-    { slug: "spa-headband", qty: 1, variant: "Grey = CJHL133914103CX" },
+    { slug: "spa-headband", qty: 1, variant: "Beige = CJHL133914107GT" },
+    { slug: "cozy-fleece-socks", qty: 1, variant: "Beige = CJWZ191410903CX" },
   ],
   "set-pink-pop": [
     { slug: "under-eye-glow-wand", qty: 1, variant: "PINK PICK: Rose gold (English) = CJYD202121801AZ (no true pink; rose gold is the pink option)" },
     { slug: "sonic-silicone-cleansing-brush", qty: 1, variant: "PINK: Pink-USB = CJPF103247301AZ" },
     { slug: "facial-ice-roller", qty: 1, variant: "PINK: Pink = CJMJ198034901AZ" },
     { slug: "spa-headband", qty: 1, variant: "PINK: Pink = CJHL133914102BY" },
+    { slug: "satin-scrunchie", qty: 1, variant: "PINK: Pink = CJTF106711601AZ" },
+    { slug: "pink-shell-makeup-pouch", qty: 1, variant: "PINK: Rose Pink = CJYD191668204DW (holds the set)" },
   ],
   "set-carry-on-glow": [
     { slug: "under-eye-glow-wand", qty: 1, variant: "Rose gold (English) = CJYD202121801AZ" },
     { slug: "satin-sleep-mask", qty: 1, variant: "Black = CJYD198717805EV" },
     { slug: "spa-headband", qty: 1, variant: "Beige = CJHL133914107GT" },
+    { slug: "travel-makeup-organizer", qty: 1, variant: "Rose Pink = CJYD185535502BY (holds the set)" },
+    { slug: "satin-scrunchie", qty: 1, variant: "Champagne = CJTF106711602BY" },
   ],
   "set-bestie-duo": [
     { slug: "facial-ice-roller", qty: 2, variant: "1× Pink = CJMJ198034901AZ + 1× Purple = CJMJ198034904DW" },
     { slug: "spa-headband", qty: 2, variant: "1× Pink = CJHL133914102BY + 1× Beige = CJHL133914107GT" },
+    { slug: "satin-scrunchie", qty: 2, variant: "1× Pink = CJTF106711601AZ + 1× Purple = CJTF106711607GT (one per roller colour)" },
   ],
 };
 

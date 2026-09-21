@@ -57,7 +57,12 @@ export function ProductDetail({ product, components = [] }: { product: ProductVi
     setTimeout(() => setAdded(false), 1400);
   }
 
-  const gallery = product.images.length ? product.images : [];
+  // Gallery slides: hero photo first, then the supplier video (if any), then the other photos.
+  type Slide = { kind: "image"; src: string } | { kind: "video"; src: string; poster: string };
+  const imageSlides: Slide[] = product.images.map((src) => ({ kind: "image", src }));
+  const videoSlides: Slide[] = product.videos.map((v) => ({ kind: "video", src: v.mp4, poster: v.poster }));
+  const gallery: Slide[] = [...imageSlides.slice(0, 1), ...videoSlides, ...imageSlides.slice(1)];
+  const active = gallery[activeImage];
 
   return (
     <div className="grid gap-10 md:grid-cols-[1.05fr_0.95fr] md:gap-14">
@@ -66,14 +71,29 @@ export function ProductDetail({ product, components = [] }: { product: ProductVi
           {t("shop.backToShop")}
         </Link>
         <div className="relative aspect-[4/5] overflow-hidden rounded-[var(--radius-card)] bg-cream-2" data-reveal="scale">
-          <ProductArt images={gallery[activeImage] ? [gallery[activeImage]] : []} name={name} tags={product.tags} priority />
+          {active?.kind === "video" ? (
+            <video
+              key={active.src}
+              src={active.src}
+              poster={active.poster}
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="metadata"
+              aria-label={name}
+              className="h-full w-full object-cover"
+            />
+          ) : (
+            <ProductArt images={active ? [active.src] : []} name={name} tags={product.tags} priority />
+          )}
           {onSale && <span className="product-card__badge">−{pct}%</span>}
         </div>
         {gallery.length > 1 && (
-          <div className="mt-3 flex gap-2">
-            {gallery.map((src, i) => (
+          <div className="mt-3 flex flex-wrap gap-2">
+            {gallery.map((slide, i) => (
               <button
-                key={src}
+                key={slide.src}
                 type="button"
                 onClick={() => setActiveImage(i)}
                 aria-pressed={activeImage === i}
@@ -82,7 +102,20 @@ export function ProductDetail({ product, components = [] }: { product: ProductVi
                   activeImage === i ? "border-ink" : "border-transparent",
                 )}
               >
-                <ProductArt images={[src]} name={`${name} ${i + 1}`} tags={product.tags} sizes="64px" />
+                <ProductArt
+                  images={[slide.kind === "video" ? slide.poster : slide.src]}
+                  name={`${name} ${i + 1}`}
+                  tags={product.tags}
+                  sizes="64px"
+                />
+                {slide.kind === "video" && (
+                  <span className="absolute inset-0 grid place-items-center bg-ink/25" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" className="h-5 w-5 fill-white">
+                      <path d="M8 5v14l11-7z" />
+                    </svg>
+                  </span>
+                )}
+                {slide.kind === "video" && <span className="sr-only">{t("shop.video")}</span>}
               </button>
             ))}
           </div>
@@ -201,8 +234,8 @@ export function ProductDetail({ product, components = [] }: { product: ProductVi
                 pmax: SHIPPING.processingDays.max,
                 dmin: SHIPPING.deliveryBusinessDays.min,
                 dmax: SHIPPING.deliveryBusinessDays.max,
-                wmin: SHIPPING.deliveryWeeks.min,
-                wmax: SHIPPING.deliveryWeeks.max,
+                wmin: SHIPPING.totalWeeks.min,
+                wmax: SHIPPING.totalWeeks.max,
               })}
             </li>
             <li className="flex gap-2">

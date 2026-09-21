@@ -26,12 +26,18 @@ export const BRAND = {
 export const SHIPPING = {
   flatCents: 999,
   freeThresholdCents: 7500,
-  /** Business-day handling window before the parcel leaves the supplier. */
-  processingDays: { min: 1, max: 3 },
+  /**
+   * Business-day handling window before the parcel leaves the supplier. 3–5 because CJ
+   * buys most items from the factory first (stock "CJ: 0, Factory: N") and a set is
+   * consolidated into one parcel. Keep Merchant Center handling time in sync (feed.ts).
+   */
+  processingDays: { min: 3, max: 5 },
   /** Carrier transit after processing (CJPacket, China → Canada), business days. */
   deliveryBusinessDays: { min: 7, max: 15 },
-  /** Rounded delivery estimate shown everywhere (CJdropshipping from China). */
+  /** Rounded carrier transit once shipped (CJPacket from China). */
   deliveryWeeks: { min: 1, max: 3 },
+  /** Rounded order-to-door estimate (processing + transit = 10–20 business days). */
+  totalWeeks: { min: 2, max: 4 },
 } as const;
 
 export const POLICY = {

@@ -33,6 +33,8 @@ model Product {
   // Collection membership: "glow" | "sculpt" | "cool" (+ free-form tags, "new")
   tags           String[] @default([])
   images         Json     @default("[]") // string[] of image URLs
+  // [{ mp4, poster }] — short muted supplier clips (Cloudinary), shown in the gallery
+  videos         Json     @default("[]")
   // [{ nameFr, nameEn, values: [{ value, labelFr, labelEn }] }] — e.g. Colour
   options        Json     @default("[]")
   stock          Int? // null = not tracked

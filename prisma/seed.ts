@@ -3,8 +3,8 @@
  *
  * Catalogue sourced on CJdropshipping (research:
  * ../OneDrive/Claude projets/cmac-store/research/cj-catalog-2026-09-21.json).
- * Every item ships China → Canada by CJPacket JYSP Sensitive (1–3 days
- * processing, 7–15 days transit). Prices are CAD, chosen per the pricing rule
+ * Every item ships China → Canada by CJPacket JYSP Sensitive (3–5 business days
+ * processing, since CJ buys from the factory first, then 7–15 days transit). Prices are CAD, chosen per the pricing rule
  * (≈2.6–3.2× landed CAD) except where the owner fixed them.
  *
  * COPY RULE (Health Canada): cosmetic / appearance-only. Never "treats",
@@ -14,7 +14,11 @@
  * at-home device, not a medical device" line + contraindications.
  *
  * Idempotent, admin edits win:
- *  - New slug → created with everything below.
+ *  - New slug → created with everything below (images/videos from ./media.ts when present).
+ *  - Images → replaced by the processed Cloudinary set (./media.ts) ONLY while every
+ *    current image URL is still a CJ CDN photo (cjdropshipping.com / aliyuncs.com), i.e.
+ *    untouched supplier photos. Admin-pasted URLs are never replaced.
+ *  - Videos → filled only while `videos` is empty.
  *  - Existing row → `sortOrder` always; `images`, `options`, `supplierUrl`,
  *    `supplierSku`, `shippingNote` (and, for `refreshCopyWhenEmpty` items, the
  *    copy) ONLY while the row still has no images, i.e. was never edited with
@@ -26,6 +30,7 @@
 import { PrismaClient, type Prisma } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import { SET_CONTENTS } from "../src/lib/sets";
+import { MEDIA } from "./media";
 
 const prisma = new PrismaClient();
 
@@ -61,6 +66,8 @@ type SeedProduct = {
   active?: boolean;
   /** Also replace copy on the one-time fill (the launch copy described a different item). */
   refreshCopyWhenEmpty?: boolean;
+  /** Options as a previous seed wrote them: a row still holding exactly these gets `options`. */
+  legacyOptions?: Option[];
 };
 
 const colour = (values: OptionValue[]): Option => ({ nameEn: "Colour", nameFr: "Couleur", values });
@@ -242,6 +249,16 @@ const PRODUCTS: SeedProduct[] = [
       colour([
         { value: "Pink 1", labelEn: "Pink", labelFr: "Rose" },
         { value: "Purple 1", labelEn: "Purple", labelFr: "Mauve" },
+        // CJ calls it "Green 1" but the mould is turquoise (variant photo, 2026-09-21).
+        { value: "Green 1", labelEn: "Turquoise", labelFr: "Turquoise" },
+        { value: "Yellow 1", labelEn: "Yellow", labelFr: "Jaune" },
+        { value: "Red 1", labelEn: "Red", labelFr: "Rouge" },
+      ]),
+    ],
+    legacyOptions: [
+      colour([
+        { value: "Pink 1", labelEn: "Pink", labelFr: "Rose" },
+        { value: "Purple 1", labelEn: "Purple", labelFr: "Mauve" },
         { value: "Green 1", labelEn: "Green", labelFr: "Vert" },
         { value: "Yellow 1", labelEn: "Yellow", labelFr: "Jaune" },
         { value: "Red 1", labelEn: "Red", labelFr: "Rouge" },
@@ -383,6 +400,173 @@ const PRODUCTS: SeedProduct[] = [
     shippingNote:
       "CJ variants ($1.93 USD, 300 g): White Powder = CJMJ185778101AZ, Black Rose Red = CJMJ185778102BY, Purple = CJMJ185778103CX. CJPacket JYSP Sensitive to CA $6.81, 7-15 days. Landed $8.74 USD.",
   },
+  // ---------------------------------------------------------------- ADD-ONS (2026-09-21)
+  // Sourced for the Sets (research: cmac-store/research/sets-addons-2026-09-21.json).
+  // Also sold alone. Appearance-only copy; CJ titles say "silk": never reuse (satin/polyester).
+  {
+    slug: "satin-beauty-sleep-set",
+    nameEn: "Satin Beauty-Sleep Set (4 pieces)",
+    nameFr: "Ensemble beauté-sommeil en satin (4 pièces)",
+    tagline: "Eye mask, pillowcase, scrunchie and headband in champagne satin",
+    taglineFr: "Masque, taie, chouchou et bandeau en satin champagne",
+    priceCents: 3999,
+    compareAtCents: null,
+    tags: ["essentials", "sleep", "gift", "new"],
+    sortOrder: 10,
+    descriptionEn: `<p><strong>Four matching satin pieces for the very end of the evening.</strong> A champagne-colour eye mask, pillowcase, scrunchie and twist headband, all smooth and cool to the touch. Hair and cheek glide over the pillowcase instead of catching on cotton, and the whole set makes a nightstand look like a little hotel.</p><h3>In the set</h3><ul><li>Eye mask, about 20.5 × 9.5 cm</li><li>Pillowcase, about 48 × 65 cm</li><li>Scrunchie</li><li>Twist headband</li></ul><h3>How to use</h3><ol><li>Slip the pillowcase over a standard pillow.</li><li>Headband on for your evening routine, scrunchie for a loose bun before bed.</li><li>Eye mask on. Lights out.</li></ol><h3>Good to know</h3><ul><li>Material: satin, as stated by the supplier (not silk). Colour: champagne.</li><li>Hand-wash in cool water with a mild soap and lay flat to dry.</li><li>For hygiene reasons, returns are accepted only if unopened.</li></ul>${FOOTER_HYGIENE_EN}`,
+    descriptionFr: `<p><strong>Quatre pièces en satin assorties pour la toute fin de soirée.</strong> Un masque pour les yeux, une taie d'oreiller, un chouchou et un bandeau torsadé couleur champagne, lisses et frais au toucher. Les cheveux et la joue glissent sur la taie au lieu d'accrocher au coton, et l'ensemble donne à la table de chevet un petit air d'hôtel.</p><h3>Dans l'ensemble</h3><ul><li>Masque pour les yeux, environ 20,5 × 9,5 cm</li><li>Taie d'oreiller, environ 48 × 65 cm</li><li>Chouchou</li><li>Bandeau torsadé</li></ul><h3>Mode d'emploi</h3><ol><li>Glissez la taie sur un oreiller standard.</li><li>Le bandeau pour la routine du soir, le chouchou pour un chignon lâche avant de dormir.</li><li>Masque en place. Bonne nuit.</li></ol><h3>Bon à savoir</h3><ul><li>Matière : satin, selon le fournisseur (pas de la soie). Couleur : champagne.</li><li>Lavez à la main à l'eau fraîche avec un savon doux et faites sécher à plat.</li><li>Pour des raisons d'hygiène, les retours sont acceptés seulement si l'article est non ouvert.</li></ul>${FOOTER_HYGIENE_FR}`,
+    options: [],
+    images: [`${CF}/dc02e2c4-db49-43e3-9963-a12d1e4049c4.jpg`],
+    supplierUrl: `${CJ}/double-sided-silk-eye-mask-pillowcase-hair-tie-four-piece-set-p-1524212426772852736.html`,
+    supplierSku: "CJCS148046301AZ",
+    shippingNote:
+      'CJ variant Champagne (CJCS148046301AZ, only colour, 135 g, $5.81 USD). The CJ page defaults to a US warehouse: ALWAYS choose "Shipping From: China". CJPacket JYSP Sensitive to CA $4.90, 7-15 days. Landed $10.71 USD. Satin, not silk: never call it silk.',
+  },
+  {
+    slug: "satin-scrunchie",
+    nameEn: "Satin Scrunchie",
+    nameFr: "Chouchou en satin",
+    tagline: "A soft hold for buns and ponytails",
+    taglineFr: "Une tenue douce pour chignons et queues de cheval",
+    priceCents: 1599,
+    compareAtCents: null,
+    tags: ["essentials", "hair", "new"],
+    sortOrder: 11,
+    descriptionEn: `<p><strong>The easiest upgrade in the whole routine.</strong> A full, glossy satin scrunchie that holds a bun or ponytail softly, without the tight crease a thin elastic leaves. Wear it for the ritual, to bed, or on your wrist until you need it.</p><h3>How to use</h3><ol><li>Loop it twice around a ponytail, or three times for a smaller bun.</li><li>Keep it loose for sleep.</li></ol><h3>Good to know</h3><ul><li>Material: satin, as stated by the supplier (not silk). One size.</li><li>Hand-wash in cool water and air-dry.</li><li>For hygiene reasons, returns are accepted only if unopened.</li></ul>${FOOTER_HYGIENE_EN}`,
+    descriptionFr: `<p><strong>L'amélioration la plus simple de toute la routine.</strong> Un chouchou en satin bien bouffant et lustré qui tient un chignon ou une queue de cheval tout en douceur, sans le pli serré d'un élastique mince. À porter pour le rituel, pour dormir, ou au poignet jusqu'à ce qu'on en ait besoin.</p><h3>Mode d'emploi</h3><ol><li>Faites deux tours autour d'une queue de cheval, ou trois pour un petit chignon.</li><li>Gardez-le lâche pour dormir.</li></ol><h3>Bon à savoir</h3><ul><li>Matière : satin, selon le fournisseur (pas de la soie). Taille unique.</li><li>Lavez à la main à l'eau fraîche et laissez sécher à l'air.</li><li>Pour des raisons d'hygiène, les retours sont acceptés seulement si l'article est non ouvert.</li></ul>${FOOTER_HYGIENE_FR}`,
+    options: [
+      colour([
+        { value: "Pink", labelEn: "Pink", labelFr: "Rose" },
+        { value: "Light Pink", labelEn: "Light pink", labelFr: "Rose pâle" },
+        { value: "Smoky pink", labelEn: "Dusty pink", labelFr: "Vieux rose" },
+        { value: "Champagne", labelEn: "Champagne", labelFr: "Champagne" },
+        { value: "Beige", labelEn: "Beige", labelFr: "Beige" },
+        { value: "White", labelEn: "White", labelFr: "Blanc" },
+        { value: "Light Blue", labelEn: "Light blue", labelFr: "Bleu pâle" },
+        { value: "Lake Blue", labelEn: "Lake blue", labelFr: "Bleu lac" },
+        { value: "Purple", labelEn: "Purple", labelFr: "Mauve" },
+        { value: "Yellow", labelEn: "Yellow", labelFr: "Jaune" },
+        { value: "Gray", labelEn: "Grey", labelFr: "Gris" },
+        { value: "Red", labelEn: "Red", labelFr: "Rouge" },
+        { value: "Black", labelEn: "Black", labelFr: "Noir" },
+      ]),
+    ],
+    images: [`${CF}/1617668809299.jpg`, `${CF}/1617668808409.jpg`, `${CF}/1617668809421.jpg`],
+    supplierUrl: `${CJ}/french-girl-silky-satin-large-intestine-ring-ins-korea-tie-hair-rubber-band-hair-rope-hair-ring-ponytail-head-rope-hair-accessories-p-1379230694693277696.html`,
+    supplierSku: "CJTF106711601AZ",
+    shippingNote:
+      "CJ variants ($0.33 USD, 30 g): Pink = CJTF106711601AZ, Light Pink = CJTF106711610JQ, Smoky pink = CJTF106711611KP, Champagne = CJTF106711602BY, Beige = CJTF106711605EV, White = CJTF106711604DW, Light Blue = CJTF106711603CX, Lake Blue = CJTF106711606FU, Purple = CJTF106711607GT, Yellow = CJTF106711608HS, Gray = CJTF106711609IR, Red = CJTF106711612LO, Black = CJTF106711613MN. Shipping From: China. CJPacket JYSP Sensitive to CA $3.81 alone, 7-15 days. Landed $4.14 USD alone (about +$0.40 inside a set parcel). Satin, not silk.",
+  },
+  {
+    slug: "pink-shell-makeup-pouch",
+    nameEn: "Rose Shell Makeup Pouch",
+    nameFr: "Trousse à maquillage coquillage rose",
+    tagline: "A soft-structured pouch for the everyday bag",
+    taglineFr: "Une trousse souple et structurée pour le sac de tous les jours",
+    priceCents: 2499,
+    compareAtCents: null,
+    tags: ["essentials", "travel", "gift", "new"],
+    sortOrder: 12,
+    descriptionEn: `<p><strong>A pouch you'll actually carry.</strong> A rounded shell-shape bag in wipe-clean faux leather (PU) with a zip top and carry handles. Big enough for the everyday kit: a few makeup pieces, brushes, a small tool or two. In the Pink Pop set it doubles as the gift box.</p><h3>How to use</h3><ol><li>Unzip, fill, zip.</li><li>Wipe the outside with a damp cloth when needed.</li></ol><h3>Good to know</h3><ul><li>Material: PU (faux leather).</li><li>Makeup and accessories shown in photos are not included.</li><li>Colours: rose pink, milk white, caramel mocha, black.</li></ul>${FOOTER_EN}`,
+    descriptionFr: `<p><strong>Une trousse qu'on traîne vraiment partout.</strong> Un sac arrondi en forme de coquillage, en similicuir (PU) facile à essuyer, avec fermeture éclair et poignées. Assez grand pour le nécessaire du quotidien : quelques produits de maquillage, des pinceaux, un ou deux petits outils. Dans la trousse Pink Pop, il sert aussi de boîte-cadeau.</p><h3>Mode d'emploi</h3><ol><li>On ouvre, on remplit, on ferme.</li><li>Essuyez l'extérieur avec un linge humide au besoin.</li></ol><h3>Bon à savoir</h3><ul><li>Matière : PU (similicuir).</li><li>Le maquillage et les accessoires montrés sur les photos ne sont pas inclus.</li><li>Couleurs : rose, blanc lait, caramel moka, noir.</li></ul>${FOOTER_FR}`,
+    options: [
+      colour([
+        { value: "Rose Pink", labelEn: "Rose pink", labelFr: "Rose" },
+        { value: "Milk Apricot White", labelEn: "Milk white", labelFr: "Blanc lait" },
+        { value: "Caramel Mocha", labelEn: "Caramel mocha", labelFr: "Caramel moka" },
+        { value: "Black", labelEn: "Black", labelFr: "Noir" },
+      ]),
+    ],
+    images: [
+      `${CF}/operation-center/file_202403070927181765670549817925632.png`,
+      `${CF}/operation-center/file_202403070926581765670468771389440.png`,
+    ],
+    supplierUrl: `${CJ}/shell-shape-pu-leather-cosmetic-bag-waterproof-letter-makeup-pouch-bag-multifunction-carry-on-makeup-tote-travel-wash-bags-p-1733339387867439104.html`,
+    supplierSku: "CJYD191668204DW",
+    shippingNote:
+      "CJ variants ($1.22 USD): Rose Pink = CJYD191668204DW (165 g), Milk Apricot White = CJYD191668201AZ (217 g), Caramel Mocha = CJYD191668202BY (120 g), Black = CJYD191668203CX (120 g). Shipping From: China. CJPacket JYSP Sensitive to CA $5.22 alone, 7-15 days. Landed $6.44 USD alone. CJ title says 'Letter': check the sample for printed lettering.",
+  },
+  {
+    slug: "travel-makeup-organizer",
+    nameEn: "Travel Makeup Organizer",
+    nameFr: "Organisateur de maquillage de voyage",
+    tagline: "Everything in its place, zipped",
+    taglineFr: "Chaque chose à sa place, bien zippée",
+    priceCents: 2799,
+    compareAtCents: null,
+    tags: ["essentials", "travel", "gift", "new"],
+    sortOrder: 13,
+    descriptionEn: `<p><strong>The case that makes packing feel organized.</strong> A structured faux-leather (PU) organizer, about 21 × 8 × 19 cm, with divided compartments inside for brushes, bottles and small tools, a wide zip opening and carry handles. It holds a whole travel routine; in the Carry-On Glow set it is the set's case.</p><h3>How to use</h3><ol><li>Tall items and brushes in the side pockets, flat items in the middle.</li><li>Zip it and go.</li></ol><h3>Good to know</h3><ul><li>Material: PU (faux leather). About 21 × 8 × 19 cm.</li><li>Makeup and accessories shown in photos and video are not included.</li><li>Wipe clean with a damp cloth.</li></ul>${FOOTER_EN}`,
+    descriptionFr: `<p><strong>L'étui qui rend les bagages organisés.</strong> Un organisateur structuré en similicuir (PU), environ 21 × 8 × 19 cm, avec des compartiments intérieurs pour les pinceaux, les flacons et les petits outils, une large ouverture zippée et des poignées. Il contient toute une routine de voyage ; dans le coffret Éclat en cabine, c'est l'étui du coffret.</p><h3>Mode d'emploi</h3><ol><li>Les grands articles et les pinceaux dans les pochettes latérales, le reste au centre.</li><li>On zippe et on part.</li></ol><h3>Bon à savoir</h3><ul><li>Matière : PU (similicuir). Environ 21 × 8 × 19 cm.</li><li>Le maquillage et les accessoires montrés sur les photos et la vidéo ne sont pas inclus.</li><li>Essuyez avec un linge humide.</li></ul>${FOOTER_FR}`,
+    options: [
+      colour([
+        { value: "Rose Pink", labelEn: "Rose pink", labelFr: "Rose" },
+        { value: "Ivory White", labelEn: "Ivory", labelFr: "Ivoire" },
+        { value: "Caramel Mocha", labelEn: "Caramel mocha", labelFr: "Caramel moka" },
+        { value: "Crystal Black", labelEn: "Black", labelFr: "Noir" },
+      ]),
+    ],
+    images: [
+      `${CF}/operation-center/file_202403110838511767107909847883776.png`,
+      `${CF}/operation-center/file_202403110832461767106379811921920.png`,
+    ],
+    supplierUrl: `${CJ}/pu-large-capacity-travel-make-up-storage-organizer-makeup-pouch-cosmetic-bag-shell-bags-p-1705890767220248576.html`,
+    supplierSku: "CJYD185535502BY",
+    shippingNote:
+      "CJ variants ($1.71 USD, 210 g): Rose Pink = CJYD185535502BY, Ivory White = CJYD185535501AZ, Caramel Mocha = CJYD185535503CX, Crystal Black = CJYD185535504DW. Shipping From: China. CJPacket JYSP Sensitive to CA $5.81 alone, 7-15 days. Landed $7.52 USD alone.",
+  },
+  {
+    slug: "cozy-fleece-socks",
+    nameEn: "Cozy Fleece Socks",
+    nameFr: "Bas douillets en molleton",
+    tagline: "Fluffy socks for long evenings in",
+    taglineFr: "Des bas moelleux pour les longues soirées à la maison",
+    priceCents: 1799,
+    compareAtCents: null,
+    tags: ["essentials", "cozy", "fall", "new"],
+    sortOrder: 14,
+    descriptionEn: `<p><strong>The cozy part of the ritual.</strong> Thick, fluffy coral-fleece socks for mask nights, movie nights and cold floors. Soft cuff, one size.</p><h3>Good to know</h3><ul><li>Fibre content: polyester (coral fleece), as stated by the supplier. One size.</li><li>Wash cold in a laundry bag, or by hand, and air-dry.</li><li>For hygiene reasons, returns are accepted only if unopened.</li></ul>${FOOTER_HYGIENE_EN}`,
+    descriptionFr: `<p><strong>Le côté douillet du rituel.</strong> Des bas épais et moelleux en molleton corail, pour les soirées masque, les soirées cinéma et les planchers froids. Poignet souple, taille unique.</p><h3>Bon à savoir</h3><ul><li>Composition : polyester (molleton corail), selon le fournisseur. Taille unique.</li><li>Lavage à l'eau froide dans un filet, ou à la main, séchage à l'air.</li><li>Pour des raisons d'hygiène, les retours sont acceptés seulement si l'article est non ouvert.</li></ul>${FOOTER_HYGIENE_FR}`,
+    options: [
+      colour([
+        { value: "Beige", labelEn: "Beige", labelFr: "Beige" },
+        { value: "White", labelEn: "White", labelFr: "Blanc" },
+        { value: "Light Grey", labelEn: "Light grey", labelFr: "Gris pâle" },
+        { value: "Dark Grey", labelEn: "Dark grey", labelFr: "Gris foncé" },
+        { value: "Coffee", labelEn: "Coffee", labelFr: "Café" },
+        { value: "Green", labelEn: "Green", labelFr: "Vert" },
+        { value: "Blue", labelEn: "Blue", labelFr: "Bleu" },
+        { value: "Black", labelEn: "Black", labelFr: "Noir" },
+      ]),
+    ],
+    images: [
+      `${CF}/operation-center/file_202410240827371849367127476412416.png`,
+      `${CF}/operation-center/file_202410170640271846803444552441856.jpg`,
+    ],
+    supplierUrl: `${CJ}/-p-1732222258162585600.html`,
+    supplierSku: "CJWZ191410903CX",
+    shippingNote:
+      "CJ variants ($0.79 USD, 40 g): Beige = CJWZ191410903CX, White = CJWZ191410902BY, Light Grey = CJWZ191410906FU, Dark Grey = CJWZ191410907GT, Coffee = CJWZ191410905EV, Green = CJWZ191410908HS, Blue = CJWZ191410904DW, Black = CJWZ191410901AZ. Shipping From: China. CJPacket JYSP Sensitive to CA $3.92 alone, 7-15 days. Landed $4.71 USD alone.",
+  },
+  {
+    slug: "reusable-cleansing-puff",
+    nameEn: "Reusable Cleansing Puff",
+    nameFr: "Houppette démaquillante réutilisable",
+    tagline: "A soft round pad for your cleanser, again and again",
+    taglineFr: "Un disque doux pour votre nettoyant, encore et encore",
+    priceCents: 2099,
+    compareAtCents: null,
+    tags: ["essentials", "cleansing", "hygiene", "new"],
+    sortOrder: 15,
+    descriptionEn: `<p><strong>A plush 12 cm pad for the cleansing step.</strong> Soft microfibre over a sponge core: wet it, use it with your usual cleanser or makeup remover, rinse, and let it dry. One pad replaces a stack of cotton rounds.</p><h3>How to use</h3><ol><li>Wet the puff and squeeze out the excess water.</li><li>Add your cleanser or makeup remover and move it over the face in gentle circles. Avoid rubbing the eyes.</li><li>Rinse the puff with mild soap after each use and let it dry completely.</li></ol><h3>Good to know</h3><ul><li>Material: sponge and microfibre, as stated by the supplier. About 12 cm across, 1 cm thick.</li><li>Colour picked by us.</li><li>For hygiene reasons, returns are accepted only if unopened.</li></ul>${FOOTER_HYGIENE_EN}`,
+    descriptionFr: `<p><strong>Un disque moelleux de 12 cm pour l'étape du nettoyage.</strong> Une microfibre douce sur un cœur en éponge : on le mouille, on l'utilise avec son nettoyant ou son démaquillant habituel, on rince et on le laisse sécher. Un seul disque remplace une pile de ronds de coton.</p><h3>Mode d'emploi</h3><ol><li>Mouillez la houppette et essorez l'excédent d'eau.</li><li>Ajoutez votre nettoyant ou démaquillant et faites de petits cercles doux sur le visage. Évitez de frotter les yeux.</li><li>Rincez la houppette au savon doux après chaque utilisation et laissez-la sécher complètement.</li></ol><h3>Bon à savoir</h3><ul><li>Matière : éponge et microfibre, selon le fournisseur. Environ 12 cm de diamètre, 1 cm d'épaisseur.</li><li>Couleur choisie par nous.</li><li>Pour des raisons d'hygiène, les retours sont acceptés seulement si l'article est non ouvert.</li></ul>${FOOTER_HYGIENE_FR}`,
+    options: [],
+    images: [`${CF}/1614061763385.jpg`, `${CF}/1614061763383.jpg`],
+    supplierUrl: `${CJ}/-p-1364100558956400640.html`,
+    supplierSku: "CJPF101912105EV",
+    shippingNote:
+      "CJ variant CJPF101912105EV (default swatch; pick a pink swatch when ordering: 14 swatches, names not read). $1.30 USD (page shows 'Request quote': may be a tier price), 90 g. Shipping From: China. CJPacket JYSP Sensitive to CA $4.43 alone, 7-15 days. Landed $5.73 USD alone. Lowest inventory of the add-ons (4,000).",
+  },
 ];
 
 // ---------------------------------------------------------------------------
@@ -409,14 +593,21 @@ type SeedSet = {
   goodFr: string[];
   /** No electric device inside: hygiene footer, no warranty line. */
   hygieneOnly?: boolean;
+  /** Launch price: an existing row still at this price gets the new price + compare-at. */
+  prevPriceCents: number;
+  /** Targeted copy updates [from, to] (EN or FR), applied only where `from` is still present verbatim. */
+  swaps?: [string, string][];
 };
 
 const COSMETIC_EN = "Cosmetic at-home devices, not medical devices.";
 const COSMETIC_FR = "Appareils cosmétiques à usage domestique, pas des dispositifs médicaux.";
 const PICKED_EN = "Colours are picked by us to suit the set.";
 const PICKED_FR = "Les couleurs sont choisies par nous pour s'agencer au coffret.";
-const PARCELS_EN = "Items may ship in separate parcels.";
-const PARCELS_FR = "Les articles peuvent arriver en colis séparés.";
+// Sets are placed as ONE CJ order (China warehouse), so they ship as one parcel.
+const LEGACY_PARCELS_EN = "Items may ship in separate parcels.";
+const LEGACY_PARCELS_FR = "Les articles peuvent arriver en colis séparés.";
+const PARCELS_EN = "Everything is ordered and shipped together, normally in one parcel.";
+const PARCELS_FR = "Tout est commandé et expédié ensemble, normalement en un seul colis.";
 const hygieneEn = (items: string) => `Hygiene items (${items}) are returnable only if unopened.`;
 const hygieneFr = (items: string) => `Articles d'hygiène (${items}) : retours acceptés seulement s'ils sont non ouverts.`;
 
@@ -427,7 +618,18 @@ const SETS: SeedSet[] = [
     nameFr: "Le Rituel complet",
     tagline: "Cool, lift, glow: the whole routine in one box",
     taglineFr: "Fraîcheur, lift, éclat : toute la routine dans une boîte",
-    priceCents: 15999,
+    priceCents: 16999,
+    prevPriceCents: 15999,
+    swaps: [
+      [
+        "Four pieces, one evening ritual, and the most complete set we make.",
+        "Four tools plus a satin beauty-sleep set, one evening ritual, and the most complete set we make."
+      ],
+      [
+        "Quatre pièces, un rituel du soir, et notre coffret le plus complet.",
+        "Quatre outils et un ensemble beauté-sommeil en satin, un rituel du soir, et notre coffret le plus complet."
+      ]
+    ],
     tags: ["sets", "glow", "sculpt", "cool", "essentials", "gift"],
     sortOrder: 20,
     hookEn:
@@ -471,7 +673,8 @@ const SETS: SeedSet[] = [
     nameFr: "Le Reset de 7 h",
     tagline: "From pillow face to ready in 5 minutes",
     taglineFr: "De l'oreiller à la porte en 5 minutes",
-    priceCents: 7699,
+    priceCents: 7999,
+    prevPriceCents: 7699,
     tags: ["sets", "cool", "glow", "essentials"],
     sortOrder: 21,
     hookEn:
@@ -513,7 +716,18 @@ const SETS: SeedSet[] = [
     nameFr: "Rituel Éclat de minuit",
     tagline: "Cleanse, glow, lights out",
     taglineFr: "Nettoyage, éclat, extinction des feux",
-    priceCents: 9999,
+    priceCents: 10999,
+    prevPriceCents: 9999,
+    swaps: [
+      [
+        "then a satin-feel mask for lights out.",
+        "then the satin beauty-sleep set (eye mask, pillowcase, scrunchie, headband) for lights out."
+      ],
+      [
+        "puis un masque effet satin pour l'extinction des feux.",
+        "puis l'ensemble beauté-sommeil en satin (masque, taie, chouchou, bandeau) pour l'extinction des feux."
+      ]
+    ],
     tags: ["sets", "glow", "essentials"],
     sortOrder: 22,
     hookEn:
@@ -556,6 +770,17 @@ const SETS: SeedSet[] = [
     tagline: "Your skin's cozy season. Fall limited edition",
     taglineFr: "La saison douillette de votre peau. Édition limitée d'automne",
     priceCents: 10999,
+    prevPriceCents: 10999,
+    swaps: [
+      [
+        "a soft headband and a satin-feel mask for lights out.",
+        "a soft headband, fluffy fleece socks and a satin-feel mask for lights out."
+      ],
+      [
+        "un bandeau tout doux et un masque effet satin pour l'extinction des feux.",
+        "un bandeau tout doux, des bas moelleux en molleton et un masque effet satin pour l'extinction des feux."
+      ]
+    ],
     tags: ["sets", "glow", "essentials", "fall", "limited"],
     sortOrder: 23,
     hookEn:
@@ -599,7 +824,18 @@ const SETS: SeedSet[] = [
     nameFr: "Trousse Pink Pop",
     tagline: "Everything pink, everything glow",
     taglineFr: "Tout en rose, tout en éclat",
-    priceCents: 9499,
+    priceCents: 9999,
+    prevPriceCents: 9499,
+    swaps: [
+      [
+        "Four of our favourite tools in their pink (and rose-gold) versions: cleanse",
+        "Four of our favourite tools in their pink (and rose-gold) versions, plus a pink satin scrunchie, zipped into a rose shell pouch: cleanse"
+      ],
+      [
+        "Quatre de nos outils préférés dans leurs versions roses (et or rose) : on nettoie",
+        "Quatre de nos outils préférés dans leurs versions roses (et or rose), plus un chouchou en satin rose, dans une trousse coquillage rose : on nettoie"
+      ]
+    ],
     tags: ["sets", "glow", "cool", "essentials", "gift"],
     sortOrder: 24,
     hookEn:
@@ -641,7 +877,18 @@ const SETS: SeedSet[] = [
     nameFr: "Éclat en cabine",
     tagline: "Pack light, land glowing",
     taglineFr: "Bagage léger, arrivée éclatante",
-    priceCents: 7699,
+    priceCents: 7999,
+    prevPriceCents: 7699,
+    swaps: [
+      [
+        "and a headband that folds to nothing: a small kit",
+        "and a headband that folds to nothing, plus a satin scrunchie, all zipped into a travel organizer: a small kit"
+      ],
+      [
+        "et un bandeau qui se plie en rien : une petite trousse",
+        "et un bandeau qui se plie en rien, plus un chouchou en satin, le tout zippé dans un organisateur de voyage : une petite trousse"
+      ]
+    ],
     tags: ["sets", "glow", "essentials"],
     sortOrder: 25,
     hookEn:
@@ -684,6 +931,17 @@ const SETS: SeedSet[] = [
     tagline: "One for you, one for your bestie",
     taglineFr: "Un pour toi, un pour ta meilleure amie",
     priceCents: 6999,
+    prevPriceCents: 6999,
+    swaps: [
+      [
+        "Two ice rollers and two spa headbands: one set for you",
+        "Two ice rollers, two spa headbands and two satin scrunchies: one set for you"
+      ],
+      [
+        "Deux rouleaux de glace et deux bandeaux spa : un ensemble pour toi",
+        "Deux rouleaux de glace, deux bandeaux spa et deux chouchous en satin : un ensemble pour toi"
+      ]
+    ],
     tags: ["sets", "cool", "essentials", "gift"],
     sortOrder: 26,
     hygieneOnly: true,
@@ -720,21 +978,64 @@ const SETS: SeedSet[] = [
 
 const li = (xs: string[]) => xs.map((x) => `<li>${x}</li>`).join("");
 
+/** Set contents before the 2026-09-21 add-ons (slug × qty). Used only to recognise untouched seed copy. */
+const LEGACY_SET_CONTENTS: Record<string, [string, number][]> = {
+  "set-full-ritual": [["led-red-light-mask", 1], ["microcurrent-facial-lift-device", 1], ["facial-ice-roller", 1], ["spa-headband", 1]],
+  "set-7am-reset": [["facial-ice-roller", 1], ["under-eye-glow-wand", 1], ["spa-headband", 1]],
+  "set-midnight-glow": [["sonic-silicone-cleansing-brush", 1], ["led-red-light-mask", 1], ["satin-sleep-mask", 1]],
+  "set-sweater-weather": [["led-red-light-mask", 1], ["electric-scalp-massager", 1], ["satin-sleep-mask", 1], ["spa-headband", 1]],
+  "set-pink-pop": [["under-eye-glow-wand", 1], ["sonic-silicone-cleansing-brush", 1], ["facial-ice-roller", 1], ["spa-headband", 1]],
+  "set-carry-on-glow": [["under-eye-glow-wand", 1], ["satin-sleep-mask", 1], ["spa-headband", 1]],
+  "set-bestie-duo": [["facial-ice-roller", 2], ["spa-headband", 2]],
+};
+
+function insideBlock(items: [string, number][], locale: "en" | "fr"): string {
+  const fr = locale === "fr";
+  const inside = items.map(([slug, qty]) => {
+    const p = PRODUCTS.find((x) => x.slug === slug);
+    const name = p ? (fr ? p.nameFr : p.nameEn) : slug;
+    return `${qty} × <a href="/shop/${slug}">${name}</a>`;
+  });
+  return `<h3>${fr ? "Dans le coffret" : "What's inside"}</h3><ul>${li(inside)}</ul>`;
+}
+
+const currentInside = (slug: string, locale: "en" | "fr") =>
+  insideBlock((SET_CONTENTS[slug] ?? []).map((c) => [c.slug, c.qty]), locale);
+
+function applySwaps(html: string, s: SeedSet): string {
+  let out = html;
+  for (const [from, to] of s.swaps ?? []) if (out.includes(from)) out = out.replace(from, to);
+  return out;
+}
+
 function setDescription(s: SeedSet, locale: "en" | "fr"): string {
   const fr = locale === "fr";
-  const inside = (SET_CONTENTS[s.slug] ?? []).map((c) => {
-    const p = PRODUCTS.find((x) => x.slug === c.slug);
-    const name = p ? (fr ? p.nameFr : p.nameEn) : c.slug;
-    return `${c.qty} × <a href="/shop/${c.slug}">${name}</a>`;
-  });
   const footer = s.hygieneOnly ? (fr ? FOOTER_HYGIENE_FR : FOOTER_HYGIENE_EN) : fr ? FOOTER_FR : FOOTER_EN;
-  return [
-    fr ? s.hookFr : s.hookEn,
-    `<h3>${fr ? "Dans le coffret" : "What's inside"}</h3><ul>${li(inside)}</ul>`,
-    `<h3>${fr ? "La routine" : "The routine"}</h3><ol>${li(fr ? s.routineFr : s.routineEn)}</ol>`,
-    `<h3>${fr ? "Bon à savoir" : "Good to know"}</h3><ul>${li(fr ? s.goodFr : s.goodEn)}</ul>`,
-    footer,
-  ].join("");
+  return applySwaps(
+    [
+      fr ? s.hookFr : s.hookEn,
+      currentInside(s.slug, locale),
+      `<h3>${fr ? "La routine" : "The routine"}</h3><ol>${li(fr ? s.routineFr : s.routineEn)}</ol>`,
+      `<h3>${fr ? "Bon à savoir" : "Good to know"}</h3><ul>${li(fr ? s.goodFr : s.goodEn)}</ul>`,
+      footer,
+    ].join(""),
+    s,
+  );
+}
+
+/**
+ * Bring an existing set description up to date without touching owner edits: only the
+ * seed-generated "What's inside" block (if still verbatim), the old separate-parcels line,
+ * and the targeted `swaps` are replaced.
+ */
+function refreshSetDescription(html: string, s: SeedSet, locale: "en" | "fr"): string {
+  const fr = locale === "fr";
+  let out = html;
+  const legacy = insideBlock(LEGACY_SET_CONTENTS[s.slug] ?? [], locale);
+  if (out.includes(legacy)) out = out.replace(legacy, currentInside(s.slug, locale));
+  const [oldP, newP] = fr ? [LEGACY_PARCELS_FR, PARCELS_FR] : [LEGACY_PARCELS_EN, PARCELS_EN];
+  out = out.replace(`<li>${oldP}</li>`, `<li>${newP}</li>`);
+  return applySwaps(out, s);
 }
 
 /** Sum of component sale prices × qty (from this file's catalogue). */
@@ -752,7 +1053,26 @@ function setRecipe(slug: string): string {
     const p = PRODUCTS.find((x) => x.slug === c.slug);
     return `${c.qty}× ${p?.nameEn ?? c.slug}: ${c.variant}`;
   });
-  return `SET: order each component on CJ (CJPacket JYSP Sensitive to CA). ${parts.join(" | ")}. Items may ship in separate parcels.`;
+  return `SET: place ONE CJ order with all items (Shipping From: China for every item) so it ships as one parcel, CJPacket JYSP Sensitive to CA. ${parts.join(" | ")}. Put the small items inside the pouch/organizer if the CJ agent agreed.`;
+}
+/** Recipes written by the previous seed start with this (never hand-written by the owner). */
+const LEGACY_RECIPE_PREFIX = "SET: order each component on CJ";
+
+/** True when every URL is a CJ CDN photo, i.e. untouched supplier images (admin never pasted its own). */
+const CJ_HOST = /^https?:\/\/[^/]*(cjdropshipping\.com|aliyuncs\.com)\//i;
+function onlySupplierPhotos(images: unknown): boolean {
+  return Array.isArray(images) && images.length > 0 && images.every((u) => typeof u === "string" && CJ_HOST.test(u));
+}
+const isEmptyJsonArray = (v: unknown) => !Array.isArray(v) || v.length === 0;
+/** Deep equality that ignores object key order (Postgres jsonb reorders keys). */
+function sameJson(a: unknown, b: unknown): boolean {
+  const norm = (v: unknown): unknown =>
+    Array.isArray(v)
+      ? v.map(norm)
+      : v && typeof v === "object"
+        ? Object.fromEntries(Object.keys(v as object).sort().map((k) => [k, norm((v as Record<string, unknown>)[k])]))
+        : v;
+  return JSON.stringify(norm(a)) === JSON.stringify(norm(b));
 }
 
 async function seedSets(reset: boolean) {
@@ -790,17 +1110,48 @@ async function seedSets(reset: boolean) {
       continue;
     }
     const update: Prisma.ProductUpdateInput = { sortOrder: s.sortOrder };
+    const notes: string[] = [];
     if (reset) Object.assign(update, copy, commerce, { options: [] });
-    const hasImages = Array.isArray(existing.images) && existing.images.length > 0;
-    if (!hasImages) Object.assign(update, { images: supplier.images, shippingNote: supplier.shippingNote });
+    else {
+      // New launch price (and compare-at) only while the owner hasn't changed the old price.
+      if (
+        existing.priceCents === s.prevPriceCents &&
+        (existing.priceCents !== s.priceCents || existing.compareAtCents !== commerce.compareAtCents)
+      ) {
+        Object.assign(update, { priceCents: s.priceCents, compareAtCents: commerce.compareAtCents });
+        notes.push("price");
+      }
+      const en = refreshSetDescription(existing.descriptionEn ?? "", s, "en");
+      const fr = refreshSetDescription(existing.descriptionFr ?? "", s, "fr");
+      if (existing.descriptionEn && en !== existing.descriptionEn) {
+        update.descriptionEn = en;
+        notes.push("copy EN");
+      }
+      if (existing.descriptionFr && fr !== existing.descriptionFr) {
+        update.descriptionFr = fr;
+        notes.push("copy FR");
+      }
+    }
+    // Images derived from components: refresh while they are still untouched CJ photos.
+    const oldImages = existing.images;
+    if ((isEmptyJsonArray(oldImages) || onlySupplierPhotos(oldImages)) && images.length) {
+      update.images = images;
+      notes.push("images");
+    }
+    const note = existing.shippingNote ?? "";
+    if (!note || note.startsWith(LEGACY_RECIPE_PREFIX)) {
+      update.shippingNote = supplier.shippingNote;
+      notes.push("recipe");
+    }
     await prisma.product.update({ where: { slug: s.slug }, data: update });
-    console.log(`Set ready: ${s.slug}${hasImages ? "" : " (images + recipe filled)"}`);
+    console.log(`Set ready: ${s.slug}${notes.length ? ` (${notes.join(", ")})` : ""}`);
   }
 }
 
 async function main() {
   const reset = process.env.RESET_PRODUCTS === "1";
   for (const p of PRODUCTS) {
+    const media = MEDIA[p.slug];
     const copy = {
       nameEn: p.nameEn,
       nameFr: p.nameFr,
@@ -811,23 +1162,25 @@ async function main() {
     };
     const commerce = { priceCents: p.priceCents, compareAtCents: p.compareAtCents, tags: p.tags };
     const supplier = {
-      images: p.images,
+      images: media?.images.length ? media.images : p.images,
       options: p.options as unknown as Prisma.InputJsonValue,
       supplierUrl: p.supplierUrl,
       supplierSku: p.supplierSku,
       shippingNote: p.shippingNote,
     };
+    const videos = (media?.videos ?? []) as unknown as Prisma.InputJsonValue;
 
     const existing = await prisma.product.findUnique({ where: { slug: p.slug } });
     if (!existing) {
       await prisma.product.create({
-        data: { slug: p.slug, active: p.active ?? true, sortOrder: p.sortOrder, ...copy, ...commerce, ...supplier },
+        data: { slug: p.slug, active: p.active ?? true, sortOrder: p.sortOrder, ...copy, ...commerce, ...supplier, videos },
       });
       console.log(`Product created: ${p.slug}`);
       continue;
     }
 
     const update: Prisma.ProductUpdateInput = { sortOrder: p.sortOrder };
+    const notes: string[] = [];
     if (reset) Object.assign(update, copy, commerce, { options: supplier.options });
     const hasImages = Array.isArray(existing.images) && existing.images.length > 0;
     if (!hasImages) {
@@ -835,9 +1188,22 @@ async function main() {
       Object.assign(update, supplier);
       if (p.refreshCopyWhenEmpty) Object.assign(update, copy);
       if (p.active === false) update.active = false;
+      notes.push("supplier data filled");
+    } else if (media?.images.length && onlySupplierPhotos(existing.images)) {
+      // Still the raw CJ photos the seed put there → swap in the processed Cloudinary set.
+      update.images = media.images;
+      notes.push("images → Cloudinary");
+    }
+    if (!reset && hasImages && p.legacyOptions && sameJson(existing.options, p.legacyOptions)) {
+      update.options = supplier.options;
+      notes.push("option labels");
+    }
+    if (media?.videos.length && isEmptyJsonArray(existing.videos)) {
+      update.videos = videos;
+      notes.push("videos");
     }
     await prisma.product.update({ where: { slug: p.slug }, data: update });
-    console.log(`Product ready: ${p.slug}${hasImages ? "" : " (supplier data filled)"}`);
+    console.log(`Product ready: ${p.slug}${notes.length ? ` (${notes.join(", ")})` : ""}`);
   }
 
   await seedSets(reset);

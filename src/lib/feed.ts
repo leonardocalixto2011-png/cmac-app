@@ -16,6 +16,16 @@ const plain = (html: string | null) =>
 
 const money = (cents: number) => `${(cents / 100).toFixed(2)} CAD`;
 
+const DEFAULT_CATEGORY = "Health & Beauty > Personal Care > Cosmetics > Cosmetic Tools > Skin Care Tools";
+/** Non-device add-ons get a closer Google category than the default skin-care-tool one. */
+const CATEGORY_BY_SLUG: Record<string, string> = {
+  "satin-scrunchie": "Apparel & Accessories > Clothing Accessories > Hair Accessories",
+  "pink-shell-makeup-pouch": "Luggage & Bags > Cosmetic & Toiletry Bags",
+  "travel-makeup-organizer": "Luggage & Bags > Cosmetic & Toiletry Bags",
+  "cozy-fleece-socks": "Apparel & Accessories > Clothing > Underwear & Socks > Socks",
+  "satin-beauty-sleep-set": "Health & Beauty > Personal Care",
+};
+
 export async function buildGoogleFeed(locale: "en" | "fr"): Promise<Response> {
   const base = siteUrl();
   const products = await listProducts();
@@ -46,17 +56,17 @@ export async function buildGoogleFeed(locale: "en" | "fr"): Promise<Response> {
       <g:brand>${esc(BRAND.name)}</g:brand>
       <g:identifier_exists>no</g:identifier_exists>${p.tags.includes("sets") ? `
       <g:is_bundle>yes</g:is_bundle>` : ""}
-      <g:google_product_category>Health &amp; Beauty &gt; Personal Care &gt; Cosmetics &gt; Cosmetic Tools &gt; Skin Care Tools</g:google_product_category>
+      <g:google_product_category>${esc(CATEGORY_BY_SLUG[p.slug] ?? DEFAULT_CATEGORY)}</g:google_product_category>
       <g:price>${money(onSale ? p.compareAtCents! : p.priceCents)}</g:price>${onSale ? `
       <g:sale_price>${money(p.priceCents)}</g:sale_price>` : ""}
       <g:shipping>
         <g:country>CA</g:country>
         <g:service>Standard</g:service>
         <g:price>${money(p.priceCents >= SHIPPING.freeThresholdCents ? 0 : SHIPPING.flatCents)}</g:price>
-        <g:min_handling_time>1</g:min_handling_time>
-        <g:max_handling_time>3</g:max_handling_time>
-        <g:min_transit_time>7</g:min_transit_time>
-        <g:max_transit_time>15</g:max_transit_time>
+        <g:min_handling_time>${SHIPPING.processingDays.min}</g:min_handling_time>
+        <g:max_handling_time>${SHIPPING.processingDays.max}</g:max_handling_time>
+        <g:min_transit_time>${SHIPPING.deliveryBusinessDays.min}</g:min_transit_time>
+        <g:max_transit_time>${SHIPPING.deliveryBusinessDays.max}</g:max_transit_time>
       </g:shipping>
       <g:custom_label_0>${esc(p.tags.join(" "))}</g:custom_label_0>
     </item>`;

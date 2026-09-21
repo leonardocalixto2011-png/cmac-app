@@ -76,7 +76,7 @@ export const PAGES: Record<string, Record<Locale, PageContent>> = {
           ul: [
             "We ship to all Canadian provinces and territories. Canada only for now.",
             `Orders are processed within ${SHIPPING.processingDays.min} to ${SHIPPING.processingDays.max} business days.`,
-            `After processing, delivery takes ${SHIPPING.deliveryBusinessDays.min} to ${SHIPPING.deliveryBusinessDays.max} business days (about ${SHIPPING.deliveryWeeks.min} to ${SHIPPING.deliveryWeeks.max} weeks) depending on the item and your province. The estimate is shown at checkout before you pay.`,
+            `After processing, delivery takes ${SHIPPING.deliveryBusinessDays.min} to ${SHIPPING.deliveryBusinessDays.max} business days (about ${SHIPPING.deliveryWeeks.min} to ${SHIPPING.deliveryWeeks.max} weeks) depending on the item and your province. In total, plan on about ${SHIPPING.totalWeeks.min} to ${SHIPPING.totalWeeks.max} weeks from order to delivery. The estimate is shown at checkout before you pay.`,
             `Shipping is a flat ${FLAT.en}. Orders of ${FREE.en} or more ship free.`,
             "A tracking number is emailed when your parcel ships.",
           ],
@@ -113,7 +113,7 @@ export const PAGES: Record<string, Record<Locale, PageContent>> = {
           ul: [
             "On livre dans toutes les provinces et tous les territoires du Canada. Au Canada seulement pour l'instant.",
             `Les commandes sont traitées en ${SHIPPING.processingDays.min} à ${SHIPPING.processingDays.max} jours ouvrables.`,
-            `Après le traitement, la livraison prend de ${SHIPPING.deliveryBusinessDays.min} à ${SHIPPING.deliveryBusinessDays.max} jours ouvrables (environ ${SHIPPING.deliveryWeeks.min} à ${SHIPPING.deliveryWeeks.max} semaines) selon l'article et votre province. L'estimation est affichée au moment du paiement.`,
+            `Après le traitement, la livraison prend de ${SHIPPING.deliveryBusinessDays.min} à ${SHIPPING.deliveryBusinessDays.max} jours ouvrables (environ ${SHIPPING.deliveryWeeks.min} à ${SHIPPING.deliveryWeeks.max} semaines) selon l'article et votre province. Au total, comptez environ ${SHIPPING.totalWeeks.min} à ${SHIPPING.totalWeeks.max} semaines de la commande à la livraison. L'estimation est affichée au moment du paiement.`,
             `Frais de livraison fixes de ${FLAT.fr}. Livraison gratuite pour toute commande de ${FREE.fr} et plus.`,
             "Un numéro de suivi vous est envoyé par courriel dès l'expédition.",
           ],

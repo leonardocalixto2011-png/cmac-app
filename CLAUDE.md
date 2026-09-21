@@ -1,7 +1,8 @@
 # CMAC Beauty — standalone e-commerce app (cmacbeauty.ca)
 
-Montréal / L'Assomption beauty-tech brand selling at-home devices + ritual essentials (10 active
-products), fulfilled via CJdropshipping. **Own project, own Stripe / Resend / Neon accounts** — never
+Montréal / L'Assomption beauty-tech brand selling at-home devices + ritual essentials (16 active
+products incl. 6 set add-ons: satin sleep set, scrunchie, shell pouch, travel organizer, fleece socks,
+cleansing puff), fulfilled via CJdropshipping. **Own project, own Stripe / Resend / Neon accounts** — never
 share keys or code paths with the Couca & Co. app (`C:\Users\leona\couca-app`),
 which it was scaffolded from.
 
@@ -25,9 +26,11 @@ Source: `../OneDrive/Claude projets/cmac-store/research/sourcing-report-2026-09-
 - Currency CAD, Canada-only shipping
 - Shipping: flat **$9.99**, **free at $75+** subtotal (`SHIPPING` const). Hero,
   marquee, FAQ, cart, product page, policies and Stripe all read this constant.
-- Delivery: processing 1–3 business days, then **7–15 business days** transit
-  (CJPacket JYSP Sensitive, China → Canada), shown rounded as **about 1–3 weeks**
-  (`SHIPPING.deliveryBusinessDays` / `deliveryWeeks`)
+- Delivery: processing **3–5 business days** (CJ buys most items from the factory first;
+  sets are consolidated into one parcel), then **7–15 business days** transit (CJPacket JYSP
+  Sensitive, China → Canada). Transit ≈ 1–3 weeks (`deliveryWeeks`), order-to-door ≈ **2–4 weeks**
+  (`totalWeeks`: Stripe estimate, confirmation email, product page). Google feeds read
+  `processingDays` for `min/max_handling_time`: keep Merchant Center shipping handling time 3–5 in sync.
 - Returns **30 days** unused in original packaging; hygiene items unopened
 - Warranty **12 months** against manufacturing defects
 - No invented reviews, awards or stats. Stats shown (10 min / 3x / 60 s) are
@@ -62,8 +65,12 @@ and server pages. Long-form pages live in `src/content/pages.ts`, FAQ in
 
 ## Key files
 
+- `prisma/media.ts` — processed Cloudinary media per slug (4:5 cream images + muted supplier
+  videos `{mp4, poster}`). Seed swaps a product's images to these only while all its current
+  images are CJ CDN URLs; fills `videos` only while empty. Product page shows the video as slide 2.
 - `src/lib/sets.ts` — curated bundle Sets: contents (slug × qty) + CJ variant per component. A set is a
-  normal Product tagged `sets`, no options, `supplierSku: "SET"`, `shippingNote` = CJ recipe (shown in
+  normal Product tagged `sets`, no options, `supplierSku: "SET"`, `shippingNote` = CJ recipe (ONE CJ order,
+  China warehouse, one parcel) (shown in
   /admin/orders and the owner new-order email). Seeded in `prisma/seed.ts` (`SETS`, compare-at = sum of
   components; images = components’ photos). Product page shows a "What’s inside" grid + savings;
   tag `limited` shows a badge (Sweater Weather: deactivate it in /admin after Nov 30). Feeds add `g:is_bundle`.
@@ -88,17 +95,18 @@ and server pages. Long-form pages live in `src/content/pages.ts`, FAQ in
 
 ## Data model (`prisma/schema.prisma`)
 
-Product (tagline/taglineFr, tags[], compareAtCents, supplierUrl/Sku,
+Product (tagline/taglineFr, tags[], images/videos Json, compareAtCents, supplierUrl/Sku,
 shippingNote), Order (shippingCents, totalCents, contactName, tracking*,
 fulfilledAt, supplierOrderId, stripePaymentIntentId), Customer (minimal),
 Subscriber (`email @unique`, locale), ContactMessage, Auth.js models
 (User/Account/Session/VerificationToken + UserRole).
-Single baseline migration `prisma/migrations/0_init` (generated with
-`prisma migrate diff --from-empty`). Add new migrations with `prisma migrate dev`.
+Migrations: baseline `prisma/migrations/0_init` (generated with
+`prisma migrate diff --from-empty`) + `20260921120000_product_videos`. Add new migrations with `prisma migrate dev`.
 
 ## STILL PLACEHOLDER — needs the owner
 
-- **Product images** are CJ CDN photos (seeded; research in
+- **Product images** are processed Cloudinary photos (`prisma/media.ts`, 2026-09-21) derived from CJ
+  supplier photos (see `cmac-store/media/media-report.md`). Before that they were CJ CDN photos (research in
   `../OneDrive/Claude projets/cmac-store/research/cj-catalog-2026-09-21.json`).
   LED mask has only 1 clean CJ photo (the rest show a bundled serum): replace
   with own sample photos. `ProductArt` still falls back to the branded gradient
@@ -140,7 +148,8 @@ Dev admin: `admin@cmacbeauty.ca` / `cmac-admin-dev` (change for prod).
 `npm run typecheck` · `npm run lint` · `npm run build`. On Windows, stop `next dev`
 before `npm run build` or `prisma generate` hits EPERM on the locked engine DLL.
 Seed is idempotent (`sortOrder` always; supplier data only while `images` is
-empty); `RESET_PRODUCTS=1` to overwrite copy/prices/tags/options from the seed.
+empty; images → Cloudinary only while all are CJ URLs; set price/compare-at only while the
+set is still at its launch price `prevPriceCents`; set copy only via verbatim seed fragments); `RESET_PRODUCTS=1` to overwrite copy/prices/tags/options from the seed.
 
 ## Deploy runbook (owner)
 

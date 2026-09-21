@@ -4,6 +4,8 @@ import { SET_CONTENTS, SET_TAG } from "./sets";
 
 export type ProductOptionValue = { value: string; labelFr: string; labelEn: string };
 export type ProductOption = { nameFr: string; nameEn: string; values: ProductOptionValue[] };
+/** Short muted supplier clip (Cloudinary mp4) + poster frame. */
+export type ProductVideo = { mp4: string; poster: string };
 
 export type ProductView = {
   slug: string;
@@ -17,6 +19,7 @@ export type ProductView = {
   compareAtCents: number | null;
   tags: string[];
   images: string[];
+  videos: ProductVideo[];
   options: ProductOption[];
   active: boolean;
 };
@@ -40,6 +43,7 @@ function toView(p: {
   compareAtCents: number | null;
   tags: string[];
   images: unknown;
+  videos?: unknown;
   options: unknown;
   active: boolean;
 }): ProductView {
@@ -55,6 +59,9 @@ function toView(p: {
     compareAtCents: p.compareAtCents,
     tags: p.tags ?? [],
     images: Array.isArray(p.images) ? (p.images as string[]) : [],
+    videos: Array.isArray(p.videos)
+      ? (p.videos as ProductVideo[]).filter((v) => v && typeof v.mp4 === "string" && typeof v.poster === "string")
+      : [],
     options: Array.isArray(p.options) ? (p.options as ProductOption[]) : [],
     active: p.active,
   };

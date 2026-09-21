@@ -84,8 +84,8 @@ export async function checkout(lines: CartLineInput[], rawLocale: string): Promi
                 : "Standard shipping",
             fixed_amount: { amount: validated.shippingCents, currency: "cad" },
             delivery_estimate: {
-              minimum: { unit: "week", value: SHIPPING.deliveryWeeks.min },
-              maximum: { unit: "week", value: SHIPPING.deliveryWeeks.max },
+              minimum: { unit: "week", value: SHIPPING.totalWeeks.min },
+              maximum: { unit: "week", value: SHIPPING.totalWeeks.max },
             },
           },
         },
