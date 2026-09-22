@@ -4,7 +4,7 @@
  * No DB or network here — `email.ts` / `marketing.ts` resolve the data and
  * send; `scripts/render-email-previews.ts` renders samples.
  *
- * Voice: warm, intimate, never salesy; signed by Leonart. Health Canada:
+ * Voice: warm, intimate, never salesy; signed by the CMAC team. Health Canada:
  * appearance-only wording. Delivery promises come from SHIPPING (brand.ts).
  */
 import type { Locale } from "@/i18n/messages";
@@ -424,7 +424,7 @@ export function renderOrderConfirmation(o: OrderView): RenderedEmail {
         hero: first ? `Votre rituel est en route, ${NB(first)}.` : "Votre rituel est en route.",
         preheader: `Merci ! Voici le récapitulatif de la commande n° ${ref} et les prochaines étapes, en toute transparence.`,
         order: "Commande",
-        note: "Merci de confier votre rituel à une petite marque d'ici — ça me touche sincèrement. Si quoi que ce soit vous semble flou en chemin, répondez simplement à ce courriel : il m'arrive directement.",
+        note: "Merci de confier votre rituel à une petite marque d'ici — ça nous touche sincèrement. Si quoi que ce soit vous semble flou en chemin, répondez simplement à ce courriel : il nous arrive directement.",
         summary: "Votre commande",
         waitTitle: "En attendant",
         waitIntro: "Quelques petits gestes pour que votre premier rituel soit parfait.",
@@ -437,7 +437,7 @@ export function renderOrderConfirmation(o: OrderView): RenderedEmail {
         hero: first ? `Your ritual is on its way, ${NB(first)}.` : "Your ritual is on its way.",
         preheader: `Thank you! Here's your order #${ref} and exactly what happens next.`,
         order: "Order",
-        note: "Thank you for trusting a small Québec brand with your ritual — it truly means a lot. If anything feels unclear along the way, simply reply to this email; it comes straight to me.",
+        note: "Thank you for trusting a small Québec brand with your ritual — it truly means a lot to us. If anything feels unclear along the way, simply reply to this email; it comes straight to our team.",
         summary: "Your order",
         waitTitle: "While you wait",
         waitIntro: "A few small things to make your first ritual feel just right.",
@@ -544,7 +544,7 @@ export function renderShipped(o: OrderView): RenderedEmail {
         number: "Numéro de suivi",
         track: "Suivre mon colis",
         parcel: "Dans ce colis",
-        separate: "Un ensemble ou plusieurs articles ? Les pièces peuvent arriver dans des colis séparés, à quelques jours d'intervalle. Si un article semble manquer, attendez quelques jours ou répondez à ce courriel — je vérifie tout de suite.",
+        separate: "Un ensemble ou plusieurs articles ? Les pièces peuvent arriver dans des colis séparés, à quelques jours d'intervalle. Si un article semble manquer, attendez quelques jours ou répondez à ce courriel — nous vérifions tout de suite.",
         careTitle: "À l'arrivée",
         careIntro: "Petit rappel pour bien commencer.",
       }
@@ -560,7 +560,7 @@ export function renderShipped(o: OrderView): RenderedEmail {
         number: "Tracking number",
         track: "Track your parcel",
         parcel: "In this parcel",
-        separate: "Ordered a set or several pieces? They may arrive in separate parcels, a few days apart. If something seems missing, give it a few days or reply to this email — I'll check right away.",
+        separate: "Ordered a set or several pieces? They may arrive in separate parcels, a few days apart. If something seems missing, give it a few days or reply to this email — we'll check right away.",
         careTitle: "When it arrives",
         careIntro: "A gentle reminder to start on the right foot.",
       };

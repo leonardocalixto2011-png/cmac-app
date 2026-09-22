@@ -143,15 +143,16 @@ ${opts.fine ? `<p style="margin:6px 0 0;font-family:${SANS};font-size:12px;line-
 </td></tr></table>`;
 }
 
-/** Personal sign-off: "With care, / Leonart / CMAC Beauty · Montréal & L'Assomption". */
+/** Team sign-off: "With care, / The CMAC team / CMAC Beauty · Montréal & L'Assomption". */
 export function signOff(locale: Locale, closing?: string): Block {
   const close = closing ?? (locale === "fr" ? "Avec douceur," : "With care,");
+  const team = locale === "fr" ? "L'équipe CMAC" : "The CMAC team";
   const place = locale === "fr" ? "CMAC Beauty · Montréal et L'Assomption" : "CMAC Beauty · Montréal & L'Assomption";
   return {
     html: `<p style="margin:0 0 4px;font-family:${SANS};font-size:15px;line-height:1.6;color:${C.soft};">${esc(close)}</p>
-<p style="margin:0;font-family:${SERIF};font-size:30px;line-height:1.2;font-style:italic;font-weight:400;color:${C.ink};">Leonart</p>
+<p style="margin:0;font-family:${SERIF};font-size:30px;line-height:1.2;font-style:italic;font-weight:400;color:${C.ink};">${esc(team)}</p>
 <p style="margin:2px 0 0;font-family:${SANS};font-size:12px;line-height:1.5;letter-spacing:0.08em;color:${C.faint};">${esc(place)}</p>`,
-    text: `${close}\nLeonart, ${place}`,
+    text: `${close}\n${team}, ${place}`,
   };
 }
 
