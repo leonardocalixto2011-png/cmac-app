@@ -79,6 +79,14 @@ export const SET_CONTENTS: Record<string, SetComponent[]> = {
     { slug: "electric-foot-file", qty: 1, variant: "Pink, outlet No (USB) = CJYD196463901AZ" },
     { slug: "cozy-fleece-socks", qty: 1, variant: "Beige = CJWZ191410903CX (matches the photo)" },
   ],
+  "set-fall-basket": [
+    { slug: "travel-makeup-organizer", qty: 1, variant: "Caramel Mocha = CJYD185535503CX (holds the basket)" },
+    { slug: "cozy-fleece-socks", qty: 1, variant: "Coffee = CJWZ191410905EV" },
+    { slug: "satin-sleep-mask", qty: 1, variant: "Light Gray = CJYD198717802BY" },
+    { slug: "spa-headband", qty: 1, variant: "Beige = CJHL133914107GT" },
+    { slug: "satin-scrunchie", qty: 1, variant: "Champagne = CJTF106711602BY" },
+    { slug: "reusable-cleansing-puff", qty: 1, variant: "CJPF101912105EV (pick a neutral swatch)" },
+  ],
 };
 
 /** Order of the four sets featured on the homepage. */

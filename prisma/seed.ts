@@ -1205,6 +1205,50 @@ const SETS: SeedSet[] = [
       PARCELS_FR,
     ],
   },
+  {
+    slug: "set-fall-basket",
+    nameEn: "The Fall Basket",
+    nameFr: "Le panier d'automne",
+    tagline: "A cozy night in, packed in a caramel case. Fall limited edition",
+    taglineFr: "Une soirée douillette, dans un étui caramel. Édition limitée d'automne",
+    priceCents: 8999,
+    prevPriceCents: 8999,
+    tags: ["sets", "essentials", "cozy", "fall", "gift", "new"],
+    sortOrder: 30,
+    hygieneOnly: true,
+    hookEn:
+      "<p><strong>The gift basket, minus the cellophane.</strong> Everything soft, nothing to charge: fluffy fleece socks, a satin-feel sleep mask, a spa headband, a satin scrunchie and a reusable cleansing puff, all packed inside a caramel travel case she'll keep using long after the leaves are gone. No device, no learning curve, no wrong shade.</p>",
+    hookFr:
+      "<p><strong>Le panier-cadeau, sans le cellophane.</strong> Tout ce qui est doux, rien à recharger : des bas moelleux en molleton, un masque de nuit effet satin, un bandeau spa, un chouchou en satin et une houppette démaquillante réutilisable, le tout rangé dans un étui de voyage caramel qu'elle gardera bien après l'automne. Aucun appareil, aucun apprentissage, aucune teinte à deviner.</p>",
+    routineEn: [
+      "Headband on, hair up with the scrunchie.",
+      "Cleanse with the reusable puff, then apply whatever your skin likes.",
+      "Fleece socks on, phone down.",
+      "Sleep mask on for a proper dark room.",
+    ],
+    routineFr: [
+      "Bandeau en place, cheveux attachés avec le chouchou.",
+      "Nettoyez avec la houppette réutilisable, puis appliquez vos produits habituels.",
+      "Bas en molleton enfilés, téléphone déposé.",
+      "Masque de nuit sur les yeux, pour une vraie noirceur.",
+    ],
+    goodEn: [
+      "Autumn colours picked by us: caramel case, coffee socks, beige headband, champagne scrunchie. The photos show each piece in its standard colour, so the shades you receive differ from the pictures.",
+      "No electronics inside: nothing to charge, nothing to break, easy to mail as a gift.",
+      "Satin-feel textiles are rayon, not silk. Hand-wash cold, dry flat.",
+      "Fall limited edition: on sale until December 1, or while the colours last.",
+      hygieneEn("socks, headband, scrunchie, sleep mask, cleansing puff"),
+      PARCELS_EN,
+    ],
+    goodFr: [
+      "Couleurs d'automne choisies par nous : étui caramel, bas café, bandeau beige, chouchou champagne. Les photos montrent chaque pièce dans sa couleur standard : les teintes reçues diffèrent donc des images.",
+      "Aucun appareil électronique : rien à recharger, rien à briser, facile à offrir ou à poster.",
+      "Les textiles effet satin sont en viscose, pas en soie. Lavage à la main à l'eau froide, séchage à plat.",
+      "Édition limitée d'automne : en vente jusqu'au 1er décembre, ou jusqu'à épuisement des couleurs.",
+      hygieneFr("bas, bandeau, chouchou, masque de nuit, houppette"),
+      PARCELS_FR,
+    ],
+  },
 ];
 
 const li = (xs: string[]) => xs.map((x) => `<li>${x}</li>`).join("");

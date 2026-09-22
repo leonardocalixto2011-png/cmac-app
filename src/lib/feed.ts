@@ -24,6 +24,7 @@ const CATEGORY_BY_SLUG: Record<string, string> = {
   "travel-makeup-organizer": "Luggage & Bags > Cosmetic & Toiletry Bags",
   "cozy-fleece-socks": "Apparel & Accessories > Clothing > Underwear & Socks > Socks",
   "satin-beauty-sleep-set": "Health & Beauty > Personal Care",
+  "set-fall-basket": "Health & Beauty > Personal Care",
   "nail-care-pen": "Health & Beauty > Personal Care > Cosmetics > Cosmetic Tools > Nail Tools",
   "rose-gold-manicure-kit": "Health & Beauty > Personal Care > Cosmetics > Cosmetic Tools > Nail Tools",
   "gel-manicure-gloves": "Health & Beauty > Personal Care > Cosmetics > Cosmetic Tools > Nail Tools",
