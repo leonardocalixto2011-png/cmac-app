@@ -168,6 +168,8 @@ const en: Dict = {
   "shop.upsellTitle": "Complete your ritual",
   "shop.upsellFree": "unlocks free shipping",
   "shop.upsellAdd": "Add",
+  "shop.emailLabel": "Your email (for your receipt and offers)",
+  "shop.emailNeeded": "Please enter your email, or untick the email box.",
   "shop.limited": "Limited · until Nov 30",
 
   "coll.glow.t": "Glow",
@@ -373,6 +375,8 @@ const fr: Dict = {
   "shop.upsellTitle": "Complétez votre rituel",
   "shop.upsellFree": "débloque la livraison gratuite",
   "shop.upsellAdd": "Ajouter",
+  "shop.emailLabel": "Votre courriel (pour votre reçu et les offres)",
+  "shop.emailNeeded": "Entrez votre courriel, ou décochez la case des courriels.",
   "shop.limited": "Édition limitée · jusqu'au 30 nov.",
 
   "coll.glow.t": "Éclat",

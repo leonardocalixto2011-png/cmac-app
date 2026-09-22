@@ -199,6 +199,8 @@ export type OrderItem = {
   qty: number;
   options?: Record<string, string>;
   optionsEn?: Record<string, string>;
+  /** Cart selection (option nameEn -> value); lets /cart?restore= rebuild the line. */
+  selected?: Record<string, string>;
 };
 
 export function orderItems(raw: unknown): OrderItem[] {
@@ -232,4 +234,50 @@ export function shippingLines(raw: unknown): string[] {
   ]
     .filter((x): x is string => Boolean(x))
     .map(String);
+}
+
+/**
+ * Cart lines rebuilt from an UNPAID order (reminder email link), at today's
+ * prices and with today's product data. Paid / refunded orders and lines whose
+ * product or option no longer exists are skipped.
+ */
+export async function restoreCartLines(reference: string) {
+  const order = await prisma.order.findUnique({ where: { reference } });
+  if (!order || (order.status !== "PENDING" && order.status !== "CANCELLED")) return null;
+  const lines = orderItems(order.items);
+  const products = await prisma.product.findMany({ where: { slug: { in: lines.map((l) => l.slug) }, active: true } });
+  const out = [];
+  for (const l of lines) {
+    const p = products.find((x) => x.slug === l.slug);
+    if (!p) continue;
+    const opts = Array.isArray(p.options) ? (p.options as ProductOption[]) : [];
+    const selected = l.selected ?? {};
+    const optionLabelsFr: Record<string, string> = {};
+    const optionLabelsEn: Record<string, string> = {};
+    let ok = true;
+    for (const o of opts) {
+      const v = o.values.find((x) => x.value === selected[o.nameEn]);
+      if (!v) {
+        ok = false;
+        break;
+      }
+      optionLabelsFr[o.nameFr] = v.labelFr;
+      optionLabelsEn[o.nameEn] = v.labelEn;
+    }
+    if (!ok) continue;
+    const images = Array.isArray(p.images) ? (p.images as string[]) : [];
+    out.push({
+      slug: p.slug,
+      qty: Math.max(1, Math.min(10, l.qty)),
+      selected,
+      nameFr: p.nameFr,
+      nameEn: p.nameEn,
+      priceCents: p.priceCents,
+      image: images[0] ?? null,
+      tags: p.tags,
+      optionLabelsFr,
+      optionLabelsEn,
+    });
+  }
+  return out.length ? out : null;
 }

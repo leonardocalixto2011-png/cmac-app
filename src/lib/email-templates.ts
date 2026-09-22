@@ -625,7 +625,7 @@ ${sig.html}`;
 export type MarketingFooterInput = {
   locale: Locale;
   /** newsletter = subscriber (unsubscribe link); member = Glow Club birthday (profile link); confirm = opt-in request. */
-  kind: "newsletter" | "member" | "confirm";
+  kind: "newsletter" | "member" | "confirm" | "checkout" | "review";
   /** BUSINESS_MAILING_ADDRESS (falls back to the service area when unset). */
   mailingAddress: string | null;
   unsubscribeUrl?: string;
@@ -636,6 +636,9 @@ const CASL = {
     newsletter: "You're receiving this email because you subscribed to CMAC Beauty news at cmacbeauty.ca.",
     member: "You're receiving this email because you're a Glow Club member with a birthday saved in your CMAC Beauty account. Remove it from your profile to stop birthday emails.",
     confirm: "You're receiving this one-time email because this address was entered in a CMAC Beauty signup form. No confirmation, no newsletter.",
+    checkout: "You're receiving this one-time reminder because you ticked the box to receive emails from CMAC Beauty at checkout on cmacbeauty.ca.",
+    review: "You're receiving this email because you ordered from CMAC Beauty at cmacbeauty.ca. One review request per order.",
+    stopReviews: "Stop review requests",
     unsubscribe: "Unsubscribe",
     unsubscribeText: "Unsubscribe in one click:",
     profile: "Manage my profile",
@@ -644,6 +647,9 @@ const CASL = {
     newsletter: "Vous recevez ce courriel parce que vous êtes abonné·e aux nouvelles de CMAC Beauty sur cmacbeauty.ca.",
     member: "Vous recevez ce courriel parce que vous êtes membre du Glow Club et que votre date d'anniversaire est enregistrée dans votre compte CMAC Beauty. Retirez-la de votre profil pour ne plus recevoir ce courriel.",
     confirm: "Vous recevez ce courriel unique parce que cette adresse a été saisie dans un formulaire d'inscription CMAC Beauty. Sans confirmation, aucune infolettre.",
+    checkout: "Vous recevez ce rappel unique parce que vous avez coché la case pour recevoir des courriels de CMAC Beauty au moment de payer sur cmacbeauty.ca.",
+    review: "Vous recevez ce courriel parce que vous avez commandé chez CMAC Beauty sur cmacbeauty.ca. Une seule demande d'avis par commande.",
+    stopReviews: "Ne plus recevoir de demandes d'avis",
     unsubscribe: "Se désabonner",
     unsubscribeText: "Désabonnement en un clic :",
     profile: "Gérer mon profil",
@@ -659,7 +665,11 @@ export function marketingFooter(i: MarketingFooterInput): Block {
       ? { url: i.unsubscribeUrl, label: f.unsubscribe, text: f.unsubscribeText }
       : i.kind === "member"
         ? { url: `${siteUrl()}/account/profile`, label: f.profile, text: `${f.profile}:` }
-        : null;
+        : i.kind === "review" && i.unsubscribeUrl
+          ? { url: i.unsubscribeUrl, label: f.stopReviews, text: `${f.stopReviews}:` }
+          : i.kind === "checkout"
+            ? { url: `mailto:${BRAND.email}?subject=unsubscribe`, label: f.unsubscribe, text: `${f.unsubscribe}:` }
+            : null;
   const html = `${esc(reason)}<br><br>
 <strong style="color:${C.soft};">${esc(BRAND.name)}</strong> · ${esc(address)} · <a href="mailto:${BRAND.email}" style="color:${C.terraDeep};text-decoration:none;">${BRAND.email}</a>
 ${link ? `<br><br><a href="${esc(link.url)}" style="color:${C.soft};text-decoration:underline;">${esc(link.label)}</a>` : ""}
@@ -1179,5 +1189,124 @@ ${para("Place the CJ order, then click Mark fulfilled with the tracking number �
     preheader: `${o.items.map((i) => `${i.qty}× ${i.name}`).join(", ")}`,
     html: layout({ locale: "en", title: subject, body, footer: `${esc(BRAND.name)} · owner notification`, preheader: o.items.map((i) => `${i.qty}× ${i.name}`).join(", ") }),
     text,
+  };
+}
+
+// ---------------------------------------------------------------------------
+// 4a. Checkout reminder (abandoned cart). Commercial: sent only to people who
+// ticked the cart consent box, once per cart, with the CASL footer.
+// ---------------------------------------------------------------------------
+
+export function renderCheckoutReminder(i: {
+  locale: Locale;
+  items: ItemView[];
+  restoreUrl: string;
+  mailingAddress: string | null;
+  freeShippingCents: number;
+  subtotalCents: number;
+}): RenderedEmail {
+  const l = i.locale;
+  const gap = i.freeShippingCents - i.subtotalCents;
+  const T = fr(l)
+    ? {
+        subject: "Votre panier CMAC vous attend",
+        preheader: "On l'a gardé de côté, au cas où.",
+        eyebrow: "Mis de côté pour vous",
+        hero: "Vous aviez presque terminé.",
+        lead: "Votre panier est toujours là, exactement comme vous l'avez laissé. Pas de pression : si vous aviez une question sur un produit, la livraison ou les retours, répondez simplement à ce courriel.",
+        inside: "Dans votre panier",
+        cta: "Reprendre mon panier",
+        free: gap > 0 ? `Plus que ${money(gap, l)} pour la livraison gratuite.` : "Votre panier a droit à la livraison gratuite.",
+        once: "C'est le seul rappel que nous enverrons pour ce panier.",
+      }
+    : {
+        subject: "Your CMAC cart is waiting",
+        preheader: "We kept it aside, just in case.",
+        eyebrow: "Saved for you",
+        hero: "You were almost there.",
+        lead: "Your cart is still here, exactly as you left it. No pressure: if you had a question about a product, shipping or returns, just reply to this email.",
+        inside: "In your cart",
+        cta: "Back to my cart",
+        free: gap > 0 ? `Only ${money(gap, l)} away from free shipping.` : "Your cart ships free.",
+        once: "This is the only reminder we'll send for this cart.",
+      };
+  const items = itemsBlock(i.items, l, { prices: true });
+  const foot = marketingFooter({ locale: l, kind: "checkout", mailingAddress: i.mailingAddress });
+  const sig = signOff(l);
+  const body = `
+${eyebrow(T.eyebrow)}
+${h1(T.hero)}
+${para(esc(T.lead), { margin: "0 0 26px" })}
+${panel(`${eyebrow(T.inside, C.sage)}${items.html}`, { margin: "0 0 22px" })}
+${para(esc(T.free), { size: 14, color: C.terraDeep, margin: "0 0 22px" })}
+${button(i.restoreUrl, T.cta)}
+${spacer(26)}
+${para(esc(T.once), { size: 13, color: C.faint, margin: "0 0 26px" })}
+${sig.html}`;
+  return {
+    subject: T.subject,
+    preheader: T.preheader,
+    html: layout({ locale: l, title: T.subject, preheader: T.preheader, body, footer: foot.html }),
+    text: [T.hero, "", T.lead, "", T.inside.toUpperCase(), items.text, "", T.free, `${T.cta}: ${i.restoreUrl}`, "", T.once, "", sig.text, "", foot.text].join("\n"),
+  };
+}
+
+// ---------------------------------------------------------------------------
+// 4b. Review request (~3 weeks after shipping). One per order; the footer
+// links to "stop asking me" (sets Customer.reviewEmailsOptOut).
+// ---------------------------------------------------------------------------
+
+export function renderReviewRequest(i: {
+  locale: Locale;
+  name: string | null;
+  reference: string;
+  items: ItemView[];
+  reviewUrl: string;
+  stopUrl: string;
+  mailingAddress: string | null;
+}): RenderedEmail {
+  const l = i.locale;
+  const first = firstNameOf(i.name);
+  const T = fr(l)
+    ? {
+        subject: "Alors, comment ça se passe ? Votre avis compte",
+        preheader: "Deux minutes, une note, quelques mots : ça aide vraiment.",
+        eyebrow: "Votre avis",
+        hero: first ? `Alors, ${NB(first)}, verdict ?` : "Alors, verdict ?",
+        lead: "Votre commande devrait être arrivée depuis quelques jours. Nous sommes une petite boutique d'ici : un avis honnête, même court, aide énormément les prochaines clientes à choisir, et nous aide à garder seulement les produits qui le méritent.",
+        honest: "Les bons comme les moins bons avis sont publiés : nous ne retirons que les propos injurieux ou hors sujet.",
+        order: "Votre commande",
+        cta: "Laisser un avis",
+        issue: "Un souci avec un article ? Répondez simplement à ce courriel : nous nous en occupons.",
+      }
+    : {
+        subject: "So, how's it going? Your review matters",
+        preheader: "Two minutes, a rating, a few words: it really helps.",
+        eyebrow: "Your review",
+        hero: first ? `So, ${NB(first)}, what's the verdict?` : "So, what's the verdict?",
+        lead: "Your order should have arrived a few days ago. We're a small local shop: an honest review, even a short one, helps the next customer choose, and helps us keep only the products that earn their place.",
+        honest: "Good and less-good reviews are both published: we only remove abusive or off-topic content.",
+        order: "Your order",
+        cta: "Leave a review",
+        issue: "A problem with something? Just reply to this email and we'll sort it out.",
+      };
+  const items = itemsBlock(i.items, l, { prices: false });
+  const foot = marketingFooter({ locale: l, kind: "review", mailingAddress: i.mailingAddress, unsubscribeUrl: i.stopUrl });
+  const sig = signOff(l);
+  const body = `
+${eyebrow(T.eyebrow)}
+${h1(T.hero)}
+${para(esc(T.lead), { margin: "0 0 26px" })}
+${panel(`${eyebrow(`${T.order} #${shortRef(i.reference)}`, C.sage)}${items.html}`, { margin: "0 0 24px" })}
+${button(i.reviewUrl, T.cta)}
+${spacer(24)}
+${para(esc(T.honest), { size: 13, color: C.faint, margin: "0 0 10px" })}
+${para(esc(T.issue), { size: 13, color: C.faint, margin: "0 0 26px" })}
+${sig.html}`;
+  return {
+    subject: T.subject,
+    preheader: T.preheader,
+    html: layout({ locale: l, title: T.subject, preheader: T.preheader, body, footer: foot.html }),
+    text: [T.hero, "", T.lead, "", items.text, "", `${T.cta}: ${i.reviewUrl}`, "", T.honest, T.issue, "", sig.text, "", foot.text].join("\n"),
   };
 }

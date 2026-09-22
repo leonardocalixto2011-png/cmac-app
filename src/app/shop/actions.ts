@@ -32,7 +32,7 @@ async function siteOrigin(): Promise<string> {
 export async function checkout(
   lines: CartLineInput[],
   rawLocale: string,
-  opts: { newsletter?: boolean } = {},
+  opts: { newsletter?: boolean; email?: string } = {},
 ): Promise<CheckoutResult> {
   const locale = normalizeLocale(rawLocale);
   const member = await currentMemberTier().catch(() => null);
@@ -46,11 +46,15 @@ export async function checkout(
   const stripe = getStripe();
   if (!stripe) return { ok: false, error: "PAYMENT_UNAVAILABLE" };
 
+  // Email typed next to the consent box (guests only). Prefills Stripe and allows one cart reminder.
+  const typed = opts.newsletter === true ? (opts.email ?? "").trim().toLowerCase() : "";
+  const guestEmail = typed && /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(typed) && typed.length <= 254 ? typed : "";
+
   const order = await prisma.order.create({
     data: {
       status: "PENDING",
-      contactEmail: "",
-      items: validated.lines.map((l) => ({
+      contactEmail: member?.email ?? guestEmail,
+      items: validated.lines.map((l, i) => ({
         productId: l.productId,
         slug: l.slug,
         nameFr: l.nameFr,
@@ -59,6 +63,7 @@ export async function checkout(
         qty: l.qty,
         options: l.options,
         optionsEn: l.optionsEn,
+        selected: lines[i]?.selected ?? {},
       })),
       subtotalCents: validated.subtotalCents,
       shippingCents: validated.shippingCents,
@@ -76,7 +81,7 @@ export async function checkout(
     const origin = await siteOrigin();
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
-      ...(member ? { customer_email: member.email } : {}),
+      ...(member ? { customer_email: member.email } : guestEmail ? { customer_email: guestEmail } : {}),
       currency: "cad",
       locale: locale === "fr" ? "fr-CA" : "en",
       billing_address_collection: "auto",

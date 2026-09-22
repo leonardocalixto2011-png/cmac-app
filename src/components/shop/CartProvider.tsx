@@ -28,6 +28,8 @@ type CartCtx = {
   setQty: (index: number, qty: number) => void;
   remove: (index: number) => void;
   clear: () => void;
+  /** Replace the whole cart (restore link from a reminder email). */
+  replace: (items: CartItem[]) => void;
 };
 
 const Ctx = createContext<CartCtx | null>(null);
@@ -89,6 +91,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const clear = useCallback(() => setItems([]), []);
+  const replace = useCallback((next: CartItem[]) => setItems(next.slice(0, 20)), []);
 
   const value = useMemo<CartCtx>(() => {
     const subtotalCents = items.reduce((s, i) => s + i.priceCents * i.qty, 0);
@@ -104,8 +107,9 @@ export function CartProvider({ children }: { children: ReactNode }) {
       setQty,
       remove,
       clear,
+      replace,
     };
-  }, [items, hydrated, add, setQty, remove, clear]);
+  }, [items, hydrated, add, setQty, remove, clear, replace]);
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }

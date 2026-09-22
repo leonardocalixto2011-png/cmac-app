@@ -186,6 +186,12 @@ function itemViews(d: OrderEmailData, products: Map<string, ProductInfo>): ItemV
   }));
 }
 
+/** Item rows (names, options, photos, set contents) for an order's items, in the given language. */
+export async function orderItemViews(items: ReturnType<typeof orderItems>, locale: Locale): Promise<ItemView[]> {
+  const products = await productInfo(allSlugs(items));
+  return itemViews({ locale, items } as OrderEmailData, products);
+}
+
 /** Address lines for display: name, street, "City, QC  H2X 1Y4", Canada (+ phone for the owner). */
 function addressLines(raw: unknown, withPhone: boolean): string[] {
   const s = raw as ShippingAddress | null | undefined;

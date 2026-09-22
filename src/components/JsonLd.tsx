@@ -39,6 +39,7 @@ export function productLd(
     images: string[];
   },
   locale: Locale = "en",
+  rating?: { count: number; average: number; reviews: { rating: number; authorName: string; body: string; createdAt: Date }[] } | null,
 ) {
   const base = siteUrl();
   const name = locale === "fr" ? p.nameFr : p.nameEn;
@@ -50,6 +51,19 @@ export function productLd(
     description: stripHtml(desc ?? "").slice(0, 400),
     image: p.images.map((i) => (i.startsWith("http") ? i : `${base}${i}`)),
     brand: { "@type": "Brand", name: BRAND.name },
+    // Only real, approved verified-buyer reviews (never placeholders).
+    ...(rating && rating.count > 0
+      ? {
+          aggregateRating: { "@type": "AggregateRating", ratingValue: rating.average, reviewCount: rating.count, bestRating: 5, worstRating: 1 },
+          review: rating.reviews.slice(0, 5).map((r) => ({
+            "@type": "Review",
+            reviewRating: { "@type": "Rating", ratingValue: r.rating, bestRating: 5, worstRating: 1 },
+            author: { "@type": "Person", name: r.authorName },
+            datePublished: r.createdAt.toISOString().slice(0, 10),
+            reviewBody: r.body.slice(0, 500),
+          })),
+        }
+      : {}),
     offers: {
       "@type": "Offer",
       url: `${base}/shop/${p.slug}`,

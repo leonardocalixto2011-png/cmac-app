@@ -3,7 +3,7 @@ import { serverT } from "@/i18n/server";
 import { CartView } from "@/components/shop/CartView";
 import { currentMemberTier } from "@/lib/account";
 import { subscriberStatus } from "@/lib/newsletter";
-import { listProducts } from "@/lib/shop";
+import { listProducts, restoreCartLines } from "@/lib/shop";
 import type { CartAddon } from "@/components/shop/CartView";
 
 export const dynamic = "force-dynamic";
@@ -13,7 +13,9 @@ export async function generateMetadata(): Promise<Metadata> {
   return { title: t("shop.cartTitle"), robots: { index: false } };
 }
 
-export default async function CartPage() {
+export default async function CartPage({ searchParams }: { searchParams: Promise<{ restore?: string }> }) {
+  const { restore } = await searchParams;
+  const restored = restore ? await restoreCartLines(restore).catch(() => null) : null;
   // Member perks are resolved server-side from the session; checkout re-checks them.
   const member = await currentMemberTier().catch(() => null);
   const sub = member ? await subscriberStatus(member.email).catch(() => null) : null;
@@ -28,6 +30,7 @@ export default async function CartPage() {
           member={member ? { tier: member.tier.id, freeShippingFromCents: member.tier.freeShippingFromCents, quarterPointsPerDollar: member.tier.quarterPointsPerDollar } : null}
           subscribed={sub === "CONFIRMED" || sub === "PENDING"}
           addons={addons}
+          restore={restored}
         />
       </div>
     </section>

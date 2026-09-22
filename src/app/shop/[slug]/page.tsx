@@ -5,6 +5,8 @@ import { serverLocale } from "@/i18n/server";
 import { stripHtml } from "@/lib/utils";
 import { ProductDetail } from "@/components/shop/ProductDetail";
 import { JsonLd, productLd } from "@/components/JsonLd";
+import { productReviews } from "@/lib/reviews";
+import { ProductReviews } from "@/components/reviews/ProductReviews";
 
 export const dynamic = "force-dynamic";
 
@@ -29,13 +31,17 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
   const locale = await serverLocale();
   const product = await getProduct(slug);
   if (!product) notFound();
-  const components = await getSetComponents(product.slug);
+  const [components, reviews] = await Promise.all([
+    getSetComponents(product.slug),
+    productReviews(product.slug).catch(() => ({ count: 0, average: 0, reviews: [] })),
+  ]);
 
   return (
     <section className="section-pad">
-      <JsonLd data={productLd(product, locale)} />
+      <JsonLd data={productLd(product, locale, reviews)} />
       <div className="wrap">
         <ProductDetail product={product} components={components} />
+        <ProductReviews summary={reviews} locale={locale} />
       </div>
     </section>
   );

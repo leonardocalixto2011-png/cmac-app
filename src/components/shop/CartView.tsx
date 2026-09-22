@@ -1,6 +1,8 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
+import type { CartItem } from "./CartProvider";
 import Link from "next/link";
 import { useLocale } from "@/i18n/LocaleProvider";
 import { useCart } from "./CartProvider";
@@ -31,25 +33,42 @@ export function CartView({
   member = null,
   subscribed = false,
   addons = [],
+  restore = null,
 }: {
   member?: CartMember;
   subscribed?: boolean;
   addons?: CartAddon[];
+  /** Lines rebuilt from /cart?restore=<reference> (reminder email). */
+  restore?: CartItem[] | null;
 }) {
   const { t, locale } = useLocale();
   const cart = useCart();
   const [pending, start] = useTransition();
   const [error, setError] = useState<string | null>(null);
   const [optIn, setOptIn] = useState(false); // CASL: unchecked by default
+  const [email, setEmail] = useState("");
+  const router = useRouter();
+
+  // Restore link: replace the cart once, then drop the query string.
+  useEffect(() => {
+    if (!restore?.length || !cart.hydrated) return;
+    cart.replace(restore);
+    router.replace("/cart");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [restore, cart.hydrated]);
 
   function pay() {
     setError(null);
+    if (optIn && !member && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email.trim())) {
+      setError(t("shop.emailNeeded"));
+      return;
+    }
     trackInitiateCheckout(cart.items.map((i) => ({ id: i.slug, name: i.nameEn, priceCents: i.priceCents, qty: i.qty })));
     start(async () => {
       const res = await checkout(
         cart.items.map((i) => ({ slug: i.slug, qty: i.qty, selected: i.selected })),
         locale,
-        { newsletter: optIn },
+        { newsletter: optIn, email: optIn && !member ? email.trim() : undefined },
       );
       if (res.ok) {
         window.location.href = res.url;
@@ -215,6 +234,20 @@ export function CartView({
             <label className="mt-4 flex items-start gap-3 rounded-2xl border border-[var(--line)] px-4 py-3 text-[0.8rem] leading-relaxed text-ink-soft">
               <input type="checkbox" className="mt-0.5 h-4 w-4 flex-none accent-[var(--color-terra)]" checked={optIn} onChange={(e) => setOptIn(e.target.checked)} />
               <span>{t("consent.newsletter", { email: BRAND.email })}</span>
+            </label>
+          )}
+          {!subscribed && optIn && !member && (
+            <label className="mt-2 block text-[0.8rem] text-ink-soft">
+              <span className="mb-1 block">{t("shop.emailLabel")}</span>
+              <input
+                type="email"
+                required
+                autoComplete="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="you@email.com"
+                className="field w-full"
+              />
             </label>
           )}
 
