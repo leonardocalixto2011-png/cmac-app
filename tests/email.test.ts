@@ -46,7 +46,7 @@ describe("order confirmation", () => {
     const fr = renderOrderConfirmation(base);
     expect(fr.subject).toBe("Votre rituel CMAC est confirmé ✨ (commande n° 23DEF456)");
     expect(fr.text).toContain("Bonjour,");
-    expect(fr.text).toContain("Leonart, CMAC Beauty");
+    expect(fr.text).toContain("L'équipe CMAC, CMAC Beauty");
     const en = renderOrderConfirmation({ ...base, locale: "en" });
     expect(en.subject).toBe("Your CMAC ritual is confirmed ✨ (Order #23DEF456)");
     expect(en.text).toContain("Hi there,");
