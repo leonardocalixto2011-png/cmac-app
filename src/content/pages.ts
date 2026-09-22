@@ -308,9 +308,9 @@ export const PAGES: Record<string, Record<Locale, PageContent>> = {
         },
         {
           h: "Person in charge of the protection of personal information",
-          // OWNER: add the name and title of the person in charge (Law 25 requires publishing their title and
-          // contact information), e.g. "<Full name>, owner — CMAC Beauty — cmacbeauty.ca@outlook.com".
-          p: [`${BRAND.name} — ${BRAND.email}. Write to this address for any question, request or complaint about your personal information.`],
+          p: [
+            `Leonart Calixte, owner — ${BRAND.name}, 209 rue Paré, L'Assomption, QC J5W 0K5, Canada — ${BRAND.email}. Write to this address for any question, request or complaint about your personal information.`,
+          ],
         },
         {
           h: "Changes",
@@ -372,8 +372,9 @@ export const PAGES: Record<string, Record<Locale, PageContent>> = {
         },
         {
           h: "Personne responsable de la protection des renseignements personnels",
-          // OWNER : ajouter le nom et le titre de la personne responsable (la Loi 25 exige de publier son titre et ses coordonnées).
-          p: [`${BRAND.name} — ${BRAND.email}. Écrivez à cette adresse pour toute question, demande ou plainte concernant vos renseignements personnels.`],
+          p: [
+            `Leonart Calixte, propriétaire — ${BRAND.name}, 209 rue Paré, L'Assomption (Québec) J5W 0K5, Canada — ${BRAND.email}. Écrivez à cette adresse pour toute question, demande ou plainte concernant vos renseignements personnels.`,
+          ],
         },
         {
           h: "Modifications",
