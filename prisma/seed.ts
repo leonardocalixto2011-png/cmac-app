@@ -75,6 +75,25 @@ const colour = (values: OptionValue[]): Option => ({ nameEn: "Colour", nameFr: "
 // "Was" prices seeded before launch that the product never actually sold at → cleared if still untouched.
 const INVENTED_COMPARE_AT: Record<string, number> = { "led-red-light-mask": 8999 };
 
+/**
+ * 2026-09-22 price review against the Canadian market (Amazon.ca ranges): the
+ * accessories were priced above what the same item sells for here, which reads
+ * badly next to the devices, where we are cheap. [slug, old price, new price] —
+ * applied only while the row still holds the old price, so /admin edits win.
+ */
+const PRICE_REVIEW: [string, number, number][] = [
+  ["satin-scrunchie", 1599, 1299],
+  ["spa-headband", 1699, 1299],
+  ["cozy-fleece-socks", 1799, 1499],
+  ["reusable-cleansing-puff", 2099, 1599],
+  ["satin-sleep-mask", 2999, 2299],
+  ["electric-scalp-massager", 3499, 2999],
+  ["electric-makeup-brush-cleaner", 3199, 2699],
+  ["electric-foot-file", 4499, 3499],
+  ["rose-gold-manicure-kit", 2999, 2499],
+  ["pink-shell-makeup-pouch", 2499, 1999],
+];
+
 const PRODUCTS: SeedProduct[] = [
   // ---------------------------------------------------------------- GLOW
   {
@@ -287,7 +306,7 @@ const PRODUCTS: SeedProduct[] = [
     nameFr: "Masseur électrique pour le cuir chevelu",
     tagline: "Eight soft fingers for the end of a long day",
     taglineFr: "Huit doigts souples pour la fin d'une longue journée",
-    priceCents: 3499,
+    priceCents: 2999,
     compareAtCents: null,
     tags: ["essentials", "massage", "new"],
     sortOrder: 6,
@@ -312,7 +331,7 @@ const PRODUCTS: SeedProduct[] = [
     nameFr: "Masque de nuit effet satin",
     tagline: "Lights out, the soft way",
     taglineFr: "Extinction des feux, tout en douceur",
-    priceCents: 2999,
+    priceCents: 2299,
     compareAtCents: null,
     tags: ["essentials", "sleep", "new"],
     sortOrder: 7,
@@ -345,7 +364,7 @@ const PRODUCTS: SeedProduct[] = [
     nameFr: "Bandeau spa",
     tagline: "Hair off your face, ritual on",
     taglineFr: "Les cheveux dégagés, le rituel commence",
-    priceCents: 1699,
+    priceCents: 1299,
     compareAtCents: null,
     tags: ["essentials", "spa", "new"],
     sortOrder: 8,
@@ -378,7 +397,7 @@ const PRODUCTS: SeedProduct[] = [
     nameFr: "Nettoyeur électrique de pinceaux à maquillage",
     tagline: "Clean brushes in the time it takes to boil the kettle",
     taglineFr: "Des pinceaux propres le temps de faire bouillir l'eau",
-    priceCents: 3199,
+    priceCents: 2699,
     compareAtCents: null,
     tags: ["essentials", "brush-care", "new"],
     sortOrder: 9,
@@ -432,7 +451,7 @@ const PRODUCTS: SeedProduct[] = [
     nameFr: "Chouchou en satin",
     tagline: "A soft hold for buns and ponytails",
     taglineFr: "Une tenue douce pour chignons et queues de cheval",
-    priceCents: 1599,
+    priceCents: 1299,
     compareAtCents: null,
     tags: ["essentials", "hair", "new"],
     sortOrder: 11,
@@ -467,7 +486,7 @@ const PRODUCTS: SeedProduct[] = [
     nameFr: "Trousse à maquillage coquillage rose",
     tagline: "A soft-structured pouch for the everyday bag",
     taglineFr: "Une trousse souple et structurée pour le sac de tous les jours",
-    priceCents: 2499,
+    priceCents: 1999,
     compareAtCents: null,
     tags: ["essentials", "travel", "gift", "new"],
     sortOrder: 12,
@@ -525,7 +544,7 @@ const PRODUCTS: SeedProduct[] = [
     nameFr: "Bas douillets en molleton",
     tagline: "Fluffy socks for long evenings in",
     taglineFr: "Des bas moelleux pour les longues soirées à la maison",
-    priceCents: 1799,
+    priceCents: 1499,
     compareAtCents: null,
     tags: ["essentials", "cozy", "fall", "new"],
     sortOrder: 14,
@@ -558,7 +577,7 @@ const PRODUCTS: SeedProduct[] = [
     nameFr: "Houppette démaquillante réutilisable",
     tagline: "A soft round pad for your cleanser, again and again",
     taglineFr: "Un disque doux pour votre nettoyant, encore et encore",
-    priceCents: 2099,
+    priceCents: 1599,
     compareAtCents: null,
     tags: ["essentials", "cleansing", "hygiene", "new"],
     sortOrder: 15,
@@ -603,7 +622,7 @@ const PRODUCTS: SeedProduct[] = [
     nameFr: "Trousse de manucure or rose",
     tagline: "Every little tool, in one pretty case",
     taglineFr: "Tous les petits outils, dans un joli étui",
-    priceCents: 2999,
+    priceCents: 2499,
     compareAtCents: null,
     tags: ["essentials", "nails", "gift", "new"],
     sortOrder: 17,
@@ -653,7 +672,7 @@ const PRODUCTS: SeedProduct[] = [
     nameFr: "Râpe électrique pour les pieds",
     tagline: "Sandal-ready heels, at home",
     taglineFr: "Des talons prêts pour les sandales, à la maison",
-    priceCents: 4499,
+    priceCents: 3499,
     compareAtCents: null,
     tags: ["essentials", "feet", "nails", "new"],
     sortOrder: 19,
@@ -1083,8 +1102,8 @@ const SETS: SeedSet[] = [
     nameFr: "Trousse Entre deux rendez-vous",
     tagline: "Keep your manicure looking fresh until the next visit",
     taglineFr: "Une manucure qui garde son air frais jusqu'à la prochaine visite",
-    priceCents: 5999,
-    prevPriceCents: 5999,
+    priceCents: 5499,
+    prevPriceCents: 5999, // 2026-09-22 market review
     tags: ["sets", "essentials", "nails", "gift", "new"],
     sortOrder: 27,
     hygieneOnly: false,
@@ -1127,15 +1146,15 @@ const SETS: SeedSet[] = [
     nameFr: "Soirée pédi à la maison",
     tagline: "Soft-looking heels and fluffy socks, no appointment needed",
     taglineFr: "Des talons d'apparence douce et des bas moelleux, sans rendez-vous",
-    priceCents: 7999,
-    prevPriceCents: 7999,
+    priceCents: 5999,
+    prevPriceCents: 7999, // 2026-09-22 market review
     tags: ["sets", "essentials", "feet", "cozy", "gift", "new"],
     sortOrder: 28,
     hygieneOnly: false,
     hookEn:
-      "<p><strong>A pedicure mood on a Tuesday night.</strong> The electric foot file for rough-looking heels, fluffy fleece socks to slip into after your moisturizer, a spa headband and a satin scrunchie to keep your hair out of the way. Ships free: it's over $75.</p>",
+      "<p><strong>A pedicure mood on a Tuesday night.</strong> The electric foot file for rough-looking heels, fluffy fleece socks to slip into after your moisturizer, a spa headband and a satin scrunchie to keep your hair out of the way.</p>",
     hookFr:
-      "<p><strong>Une ambiance pédicure un mardi soir.</strong> La râpe électrique pour les talons rugueux, des bas en molleton moelleux à enfiler après votre crème, un bandeau spa et un chouchou en satin pour dégager vos cheveux. Livraison gratuite : c'est plus de 75 $.</p>",
+      "<p><strong>Une ambiance pédicure un mardi soir.</strong> La râpe électrique pour les talons rugueux, des bas en molleton moelleux à enfiler après votre crème, un bandeau spa et un chouchou en satin pour dégager vos cheveux.</p>",
     routineEn: [
       "Hair up with the scrunchie, headband on, playlist on.",
       "On clean, completely dry feet, glide the foot file lightly over rough areas.",
@@ -1169,8 +1188,8 @@ const SETS: SeedSet[] = [
     nameFr: "Le coffret Mani-Pédi",
     tagline: "Hands and feet, head to toe, one gift",
     taglineFr: "Les mains et les pieds, de la tête aux orteils, un seul cadeau",
-    priceCents: 10999,
-    prevPriceCents: 10999,
+    priceCents: 9499,
+    prevPriceCents: 10999, // 2026-09-22 market review
     tags: ["sets", "essentials", "nails", "feet", "gift", "new"],
     sortOrder: 29,
     hygieneOnly: false,
@@ -1211,8 +1230,8 @@ const SETS: SeedSet[] = [
     nameFr: "Le panier d'automne",
     tagline: "A cozy night in, packed in a caramel case. Fall limited edition",
     taglineFr: "Une soirée douillette, dans un étui caramel. Édition limitée d'automne",
-    priceCents: 8999,
-    prevPriceCents: 8999,
+    priceCents: 8499,
+    prevPriceCents: 8999, // 2026-09-22 market review
     tags: ["sets", "essentials", "cozy", "fall", "gift", "new"],
     sortOrder: 30,
     hygieneOnly: true,
@@ -1476,6 +1495,11 @@ async function main() {
 
     const update: Prisma.ProductUpdateInput = { sortOrder: p.sortOrder };
     const notes: string[] = [];
+    const review = PRICE_REVIEW.find(([slug, from]) => slug === p.slug && existing.priceCents === from);
+    if (review) {
+      update.priceCents = review[2];
+      notes.push(`price ${review[1] / 100} → ${review[2] / 100} (market review)`);
+    }
     if (INVENTED_COMPARE_AT[p.slug] != null && existing.compareAtCents === INVENTED_COMPARE_AT[p.slug]) {
       update.compareAtCents = null;
       notes.push("invented compare-at price removed");
