@@ -30,6 +30,7 @@ export function Footer() {
       title: t("footer.help"),
       links: [
         { href: "/about", label: t("nav.about") },
+        { href: "/journal", label: "Journal" },
         { href: "/glow-club", label: t("footer.glowClub") },
         { href: "/account", label: t("footer.account") },
         { href: "/faq", label: t("footer.faq") },

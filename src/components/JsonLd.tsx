@@ -1,4 +1,4 @@
-import { BRAND, siteUrl } from "@/lib/brand";
+import { BRAND, POLICY, SHIPPING, siteUrl } from "@/lib/brand";
 import { stripHtml } from "@/lib/utils";
 import type { Locale } from "@/i18n/messages";
 
@@ -70,9 +70,30 @@ export function productLd(
       priceCurrency: "CAD",
       price: (p.priceCents / 100).toFixed(2),
       availability: "https://schema.org/InStock",
+      priceValidUntil: new Date(Date.now() + 90 * 864e5).toISOString().slice(0, 10),
+      itemCondition: "https://schema.org/NewCondition",
+      seller: { "@type": "Organization", name: BRAND.name },
       shippingDetails: {
         "@type": "OfferShippingDetails",
         shippingDestination: { "@type": "DefinedRegion", addressCountry: "CA" },
+        shippingRate: {
+          "@type": "MonetaryAmount",
+          value: (p.priceCents >= SHIPPING.freeThresholdCents ? 0 : SHIPPING.flatCents) / 100,
+          currency: "CAD",
+        },
+        deliveryTime: {
+          "@type": "ShippingDeliveryTime",
+          handlingTime: { "@type": "QuantitativeValue", minValue: SHIPPING.processingDays.min, maxValue: SHIPPING.processingDays.max, unitCode: "DAY" },
+          transitTime: { "@type": "QuantitativeValue", minValue: SHIPPING.deliveryBusinessDays.min, maxValue: SHIPPING.deliveryBusinessDays.max, unitCode: "DAY" },
+        },
+      },
+      hasMerchantReturnPolicy: {
+        "@type": "MerchantReturnPolicy",
+        applicableCountry: "CA",
+        returnPolicyCategory: "https://schema.org/MerchantReturnFiniteReturnWindow",
+        merchantReturnDays: POLICY.returnDays,
+        returnMethod: "https://schema.org/ReturnByMail",
+        returnFees: "https://schema.org/ReturnShippingFees",
       },
     },
   };
@@ -86,6 +107,37 @@ export function faqLd(items: { q: string; a: string }[]) {
       "@type": "Question",
       name: i.q,
       acceptedAnswer: { "@type": "Answer", text: i.a },
+    })),
+  };
+}
+
+/** Breadcrumbs: assistants and search engines use them to place a page in the shop. */
+export function breadcrumbLd(trail: { name: string; path: string }[]) {
+  const base = siteUrl();
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: trail.map((t, i) => ({ "@type": "ListItem", position: i + 1, name: t.name, item: `${base}${t.path}` })),
+  };
+}
+
+/** A collection page as a list of products, with prices, so an answer engine can compare. */
+export function itemListLd(
+  name: string,
+  products: { slug: string; nameEn: string; nameFr: string; priceCents: number }[],
+  locale: Locale = "en",
+) {
+  const base = siteUrl();
+  return {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name,
+    numberOfItems: products.length,
+    itemListElement: products.map((p, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      url: `${base}/shop/${p.slug}`,
+      name: locale === "fr" ? p.nameFr : p.nameEn,
     })),
   };
 }

@@ -49,7 +49,7 @@ export async function generateMetadata(): Promise<Metadata> {
       siteName: BRAND.name,
       url: siteUrl(),
     },
-    alternates: { canonical: "/" },
+    alternates: { canonical: "/", languages: { "en-CA": "/", "fr-CA": "/?lang=fr", "x-default": "/" } },
   };
 }
 

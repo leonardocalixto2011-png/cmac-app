@@ -4,7 +4,7 @@ import { getProduct, getSetComponents } from "@/lib/shop";
 import { serverLocale } from "@/i18n/server";
 import { stripHtml } from "@/lib/utils";
 import { ProductDetail } from "@/components/shop/ProductDetail";
-import { JsonLd, productLd } from "@/components/JsonLd";
+import { JsonLd, breadcrumbLd, productLd } from "@/components/JsonLd";
 import { productReviews } from "@/lib/reviews";
 import { ProductReviews } from "@/components/reviews/ProductReviews";
 
@@ -21,7 +21,10 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   return {
     title: tagline ? `${name} — ${tagline}` : name,
     description: desc || undefined,
-    alternates: { canonical: `/shop/${p.slug}` },
+    alternates: {
+      canonical: `/shop/${p.slug}`,
+      languages: { "en-CA": `/shop/${p.slug}`, "fr-CA": `/shop/${p.slug}?lang=fr`, "x-default": `/shop/${p.slug}` },
+    },
     openGraph: { images: p.images.length ? [p.images[0]] : undefined },
   };
 }
@@ -39,6 +42,12 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
   return (
     <section className="section-pad">
       <JsonLd data={productLd(product, locale, reviews)} />
+      <JsonLd
+        data={breadcrumbLd([
+          { name: locale === "fr" ? "Boutique" : "Shop", path: "/shop" },
+          { name: locale === "fr" ? product.nameFr : product.nameEn, path: `/shop/${product.slug}` },
+        ])}
+      />
       <div className="wrap">
         <ProductDetail product={product} components={components} />
         <ProductReviews summary={reviews} locale={locale} />
