@@ -16,6 +16,15 @@ import { subscribeEmail } from "@/lib/newsletter";
  * newsletter opt-in starts the CASL double opt-in. Register this URL in the CMAC Stripe account:
  *   https://cmacbeauty.ca/api/stripe/webhook
  */
+/** Customer-facing text of a promotion code (e.g. "WELCOME10") for the confirmation email. */
+async function promoCodeText(stripe: Stripe, id: string): Promise<string | null> {
+  try {
+    return (await stripe.promotionCodes.retrieve(id)).code ?? null;
+  } catch {
+    return null;
+  }
+}
+
 export async function POST(req: NextRequest) {
   const stripe = getStripe();
   const secret = process.env.STRIPE_WEBHOOK_SECRET;
@@ -80,13 +89,13 @@ export async function POST(req: NextRequest) {
     });
     console.info(`[shop] order ${updated.reference} paid`);
 
+    const promoIds = (session.discounts ?? [])
+      .map((d) => (typeof d.promotion_code === "string" ? d.promotion_code : d.promotion_code?.id))
+      .filter((x): x is string => Boolean(x));
     // Glow Club — never let loyalty bookkeeping break the payment webhook.
     try {
       const points = await creditOrder(updated.id);
       if (points) console.info(`[loyalty] +${points} pts for order ${updated.reference}`);
-      const promoIds = (session.discounts ?? [])
-        .map((d) => (typeof d.promotion_code === "string" ? d.promotion_code : d.promotion_code?.id))
-        .filter((x): x is string => Boolean(x));
       await markCodesRedeemed(promoIds);
     } catch (err) {
       console.error("[loyalty] webhook bookkeeping failed", err);
@@ -107,6 +116,7 @@ export async function POST(req: NextRequest) {
       shippingCents: updated.shippingCents,
       totalCents: updated.totalCents,
       shippingJson: updated.shippingJson,
+      promoCode: promoIds[0] ? await promoCodeText(stripe, promoIds[0]) : null,
     };
     await Promise.all([sendOrderConfirmation(data), sendOwnerOrderNotice(data)]);
   }

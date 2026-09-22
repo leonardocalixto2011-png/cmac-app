@@ -4,15 +4,36 @@
  * logged to the console (so links can be followed); in production only the
  * recipient + subject are logged (never tokens / reset links).
  *
- * Customer emails are bilingual (per order locale): order confirmation,
- * shipping/tracking notice, password reset. Owner emails: new order,
- * contact-form forward. Marketing email (newsletter, welcome, birthday,
- * campaigns) lives in ./marketing.ts and reuses this transport + frame.
+ * This file resolves data (DB lookups) and sends; the look lives in
+ * ./email-kit.ts and the copy in ./email-templates.ts (pure, previewable with
+ * `npx tsx scripts/render-email-previews.ts`).
+ *
+ * Customer emails (EN/FR per order / account locale): order confirmation,
+ * shipping/tracking notice, account welcome, password reset, Glow Club reward
+ * code. Owner emails: new order, contact-form forward. Marketing email
+ * (newsletter opt-in, welcome, birthday, campaigns) lives in ./marketing.ts.
  */
 import type { Locale } from "@/i18n/messages";
-import { BRAND, SHIPPING, POLICY, siteUrl } from "./brand";
-import { formatMoneyFromCents } from "./utils";
-import { orderItems, setRecipes, shippingLines } from "./shop";
+import { BRAND } from "./brand";
+import { prisma } from "./prisma";
+import { orderItems, type ShippingAddress } from "./shop";
+import { SET_CONTENTS } from "./sets";
+import { TIERS, merchandiseCents, pointsFor, tierFor } from "./loyalty-rules";
+import { C, SANS, esc, eyebrow, h1, layout, panel, transactionalFooter } from "./email-kit";
+import {
+  renderAccountWelcome,
+  renderOrderConfirmation,
+  renderOwnerOrder,
+  renderPasswordReset,
+  renderRewardCode,
+  renderShipped,
+  type ItemView,
+  type LoyaltyView,
+  type OrderView,
+  type OwnerOrderView,
+} from "./email-templates";
+
+export { C, esc } from "./email-kit";
 
 // ---------------------------------------------------------------------------
 // Transport
@@ -78,46 +99,27 @@ export function ownerNotifyAddress(): string | null {
 }
 
 // ---------------------------------------------------------------------------
-// Shared HTML bits
+// Legacy shell helpers (campaigns, contact forward)
 // ---------------------------------------------------------------------------
 
-export const C = { cream: "#F5F1EA", ink: "#1F2422", soft: "#3B423F", faint: "#8A908D", terra: "#C97B63", sage: "#4A5D4E", line: "#E3DDD2", white: "#FFFDF9" };
-
-export function esc(s: string): string {
-  return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
-}
-
-function row(label: string, value: string, strong = false): string {
-  return `<tr>
-    <td style="padding:7px 0;color:${C.faint};font-size:14px;vertical-align:top;">${esc(label)}</td>
-    <td style="padding:7px 0 7px 16px;color:${strong ? C.terra : C.ink};font-size:14px;text-align:right;${strong ? "font-weight:600;" : ""}">${value}</td>
-  </tr>`;
-}
-
+/** Titled panel. */
 export function card(title: string, inner: string): string {
-  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 18px;border:1px solid ${C.line};border-radius:18px;background:${C.white};">
-    <tr><td style="padding:18px 20px;">
-      <p style="margin:0 0 8px;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:${C.terra};font-family:Arial,Helvetica,sans-serif;font-weight:600;">${esc(title)}</p>
-      ${inner}
-    </td></tr>
-  </table>`;
+  return panel(`${eyebrow(title)}${inner}`, { bg: C.cream, margin: "0 0 18px" });
 }
 
-/** Branded email shell. `footerHtml` replaces the default one-line footer (marketing emails pass the CASL footer). */
+/** Branded email shell. `footerHtml` replaces the default footer (marketing emails pass the CASL footer). */
 export function frame(locale: Locale, title: string, inner: string, footerHtml?: string, preheader?: string): string {
-  return `<!doctype html><html lang="${locale}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"></head>
-<body style="margin:0;padding:24px 12px;background:${C.cream};font-family:Arial,Helvetica,sans-serif;color:${C.ink};">
-${preheader ? `<div style="display:none;max-height:0;overflow:hidden;opacity:0;">${esc(preheader)}</div>` : ""}
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;margin:0 auto;">
-  <tr><td style="padding:0 0 14px;font-family:Georgia,serif;font-size:20px;font-weight:600;">CMAC <span style="font-family:Arial,sans-serif;font-size:10px;letter-spacing:0.3em;text-transform:uppercase;color:${C.sage};margin-left:6px;">Beauty</span></td></tr>
-  <tr><td style="padding:0 0 16px;font-size:26px;font-family:Georgia,serif;line-height:1.15;">${esc(title)}</td></tr>
-  <tr><td>${inner}</td></tr>
-  <tr><td style="padding:18px 4px 0;font-size:12px;color:${C.faint};line-height:1.5;">${footerHtml ?? `${esc(BRAND.name)} · ${esc(BRAND.area)} · <a href="mailto:${BRAND.email}" style="color:${C.terra};">${BRAND.email}</a>`}</td></tr>
-</table></body></html>`;
+  return layout({
+    locale,
+    title,
+    preheader,
+    body: `${h1(title)}<div style="font-family:${SANS};font-size:15px;line-height:1.7;color:${C.soft};">${inner}</div>`,
+    footer: footerHtml ?? transactionalFooter(locale).html,
+  });
 }
 
 // ---------------------------------------------------------------------------
-// Order emails (customer)
+// Data resolution
 // ---------------------------------------------------------------------------
 
 export type OrderEmailData = {
@@ -132,119 +134,131 @@ export type OrderEmailData = {
   shippingJson: unknown;
   trackingNumber?: string | null;
   trackingUrl?: string | null;
+  /** Promotion code typed at checkout (display only). */
+  promoCode?: string | null;
 };
 
-const COPY = {
-  en: {
-    confirmSubject: (ref: string) => `Order confirmed — ${ref}`,
-    confirmTitle: "Your order is in.",
-    hello: (n: string | null) => (n ? `Hi ${n},` : "Hi,"),
-    confirmLead: `Thanks for your order. We're getting it ready — you'll receive a tracking number by email as soon as it ships. It usually leaves our supplier within ${SHIPPING.processingDays.min} to ${SHIPPING.processingDays.max} business days and arrives about ${SHIPPING.totalWeeks.min} to ${SHIPPING.totalWeeks.max} weeks after your order.`,
-    items: "Your order",
-    subtotal: "Subtotal",
-    shipping: "Shipping",
-    free: "Free",
-    total: "Total",
-    reference: "Reference",
-    shipTo: "Shipping to",
-    returns: `Returns: ${POLICY.returnDays} days on unused items in original packaging (hygiene items unopened). ${POLICY.warrantyMonths}-month coverage against manufacturing defects. Reply to this email for anything.`,
-    shipSubject: (ref: string) => `Your order is on its way — ${ref}`,
-    shipTitle: "Your parcel has shipped.",
-    shipLead: `Good news — your order left the warehouse. Track it with the number below. Delivery usually takes ${SHIPPING.deliveryWeeks.min} to ${SHIPPING.deliveryWeeks.max} weeks; tracking can take a day or two to update.`,
-    tracking: "Tracking number",
-    track: "Track my parcel",
-    seeYou: "Talk soon,",
-    sig: "The CMAC team",
-  },
-  fr: {
-    confirmSubject: (ref: string) => `Commande confirmée — ${ref}`,
-    confirmTitle: "Votre commande est enregistrée.",
-    hello: (n: string | null) => (n ? `Bonjour ${n},` : "Bonjour,"),
-    confirmLead: `Merci pour votre commande. On la prépare — vous recevrez un numéro de suivi par courriel dès son expédition. Elle quitte généralement notre fournisseur en ${SHIPPING.processingDays.min} à ${SHIPPING.processingDays.max} jours ouvrables et arrive environ ${SHIPPING.totalWeeks.min} à ${SHIPPING.totalWeeks.max} semaines après votre commande.`,
-    items: "Votre commande",
-    subtotal: "Sous-total",
-    shipping: "Livraison",
-    free: "Gratuite",
-    total: "Total",
-    reference: "Référence",
-    shipTo: "Livraison à",
-    returns: `Retours : ${POLICY.returnDays} jours pour les articles inutilisés dans leur emballage d'origine (articles d'hygiène non ouverts). Garantie de ${POLICY.warrantyMonths} mois contre les défauts de fabrication. Répondez à ce courriel pour toute question.`,
-    shipSubject: (ref: string) => `Votre commande est en route — ${ref}`,
-    shipTitle: "Votre colis est expédié.",
-    shipLead: `Bonne nouvelle — votre commande a quitté l'entrepôt. Suivez-la avec le numéro ci-dessous. La livraison prend généralement de ${SHIPPING.deliveryWeeks.min} à ${SHIPPING.deliveryWeeks.max} semaines ; le suivi peut prendre un jour ou deux avant de s'activer.`,
-    tracking: "Numéro de suivi",
-    track: "Suivre mon colis",
-    seeYou: "À bientôt,",
-    sig: "L'équipe CMAC",
-  },
-} as const;
+type ProductInfo = { nameEn: string; nameFr: string; image: string | null; supplierSku: string | null; shippingNote: string | null };
 
-function itemsTable(d: OrderEmailData): { html: string; text: string[] } {
-  const money = (n: number) => formatMoneyFromCents(n, d.locale);
-  const items = orderItems(d.items);
-  const c = COPY[d.locale];
-  const rows = items
-    .map((i) => {
-      const name = d.locale === "fr" ? i.nameFr : i.nameEn;
-      const opts = Object.values((d.locale === "fr" ? i.options : i.optionsEn) ?? {});
-      const optHtml = opts.length ? ` <span style="color:${C.faint};">(${esc(opts.join(", "))})</span>` : "";
-      return row(`${i.qty} × ${name}`, `${money(i.priceCents * i.qty)}${optHtml}`);
-    })
-    .join("");
-  const html = `<table role="presentation" width="100%" cellpadding="0" cellspacing="0">
-    ${rows}
-    ${row(c.subtotal, money(d.subtotalCents))}
-    ${row(c.shipping, d.shippingCents === 0 ? c.free : money(d.shippingCents))}
-    ${row(c.total, `<strong>${money(d.totalCents)}</strong>`, true)}
-    ${row(c.reference, `<span style="font-family:Menlo,Consolas,monospace;font-size:12px;">${esc(d.reference.slice(-8).toUpperCase())}</span>`)}
-  </table>`;
-  const text = [
-    ...items.map((i) => {
-      const name = d.locale === "fr" ? i.nameFr : i.nameEn;
-      const opts = Object.values((d.locale === "fr" ? i.options : i.optionsEn) ?? {});
-      return `${i.qty} × ${name}${opts.length ? ` (${opts.join(", ")})` : ""} — ${money(i.priceCents * i.qty)}`;
-    }),
-    `${c.subtotal}: ${money(d.subtotalCents)}`,
-    `${c.shipping}: ${d.shippingCents === 0 ? c.free : money(d.shippingCents)}`,
-    `${c.total}: ${money(d.totalCents)}`,
-    `${c.reference}: ${d.reference.slice(-8).toUpperCase()}`,
-  ];
-  return { html, text };
+async function productInfo(slugs: string[]): Promise<Map<string, ProductInfo>> {
+  const unique = [...new Set(slugs)];
+  if (!unique.length) return new Map();
+  try {
+    const rows = await prisma.product.findMany({
+      where: { slug: { in: unique } },
+      select: { slug: true, nameEn: true, nameFr: true, images: true, supplierSku: true, shippingNote: true },
+    });
+    return new Map(
+      rows.map((r) => [
+        r.slug,
+        {
+          nameEn: r.nameEn,
+          nameFr: r.nameFr,
+          image: Array.isArray(r.images) ? ((r.images as string[])[0] ?? null) : null,
+          supplierSku: r.supplierSku,
+          shippingNote: r.shippingNote,
+        },
+      ]),
+    );
+  } catch (err) {
+    console.error("[email] product lookup failed", err);
+    return new Map();
+  }
 }
 
+function allSlugs(items: ReturnType<typeof orderItems>): string[] {
+  return items.flatMap((i) => [i.slug, ...(SET_CONTENTS[i.slug] ?? []).map((c) => c.slug)]);
+}
+
+function itemViews(d: OrderEmailData, products: Map<string, ProductInfo>): ItemView[] {
+  const isFr = d.locale === "fr";
+  return orderItems(d.items).map((i) => ({
+    slug: i.slug,
+    name: isFr ? i.nameFr : i.nameEn,
+    options: Object.values((isFr ? i.options : i.optionsEn) ?? {}),
+    qty: i.qty,
+    unitCents: i.priceCents,
+    image: products.get(i.slug)?.image ?? null,
+    components: (SET_CONTENTS[i.slug] ?? []).flatMap((c) => {
+      const p = products.get(c.slug);
+      return p ? [{ slug: c.slug, name: isFr ? p.nameFr : p.nameEn, qty: c.qty, image: p.image }] : [];
+    }),
+  }));
+}
+
+/** Address lines for display: name, street, "City, QC  H2X 1Y4", Canada (+ phone for the owner). */
+function addressLines(raw: unknown, withPhone: boolean): string[] {
+  const s = raw as ShippingAddress | null | undefined;
+  if (!s?.address) return [];
+  const a = s.address;
+  const country = a.country === "CA" ? "Canada" : a.country;
+  return [s.name, a.line1, a.line2, [[a.city, a.state].filter(Boolean).join(", "), a.postal_code].filter(Boolean).join("  "), country, withPhone ? s.phone : null]
+    .filter((x): x is string => Boolean(x && String(x).trim()))
+    .map(String);
+}
+
+async function orderRow(reference: string) {
+  try {
+    return await prisma.order.findUnique({
+      where: { reference },
+      include: { customer: true, loyaltyEntries: { where: { reason: "ORDER_CREDIT" } } },
+    });
+  } catch (err) {
+    console.error("[email] order lookup failed", err);
+    return null;
+  }
+}
+
+async function buildOrderView(d: OrderEmailData): Promise<{ view: OrderView; row: Awaited<ReturnType<typeof orderRow>>; products: Map<string, ProductInfo> }> {
+  const items = orderItems(d.items);
+  const [products, row] = await Promise.all([productInfo(allSlugs(items)), orderRow(d.reference)]);
+  const discountCents = row?.discountCents ?? 0;
+  let loyalty: LoyaltyView = null;
+  if (row?.customer?.userId) {
+    loyalty = {
+      kind: "member",
+      earned: row.loyaltyEntries[0]?.points ?? 0,
+      balance: row.customer.points,
+      tier: tierFor(row.customer.lifetimeSpendCents).id,
+    };
+  } else if (row) {
+    // Guest: orders with this email attach to the account on sign-up and are credited then.
+    loyalty = { kind: "guest", points: pointsFor(merchandiseCents(d.subtotalCents, discountCents), TIERS[0]) };
+  }
+  const view: OrderView = {
+    locale: d.locale,
+    reference: d.reference,
+    placedAt: row?.createdAt ?? new Date(),
+    name: d.contactName,
+    email: d.contactEmail,
+    items: itemViews(d, products),
+    subtotalCents: d.subtotalCents,
+    discountCents,
+    promoCode: d.promoCode ?? null,
+    shippingCents: d.shippingCents,
+    totalCents: d.totalCents,
+    address: addressLines(d.shippingJson, false),
+    loyalty,
+    trackingNumber: d.trackingNumber ?? null,
+    trackingUrl: d.trackingUrl ?? null,
+  };
+  return { view, row, products };
+}
+
+// ---------------------------------------------------------------------------
+// Order emails (customer)
+// ---------------------------------------------------------------------------
+
 export async function sendOrderConfirmation(d: OrderEmailData): Promise<void> {
-  const c = COPY[d.locale];
-  const ref = d.reference.slice(-8).toUpperCase();
-  const table = itemsTable(d);
-  const addr = shippingLines(d.shippingJson);
-  const inner = `
-    <p style="margin:0 0 10px;font-size:15px;">${esc(c.hello(d.contactName))}</p>
-    <p style="margin:0 0 18px;font-size:15px;line-height:1.6;color:${C.soft};">${esc(c.confirmLead)}</p>
-    ${card(c.items, table.html)}
-    ${addr.length ? card(c.shipTo, `<p style="margin:0;font-size:14px;line-height:1.6;">${addr.map(esc).join("<br>")}</p>`) : ""}
-    <p style="margin:0 0 18px;font-size:13px;line-height:1.6;color:${C.faint};">${esc(c.returns)}</p>
-    <p style="margin:0;font-size:15px;">${esc(c.seeYou)}<br><strong>${esc(c.sig)}</strong></p>`;
-  const text = [c.hello(d.contactName), "", c.confirmLead, "", ...table.text, "", ...(addr.length ? [c.shipTo + ":", ...addr, ""] : []), c.returns, "", c.seeYou, c.sig].join("\n");
-  await sendEmail({ to: d.contactEmail, subject: c.confirmSubject(ref), html: frame(d.locale, c.confirmTitle, inner), text, replyTo: BRAND.email });
+  const { view } = await buildOrderView(d);
+  const m = renderOrderConfirmation(view);
+  await sendEmail({ to: d.contactEmail, subject: m.subject, html: m.html, text: m.text, replyTo: BRAND.email });
 }
 
 export async function sendShippingNotice(d: OrderEmailData): Promise<void> {
-  const c = COPY[d.locale];
-  const ref = d.reference.slice(-8).toUpperCase();
-  const table = itemsTable(d);
-  const tracking = d.trackingNumber ?? "";
-  const trackHtml = `
-    <p style="margin:0 0 6px;font-size:13px;color:${C.faint};">${esc(c.tracking)}</p>
-    <p style="margin:0 0 14px;font-family:Menlo,Consolas,monospace;font-size:16px;">${esc(tracking)}</p>
-    ${d.trackingUrl ? `<a href="${esc(d.trackingUrl)}" style="display:inline-block;padding:11px 20px;border-radius:999px;background:${C.ink};color:#fff;text-decoration:none;font-size:13px;font-weight:600;">${esc(c.track)} →</a>` : ""}`;
-  const inner = `
-    <p style="margin:0 0 10px;font-size:15px;">${esc(c.hello(d.contactName))}</p>
-    <p style="margin:0 0 18px;font-size:15px;line-height:1.6;color:${C.soft};">${esc(c.shipLead)}</p>
-    ${card(c.tracking, trackHtml)}
-    ${card(c.items, table.html)}
-    <p style="margin:0;font-size:15px;">${esc(c.seeYou)}<br><strong>${esc(c.sig)}</strong></p>`;
-  const text = [c.hello(d.contactName), "", c.shipLead, "", `${c.tracking}: ${tracking}`, d.trackingUrl ?? "", "", ...table.text, "", c.seeYou, c.sig].join("\n");
-  await sendEmail({ to: d.contactEmail, subject: c.shipSubject(ref), html: frame(d.locale, c.shipTitle, inner), text, replyTo: BRAND.email });
+  const { view } = await buildOrderView(d);
+  const m = renderShipped(view);
+  await sendEmail({ to: d.contactEmail, subject: m.subject, html: m.html, text: m.text, replyTo: BRAND.email });
 }
 
 // ---------------------------------------------------------------------------
@@ -254,34 +268,41 @@ export async function sendShippingNotice(d: OrderEmailData): Promise<void> {
 export async function sendOwnerOrderNotice(d: OrderEmailData): Promise<void> {
   const to = ownerNotifyAddress();
   if (!to) return;
-  const money = (n: number) => formatMoneyFromCents(n, "en");
-  const ref = d.reference.slice(-8).toUpperCase();
-  const table = itemsTable({ ...d, locale: "en" });
-  const addr = shippingLines(d.shippingJson);
-  const subject = `New order · ${money(d.totalCents)} · ${ref}`;
-  // Sets: show the CJ recipe so the owner knows which components to order.
-  const recipes = await setRecipes(orderItems(d.items).map((i) => i.slug)).catch(() => new Map<string, string>());
-  const recipeRows = orderItems(d.items).flatMap((i) => {
-    const r = recipes.get(i.slug);
-    return r ? [{ label: `${i.qty} × ${i.nameEn}`, recipe: r }] : [];
-  });
-  const recipeHtml = recipeRows
-    .map((x) => `<p style="margin:0 0 10px;font-size:13px;line-height:1.55;"><strong>${esc(x.label)}</strong><br>${esc(x.recipe)}</p>`)
-    .join("");
-  const inner = `
-    ${card("Order", table.html)}
-    ${recipeRows.length ? card("Set contents to order on CJ", recipeHtml) : ""}
-    ${card("Customer", `<p style="margin:0;font-size:14px;line-height:1.6;">${esc(d.contactName ?? "—")}<br><a href="mailto:${esc(d.contactEmail)}" style="color:${C.terra};">${esc(d.contactEmail)}</a><br>Locale: ${d.locale}</p>`)}
-    ${addr.length ? card("Ship to", `<p style="margin:0;font-size:14px;line-height:1.6;">${addr.map(esc).join("<br>")}</p>`) : ""}
-    <p style="margin:0;"><a href="${siteUrl()}/admin/orders" style="display:inline-block;padding:10px 18px;border-radius:999px;background:${C.ink};color:#fff;text-decoration:none;font-size:13px;font-weight:600;">Open in admin → place the supplier order</a></p>`;
-  const text = [
-    subject,
-    "",
-    ...table.text,
-    ...(recipeRows.length ? ["", "SET CONTENTS TO ORDER ON CJ:", ...recipeRows.map((x) => `${x.label}: ${x.recipe}`)] : []),
-    "",
-    `Customer: ${d.contactName ?? "—"} <${d.contactEmail}> (${d.locale})`, ...addr, "", `${siteUrl()}/admin/orders`].join("\n");
-  await sendEmail({ to, subject, html: frame("en", "New order", inner), text, replyTo: d.contactEmail });
+  const items = orderItems(d.items);
+  const [products, row] = await Promise.all([productInfo(allSlugs(items)), orderRow(d.reference)]);
+  const view: OwnerOrderView = {
+    reference: d.reference,
+    placedAt: row?.createdAt ?? new Date(),
+    name: d.contactName,
+    email: d.contactEmail,
+    locale: d.locale,
+    items: items.map((i) => {
+      const p = products.get(i.slug);
+      return {
+        name: i.nameEn,
+        options: Object.values(i.optionsEn ?? {}),
+        qty: i.qty,
+        unitCents: i.priceCents,
+        sku: p?.supplierSku ?? null,
+        note: p?.shippingNote ?? null,
+        components: (SET_CONTENTS[i.slug] ?? []).map((c) => ({
+          name: products.get(c.slug)?.nameEn ?? c.slug,
+          qty: c.qty,
+          variant: c.variant,
+        })),
+      };
+    }),
+    subtotalCents: d.subtotalCents,
+    discountCents: row?.discountCents ?? 0,
+    promoCode: d.promoCode ?? null,
+    shippingCents: d.shippingCents,
+    totalCents: d.totalCents,
+    address: addressLines(d.shippingJson, true),
+    member: Boolean(row?.customer?.userId),
+    pointsEarned: row?.customer?.userId ? (row.loyaltyEntries[0]?.points ?? 0) : null,
+  };
+  const m = renderOwnerOrder(view);
+  await sendEmail({ to, subject: m.subject, html: m.html, text: m.text, replyTo: d.contactEmail });
 }
 
 export async function sendContactForward(m: { name: string; email: string; message: string; locale: Locale }): Promise<void> {
@@ -289,7 +310,7 @@ export async function sendContactForward(m: { name: string; email: string; messa
   if (!to) return;
   const subject = `Contact form · ${m.name}`;
   const inner = `
-    ${card("From", `<p style="margin:0;font-size:14px;line-height:1.6;">${esc(m.name)}<br><a href="mailto:${esc(m.email)}" style="color:${C.terra};">${esc(m.email)}</a><br>Locale: ${m.locale}</p>`)}
+    ${card("From", `<p style="margin:0;font-size:14px;line-height:1.6;">${esc(m.name)}<br><a href="mailto:${esc(m.email)}" style="color:${C.terraDeep};">${esc(m.email)}</a><br>Locale: ${m.locale}</p>`)}
     ${card("Message", `<p style="margin:0;font-size:14px;line-height:1.6;white-space:pre-wrap;">${esc(m.message)}</p>`)}
     <p style="margin:0;font-size:13px;color:${C.faint};">Reply directly to this email to answer.</p>`;
   const text = [subject, "", `${m.name} <${m.email}> (${m.locale})`, "", m.message].join("\n");
@@ -300,29 +321,27 @@ export async function sendContactForward(m: { name: string; email: string; messa
 // Accounts (customer)
 // ---------------------------------------------------------------------------
 
-const RESET = {
-  en: {
-    subject: "Reset your CMAC Beauty password",
-    title: "Reset your password.",
-    lead: "Someone (hopefully you) asked to reset the password of your CMAC Beauty account. This link works once and expires in 1 hour.",
-    cta: "Choose a new password",
-    ignore: "Didn't ask for this? You can ignore this email — your password stays the same.",
-  },
-  fr: {
-    subject: "Réinitialisez votre mot de passe CMAC Beauty",
-    title: "Réinitialisez votre mot de passe.",
-    lead: "Quelqu'un (vous, on l'espère) a demandé de réinitialiser le mot de passe de votre compte CMAC Beauty. Ce lien fonctionne une seule fois et expire dans 1 heure.",
-    cta: "Choisir un nouveau mot de passe",
-    ignore: "Vous n'avez rien demandé ? Ignorez ce courriel — votre mot de passe reste le même.",
-  },
-} as const;
-
 export async function sendPasswordReset(to: string, locale: Locale, url: string): Promise<boolean> {
-  const c = RESET[locale];
-  const inner = `
-    <p style="margin:0 0 18px;font-size:15px;line-height:1.6;color:${C.soft};">${esc(c.lead)}</p>
-    <p style="margin:0 0 18px;"><a href="${esc(url)}" style="display:inline-block;padding:12px 22px;border-radius:999px;background:${C.ink};color:#fff;text-decoration:none;font-size:14px;font-weight:600;">${esc(c.cta)} →</a></p>
-    <p style="margin:0;font-size:13px;line-height:1.6;color:${C.faint};">${esc(c.ignore)}</p>`;
-  const text = [c.lead, "", url, "", c.ignore].join("\n");
-  return sendEmail({ to, subject: c.subject, html: frame(locale, c.title, inner), text, replyTo: BRAND.email });
+  const m = renderPasswordReset({ locale, url });
+  return sendEmail({ to, subject: m.subject, html: m.html, text: m.text, replyTo: BRAND.email });
+}
+
+/** Sent once on registration (transactional: account created; no marketing codes). */
+export async function sendAccountWelcome(
+  to: string,
+  locale: Locale,
+  data: { name: string | null; creditedPoints: number; hasBirthday: boolean },
+): Promise<boolean> {
+  const m = renderAccountWelcome({ locale, ...data });
+  return sendEmail({ to, subject: m.subject, html: m.html, text: m.text, replyTo: BRAND.email });
+}
+
+/** Sent when a member redeems points for a reward code (the code is also shown in /account). */
+export async function sendRewardCode(
+  to: string,
+  locale: Locale,
+  data: { name: string | null; code: string; amountOffCents: number; pointsSpent: number; balance: number },
+): Promise<boolean> {
+  const m = renderRewardCode({ locale, ...data });
+  return sendEmail({ to, subject: m.subject, html: m.html, text: m.text, replyTo: BRAND.email });
 }

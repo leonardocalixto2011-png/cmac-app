@@ -11,8 +11,9 @@ import { LIMITS, rateLimit, requestIp } from "@/lib/rate-limit";
 import { authSecret, createResetToken, parseResetToken, verifyResetToken } from "@/lib/tokens";
 import { creditPastOrders, redeemPoints, type RedeemResult } from "@/lib/loyalty";
 import { subscribeEmail, unsubscribeByEmail } from "@/lib/newsletter";
-import { sendPasswordReset } from "@/lib/email";
+import { sendAccountWelcome, sendPasswordReset, sendRewardCode } from "@/lib/email";
 import { emailConfigured } from "@/lib/integrations";
+import { POINTS_PER_REWARD, REWARD_VALUE_CENTS } from "@/lib/loyalty-rules";
 import { siteUrl } from "@/lib/brand";
 import { LOCALE_COOKIE, normalizeLocale } from "@/i18n/messages";
 
@@ -99,7 +100,13 @@ export async function registerCustomer(input: {
     return { ok: false, error: "taken" };
   }
 
-  await creditPastOrders(customerId).catch((err) => console.error("[account] backfill credit failed", err));
+  const creditedPoints = await creditPastOrders(customerId).catch((err) => {
+    console.error("[account] backfill credit failed", err);
+    return 0;
+  });
+  await sendAccountWelcome(email, locale, { name, creditedPoints, hasBirthday: birthMonth != null && birthDay != null }).catch((err) =>
+    console.error("[account] welcome email failed", err),
+  );
   if (input.newsletter) await subscribeEmail(email, locale, "register").catch(() => {});
   return { ok: true };
 }
@@ -214,6 +221,17 @@ export async function redeemReward(units: number): Promise<RedeemResult | { ok: 
   if (!user?.customer) return { ok: false, error: "auth" };
   if (!(await rateLimit(`redeem:${user.customer.id}`, LIMITS.redeem))) return { ok: false, error: "limited" };
   const res = await redeemPoints(user.customer.id, Number(units));
+  if (res.ok && user.email) {
+    const after = await prisma.customer.findUnique({ where: { id: user.customer.id }, select: { points: true } }).catch(() => null);
+    const pointsSpent = (res.amountOffCents / REWARD_VALUE_CENTS) * POINTS_PER_REWARD;
+    await sendRewardCode(user.email, normalizeLocale(user.customer.locale), {
+      name: user.customer.name ?? user.name,
+      code: res.code,
+      amountOffCents: res.amountOffCents,
+      pointsSpent,
+      balance: after?.points ?? Math.max(0, user.customer.points - pointsSpent),
+    }).catch((err) => console.error("[account] reward email failed", err));
+  }
   revalidatePath("/account");
   return res;
 }
