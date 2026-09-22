@@ -51,7 +51,12 @@ export function ProductCard({ product: p, index = 0 }: { product: ProductView; i
         <div className="product-card__row">
           <span className="product-card__price">
             {formatMoneyFromCents(p.priceCents, locale)}
-            {onSale && <s>{formatMoneyFromCents(p.compareAtCents!, locale)}</s>}
+            {onSale &&
+              (p.tags.includes("sets") ? (
+                <small className="ml-2 text-[0.78rem] font-normal text-ink-faint">{t("shop.separately", { amount: formatMoneyFromCents(p.compareAtCents!, locale) })}</small>
+              ) : (
+                <s>{formatMoneyFromCents(p.compareAtCents!, locale)}</s>
+              ))}
           </span>
           {hasOptions ? (
             <Link className="product-card__add" href={href}>

@@ -55,3 +55,14 @@ export function shippingCentsFor(subtotalCents: number): number {
 export function siteUrl(): string {
   return process.env.NEXT_PUBLIC_SITE_URL || BRAND.domain;
 }
+
+/**
+ * Last order date for delivery before Dec 24, from the *longest* delivery estimate
+ * (SHIPPING.totalWeeks.max). Null once it has passed or before Oct 1 (not shown).
+ */
+export function holidayCutoff(now: Date = new Date()): Date | null {
+  const y = now.getFullYear();
+  const cutoff = new Date(y, 11, 24 - SHIPPING.totalWeeks.max * 7);
+  if (now.getMonth() < 8 || now > cutoff) return null; // Sept 1 → cutoff
+  return cutoff;
+}

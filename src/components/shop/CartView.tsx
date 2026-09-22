@@ -10,10 +10,32 @@ import { Icon } from "@/components/Icon";
 import { formatMoneyFromCents, formatWholeDollars } from "@/lib/utils";
 import { BRAND, SHIPPING } from "@/lib/brand";
 import { getTier, pointsFor, type TierId } from "@/lib/loyalty-rules";
+import { trackAddToCart, trackInitiateCheckout } from "@/lib/pixels";
+
+export type CartAddon = { slug: string; nameEn: string; nameFr: string; priceCents: number; image: string | null; tags: string[] };
+
+/**
+ * Up to 3 add-ons for the free-shipping gap: the cheapest ones that close it on their own,
+ * topped up with the closest-priced others. Never something already in the cart.
+ */
+function pickAddons(addons: CartAddon[], inCart: Set<string>, remaining: number): CartAddon[] {
+  const pool = addons.filter((a) => !inCart.has(a.slug));
+  const closing = pool.filter((a) => a.priceCents >= remaining).sort((a, b) => a.priceCents - b.priceCents);
+  const rest = pool.filter((a) => a.priceCents < remaining).sort((a, b) => b.priceCents - a.priceCents);
+  return [...closing, ...rest].slice(0, 3);
+}
 
 export type CartMember = { tier: TierId; freeShippingFromCents: number; quarterPointsPerDollar: number } | null;
 
-export function CartView({ member = null, subscribed = false }: { member?: CartMember; subscribed?: boolean }) {
+export function CartView({
+  member = null,
+  subscribed = false,
+  addons = [],
+}: {
+  member?: CartMember;
+  subscribed?: boolean;
+  addons?: CartAddon[];
+}) {
   const { t, locale } = useLocale();
   const cart = useCart();
   const [pending, start] = useTransition();
@@ -22,6 +44,7 @@ export function CartView({ member = null, subscribed = false }: { member?: CartM
 
   function pay() {
     setError(null);
+    trackInitiateCheckout(cart.items.map((i) => ({ id: i.slug, name: i.nameEn, priceCents: i.priceCents, qty: i.qty })));
     start(async () => {
       const res = await checkout(
         cart.items.map((i) => ({ slug: i.slug, qty: i.qty, selected: i.selected })),
@@ -47,6 +70,7 @@ export function CartView({ member = null, subscribed = false }: { member?: CartM
   const remaining = freeFrom - cart.subtotalCents;
   const tierName = member ? t(`tier.${member.tier}`) : "";
   const earn = member ? pointsFor(cart.subtotalCents, getTier(member.tier)) : 0;
+  const suggestions = remaining > 0 ? pickAddons(addons, new Set(cart.items.map((i) => i.slug)), remaining) : [];
 
   return (
     <div className="mx-auto max-w-[680px]">
@@ -127,7 +151,47 @@ export function CartView({ member = null, subscribed = false }: { member?: CartM
                 ? t("shop.freeShipAway", { amount: formatMoneyFromCents(remaining, locale) })
                 : t("shop.freeShipUnlocked")}
             </p>
+            {remaining > 0 && (
+              <div className="mt-1 h-1.5 w-full overflow-hidden rounded-full bg-cream-2" aria-hidden="true">
+                <div className="h-full rounded-full bg-terra transition-[width] duration-500" style={{ width: `${Math.min(100, Math.round((cart.subtotalCents / freeFrom) * 100))}%` }} />
+              </div>
+            )}
           </div>
+          {suggestions.length > 0 && (
+            <div className="mt-4">
+              <p className="font-ui text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-ink-soft">{t("shop.upsellTitle")}</p>
+              <ul className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-3">
+                {suggestions.map((a) => {
+                  const aName = locale === "fr" ? a.nameFr : a.nameEn;
+                  const closes = a.priceCents >= remaining;
+                  return (
+                    <li key={a.slug} className="flex items-center gap-3 rounded-2xl border border-[var(--line)] p-2.5 sm:flex-col sm:items-start">
+                      <Link href={`/shop/${a.slug}`} className="relative h-14 w-12 flex-none overflow-hidden rounded-lg bg-cream-2 sm:h-24 sm:w-full">
+                        <ProductArt images={a.image ? [a.image] : []} name={aName} tags={a.tags} sizes="(min-width: 640px) 200px, 48px" />
+                      </Link>
+                      <div className="min-w-0 flex-1">
+                        <p className="truncate text-[0.85rem] font-medium">{aName}</p>
+                        <p className="text-[0.8rem] tabular-nums text-ink-soft">
+                          {formatMoneyFromCents(a.priceCents, locale)}
+                          {closes && <span className="ml-1.5 text-terra">· {t("shop.upsellFree")}</span>}
+                        </p>
+                      </div>
+                      <button
+                        type="button"
+                        className="btn btn--ghost btn--sm flex-none"
+                        onClick={() => {
+                          cart.add({ slug: a.slug, qty: 1, selected: {}, nameFr: a.nameFr, nameEn: a.nameEn, priceCents: a.priceCents, image: a.image, tags: a.tags, optionLabelsFr: {}, optionLabelsEn: {} });
+                          trackAddToCart({ id: a.slug, name: a.nameEn, priceCents: a.priceCents });
+                        }}
+                      >
+                        + {t("shop.upsellAdd")}
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          )}
           <p className="mt-2 flex flex-wrap items-center gap-x-2 text-[0.82rem] text-ink-soft">
             {member ? (
               t("shop.earnPoints", { points: earn })

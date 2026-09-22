@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useLocale } from "@/i18n/LocaleProvider";
 import { useCart } from "./CartProvider";
@@ -9,10 +9,15 @@ import { Icon } from "@/components/Icon";
 import { formatMoneyFromCents, formatWholeDollars, cn } from "@/lib/utils";
 import { POLICY, SHIPPING } from "@/lib/brand";
 import type { ProductView, SetComponentView } from "@/lib/shop";
+import { trackAddToCart, trackViewContent } from "@/lib/pixels";
 
 export function ProductDetail({ product, components = [] }: { product: ProductView; components?: SetComponentView[] }) {
   const { t, locale } = useLocale();
   const cart = useCart();
+
+  useEffect(() => {
+    trackViewContent({ id: product.slug, name: product.nameEn, priceCents: product.priceCents });
+  }, [product.slug, product.nameEn, product.priceCents]);
 
   const name = locale === "fr" ? product.nameFr : product.nameEn;
   const tagline = locale === "fr" ? product.taglineFr ?? product.tagline : product.tagline;
@@ -53,6 +58,7 @@ export function ProductDetail({ product, components = [] }: { product: ProductVi
       optionLabelsFr: labelsFr,
       optionLabelsEn: labelsEn,
     });
+    trackAddToCart({ id: product.slug, name: product.nameEn, priceCents: product.priceCents, qty });
     setAdded(true);
     setTimeout(() => setAdded(false), 1400);
   }
@@ -147,7 +153,11 @@ export function ProductDetail({ product, components = [] }: { product: ProductVi
           <span className="font-ui text-2xl font-semibold text-ink">{formatMoneyFromCents(product.priceCents, locale)}</span>
           {onSale && (
             <>
-              <s className="text-ink-faint">{formatMoneyFromCents(product.compareAtCents!, locale)}</s>
+              {isSet ? (
+                <span className="text-ink-faint">{t("shop.separately", { amount: formatMoneyFromCents(product.compareAtCents!, locale) })}</span>
+              ) : (
+                <s className="text-ink-faint">{formatMoneyFromCents(product.compareAtCents!, locale)}</s>
+              )}
               <span className="rounded-full bg-terra px-2.5 py-0.5 text-[0.72rem] font-semibold text-white">{t("shop.save", { pct })}</span>
             </>
           )}

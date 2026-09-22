@@ -5,13 +5,25 @@ import Link from "next/link";
 import { useLocale } from "@/i18n/LocaleProvider";
 import { useCart } from "./CartProvider";
 import { Icon } from "@/components/Icon";
+import { trackPurchase, type TrackItem } from "@/lib/pixels";
 
-export function OrderThanks({ reference, found, signedIn = false }: { reference: string; found: boolean; signedIn?: boolean }) {
+export function OrderThanks({
+  reference,
+  found,
+  signedIn = false,
+  purchase = null,
+}: {
+  reference: string;
+  found: boolean;
+  signedIn?: boolean;
+  purchase?: { totalCents: number; items: TrackItem[] } | null;
+}) {
   const { t } = useLocale();
   const cart = useCart();
 
   useEffect(() => {
     if (found) cart.clear();
+    if (purchase) trackPurchase(reference, purchase.totalCents, purchase.items);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [found]);
 

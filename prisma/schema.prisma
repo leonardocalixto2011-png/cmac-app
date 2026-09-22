@@ -85,6 +85,12 @@ model Order {
   discountCents           Int            @default(0)
   // Cart checkbox "email me offers" (unchecked by default) → CASL double opt-in on payment
   newsletterOptIn         Boolean        @default(false)
+  // Abandoned checkout: Stripe collected promotions consent + the session expired → one reminder
+  recoveryEmailSentAt     DateTime?
+  // Review request (~3 weeks after fulfilment): tokenised link to /review/<token>
+  reviewToken             String?        @unique
+  reviewRequestSentAt     DateTime?
+  reviews                 Review[]
   customerId              String?
   customer                Customer?      @relation(fields: [customerId], references: [id])
   loyaltyEntries          LoyaltyEntry[]
@@ -108,6 +114,8 @@ model Customer {
   birthDay           Int?
   // Year the birthday reward was last issued (cron idempotency)
   birthdayRewardYear Int?
+  // "Don't ask me for reviews again" (link in the review request email)
+  reviewEmailsOptOut Boolean        @default(false)
   // Cached sums of the LoyaltyEntry ledger (source of truth), updated in the same transaction
   points             Int            @default(0)
   lifetimeSpendCents Int            @default(0)
@@ -168,6 +176,37 @@ model RewardCode {
   createdAt             DateTime   @default(now())
 
   @@index([customerId])
+}
+
+// ----------------------------------------------------------------------------
+// Reviews — only from real orders (verified buyer), published after admin approval
+// ----------------------------------------------------------------------------
+
+enum ReviewStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+model Review {
+  id           String       @id @default(cuid())
+  orderId      String
+  order        Order        @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productSlug  String
+  rating       Int // 1–5
+  title        String?
+  body         String
+  // Display name as the customer chose it ("Camille B.")
+  authorName   String
+  locale       String       @default("en")
+  status       ReviewStatus @default(PENDING)
+  // Received as a gift / free product (creator seeding) — must be disclosed on the page
+  incentivized Boolean      @default(false)
+  createdAt    DateTime     @default(now())
+  approvedAt   DateTime?
+
+  @@unique([orderId, productSlug])
+  @@index([productSlug, status])
 }
 
 // ----------------------------------------------------------------------------

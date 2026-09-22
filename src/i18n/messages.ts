@@ -49,6 +49,7 @@ const en: Dict = {
   "hero.visualAlt": "CMAC Beauty at-home device",
 
   "marquee.label": "Store highlights",
+  "marquee.holiday": "Holiday gifts: order by {date} to receive them before Christmas",
   "marquee.1": "Free Canadian shipping over {free}",
   "marquee.2": "30-day easy returns",
   "marquee.3": "10 minutes a day",
@@ -75,7 +76,7 @@ const en: Dict = {
   "benefits.3.d": "Ice rollers to reduce the look of puffiness before makeup or after a long day.",
   "benefits.3.stat": "morning reset",
   "benefits.4.t": "Simple",
-  "benefits.4.d": "Every device comes with a plain-language routine card. No jargon, no 40-step ritual.",
+  "benefits.4.d": "Every product page and order email includes a plain-language routine. No jargon, no 40-step ritual.",
 
   "routine.eyebrow": "The 10-minute ritual",
   "routine.title": "Cool. Lift. Glow. Done.",
@@ -96,9 +97,9 @@ const en: Dict = {
 
   "founder.stamp": "Curated in Montréal",
   "founder.eyebrow": "A note from us",
-  "founder.title": "We test the boring stuff so you don't have to.",
+  "founder.title": "We do the boring homework so you don't have to.",
   "founder.p1":
-    "CMAC started because clinic facials cost more than a weekend away, and most \"at-home\" devices online are a gamble. We pick a small number of tools, order them ourselves, use them for weeks, and only list the ones we'd give to a friend.",
+    "CMAC started because clinic facials cost more than a weekend away, and most \"at-home\" devices online are a gamble. So we keep the shelf small: a handful of tools with honest specs, clear routines and a fair price, the kind we'd happily give a friend.",
   "founder.p2": "No 40-step routines. No miracle claims. Just tools that make a real evening ritual feel like a treat.",
   "founder.sig": "— The CMAC team, Montréal",
 
@@ -159,6 +160,10 @@ const en: Dict = {
   "shop.save": "Save {pct}%",
   "shop.inside": "What's inside",
   "shop.youSave": "You save {amount} ({pct}%) vs buying separately.",
+  "shop.separately": "{amount} separately",
+  "shop.upsellTitle": "Complete your ritual",
+  "shop.upsellFree": "unlocks free shipping",
+  "shop.upsellAdd": "Add",
   "shop.limited": "Limited · until Nov 30",
 
   "coll.glow.t": "Glow",
@@ -245,6 +250,7 @@ const fr: Dict = {
   "hero.visualAlt": "Appareil beauté à domicile CMAC Beauty",
 
   "marquee.label": "Points forts de la boutique",
+  "marquee.holiday": "Cadeaux des Fêtes : commandez d'ici le {date} pour les recevoir avant Noël",
   "marquee.1": "Livraison gratuite au Canada dès {free}",
   "marquee.2": "Retours faciles sous 30 jours",
   "marquee.3": "10 minutes par jour",
@@ -271,7 +277,7 @@ const fr: Dict = {
   "benefits.3.d": "Des rouleaux de glace pour réduire l'apparence des poches avant le maquillage ou après une longue journée.",
   "benefits.3.stat": "remise à zéro du matin",
   "benefits.4.t": "Simple",
-  "benefits.4.d": "Chaque appareil vient avec une carte de routine en langage clair. Pas de jargon, pas de rituel en 40 étapes.",
+  "benefits.4.d": "Chaque fiche produit et chaque courriel de commande inclut une routine en langage clair. Pas de jargon, pas de rituel en 40 étapes.",
 
   "routine.eyebrow": "Le rituel de 10 minutes",
   "routine.title": "Rafraîchir. Lifter. Illuminer. Terminé.",
@@ -292,9 +298,9 @@ const fr: Dict = {
 
   "founder.stamp": "Sélectionné à Montréal",
   "founder.eyebrow": "Un mot de notre part",
-  "founder.title": "On teste les affaires plates pour que vous n'ayez pas à le faire.",
+  "founder.title": "On fait les devoirs plates pour que vous n'ayez pas à les faire.",
   "founder.p1":
-    "CMAC est né parce qu'un soin en clinique coûte plus cher qu'une fin de semaine à l'extérieur, et que la plupart des appareils « à domicile » vendus en ligne sont une loterie. On choisit un petit nombre d'outils, on les commande nous-mêmes, on les utilise pendant des semaines, et on ne garde que ceux qu'on offrirait à une amie.",
+    "CMAC est né parce qu'un soin en clinique coûte plus cher qu'une fin de semaine à l'extérieur, et que la plupart des appareils « à domicile » vendus en ligne sont une loterie. Alors on garde une petite sélection : quelques outils aux fiches honnêtes, aux routines claires et au juste prix, ceux qu'on offrirait volontiers à une amie.",
   "founder.p2": "Pas de routine en 40 étapes. Pas de promesses miracles. Juste des outils qui font d'un vrai rituel du soir un petit plaisir.",
   "founder.sig": "— L'équipe CMAC, Montréal",
 
@@ -355,6 +361,10 @@ const fr: Dict = {
   "shop.save": "Économisez {pct} %",
   "shop.inside": "Dans le coffret",
   "shop.youSave": "Vous économisez {amount} ({pct} %) par rapport à l'achat à l'unité.",
+  "shop.separately": "{amount} à l'unité",
+  "shop.upsellTitle": "Complétez votre rituel",
+  "shop.upsellFree": "débloque la livraison gratuite",
+  "shop.upsellAdd": "Ajouter",
   "shop.limited": "Édition limitée · jusqu'au 30 nov.",
 
   "coll.glow.t": "Éclat",

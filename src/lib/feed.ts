@@ -34,7 +34,8 @@ export async function buildGoogleFeed(locale: "en" | "fr"): Promise<Response> {
   const items = products
     .filter((p) => p.images.length > 0)
     .map((p) => {
-      const onSale = p.compareAtCents != null && p.compareAtCents > p.priceCents;
+      // Sets: compareAt = the items bought separately, not a former price → never a Google sale_price.
+      const onSale = !p.tags.includes("sets") && p.compareAtCents != null && p.compareAtCents > p.priceCents;
       const name = fr ? p.nameFr : p.nameEn;
       const tag = fr ? p.taglineFr : p.tagline;
       const title = tag ? `${name} – ${tag}` : name;

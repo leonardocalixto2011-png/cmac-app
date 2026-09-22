@@ -16,12 +16,12 @@ const LAST_UPDATED = { en: "Last updated: September 2026", fr: "Dernière mise �
 export const PAGES: Record<string, Record<Locale, PageContent>> = {
   about: {
     en: {
-      title: "We test the boring stuff so you don't have to.",
+      title: "We do the boring homework so you don't have to.",
       blocks: [
         {
           p: [
             "CMAC Beauty started in Montréal with a simple frustration: clinic facials cost more than a weekend away, and most \"at-home\" devices sold online are a gamble. Reviews are fake, specs are copied, and nobody tells you how to actually use the thing.",
-            "So we pick a small number of tools, order them ourselves, use them for weeks, and only list the ones we'd give to a friend. Every device ships with a plain-language routine card. No 40-step rituals, no miracle claims.",
+            "So we keep the shelf small: a handful of tools with honest specs, clear instructions and a real-world price. Every order comes with a plain-language routine in your confirmation email, and if something disappoints you, you write to a person, not a bot. No 40-step rituals, no miracle claims.",
           ],
         },
         {
@@ -41,12 +41,12 @@ export const PAGES: Record<string, Record<Locale, PageContent>> = {
       ],
     },
     fr: {
-      title: "On teste les affaires plates pour que vous n'ayez pas à le faire.",
+      title: "On fait les devoirs plates pour que vous n'ayez pas à les faire.",
       blocks: [
         {
           p: [
             "CMAC Beauty est né à Montréal d'une frustration toute simple : un soin en clinique coûte plus cher qu'une fin de semaine à l'extérieur, et la plupart des appareils « à domicile » vendus en ligne sont une loterie. Les avis sont faux, les fiches techniques sont copiées, et personne ne vous explique comment vraiment vous en servir.",
-            "Alors on choisit un petit nombre d'outils, on les commande nous-mêmes, on les utilise pendant des semaines, et on ne garde que ceux qu'on offrirait à une amie. Chaque appareil est livré avec une carte de routine en langage clair. Pas de rituel en 40 étapes, pas de promesses miracles.",
+            "Alors on garde une petite sélection : quelques outils aux fiches honnêtes, aux instructions claires et au juste prix. Chaque commande est accompagnée d'une routine en langage clair dans votre courriel de confirmation, et si quelque chose vous déçoit, c'est une vraie personne qui vous répond, pas un robot. Pas de rituel en 40 étapes, pas de promesses miracles.",
           ],
         },
         {
@@ -289,7 +289,7 @@ export const PAGES: Record<string, Record<Locale, PageContent>> = {
         {
           h: "Cookies",
           p: [
-            "We use a language-preference cookie, a sign-in session cookie (customer accounts and the admin area), and your browser's local storage to remember your cart and whether you've closed our newsletter offer. No third-party advertising cookies.",
+            "We use a language-preference cookie, a sign-in session cookie (customer accounts and the admin area), and your browser's local storage to remember your cart and whether you've closed our newsletter offer. Advertising cookies (TikTok, Meta, Pinterest pixels), used to measure our ads and show relevant offers, load only if you click \"Accept all\" in the cookie banner. To change your choice, clear this site's data in your browser; the banner will ask again.",
           ],
         },
         {
@@ -353,7 +353,7 @@ export const PAGES: Record<string, Record<Locale, PageContent>> = {
         {
           h: "Témoins (cookies)",
           p: [
-            "Nous utilisons un témoin pour votre préférence de langue, un témoin de session de connexion (comptes clients et espace d'administration), et le stockage local de votre navigateur pour mémoriser votre panier et le fait que vous avez fermé notre offre d'infolettre. Aucun témoin publicitaire tiers.",
+            "Nous utilisons un témoin pour votre préférence de langue, un témoin de session de connexion (comptes clients et espace d'administration), et le stockage local de votre navigateur pour mémoriser votre panier et le fait que vous avez fermé notre offre d'infolettre. Les témoins publicitaires (pixels TikTok, Meta et Pinterest), qui servent à mesurer nos publicités et à vous montrer des offres pertinentes, ne se chargent que si vous cliquez sur « Tout accepter » dans la bannière. Pour changer d'avis, effacez les données de ce site dans votre navigateur : la bannière vous redemandera.",
           ],
         },
         {

@@ -9,6 +9,7 @@ import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
 import { Motion } from "@/components/Motion";
 import { NewsletterPopup } from "@/components/NewsletterPopup";
+import { Pixels } from "@/components/Pixels";
 import { viewerInfo } from "@/lib/account";
 import { JsonLd, organizationLd } from "@/components/JsonLd";
 import { BRAND, SHIPPING, siteUrl } from "@/lib/brand";
@@ -74,6 +75,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             <Footer />
             <Motion />
             <NewsletterPopup suppressed={viewer.signedIn && viewer.subscribed} />
+            <Pixels />
           </CartProvider>
         </LocaleProvider>
       </body>

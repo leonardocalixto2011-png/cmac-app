@@ -72,6 +72,9 @@ type SeedProduct = {
 
 const colour = (values: OptionValue[]): Option => ({ nameEn: "Colour", nameFr: "Couleur", values });
 
+// "Was" prices seeded before launch that the product never actually sold at → cleared if still untouched.
+const INVENTED_COMPARE_AT: Record<string, number> = { "led-red-light-mask": 8999 };
+
 const PRODUCTS: SeedProduct[] = [
   // ---------------------------------------------------------------- GLOW
   {
@@ -81,7 +84,8 @@ const PRODUCTS: SeedProduct[] = [
     tagline: "Hands-free glow, 10 minutes a night",
     taglineFr: "Un éclat mains libres, 10 minutes par soir",
     priceCents: 5999,
-    compareAtCents: 8999,
+    // No "was" price: it was never sold at a higher price (Competition Act, ordinary selling price)
+    compareAtCents: null,
     tags: ["glow", "led", "hands-free", "new"],
     sortOrder: 0,
     descriptionEn: `<p><strong>The part of the routine where you do nothing.</strong> Put it on, lie back, let the light run. The LED Red Light Mask is built for evening use at home: no downtime, no gel, no technique to learn.</p><h3>How to use</h3><ol><li>Cleanse and dry your face.</li><li>Fit the mask and start a 10-minute session.</li><li>Follow with your usual serum and moisturizer.</li></ol><p>Start with 3 sessions a week. Most people fold it into their wind-down while reading or scrolling.</p><h3>Good to know</h3><ul><li>Cosmetic at-home device, not a medical device.</li><li>Not for use if you are pregnant, photosensitive, on light-sensitizing medication, or have an active skin condition. Ask your doctor if unsure.</li><li>Keep eyes closed during sessions.</li><li>Wipe with a dry cloth after use. Do not submerge.</li></ul>${FOOTER_EN}`,
@@ -1201,6 +1205,10 @@ async function main() {
 
     const update: Prisma.ProductUpdateInput = { sortOrder: p.sortOrder };
     const notes: string[] = [];
+    if (INVENTED_COMPARE_AT[p.slug] != null && existing.compareAtCents === INVENTED_COMPARE_AT[p.slug]) {
+      update.compareAtCents = null;
+      notes.push("invented compare-at price removed");
+    }
     if (reset) Object.assign(update, copy, commerce, { options: supplier.options });
     const hasImages = Array.isArray(existing.images) && existing.images.length > 0;
     if (!hasImages) {
