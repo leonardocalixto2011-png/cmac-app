@@ -16,6 +16,7 @@ export function ProductCard({ product: p, index = 0 }: { product: ProductView; i
   const href = `/shop/${p.slug}`;
   const hasOptions = p.options.length > 0;
   const onSale = p.compareAtCents != null && p.compareAtCents > p.priceCents;
+  const isSet = p.tags.includes("sets");
   const pct = onSale ? Math.round(((p.compareAtCents! - p.priceCents) / p.compareAtCents!) * 100) : 0;
 
   function quickAdd() {
@@ -38,7 +39,7 @@ export function ProductCard({ product: p, index = 0 }: { product: ProductView; i
       <Link className="product-card__media" href={href} aria-label={name}>
         <ProductArt images={p.images} hoverImage={p.images[1]} name={name} tags={p.tags} sizes="(min-width: 990px) 25vw, 50vw" />
         {onSale ? (
-          <span className="product-card__badge">−{pct}%</span>
+          <span className="product-card__badge">{t("shop.save", { pct })}</span>
         ) : p.tags.includes("new") ? (
           <span className="product-card__badge product-card__badge--new">{t("featured.new")}</span>
         ) : null}
@@ -49,15 +50,18 @@ export function ProductCard({ product: p, index = 0 }: { product: ProductView; i
         </h3>
         {tagline && <p className="product-card__tag">{tagline}</p>}
         <div className="product-card__row">
-          <span className="product-card__price">
-            {formatMoneyFromCents(p.priceCents, locale)}
-            {onSale &&
-              (p.tags.includes("sets") ? (
-                <small className="ml-2 text-[0.78rem] font-normal text-ink-faint">{t("shop.separately", { amount: formatMoneyFromCents(p.compareAtCents!, locale) })}</small>
-              ) : (
-                <s>{formatMoneyFromCents(p.compareAtCents!, locale)}</s>
-              ))}
-          </span>
+          {onSale && isSet ? (
+            <span className="product-card__price product-card__price--set">
+              <span className="product-card__pay">{formatMoneyFromCents(p.priceCents, locale)}</span>
+              <span className="product-card__saving">{t("shop.saveAmount", { amount: formatMoneyFromCents(p.compareAtCents! - p.priceCents, locale) })}</span>
+              <span className="product-card__worth">{t("shop.separately", { amount: formatMoneyFromCents(p.compareAtCents!, locale) })}</span>
+            </span>
+          ) : (
+            <span className="product-card__price">
+              {formatMoneyFromCents(p.priceCents, locale)}
+              {onSale && <s>{formatMoneyFromCents(p.compareAtCents!, locale)}</s>}
+            </span>
+          )}
           {hasOptions ? (
             <Link className="product-card__add" href={href}>
               <span>{t("featured.choose")}</span>

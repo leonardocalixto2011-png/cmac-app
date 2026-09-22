@@ -149,22 +149,32 @@ export function ProductDetail({ product, components = [] }: { product: ProductVi
           </>
         )}
 
-        <p className="mt-4 flex flex-wrap items-baseline gap-3">
-          <span className="font-ui text-2xl font-semibold text-ink">{formatMoneyFromCents(product.priceCents, locale)}</span>
-          {onSale && (
-            <>
-              {isSet ? (
-                <span className="text-ink-faint">{t("shop.separately", { amount: formatMoneyFromCents(product.compareAtCents!, locale) })}</span>
-              ) : (
+        {isSet && onSale ? (
+          <div className="mt-4 rounded-2xl bg-warm-white px-4 py-3.5">
+            <dl className="flex flex-col gap-1 text-[0.92rem]">
+              <div className="flex items-baseline justify-between gap-4 text-ink-faint">
+                <dt>{t("shop.priceSeparately")}</dt>
+                <dd className="tabular-nums line-through">{formatMoneyFromCents(product.compareAtCents!, locale)}</dd>
+              </div>
+              <div className="flex items-baseline justify-between gap-4 font-semibold text-terra">
+                <dt>{t("shop.priceSaving", { pct })}</dt>
+                <dd className="tabular-nums">−{formatMoneyFromCents(product.compareAtCents! - product.priceCents, locale)}</dd>
+              </div>
+              <div className="mt-1 flex items-baseline justify-between gap-4 border-t border-[var(--line)] pt-2">
+                <dt className="font-ui text-[0.78rem] font-semibold uppercase tracking-[0.16em] text-ink-soft">{t("shop.priceYouPay")}</dt>
+                <dd className="font-ui text-2xl font-semibold tabular-nums text-ink">{formatMoneyFromCents(product.priceCents, locale)}</dd>
+              </div>
+            </dl>
+          </div>
+        ) : (
+          <p className="mt-4 flex flex-wrap items-baseline gap-3">
+            <span className="font-ui text-2xl font-semibold text-ink">{formatMoneyFromCents(product.priceCents, locale)}</span>
+            {onSale && (
+              <>
                 <s className="text-ink-faint">{formatMoneyFromCents(product.compareAtCents!, locale)}</s>
-              )}
-              <span className="rounded-full bg-terra px-2.5 py-0.5 text-[0.72rem] font-semibold text-white">{t("shop.save", { pct })}</span>
-            </>
-          )}
-        </p>
-        {isSet && onSale && (
-          <p className="mt-2 text-[0.92rem] text-ink-soft">
-            {t("shop.youSave", { amount: formatMoneyFromCents(product.compareAtCents! - product.priceCents, locale), pct })}
+                <span className="rounded-full bg-terra px-2.5 py-0.5 text-[0.72rem] font-semibold text-white">{t("shop.save", { pct })}</span>
+              </>
+            )}
           </p>
         )}
 
