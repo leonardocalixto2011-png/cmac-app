@@ -322,7 +322,7 @@
 .product-art__hover { opacity: 0; transition: opacity 0.5s var(--ease-cmac); }
 .product-card:hover .product-art__hover, .product-card__media:focus-visible .product-art__hover { opacity: 1; }
 @media (hover: none) { .product-art__hover { display: none; } }
-.product-card__badge { position: absolute; top: 14px; left: 14px; z-index: 2; background: var(--color-terra); color: #fff; font: 600 0.72rem var(--font-ui); letter-spacing: 0.06em; padding: 6px 10px; border-radius: 999px; }
+.product-card__badge { position: absolute; top: 14px; right: 14px; z-index: 2; background: var(--color-terra); color: #fff; font: 600 0.72rem var(--font-ui); letter-spacing: 0.06em; padding: 6px 10px; border-radius: 999px; }
 .product-card__badge--new { background: var(--color-sage); }
 .product-card__body { padding: 18px 18px 20px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
 .product-card h3 { font-size: 1.12rem; }
