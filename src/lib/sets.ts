@@ -61,6 +61,24 @@ export const SET_CONTENTS: Record<string, SetComponent[]> = {
     { slug: "spa-headband", qty: 2, variant: "1× Pink = CJHL133914102BY + 1× Beige = CJHL133914107GT" },
     { slug: "satin-scrunchie", qty: 2, variant: "1× Pink = CJTF106711601AZ + 1× Purple = CJTF106711607GT (one per roller colour)" },
   ],
+  "set-between-appointments": [
+    { slug: "nail-care-pen", qty: 1, variant: "Pink (USB) = CJYD161928501AZ" },
+    { slug: "rose-gold-manicure-kit", qty: 1, variant: "Rose Gold, Style C = CJJT100243006FU" },
+    { slug: "gel-manicure-gloves", qty: 1, variant: "Rose Red = CJMJ118758902BY" },
+  ],
+  "set-pedi-night": [
+    { slug: "electric-foot-file", qty: 1, variant: "Pink, outlet No (USB) = CJYD196463901AZ" },
+    { slug: "cozy-fleece-socks", qty: 1, variant: "Beige = CJWZ191410903CX (matches the photo)" },
+    { slug: "spa-headband", qty: 1, variant: "Pink = CJHL133914102BY" },
+    { slug: "satin-scrunchie", qty: 1, variant: "Pink = CJTF106711601AZ" },
+  ],
+  "set-mani-pedi": [
+    { slug: "nail-care-pen", qty: 1, variant: "Pink (USB) = CJYD161928501AZ" },
+    { slug: "rose-gold-manicure-kit", qty: 1, variant: "Rose Gold, Style C = CJJT100243006FU" },
+    { slug: "gel-manicure-gloves", qty: 1, variant: "White = CJMJ118758906FU" },
+    { slug: "electric-foot-file", qty: 1, variant: "Pink, outlet No (USB) = CJYD196463901AZ" },
+    { slug: "cozy-fleece-socks", qty: 1, variant: "Beige = CJWZ191410903CX (matches the photo)" },
+  ],
 };
 
 /** Order of the four sets featured on the homepage. */
