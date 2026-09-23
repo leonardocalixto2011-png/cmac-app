@@ -10,6 +10,7 @@ import { Footer } from "@/components/Footer";
 import { Motion } from "@/components/Motion";
 import { NewsletterPopup } from "@/components/NewsletterPopup";
 import { Pixels } from "@/components/Pixels";
+import { Analytics } from "@vercel/analytics/next";
 import { viewerInfo } from "@/lib/account";
 import { JsonLd, organizationLd } from "@/components/JsonLd";
 import { BRAND, SHIPPING, siteUrl } from "@/lib/brand";
@@ -79,6 +80,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             <Motion />
             <NewsletterPopup suppressed={viewer.signedIn && viewer.subscribed} />
             <Pixels />
+            {/* Cookieless visit counts (no personal data, no consent needed) — enable it once in the Vercel dashboard. */}
+            <Analytics />
           </CartProvider>
         </LocaleProvider>
       </body>
