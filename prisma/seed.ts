@@ -630,8 +630,8 @@ const PRODUCTS: SeedProduct[] = [
     descriptionFr: `<p><strong>La trousse qui met fin à la chasse au coupe-ongles.</strong> Coupe-ongles, ciseaux, repousse-cuticules, lime et petits outils de soin en acier inoxydable fini or rose, chacun dans sa fente d'un étui à fermeture éclair. Elle vit dans un tiroir, un sac de sport ou un bagage de cabine.</p><h3>Mode d'emploi</h3><ol><li>Coupez, puis limez dans un seul sens.</li><li>Assouplissez les cuticules dans l'eau tiède et repoussez-les doucement. On ne coupe pas la peau vivante.</li><li>Essuyez chaque outil à l'alcool à friction avant de le ranger.</li></ol><h3>Bon à savoir</h3><ul><li>Outils de soin personnel. Tranchants : gardez hors de la portée des enfants.</li><li>En avion, mettez-la dans les bagages enregistrés (lames).</li><li>Pour des raisons d'hygiène, les retours sont acceptés seulement si l'article est non ouvert.</li></ul>${FOOTER_HYGIENE_FR}`,
     options: [],
     images: [
-      `${CF}/1612319017737.jpg`,
-      `${CF}/1612319017741.jpg`,
+      "https://cmacbeauty.ca/products/rose-gold-manicure-kit-0.jpg",
+      "https://cmacbeauty.ca/products/rose-gold-manicure-kit-1.jpg",
       `${CF}/1612319017734.jpg`,
     ],
     supplierUrl: `${CJ}/-p-1356053588002082816.html`,
@@ -680,6 +680,8 @@ const PRODUCTS: SeedProduct[] = [
     descriptionFr: `<p><strong>Entre deux pédicures, vos talons ont une vie.</strong> Un disque abrasif rotatif polit doucement la peau sèche et rugueuse des talons et de l'avant du pied, pour des pieds d'apparence plus lisse en quelques minutes. Disques de rechange inclus.</p><h3>Mode d'emploi</h3><ol><li>Utilisez sur des pieds propres et parfaitement secs.</li><li>Glissez le disque légèrement sur les zones rugueuses, quelques secondes par endroit. N'appuyez pas et ne restez pas au même endroit.</li><li>Rincez vos pieds et appliquez une crème hydratante. Une fois par semaine suffit.</li></ol><h3>Bon à savoir</h3><ul><li>Outil cosmétique à usage domestique, pas un dispositif médical.</li><li>Ne pas utiliser sur une peau lésée, irritée ou infectée, sur des verrues ou des grains de beauté. Si vous êtes diabétique ou avez des problèmes de circulation, consultez d'abord votre médecin.</li><li>Alimentée par le câble USB inclus. Changez le disque quand il devient lisse.</li><li>Brossez le disque après chaque usage. Usage personnel seulement.</li></ul>${FOOTER_FR}`,
     options: [],
     images: [
+      // Cleaned on the CMAC cream background (scripts: scratch cutout), then the supplier detail shot
+      "https://cmacbeauty.ca/products/electric-foot-file-0.jpg",
       "https://oss-cf.cjdropshipping.com/product/2024/02/05/09/134127e8-25df-4ef1-b142-b25626479cca_trans.jpeg",
       `${CF}/17211744/2407170833080326900.jpg`,
     ],

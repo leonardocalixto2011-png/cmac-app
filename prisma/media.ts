@@ -10,6 +10,24 @@ export type ProductVideo = { mp4: string; poster: string };
 export type ProductMedia = { images: string[]; videos: ProductVideo[] };
 
 export const MEDIA: Record<string, ProductMedia> = {
+  // 2026-09-23: cut out of the supplier photo and placed on the CMAC cream background
+  // (flood-fill from the border; the other two nail products kept their supplier shots).
+  "electric-foot-file": {
+    images: [
+      "https://cmacbeauty.ca/products/electric-foot-file-0.jpg",
+      "https://oss-cf.cjdropshipping.com/product/2024/02/05/09/134127e8-25df-4ef1-b142-b25626479cca_trans.jpeg",
+      "https://cf.cjdropshipping.com/17211744/2407170833080326900.jpg",
+    ],
+    videos: [],
+  },
+  "rose-gold-manicure-kit": {
+    images: [
+      "https://cmacbeauty.ca/products/rose-gold-manicure-kit-0.jpg",
+      "https://cmacbeauty.ca/products/rose-gold-manicure-kit-1.jpg",
+      "https://cf.cjdropshipping.com/1612319017734.jpg",
+    ],
+    videos: [],
+  },
   "led-red-light-mask": {
     "images": [
       "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790013183/cmac/products/led-red-light-mask/final-0",
