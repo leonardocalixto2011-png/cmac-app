@@ -93,9 +93,23 @@ export async function sendEmail(input: SendInput): Promise<boolean> {
   }
 }
 
-/** Where owner notifications go. Falls back to the admin login email. */
+/**
+ * Where owner notifications go: the public CMAC mailbox always, plus
+ * OWNER_NOTIFY_EMAIL / ADMIN_EMAIL when they point somewhere else. Order
+ * alerts and contact messages are the two things that must never be missed,
+ * so they land in both inboxes.
+ */
+export function ownerNotifyAddresses(): string[] {
+  const extra = process.env.OWNER_NOTIFY_EMAIL || process.env.ADMIN_EMAIL || "";
+  const list = [BRAND.email, ...extra.split(",")]
+    .map((x) => x.trim().toLowerCase())
+    .filter((x) => x.includes("@"));
+  return [...new Set(list)];
+}
+
+/** First owner address (kept for callers that need a single recipient). */
 export function ownerNotifyAddress(): string | null {
-  return process.env.OWNER_NOTIFY_EMAIL || process.env.ADMIN_EMAIL || null;
+  return ownerNotifyAddresses()[0] ?? null;
 }
 
 // ---------------------------------------------------------------------------
@@ -272,8 +286,8 @@ export async function sendShippingNotice(d: OrderEmailData): Promise<void> {
 // ---------------------------------------------------------------------------
 
 export async function sendOwnerOrderNotice(d: OrderEmailData): Promise<void> {
-  const to = ownerNotifyAddress();
-  if (!to) return;
+  const to = ownerNotifyAddresses();
+  if (!to.length) return;
   const items = orderItems(d.items);
   const [products, row] = await Promise.all([productInfo(allSlugs(items)), orderRow(d.reference)]);
   const view: OwnerOrderView = {
@@ -312,8 +326,8 @@ export async function sendOwnerOrderNotice(d: OrderEmailData): Promise<void> {
 }
 
 export async function sendContactForward(m: { name: string; email: string; message: string; locale: Locale }): Promise<void> {
-  const to = ownerNotifyAddress();
-  if (!to) return;
+  const to = ownerNotifyAddresses();
+  if (!to.length) return;
   const subject = `Contact form · ${m.name}`;
   const inner = `
     ${card("From", `<p style="margin:0;font-size:14px;line-height:1.6;">${esc(m.name)}<br><a href="mailto:${esc(m.email)}" style="color:${C.terraDeep};">${esc(m.email)}</a><br>Locale: ${m.locale}</p>`)}
