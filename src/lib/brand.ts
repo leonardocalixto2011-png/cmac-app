@@ -17,6 +17,10 @@ export const BRAND = {
   areaFr: "Montréal et L'Assomption, Québec",
   /** Public contact mailbox (owner-created 2026-09-21). */
   email: "cmacbeauty.ca@outlook.com",
+  /** Published 2026-09-23. Québec's Consumer Protection Act requires a phone number
+   * before a distance contract, so it appears on Contact, in Terms and in emails. */
+  phone: "514 894-9813",
+  phoneHref: "+15148949813",
   currency: "CAD",
   country: "CA",
   timeZone: "America/Toronto",

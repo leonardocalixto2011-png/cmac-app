@@ -42,6 +42,12 @@ export function ContactForm() {
         <div className="mt-6 rounded-2xl bg-warm-white px-4 py-3 text-[0.85rem] leading-relaxed text-ink-soft" data-reveal style={{ "--d": "300ms" } as React.CSSProperties}>
           <p className="font-ui text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-ink">{t("contact.who")}</p>
           <p className="mt-1">{t("contact.whoBody")}</p>
+          <p className="mt-1">
+            {t("contact.phoneLabel")}:{" "}
+            <a href={`tel:${BRAND.phoneHref}`} className="font-semibold text-terra underline-offset-4 hover:underline">
+              {BRAND.phone}
+            </a>
+          </p>
         </div>
       </div>
 

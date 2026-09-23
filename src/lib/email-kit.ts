@@ -173,10 +173,10 @@ export function transactionalFooter(locale: Locale, campaign = "transactional"):
   const ship = utm("/shipping-returns", campaign);
   const club = utm("/glow-club", campaign);
   return {
-    html: `${esc(f.questions)}<br><a href="mailto:${BRAND.email}" style="color:${C.terraDeep};text-decoration:none;">${BRAND.email}</a><br><br>
+    html: `${esc(f.questions)}<br><a href="mailto:${BRAND.email}" style="color:${C.terraDeep};text-decoration:none;">${BRAND.email}</a> &nbsp;·&nbsp; <a href="tel:${BRAND.phoneHref}" style="color:${C.terraDeep};text-decoration:none;">${esc(BRAND.phone)}</a><br><br>
 ${link(ship, f.shipping)} &nbsp;·&nbsp; ${link(club, f.club)} &nbsp;·&nbsp; ${link(utm("/", campaign), "cmacbeauty.ca")}<br><br>
 ${esc(BRAND.name)} · ${esc(f.area)}`,
-    text: ["—", f.questions, BRAND.email, `${f.shipping}: ${siteUrl()}/shipping-returns`, `${f.club}: ${siteUrl()}/glow-club`, `${BRAND.name} · ${f.area}`].join("\n"),
+    text: ["—", f.questions, `${BRAND.email} · ${BRAND.phone}`, `${f.shipping}: ${siteUrl()}/shipping-returns`, `${f.club}: ${siteUrl()}/glow-club`, `${BRAND.name} · ${f.area}`].join("\n"),
   };
 }
 

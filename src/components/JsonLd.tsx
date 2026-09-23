@@ -18,6 +18,7 @@ export function organizationLd() {
     url: base,
     logo: `${base}/icon.svg`,
     email: BRAND.email,
+    telephone: BRAND.phoneHref,
     areaServed: "CA",
     address: {
       "@type": "PostalAddress",
