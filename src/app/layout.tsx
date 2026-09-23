@@ -36,7 +36,10 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     metadataBase: new URL(siteUrl()),
     // Google Merchant Center / Search Console site ownership
-    verification: { google: "3Y5jJTLPAdn8fgAlviB09-w9Aae8hd2F2yHkenbFbfI" },
+    verification: {
+      google: "3Y5jJTLPAdn8fgAlviB09-w9Aae8hd2F2yHkenbFbfI",
+      other: { "msvalidate.01": "16BA849697D27C1862C7FD357DCE88F6" },
+    },
     title: {
       default: translate(locale, "meta.title"),
       template: `%s | ${BRAND.name}`,
