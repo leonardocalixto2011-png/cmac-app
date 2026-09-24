@@ -72,10 +72,11 @@ export async function listProducts(collection?: CollectionHandle): Promise<Produ
     where: {
       active: true,
       // "the-ritual" = every single product (bundles excluded); the others are tag-based.
+      // "gifts" reads the singular "gift" tag used on products.
       ...(collection === "the-ritual"
         ? { NOT: { tags: { has: SET_TAG } } }
         : collection
-          ? { tags: { has: collection } }
+          ? { tags: { has: collection === "gifts" ? "gift" : collection } }
           : {}),
     },
     orderBy: { sortOrder: "asc" },
