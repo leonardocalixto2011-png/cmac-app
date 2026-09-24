@@ -86,6 +86,8 @@ export type OrderView = {
   loyalty: LoyaltyView;
   trackingNumber?: string | null;
   trackingUrl?: string | null;
+  /** Set when the order joined a convoy: the shared dispatch day and the window promised at checkout. */
+  convoy?: { code: string; ordersOn: Date; deliveryFrom: Date; deliveryTo: Date } | null;
 };
 
 export type CardProduct = { slug: string; name: string; priceCents: number; compareAtCents: number | null; image: string | null; isSet: boolean };
@@ -333,6 +335,33 @@ function timelineBlock(o: OrderView): Block {
   };
 }
 
+/** Convoy orders: repeat the dispatch date and the delivery window in writing. */
+function convoyBlock(o: OrderView): Block {
+  if (!o.convoy) return { html: "", text: "" };
+  const fr = o.locale === "fr";
+  const day = (d: Date) => d.toLocaleDateString(fr ? "fr-CA" : "en-CA", { month: "long", day: "numeric", timeZone: "America/Toronto" });
+  const T = fr
+    ? {
+        eyebrow: "Votre convoi",
+        line: `Votre commande fait partie du convoi du ${day(o.convoy.ordersOn)} : c'est la journée où nous commandons toutes les commandes du convoi d'un seul coup, et c'est ce qui vous a évité les frais de livraison.`,
+        window: `Livraison prévue entre le ${day(o.convoy.deliveryFrom)} et le ${day(o.convoy.deliveryTo)}.`,
+        change: "Un changement d'idée avant cette date ? Répondez à ce courriel : on annule et on rembourse au complet.",
+      }
+    : {
+        eyebrow: "Your convoy",
+        line: `Your order rides in the convoy of ${day(o.convoy.ordersOn)}: that's the day we place every convoy order at once, and it's what saved you the shipping fee.`,
+        window: `Expected delivery between ${day(o.convoy.deliveryFrom)} and ${day(o.convoy.deliveryTo)}.`,
+        change: "Changed your mind before that date? Reply to this email and we cancel and refund in full.",
+      };
+  return {
+    html: panel(`${eyebrow(T.eyebrow, C.sage)}${para(esc(T.line), { margin: "0 0 8px" })}${para(esc(T.window), { margin: "0 0 8px" })}${para(esc(T.change), { size: 13, color: C.faint, margin: "0" })}`, {
+      bg: C.cream,
+      margin: "0 0 22px",
+    }),
+    text: [T.eyebrow.toUpperCase(), T.line, T.window, T.change].join("\n"),
+  };
+}
+
 function loyaltyBlock(o: OrderView): Block {
   const lo = o.loyalty;
   const l = o.locale;
@@ -447,6 +476,7 @@ export function renderOrderConfirmation(o: OrderView): RenderedEmail {
   const items = itemsBlock(o.items, l, { prices: true });
   const totals = totalsBlock(o);
   const timeline = timelineBlock(o);
+  const convoy = convoyBlock(o);
   const tips = tipsBlock(o.items, l, T.waitTitle, T.waitIntro);
   const loyalty = loyaltyBlock(o);
   const addr = addressBlock(o);
@@ -463,6 +493,7 @@ ${para(esc(T.note), { margin: "0 0 32px" })}
 ${panel(`${eyebrow(T.summary)}${spacer(6)}${items.html}${rule("22px 0 14px")}${totals.html}`, { bg: C.cream, padding: "26px 26px 22px" })}
 ${addr.html}
 ${rule("26px 0 30px")}
+${convoy.html}
 ${timeline.html}
 ${rule("30px 0 30px")}
 ${tips.html}
@@ -485,6 +516,7 @@ ${sig.html}`;
     "",
     addr.text,
     "",
+    ...(convoy.text ? [convoy.text, ""] : []),
     timeline.text,
     "",
     tips.text,

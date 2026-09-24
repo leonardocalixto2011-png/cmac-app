@@ -18,6 +18,7 @@ import { BRAND } from "./brand";
 import { prisma } from "./prisma";
 import { orderItems, type ShippingAddress } from "./shop";
 import { SET_CONTENTS } from "./sets";
+import { deliveryWindow } from "./drops";
 import { TIERS, merchandiseCents, pointsFor, tierFor } from "./loyalty-rules";
 import { C, SANS, esc, eyebrow, h1, layout, panel, transactionalFooter } from "./email-kit";
 import {
@@ -221,7 +222,7 @@ async function orderRow(reference: string) {
   try {
     return await prisma.order.findUnique({
       where: { reference },
-      include: { customer: true, loyaltyEntries: { where: { reason: "ORDER_CREDIT" } } },
+      include: { customer: true, drop: true, loyaltyEntries: { where: { reason: "ORDER_CREDIT" } } },
     });
   } catch (err) {
     console.error("[email] order lookup failed", err);
@@ -258,6 +259,14 @@ async function buildOrderView(d: OrderEmailData): Promise<{ view: OrderView; row
     shippingCents: d.shippingCents,
     totalCents: d.totalCents,
     address: addressLines(d.shippingJson, false),
+    convoy: row?.drop
+      ? {
+          code: row.drop.code,
+          ordersOn: row.drop.ordersOn,
+          deliveryFrom: deliveryWindow(row.drop.ordersOn).from,
+          deliveryTo: deliveryWindow(row.drop.ordersOn).to,
+        }
+      : null,
     loyalty,
     trackingNumber: d.trackingNumber ?? null,
     trackingUrl: d.trackingUrl ?? null,
