@@ -17,8 +17,34 @@
 import { prisma } from "./prisma";
 import { SHIPPING } from "./brand";
 
-/** Montréal is UTC−5 (UTC−4 in summer); we use −5 all year, which only ever closes a convoy an hour earlier. */
-const MTL_OFFSET_HOURS = 5;
+const TZ = "America/Toronto";
+
+/** The UTC instant whose Montréal wall-clock time is the given date and time (handles daylight saving). */
+function montrealInstant(year: number, month: number, day: number, hour: number, minute: number): Date {
+  let guess = Date.UTC(year, month, day, hour, minute);
+  for (let i = 0; i < 2; i++) {
+    const p = new Intl.DateTimeFormat("en-CA", {
+      timeZone: TZ,
+      hour12: false,
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+    }).formatToParts(new Date(guess));
+    const get = (t: string) => Number(p.find((x) => x.type === t)?.value ?? 0);
+    const asUtc = Date.UTC(get("year"), get("month") - 1, get("day"), get("hour") % 24, get("minute"));
+    guess += Date.UTC(year, month, day, hour, minute) - asUtc;
+  }
+  return new Date(guess);
+}
+
+/** Montréal calendar parts of an instant. */
+function montrealParts(d: Date): { y: number; m: number; d: number } {
+  const p = new Intl.DateTimeFormat("en-CA", { timeZone: TZ, year: "numeric", month: "2-digit", day: "2-digit" }).formatToParts(d);
+  const get = (t: string) => Number(p.find((x) => x.type === t)?.value ?? 0);
+  return { y: get("year"), m: get("month") - 1, d: get("day") };
+}
 
 export type DropView = {
   id: string;
@@ -34,17 +60,13 @@ export type DropView = {
 
 /** Next 1st or 15th at 23:59 Montréal, as a UTC instant. */
 export function nextCloseDate(now: Date = new Date()): Date {
-  const local = new Date(now.getTime() - MTL_OFFSET_HOURS * 3600e3);
-  const y = local.getUTCFullYear();
-  const m = local.getUTCMonth();
-  const d = local.getUTCDate();
-  const close = (year: number, month: number, day: number) => new Date(Date.UTC(year, month, day, 23 + MTL_OFFSET_HOURS, 59, 0));
-  if (d < 15) return close(y, m, 15);
-  return close(y, m + 1, 1);
+  const { y, m, d } = montrealParts(now);
+  return d < 15 ? montrealInstant(y, m, 15, 23, 59) : montrealInstant(y, m + 1, 1, 23, 59);
 }
 
 export function dropCode(closesAt: Date): string {
-  return closesAt.toISOString().slice(0, 10);
+  const { y, m, d } = montrealParts(closesAt);
+  return `${y}-${String(m + 1).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
 }
 
 /** Delivery window: supplier order day + processing + transit (business days approximated as calendar days × 1.4). */
@@ -69,7 +91,7 @@ export async function openDrop(now: Date = new Date()): Promise<DropView | null>
   try {
     const closesAt = nextCloseDate(now);
     const code = dropCode(closesAt);
-    const ordersOn = new Date(closesAt.getTime() + 9 * 3600e3); // next morning, Montréal
+    const ordersOn = new Date(closesAt.getTime() + 9 * 3600e3); // the next morning in Montréal
     const drop = await prisma.drop.upsert({
       where: { code },
       update: {},
