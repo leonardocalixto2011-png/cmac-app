@@ -7,6 +7,7 @@ import { validateCart, type CartLineInput } from "@/lib/shop";
 import { BRAND, SHIPPING } from "@/lib/brand";
 import { normalizeLocale } from "@/i18n/messages";
 import { currentMemberTier } from "@/lib/account";
+import { openDrop } from "@/lib/drops";
 
 export type CheckoutResult = { ok: true; url: string } | { ok: false; error: string };
 
@@ -32,7 +33,7 @@ async function siteOrigin(): Promise<string> {
 export async function checkout(
   lines: CartLineInput[],
   rawLocale: string,
-  opts: { newsletter?: boolean; email?: string } = {},
+  opts: { newsletter?: boolean; email?: string; convoy?: boolean } = {},
 ): Promise<CheckoutResult> {
   const locale = normalizeLocale(rawLocale);
   const member = await currentMemberTier().catch(() => null);
@@ -45,6 +46,11 @@ export async function checkout(
 
   const stripe = getStripe();
   if (!stripe) return { ok: false, error: "PAYMENT_UNAVAILABLE" };
+
+  // Convoy: the customer accepts a shared dispatch date, we drop the shipping fee.
+  const drop = opts.convoy === true ? await openDrop() : null;
+  const shippingCents = drop ? 0 : validated.shippingCents;
+  const totalCents = validated.subtotalCents + shippingCents;
 
   // Email typed next to the consent box (guests only). Prefills Stripe and allows one cart reminder.
   const typed = opts.newsletter === true ? (opts.email ?? "").trim().toLowerCase() : "";
@@ -66,8 +72,9 @@ export async function checkout(
         selected: lines[i]?.selected ?? {},
       })),
       subtotalCents: validated.subtotalCents,
-      shippingCents: validated.shippingCents,
-      totalCents: validated.totalCents,
+      shippingCents,
+      totalCents,
+      dropId: drop?.id,
       locale,
       customerId: member?.customerId,
       newsletterOptIn: opts.newsletter === true,
@@ -75,7 +82,8 @@ export async function checkout(
   });
 
   const shortRef = order.reference.slice(-8).toUpperCase();
-  const isFree = validated.shippingCents === 0;
+  const isFree = shippingCents === 0;
+  const waitWeeks = drop ? Math.max(0, Math.ceil((drop.closesAt.getTime() - Date.now()) / (7 * 864e5))) : 0;
 
   try {
     const origin = await siteOrigin();
@@ -94,17 +102,22 @@ export async function checkout(
         {
           shipping_rate_data: {
             type: "fixed_amount",
-            display_name: isFree
+            display_name: drop
               ? locale === "fr"
-                ? "Livraison gratuite"
-                : "Free shipping"
-              : locale === "fr"
-                ? "Livraison standard"
-                : "Standard shipping",
-            fixed_amount: { amount: validated.shippingCents, currency: "cad" },
+                ? `Convoi du ${drop.code} — livraison gratuite`
+                : `Convoy of ${drop.code} — free shipping`
+              : isFree
+                ? locale === "fr"
+                  ? "Livraison gratuite"
+                  : "Free shipping"
+                : locale === "fr"
+                  ? "Livraison standard"
+                  : "Standard shipping",
+            fixed_amount: { amount: shippingCents, currency: "cad" },
             delivery_estimate: {
-              minimum: { unit: "week", value: SHIPPING.totalWeeks.min },
-              maximum: { unit: "week", value: SHIPPING.totalWeeks.max },
+              // A convoy waits for its dispatch date first, so its window is longer and we say so.
+              minimum: { unit: "week", value: SHIPPING.totalWeeks.min + waitWeeks },
+              maximum: { unit: "week", value: SHIPPING.totalWeeks.max + waitWeeks },
             },
           },
         },
@@ -123,7 +136,12 @@ export async function checkout(
           },
         };
       }),
-      metadata: { orderId: order.id, reference: order.reference, ...(member ? { glowTier: member.tier.id } : {}) },
+      metadata: {
+        orderId: order.id,
+        reference: order.reference,
+        ...(member ? { glowTier: member.tier.id } : {}),
+        ...(drop ? { convoy: drop.code } : {}),
+      },
       payment_intent_data: {
         description: `${BRAND.name} — order ${shortRef}`,
         metadata: { orderId: order.id, reference: order.reference },

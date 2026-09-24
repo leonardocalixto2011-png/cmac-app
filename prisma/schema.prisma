@@ -91,6 +91,9 @@ model Order {
   reviewToken             String?        @unique
   reviewRequestSentAt     DateTime?
   reviews                 Review[]
+  // "Convoy": orders that chose a shared dispatch date (see Drop)
+  dropId                  String?
+  drop                    Drop?          @relation(fields: [dropId], references: [id])
   customerId              String?
   customer                Customer?      @relation(fields: [customerId], references: [id])
   loyaltyEntries          LoyaltyEntry[]
@@ -176,6 +179,43 @@ model RewardCode {
   createdAt             DateTime   @default(now())
 
   @@index([customerId])
+}
+
+// ----------------------------------------------------------------------------
+// Convoy ("Le Convoi") — a shared dispatch date. Everyone who joins the same
+// drop is ordered from the supplier on the same day, at quantity prices, and
+// pays no shipping. Parcels stay individual (different addresses); what is
+// shared is the buying day, not the box.
+// ----------------------------------------------------------------------------
+
+enum DropStatus {
+  OPEN
+  CLOSED
+  ORDERED
+  SHIPPED
+}
+
+model Drop {
+  id        String     @id @default(cuid())
+  /**
+   * Public reference shown to customers, e.g. "2026-10-15".
+   */
+  code      String     @unique
+  /**
+   * Last moment to join.
+   */
+  closesAt  DateTime
+  /**
+   * Day the supplier order is placed (usually the next business day).
+   */
+  ordersOn  DateTime
+  status    DropStatus @default(OPEN)
+  note      String?
+  orders    Order[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  @@index([status, closesAt])
 }
 
 // ----------------------------------------------------------------------------

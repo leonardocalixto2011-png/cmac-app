@@ -9,7 +9,7 @@ import { useCart } from "./CartProvider";
 import { ProductArt } from "./ProductArt";
 import { checkout } from "@/app/shop/actions";
 import { Icon } from "@/components/Icon";
-import { formatMoneyFromCents, formatWholeDollars } from "@/lib/utils";
+import { formatMoneyFromCents, formatWholeDollars, cn } from "@/lib/utils";
 import { BRAND, SHIPPING } from "@/lib/brand";
 import { getTier, pointsFor, type TierId } from "@/lib/loyalty-rules";
 import { trackAddToCart, trackInitiateCheckout } from "@/lib/pixels";
@@ -34,12 +34,15 @@ export function CartView({
   subscribed = false,
   addons = [],
   restore = null,
+  convoy = null,
 }: {
   member?: CartMember;
   subscribed?: boolean;
   addons?: CartAddon[];
   /** Lines rebuilt from /cart?restore=<reference> (reminder email). */
   restore?: CartItem[] | null;
+  /** The convoy customers can join right now (shared dispatch date, no shipping fee). */
+  convoy?: { code: string; closesAt: string; deliveryFrom: string; deliveryTo: string; members: number } | null;
 }) {
   const { t, locale } = useLocale();
   const cart = useCart();
@@ -47,6 +50,7 @@ export function CartView({
   const [error, setError] = useState<string | null>(null);
   const [optIn, setOptIn] = useState(false); // CASL: unchecked by default
   const [email, setEmail] = useState("");
+  const [joinConvoy, setJoinConvoy] = useState(false);
   const router = useRouter();
 
   // Restore link: replace the cart once, then drop the query string.
@@ -68,7 +72,7 @@ export function CartView({
       const res = await checkout(
         cart.items.map((i) => ({ slug: i.slug, qty: i.qty, selected: i.selected })),
         locale,
-        { newsletter: optIn, email: optIn && !member ? email.trim() : undefined },
+        { newsletter: optIn, email: optIn && !member ? email.trim() : undefined, convoy: joinConvoy },
       );
       if (res.ok) {
         window.location.href = res.url;
@@ -84,7 +88,8 @@ export function CartView({
 
   // Preview only — checkout recomputes shipping server-side from the session's tier.
   const freeFrom = member ? member.freeShippingFromCents : SHIPPING.freeThresholdCents;
-  const shippingCents = cart.items.length && cart.subtotalCents < freeFrom ? SHIPPING.flatCents : 0;
+  const baseShippingCents = cart.items.length && cart.subtotalCents < freeFrom ? SHIPPING.flatCents : 0;
+  const shippingCents = joinConvoy ? 0 : baseShippingCents;
   const totalCents = cart.subtotalCents + shippingCents;
   const remaining = freeFrom - cart.subtotalCents;
   const tierName = member ? t(`tier.${member.tier}`) : "";
@@ -228,6 +233,37 @@ export function CartView({
             <p className="mt-3 rounded-2xl bg-terra/10 px-4 py-3 text-sm text-terra" role="alert">
               {error}
             </p>
+          )}
+
+          {convoy && (
+            <label
+              className={cn(
+                "mt-4 flex cursor-pointer items-start gap-3 rounded-2xl border px-4 py-3 text-[0.85rem] leading-relaxed transition-colors",
+                joinConvoy ? "border-terra bg-terra/5" : "border-[var(--line)]",
+              )}
+            >
+              <input
+                type="checkbox"
+                className="mt-1 h-4 w-4 flex-none accent-[var(--color-terra)]"
+                checked={joinConvoy}
+                onChange={(e) => setJoinConvoy(e.target.checked)}
+              />
+              <span>
+                <span className="block font-semibold text-ink">
+                  {t("convoy.cartTitle", { amount: formatMoneyFromCents(baseShippingCents || SHIPPING.flatCents, locale) })}
+                </span>
+                <span className="mt-1 block">
+                  {t("convoy.cartBody", {
+                    date: new Date(convoy.closesAt).toLocaleDateString(locale === "fr" ? "fr-CA" : "en-CA", { month: "long", day: "numeric" }),
+                    from: new Date(convoy.deliveryFrom).toLocaleDateString(locale === "fr" ? "fr-CA" : "en-CA", { month: "long", day: "numeric" }),
+                    to: new Date(convoy.deliveryTo).toLocaleDateString(locale === "fr" ? "fr-CA" : "en-CA", { month: "long", day: "numeric" }),
+                  })}
+                </span>
+                <Link href="/convoi" className="mt-1 inline-block text-[0.8rem] font-semibold text-terra underline underline-offset-2">
+                  {t("convoy.how")}
+                </Link>
+              </span>
+            </label>
           )}
 
           {!subscribed && (

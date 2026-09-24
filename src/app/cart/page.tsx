@@ -4,6 +4,7 @@ import { CartView } from "@/components/shop/CartView";
 import { currentMemberTier } from "@/lib/account";
 import { subscriberStatus } from "@/lib/newsletter";
 import { listProducts, restoreCartLines } from "@/lib/shop";
+import { openDrop } from "@/lib/drops";
 import type { CartAddon } from "@/components/shop/CartView";
 
 export const dynamic = "force-dynamic";
@@ -16,6 +17,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function CartPage({ searchParams }: { searchParams: Promise<{ restore?: string }> }) {
   const { restore } = await searchParams;
   const restored = restore ? await restoreCartLines(restore).catch(() => null) : null;
+  const drop = await openDrop().catch(() => null);
   // Member perks are resolved server-side from the session; checkout re-checks them.
   const member = await currentMemberTier().catch(() => null);
   const sub = member ? await subscriberStatus(member.email).catch(() => null) : null;
@@ -31,6 +33,17 @@ export default async function CartPage({ searchParams }: { searchParams: Promise
           subscribed={sub === "CONFIRMED" || sub === "PENDING"}
           addons={addons}
           restore={restored}
+          convoy={
+            drop
+              ? {
+                  code: drop.code,
+                  closesAt: drop.closesAt.toISOString(),
+                  deliveryFrom: drop.deliveryFrom.toISOString(),
+                  deliveryTo: drop.deliveryTo.toISOString(),
+                  members: drop.members,
+                }
+              : null
+          }
         />
       </div>
     </section>
