@@ -202,6 +202,8 @@ export type OrderItem = {
   optionsEn?: Record<string, string>;
   /** Cart selection (option nameEn -> value); lets /cart?restore= rebuild the line. */
   selected?: Record<string, string>;
+  /** Gift with purchase: shipped, shown at $0, never restored into a cart. */
+  gift?: boolean;
 };
 
 export function orderItems(raw: unknown): OrderItem[] {
@@ -245,7 +247,7 @@ export function shippingLines(raw: unknown): string[] {
 export async function restoreCartLines(reference: string) {
   const order = await prisma.order.findUnique({ where: { reference } });
   if (!order || (order.status !== "PENDING" && order.status !== "CANCELLED")) return null;
-  const lines = orderItems(order.items);
+  const lines = orderItems(order.items).filter((l) => !l.gift);
   const products = await prisma.product.findMany({ where: { slug: { in: lines.map((l) => l.slug) }, active: true } });
   const out = [];
   for (const l of lines) {

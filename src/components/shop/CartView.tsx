@@ -10,7 +10,7 @@ import { ProductArt } from "./ProductArt";
 import { checkout } from "@/app/shop/actions";
 import { Icon } from "@/components/Icon";
 import { formatMoneyFromCents, formatWholeDollars, cn } from "@/lib/utils";
-import { BRAND, SHIPPING } from "@/lib/brand";
+import { BRAND, GIFT, SHIPPING, giftEarned } from "@/lib/brand";
 import { getTier, pointsFor, type TierId } from "@/lib/loyalty-rules";
 import { trackAddToCart, trackInitiateCheckout } from "@/lib/pixels";
 
@@ -227,6 +227,14 @@ export function CartView({
                 </Link>
               </>
             )}
+          </p>
+          <p className={cn("mt-3 rounded-2xl px-4 py-3 text-[0.85rem]", giftEarned(cart.subtotalCents) ? "bg-terra/10 text-terra" : "bg-warm-white text-sage")}>
+            {giftEarned(cart.subtotalCents)
+              ? t("gift.earned", { gift: locale === "fr" ? "un chouchou en satin" : "a satin scrunchie" })
+              : t("gift.away", {
+                  amount: formatMoneyFromCents(GIFT.thresholdCents - cart.subtotalCents, locale),
+                  gift: locale === "fr" ? "un chouchou en satin" : "a satin scrunchie",
+                })}
           </p>
           <p className="mt-2 text-[0.8rem] text-ink-faint">{t("shop.taxNote")}</p>
           {error && (

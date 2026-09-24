@@ -4,7 +4,7 @@ import { headers } from "next/headers";
 import { prisma } from "@/lib/prisma";
 import { getStripe } from "@/lib/stripe";
 import { validateCart, type CartLineInput } from "@/lib/shop";
-import { BRAND, SHIPPING } from "@/lib/brand";
+import { BRAND, GIFT, SHIPPING, giftEarned } from "@/lib/brand";
 import { normalizeLocale } from "@/i18n/messages";
 import { currentMemberTier } from "@/lib/account";
 import { openDrop } from "@/lib/drops";
@@ -49,6 +49,25 @@ export async function checkout(
 
   // Convoy: the customer accepts a shared dispatch date, we drop the shipping fee.
   const drop = opts.convoy === true ? await openDrop() : null;
+
+  // Gift with purchase: a $0 line so fulfilment ships it and the customer sees it on the receipt.
+  const giftProduct = giftEarned(validated.subtotalCents)
+    ? await prisma.product.findUnique({ where: { slug: GIFT.slug }, select: { id: true } }).catch(() => null)
+    : null;
+  const giftItem = giftProduct
+    ? {
+        productId: giftProduct.id,
+        slug: GIFT.slug,
+        nameFr: GIFT.nameFr,
+        nameEn: GIFT.nameEn,
+        priceCents: 0,
+        qty: 1,
+        options: { Couleur: "Champagne" },
+        optionsEn: { Colour: "Champagne" },
+        selected: { Colour: "Champagne" },
+        gift: true,
+      }
+    : null;
   const shippingCents = drop ? 0 : validated.shippingCents;
   const totalCents = validated.subtotalCents + shippingCents;
 
@@ -70,7 +89,7 @@ export async function checkout(
         options: l.options,
         optionsEn: l.optionsEn,
         selected: lines[i]?.selected ?? {},
-      })),
+      })).concat(giftItem ? [giftItem] : []),
       subtotalCents: validated.subtotalCents,
       shippingCents,
       totalCents,
@@ -122,7 +141,20 @@ export async function checkout(
           },
         },
       ],
-      line_items: validated.lines.map((l) => {
+      line_items: [
+        ...(giftItem
+          ? [
+              {
+                quantity: 1,
+                price_data: {
+                  currency: "cad" as const,
+                  unit_amount: 0,
+                  product_data: { name: locale === "fr" ? GIFT.nameFr : GIFT.nameEn, description: locale === "fr" ? "Offert" : "On us" },
+                },
+              },
+            ]
+          : []),
+        ...validated.lines.map((l) => {
         const optStr = Object.values(locale === "fr" ? l.options : l.optionsEn).join(" · ");
         return {
           quantity: l.qty,
@@ -136,6 +168,7 @@ export async function checkout(
           },
         };
       }),
+      ],
       metadata: {
         orderId: order.id,
         reference: order.reference,

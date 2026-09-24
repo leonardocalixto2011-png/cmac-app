@@ -70,3 +70,20 @@ export function holidayCutoff(now: Date = new Date()): Date | null {
   if (now.getMonth() < 8 || now > cutoff) return null; // Sept 1 → cutoff
   return cutoff;
 }
+
+/**
+ * Gift with purchase: orders at or above the threshold get one satin scrunchie
+ * added at $0. It costs about $0.33 USD, it is visible in the cart before
+ * checkout, and it gives the "one more item" nudge a discount can't.
+ */
+export const GIFT = {
+  thresholdCents: 10000,
+  slug: "satin-scrunchie",
+  variant: "Champagne = CJTF106711602BY",
+  nameEn: "Satin scrunchie — our gift",
+  nameFr: "Chouchou en satin — notre cadeau",
+} as const;
+
+export function giftEarned(subtotalCents: number): boolean {
+  return subtotalCents >= GIFT.thresholdCents;
+}
