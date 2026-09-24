@@ -44,15 +44,20 @@ export default async function CollectionPage({ params }: { params: Promise<{ han
       <div className="wrap">
         {bands ? (
           <div className="flex flex-col gap-16">
+            <header className="mx-auto max-w-[68ch] text-center">
+              <span className="eyebrow">{t("shop.title")}</span>
+              <h1 className="mt-3 text-[clamp(2rem,1.5rem+2.4vw,3.2rem)]">{t(`coll.${handle}.t`)}</h1>
+              <p className="mt-4 text-[1.05rem] leading-relaxed text-ink-soft">{t(`coll.${handle}.d`)}</p>
+            </header>
             {bands
               .filter(([, list]) => list.length > 0)
-              .map(([key, list], i) => (
+              .map(([key, list]) => (
                 <ProductGrid
                   key={key}
                   products={list}
-                  title={i === 0 ? t(`coll.${handle}.t`) : t(`gifts.band.${key}`)}
-                  intro={i === 0 ? t(`coll.${handle}.d`) : t(`gifts.band.${key}D`)}
-                  eyebrow={i === 0 ? t("shop.title") : t(`gifts.band.${key}`)}
+                  title={t(`gifts.band.${key}`)}
+                  intro={t(`gifts.band.${key}D`)}
+                  eyebrow={t(`coll.${handle}.t`)}
                   showFilters={false}
                 />
               ))}
