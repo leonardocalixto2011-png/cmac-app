@@ -81,6 +81,27 @@ const INVENTED_COMPARE_AT: Record<string, number> = { "led-red-light-mask": 8999
  * badly next to the devices, where we are cheap. [slug, old price, new price] —
  * applied only while the row still holds the old price, so /admin edits win.
  */
+/** Rows that must carry the "gift" tag (the /collections/gifts page reads it). Added if missing, never removed. */
+const GIFT_TAGGED = [
+  "set-full-ritual",
+  "set-7am-reset",
+  "set-midnight-glow",
+  "set-sweater-weather",
+  "set-pink-pop",
+  "set-carry-on-glow",
+  "set-bestie-duo",
+  "set-between-appointments",
+  "set-pedi-night",
+  "set-mani-pedi",
+  "set-fall-basket",
+  "rose-gold-manicure-kit",
+  "satin-beauty-sleep-set",
+];
+
+function addGiftTag(slug: string, tags: string[]): string[] | null {
+  return GIFT_TAGGED.includes(slug) && !tags.includes("gift") ? [...tags, "gift"] : null;
+}
+
 const PRICE_REVIEW: [string, number, number][] = [
   ["satin-scrunchie", 1599, 1299],
   ["spa-headband", 1699, 1299],
@@ -798,7 +819,7 @@ const SETS: SeedSet[] = [
     taglineFr: "De l'oreiller à la porte en 5 minutes",
     priceCents: 7999,
     prevPriceCents: 7699,
-    tags: ["sets", "cool", "glow", "essentials"],
+    tags: ["sets", "cool", "glow", "essentials", "gift"],
     sortOrder: 21,
     hookEn:
       "<p><strong>For mornings that start with an alarm and end at the door.</strong> Commuters, 9-to-5ers, parents doing three things at once: this is the quickest way we know to look more awake before the coffee kicks in. A cold glide, a little warmth around the eyes, hair out of the way, done.</p>",
@@ -851,7 +872,7 @@ const SETS: SeedSet[] = [
         "puis l'ensemble beauté-sommeil en satin (masque, taie, chouchou, bandeau) pour l'extinction des feux."
       ]
     ],
-    tags: ["sets", "glow", "essentials"],
+    tags: ["sets", "glow", "essentials", "gift"],
     sortOrder: 22,
     hookEn:
       "<p><strong>For night owls who save the best part of the day for last.</strong> A soft sonic cleanse, ten minutes under the LED mask, then a satin-feel mask for lights out. It turns the end of the evening into a ritual instead of an afterthought.</p>",
@@ -904,7 +925,7 @@ const SETS: SeedSet[] = [
         "un bandeau tout doux, des bas moelleux en molleton et un masque effet satin pour l'extinction des feux."
       ]
     ],
-    tags: ["sets", "glow", "essentials", "fall", "limited"],
+    tags: ["sets", "glow", "essentials", "gift", "fall", "limited"],
     sortOrder: 23,
     hookEn:
       "<p><strong>Dark by 5 p.m.? Perfect.</strong> Our fall limited edition is made for long, cozy evenings: ten minutes under the LED mask, a slow scalp massage, a soft headband and a satin-feel mask for lights out. Available until November 30.</p>",
@@ -1012,7 +1033,7 @@ const SETS: SeedSet[] = [
         "et un bandeau qui se plie en rien, plus un chouchou en satin, le tout zippé dans un organisateur de voyage : une petite trousse"
       ]
     ],
-    tags: ["sets", "glow", "essentials"],
+    tags: ["sets", "glow", "essentials", "gift"],
     sortOrder: 25,
     hookEn:
       "<p><strong>For red-eyes, road trips and hotel rooms with thin curtains.</strong> A pocket-size eye wand, a satin-feel sleep mask and a headband that folds to nothing: a small kit that fits in a carry-on and makes any seat or hotel bed feel a bit more like home. Made with flight attendants and frequent travellers in mind.</p>",
@@ -1422,6 +1443,8 @@ async function seedSets(reset: boolean) {
       continue;
     }
     const update: Prisma.ProductUpdateInput = { sortOrder: s.sortOrder };
+    const giftTags = addGiftTag(s.slug, existing.tags);
+    if (giftTags) update.tags = giftTags;
     const notes: string[] = [];
     if (reset) Object.assign(update, copy, commerce, { options: [] });
     else {
@@ -1497,6 +1520,11 @@ async function main() {
 
     const update: Prisma.ProductUpdateInput = { sortOrder: p.sortOrder };
     const notes: string[] = [];
+    const giftTags = addGiftTag(p.slug, existing.tags);
+    if (giftTags) {
+      update.tags = giftTags;
+      notes.push("gift tag");
+    }
     const review = PRICE_REVIEW.find(([slug, from]) => slug === p.slug && existing.priceCents === from);
     if (review) {
       update.priceCents = review[2];

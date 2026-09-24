@@ -31,6 +31,48 @@ const FREE_FR = `${SHIPPING.freeThresholdCents / 100} $ CA`;
 export const JOURNAL: Record<Locale, Article[]> = {
   en: [
     {
+      slug: "when-to-order-christmas-gifts-canada",
+      updated: "2026-09-24",
+      title: "When to order beauty gifts in Canada so they arrive before Christmas",
+      answer:
+        "For a shop that ships from an overseas warehouse, order by late November. At CMAC Beauty the last safe date is shown on the homepage banner and is calculated from our longest estimate (3–5 business days of processing plus 7–15 business days in transit, about 2–4 weeks in total).",
+      intro:
+        "Every December, the same thing happens: the gift was perfect, the delivery was late. Here is how to work backwards from December 24 instead of hoping.",
+      blocks: [
+        {
+          h: "Count backwards, not forwards",
+          table: {
+            head: ["Where it ships from", "Realistic transit", "Order by"],
+            rows: [
+              ["Overseas warehouse (most online beauty tools, including ours)", "2–4 weeks door to door", "Late November"],
+              ["Canadian warehouse, standard post", "3–8 business days", "Around December 12–15"],
+              ["Canadian warehouse, express", "1–3 business days", "Around December 19–20"],
+            ],
+          },
+        },
+        {
+          h: "Three traps",
+          ul: [
+            "\"Ships in 24 h\" is not \"arrives in 24 h\". Processing and transit are two different clocks; a shop that shows only one is hiding the other.",
+            "Peak season slows everything: carriers add days in the first half of December, and customs adds unpredictable ones.",
+            "A shop with no visible deadline has decided the problem is yours. Ours is on the homepage from the fall, and it disappears by itself once it has passed.",
+          ],
+        },
+        {
+          h: "If you ordered too late",
+          p: [
+            "Print the order confirmation and put it in the card. It is not elegant, but it beats an empty box and an awkward silence. Most people are fine with \"it's on its way\" when they can see what is coming.",
+          ],
+        },
+      ],
+      faq: [
+        { q: "What is CMAC's exact Christmas deadline?", a: "It is shown in the banner at the top of cmacbeauty.ca during the fall, calculated from our longest delivery estimate. In 2026 it falls in the last week of November." },
+        { q: "Can I pay for faster shipping?", a: "No. We offer one shipping speed and we say so plainly, rather than selling an express option we cannot guarantee from an overseas warehouse." },
+        { q: "What if it arrives damaged?", a: "Write to us within 7 days with a photo and we replace it or refund it. Our phone number and address are on the Contact page." },
+      ],
+      related: ["set-fall-basket", "set-bestie-duo", "set-pink-pop", "set-7am-reset"],
+    },
+    {
       slug: "led-mask-canada-price-guide",
       updated: "2026-09-22",
       title: "At-home LED masks in Canada: what you actually get at each price",
@@ -172,6 +214,48 @@ export const JOURNAL: Record<Locale, Article[]> = {
     },
   ],
   fr: [
+    {
+      slug: "when-to-order-christmas-gifts-canada",
+      updated: "2026-09-24",
+      title: "Quand commander ses cadeaux beauté au Canada pour les recevoir avant Noël",
+      answer:
+        "Pour une boutique qui expédie d'un entrepôt outre-mer, commandez d'ici la fin novembre. Chez CMAC Beauty, la date limite s'affiche dans la bannière de la page d'accueil et se calcule à partir de notre estimation la plus longue (3 à 5 jours ouvrables de préparation, puis 7 à 15 jours ouvrables de transport, soit environ 2 à 4 semaines).",
+      intro:
+        "Chaque décembre, la même histoire : le cadeau était parfait, la livraison était en retard. Voici comment calculer à rebours à partir du 24 décembre, au lieu d'espérer.",
+      blocks: [
+        {
+          h: "Compter à rebours",
+          table: {
+            head: ["D'où part le colis", "Transport réaliste", "Commander d'ici"],
+            rows: [
+              ["Entrepôt outre-mer (la plupart des outils de beauté en ligne, dont les nôtres)", "2 à 4 semaines porte à porte", "Fin novembre"],
+              ["Entrepôt canadien, poste régulière", "3 à 8 jours ouvrables", "Vers le 12 au 15 décembre"],
+              ["Entrepôt canadien, express", "1 à 3 jours ouvrables", "Vers le 19 au 20 décembre"],
+            ],
+          },
+        },
+        {
+          h: "Trois pièges",
+          ul: [
+            "« Expédié en 24 h » n'est pas « livré en 24 h ». La préparation et le transport sont deux horloges différentes ; une boutique qui n'en affiche qu'une cache l'autre.",
+            "La haute saison ralentit tout : les transporteurs ajoutent des jours dans la première moitié de décembre, et la douane en ajoute d'imprévisibles.",
+            "Une boutique sans date limite affichée a décidé que le problème était le vôtre. La nôtre est sur la page d'accueil dès l'automne, et elle disparaît d'elle-même une fois passée.",
+          ],
+        },
+        {
+          h: "Si vous avez commandé trop tard",
+          p: [
+            "Imprimez la confirmation de commande et glissez-la dans la carte. Ce n'est pas élégant, mais c'est mieux qu'une boîte vide et un silence gênant. La plupart des gens acceptent très bien « c'est en route » quand ils voient ce qui s'en vient.",
+          ],
+        },
+      ],
+      faq: [
+        { q: "Quelle est la date limite exacte chez CMAC ?", a: "Elle s'affiche dans la bannière en haut de cmacbeauty.ca pendant l'automne, calculée à partir de notre estimation de livraison la plus longue. En 2026, elle tombe dans la dernière semaine de novembre." },
+        { q: "Puis-je payer pour une livraison plus rapide ?", a: "Non. Nous offrons une seule vitesse de livraison et nous le disons clairement, plutôt que de vendre une option express que nous ne pourrions pas garantir depuis un entrepôt outre-mer." },
+        { q: "Et si le colis arrive endommagé ?", a: "Écrivez-nous dans les 7 jours avec une photo : nous remplaçons ou remboursons. Notre numéro de téléphone et notre adresse sont sur la page Contact." },
+      ],
+      related: ["set-fall-basket", "set-bestie-duo", "set-pink-pop", "set-7am-reset"],
+    },
     {
       slug: "led-mask-canada-price-guide",
       updated: "2026-09-22",
