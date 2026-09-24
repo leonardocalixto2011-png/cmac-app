@@ -254,9 +254,9 @@ export function CartView({
                 </span>
                 <span className="mt-1 block">
                   {t("convoy.cartBody", {
-                    date: new Date(convoy.closesAt).toLocaleDateString(locale === "fr" ? "fr-CA" : "en-CA", { month: "long", day: "numeric" }),
-                    from: new Date(convoy.deliveryFrom).toLocaleDateString(locale === "fr" ? "fr-CA" : "en-CA", { month: "long", day: "numeric" }),
-                    to: new Date(convoy.deliveryTo).toLocaleDateString(locale === "fr" ? "fr-CA" : "en-CA", { month: "long", day: "numeric" }),
+                    date: new Date(convoy.closesAt).toLocaleDateString(locale === "fr" ? "fr-CA" : "en-CA", { month: "long", day: "numeric", timeZone: "America/Toronto" }),
+                    from: new Date(convoy.deliveryFrom).toLocaleDateString(locale === "fr" ? "fr-CA" : "en-CA", { month: "long", day: "numeric", timeZone: "America/Toronto" }),
+                    to: new Date(convoy.deliveryTo).toLocaleDateString(locale === "fr" ? "fr-CA" : "en-CA", { month: "long", day: "numeric", timeZone: "America/Toronto" }),
                   })}
                 </span>
                 <Link href="/convoi" className="mt-1 inline-block text-[0.8rem] font-semibold text-terra underline underline-offset-2">

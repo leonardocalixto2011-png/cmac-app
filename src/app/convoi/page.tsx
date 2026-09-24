@@ -72,7 +72,8 @@ export default async function ConvoyPage() {
   const fr = locale === "fr";
   const c = COPY[locale];
   const drop = await openDrop().catch(() => null);
-  const date = (d: Date) => d.toLocaleDateString(fr ? "fr-CA" : "en-CA", { month: "long", day: "numeric" });
+  // Always Montréal time: a convoy closes at 23:59 local, and UTC would show the next day.
+  const date = (d: Date) => d.toLocaleDateString(fr ? "fr-CA" : "en-CA", { month: "long", day: "numeric", timeZone: "America/Toronto" });
   const fee = formatMoneyFromCents(SHIPPING.flatCents, locale);
 
   const faq = fr
