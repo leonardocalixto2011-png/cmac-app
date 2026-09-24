@@ -6,6 +6,7 @@ import { serverLocale } from "@/i18n/server";
 import { translate } from "@/i18n/messages";
 import { CartProvider } from "@/components/shop/CartProvider";
 import { Nav } from "@/components/Nav";
+import { PromoBar } from "@/components/PromoBar";
 import { Footer } from "@/components/Footer";
 import { Motion } from "@/components/Motion";
 import { NewsletterPopup } from "@/components/NewsletterPopup";
@@ -72,6 +73,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             >
               {translate(locale, "nav.skip")}
             </a>
+            <PromoBar />
             <Nav signedIn={viewer.signedIn} />
             <main id="main" className="flex-1">
               {children}
