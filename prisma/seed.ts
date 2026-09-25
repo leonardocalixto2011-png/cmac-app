@@ -43,6 +43,10 @@ const FOOTER_HYGIENE_FR = "<p><em>Retours sous 30 jours pour les articles non ou
 const OSS = "https://oss-cf.cjdropshipping.com/product";
 const CF = "https://cf.cjdropshipping.com";
 const CJ = "https://cjdropshipping.com/product";
+/** Second supplier (2026-09-25): AliExpress listings that ship to Canada, ordered by hand. */
+const AE = "https://www.aliexpress.com/item";
+/** Product photos we host ourselves (downloaded from the supplier, resized to 1400 px). */
+const SITE = "https://cmacbeauty.ca/products";
 
 type OptionValue = { value: string; labelEn: string; labelFr: string };
 type Option = { nameEn: string; nameFr: string; values: OptionValue[] };
@@ -711,6 +715,79 @@ const PRODUCTS: SeedProduct[] = [
     supplierSku: "CJYD196463901AZ",
     shippingNote:
       "CJ Electric Foot Callus Remover, Colour Pink + Electrical outlet No (USB) = CJYD196463901AZ, $9.61 USD, 295 g, 633 lists, 10,506 in stock. Shipping From: China. CJPacket JYSP Sensitive to CA ~$6.75 alone (total $16.36 USD landed). 8 supplier videos on the CJ page. Don't use the CY-02 lifestyle photo (different model).",
+  },
+  // -------------------------------------------------------------------------
+  // Cozy home (2026-09-25): second supplier. These are AliExpress listings that
+  // ship to Canada with free shipping in about 1-2 weeks; ordered by hand on the
+  // same day as the CJ order. Prices below are CAD landed (item + shipping).
+  // -------------------------------------------------------------------------
+  {
+    slug: "hooded-sherpa-blanket",
+    nameEn: "Hooded Sherpa Blanket",
+    nameFr: "Couverture sherpa à capuchon",
+    tagline: "A blanket you can wear, for mask nights and cold floors",
+    taglineFr: "Une couverture qui se porte, pour les soirées masque et les planchers froids",
+    priceCents: 7999,
+    compareAtCents: null,
+    tags: ["cozy", "fall", "gift", "new", "home"],
+    sortOrder: 30,
+    descriptionEn: `<p><strong>The blanket that comes with you.</strong> A shaggy sherpa hooded blanket with sleeves and a big front pocket, long enough to cover your knees when you sit. Put it on for the LED mask, the movie, the 6 a.m. coffee.</p><h3>Details</h3><ul><li>One size, about 120 cm long: fits most adults, oversized on purpose.</li><li>Shaggy sherpa outside, soft fleece inside, ribbed cuffs.</li><li>Fibre content: polyester, as stated by the supplier.</li><li>Wash cold on gentle, tumble dry low or air-dry. Give it a shake: shaggy fabric sheds a little on the first wash.</li></ul><p>Not a branded product: made for us by a textile supplier, without a logo.</p>${FOOTER_HYGIENE_EN}`,
+    descriptionFr: `<p><strong>La couverture qui vous suit partout.</strong> Une couverture sherpa à capuchon, avec manches et grande poche avant, assez longue pour couvrir les genoux quand vous êtes assise. Vous l'enfilez pour le masque LED, le film, le café de 6 h.</p><h3>Détails</h3><ul><li>Taille unique, environ 120 cm de long : convient à la plupart des adultes, volontairement surdimensionnée.</li><li>Sherpa à poils longs à l'extérieur, molleton doux à l'intérieur, poignets côtelés.</li><li>Composition : polyester, selon le fournisseur.</li><li>Lavage à l'eau froide, cycle délicat ; séchage à basse température ou à l'air. Secouez-la : un tissu à poils longs perd un peu au premier lavage.</li></ul><p>Ce n'est pas un produit de marque : fabriqué pour nous par un fournisseur textile, sans logo.</p>${FOOTER_HYGIENE_FR}`,
+    options: [
+      colour([
+        { value: "Khaki", labelEn: "Khaki", labelFr: "Kaki" },
+        { value: "Light Brown", labelEn: "Light brown", labelFr: "Brun pâle" },
+        { value: "Light Grey", labelEn: "Light grey", labelFr: "Gris pâle" },
+        { value: "Grey", labelEn: "Grey", labelFr: "Gris" },
+        { value: "Dark Grey", labelEn: "Dark grey", labelFr: "Gris foncé" },
+        { value: "White", labelEn: "White", labelFr: "Blanc" },
+        { value: "Black", labelEn: "Black", labelFr: "Noir" },
+        { value: "Pink", labelEn: "Pink", labelFr: "Rose" },
+      ]),
+    ],
+    images: [1, 2, 3, 4, 5].map((n) => `${SITE}/hooded-sherpa-blanket-${n}.jpg`),
+    supplierUrl: `${AE}/1005013053845657.html?shipCountry=CA&currency=CAD`,
+    supplierSku: "AE-1005013053845657",
+    shippingNote:
+      "AliExpress (not CJ). Order the variant Colour = as chosen, Size = Length 120cm. C$51.68 incl. free shipping to Canada on 2026-09-25, delivery quoted Oct 3-13 (about 1-2 weeks), 800+ sold. Landed C$51.68 → 35% margin at 79.99. Ship to the customer's address directly; choose 'no invoice / gift' if offered.",
+  },
+  {
+    slug: "pumpkin-velvet-cushion-cover",
+    nameEn: "Pumpkin Velvet Cushion Cover, 18 × 18",
+    nameFr: "Housse de coussin citrouille en velours, 18 × 18",
+    tagline: "Embroidered velvet for the sofa, October to Thanksgiving",
+    taglineFr: "Du velours brodé pour le canapé, d'octobre à l'Action de grâce",
+    priceCents: 1799,
+    compareAtCents: null,
+    tags: ["cozy", "fall", "gift", "new", "home"],
+    sortOrder: 31,
+    descriptionEn: `<p><strong>The easiest way to make a room feel like October.</strong> A soft velvet cover with an embroidered pumpkin, in warm tones that go with wood, cream and rust. Slip it over a cushion you already own.</p><h3>Details</h3><ul><li>Cover only, 45 × 45 cm (18 × 18 in). Fits a standard 18-inch insert; no insert included.</li><li>Hidden zipper. Embroidered front, plain velvet back.</li><li>Fibre content: polyester velvet, as stated by the supplier.</li><li>Wash cold on gentle, inside out; air-dry.</li></ul>${FOOTER_HYGIENE_EN}`,
+    descriptionFr: `<p><strong>La façon la plus simple de donner un air d'octobre à une pièce.</strong> Une housse en velours doux, avec une citrouille brodée, dans des tons chauds qui s'accordent au bois, au crème et à la rouille. Elle se glisse sur un coussin que vous avez déjà.</p><h3>Détails</h3><ul><li>Housse seulement, 45 × 45 cm (18 × 18 po). Pour un coussin standard de 18 po ; coussin non inclus.</li><li>Fermeture éclair invisible. Devant brodé, dos en velours uni.</li><li>Composition : velours de polyester, selon le fournisseur.</li><li>Lavage à l'eau froide, cycle délicat, à l'envers ; séchage à l'air.</li></ul>${FOOTER_HYGIENE_FR}`,
+    options: [],
+    images: [1, 2, 3, 4].map((n) => `${SITE}/pumpkin-velvet-cushion-cover-${n}.jpg`),
+    supplierUrl: `${AE}/1005009784126272.html?shipCountry=CA&currency=CAD`,
+    supplierSku: "AE-1005009784126272",
+    shippingNote:
+      "AliExpress (not CJ). Order the variant '45X45cm Pumpkin' (NOT the 30x50 'welcome' one). C$9.30 incl. free shipping to Canada on 2026-09-25, delivery quoted Oct 4-9. Landed C$9.30 → 48% margin at 17.99.",
+  },
+  {
+    slug: "velvet-pumpkin-set",
+    nameEn: "Velvet Pumpkins, Set of 30",
+    nameFr: "Citrouilles en velours, ensemble de 30",
+    tagline: "A bowl of little pumpkins for the table, the mantel, the tray",
+    taglineFr: "Un bol de petites citrouilles pour la table, le manteau de cheminée, le plateau",
+    priceCents: 2499,
+    compareAtCents: null,
+    tags: ["cozy", "fall", "gift", "new", "home"],
+    sortOrder: 32,
+    descriptionEn: `<p><strong>Fall decor you set out in two minutes and keep for years.</strong> Thirty small velvet pumpkins in an autumn mix of creams, rusts and greens, with stems. Fill a bowl, line a shelf, tuck a few into a gift basket.</p><h3>Details</h3><ul><li>30 pieces in assorted colours and sizes, as pictured (about 3-5 cm each).</li><li>Foam core wrapped in velvet; decorative only, not a toy. Keep away from children under 3 (small parts) and from candles.</li><li>Wipe with a dry cloth. Store flat in the box between seasons.</li></ul>${FOOTER_HYGIENE_EN}`,
+    descriptionFr: `<p><strong>Un décor d'automne qui s'installe en deux minutes et se garde des années.</strong> Trente petites citrouilles en velours, dans un mélange automnal de crème, de rouille et de vert, avec leur tige. Remplissez un bol, garnissez une tablette, glissez-en quelques-unes dans un panier-cadeau.</p><h3>Détails</h3><ul><li>30 pièces, couleurs et tailles assorties, comme sur la photo (environ 3 à 5 cm chacune).</li><li>Cœur en mousse recouvert de velours ; décoratif seulement, pas un jouet. Tenir loin des enfants de moins de 3 ans (petites pièces) et des bougies.</li><li>Essuyer avec un linge sec. Ranger à plat dans la boîte entre les saisons.</li></ul>${FOOTER_HYGIENE_FR}`,
+    options: [],
+    images: [1, 2, 3, 4].map((n) => `${SITE}/velvet-pumpkin-set-${n}.jpg`),
+    supplierUrl: `${AE}/1005012975458134.html?shipCountry=CA&currency=CAD`,
+    supplierSku: "AE-1005012975458134",
+    shippingNote:
+      "AliExpress (not CJ). Order the variant '30pcs-D' (the default, matches the photos). C$8.62 incl. free shipping to Canada on 2026-09-25, delivery quoted Oct 3-8. Landed C$8.62 → 65% margin at 24.99. Replaces the flocked pumpkin candle jar idea: no candle (fire risk + shipping restrictions).",
   },
 ];
 
