@@ -99,6 +99,11 @@ const GIFT_TAGGED = [
   "set-pedi-night",
   "set-mani-pedi",
   "set-fall-basket",
+  "set-christmas-glow",
+  "set-cozy-night",
+  "set-for-mom",
+  "set-first-glow",
+  "set-silky-hair",
   "rose-gold-manicure-kit",
   "satin-beauty-sleep-set",
 ];
@@ -874,6 +879,11 @@ const PARCELS_FR = "Tout est commandé et expédié ensemble, normalement en un 
 const hygieneEn = (items: string) => `Hygiene items (${items}) are returnable only if unopened.`;
 const hygieneFr = (items: string) => `Articles d'hygiène (${items}) : retours acceptés seulement s'ils sont non ouverts.`;
 
+const XMAS_EN = "Christmas edition: order by November 26 for delivery before the 24th (2–4 weeks door to door). On sale until December 20, or while the colours last.";
+const XMAS_FR = "Édition de Noël : commandez avant le 26 novembre pour une livraison avant le 24 (2 à 4 semaines porte à porte). En vente jusqu'au 20 décembre, ou jusqu'à épuisement des couleurs.";
+const COLOURS_EN = "Colours picked by us to suit the box; the photos show each piece in its standard colour, so the shades you receive may differ.";
+const COLOURS_FR = "Couleurs choisies par nous pour s'agencer au coffret ; les photos montrent chaque pièce dans sa couleur standard, les teintes reçues peuvent différer.";
+
 const SETS: SeedSet[] = [
   {
     slug: "set-full-ritual",
@@ -1409,6 +1419,177 @@ const SETS: SeedSet[] = [
       hygieneFr("bas, bandeau, chouchou, masque de nuit, houppette"),
       PARCELS_FR,
     ],
+  },
+  // -------------------------------------------------------------------------
+  // Christmas 2026 (added 2026-09-25). Deactivate in /admin after Dec 20.
+  // -------------------------------------------------------------------------
+  {
+    slug: "set-christmas-glow",
+    nameEn: "The Christmas Glow Box",
+    nameFr: "Le coffret Éclat de Noël",
+    tagline: "The LED mask, wrapped for the tree. Christmas edition",
+    taglineFr: "Le masque LED, emballé pour le sapin. Édition de Noël",
+    priceCents: 8999,
+    prevPriceCents: 8999,
+    tags: ["sets", "glow", "christmas", "gift", "limited", "new"],
+    sortOrder: 40,
+    hookEn:
+      "<p><strong>The gift that gets used every night in January.</strong> Our LED Red Light Mask, with the three things that turn ten minutes of light into a ritual: a satin-feel sleep mask for after, a spa headband to keep hair back, a satin scrunchie for the ponytail. One box, one parcel, nothing else to buy.</p>",
+    hookFr:
+      "<p><strong>Le cadeau qui sert tous les soirs de janvier.</strong> Notre Masque LED lumière rouge, avec les trois choses qui font de dix minutes de lumière un vrai rituel : un masque de nuit effet satin pour après, un bandeau spa pour retenir les cheveux, un chouchou en satin pour la queue de cheval. Une boîte, un colis, rien d'autre à acheter.</p>",
+    routineEn: [
+      "Headband on, hair up with the scrunchie.",
+      "Cleanse, dry, fit the LED mask: 10 minutes, eyes closed.",
+      "Serum and moisturizer as usual.",
+      "Sleep mask on. That's the whole thing.",
+    ],
+    routineFr: [
+      "Bandeau en place, cheveux attachés avec le chouchou.",
+      "Nettoyez, séchez, ajustez le masque LED : 10 minutes, yeux fermés.",
+      "Sérum et hydratant comme d'habitude.",
+      "Masque de nuit sur les yeux. C'est tout.",
+    ],
+    goodEn: [
+      XMAS_EN,
+      COLOURS_EN,
+      "The LED mask is a cosmetic at-home device, not a medical device. Not for use if you are pregnant, photosensitive, on light-sensitizing medication, or have an active skin condition. Ask your doctor if unsure.",
+      hygieneEn("headband, scrunchie, sleep mask"),
+      PARCELS_EN,
+    ],
+    goodFr: [
+      XMAS_FR,
+      COLOURS_FR,
+      "Le masque LED est un appareil cosmétique à usage domestique, pas un dispositif médical. À éviter si vous êtes enceinte, photosensible, sous médication photosensibilisante, ou si vous avez une affection cutanée active. En cas de doute, consultez votre médecin.",
+      hygieneFr("bandeau, chouchou, masque de nuit"),
+      PARCELS_FR,
+    ],
+  },
+  {
+    slug: "set-cozy-night",
+    nameEn: "The Cozy Night Box",
+    nameFr: "La boîte Soirée douillette",
+    tagline: "Everything soft, nothing to charge. Christmas edition",
+    taglineFr: "Tout ce qui est doux, rien à recharger. Édition de Noël",
+    priceCents: 7499,
+    prevPriceCents: 7499,
+    tags: ["sets", "essentials", "cozy", "christmas", "gift", "limited", "new"],
+    sortOrder: 41,
+    hygieneOnly: true,
+    hookEn:
+      "<p><strong>For the person who says they don't need anything.</strong> A facial ice roller for puffy mornings, a satin-feel sleep mask, fluffy fleece socks, a satin scrunchie and a reusable cleansing puff. No device, no learning curve, no wrong shade: it just makes the evening nicer.</p>",
+    hookFr:
+      "<p><strong>Pour celle qui dit qu'elle n'a besoin de rien.</strong> Un rouleau de glace pour les matins gonflés, un masque de nuit effet satin, des bas moelleux en molleton, un chouchou en satin et une houppette démaquillante réutilisable. Aucun appareil, aucun apprentissage, aucune teinte à deviner : ça rend juste la soirée plus douce.</p>",
+    routineEn: [
+      "Ice roller from the freezer, two minutes across cheeks and under the eyes.",
+      "Cleanse with the reusable puff.",
+      "Socks on, hair up with the scrunchie.",
+      "Sleep mask on for a proper dark room.",
+    ],
+    routineFr: [
+      "Rouleau de glace sorti du congélateur, deux minutes sur les joues et sous les yeux.",
+      "Nettoyez avec la houppette réutilisable.",
+      "Bas enfilés, cheveux attachés avec le chouchou.",
+      "Masque de nuit sur les yeux, pour une vraie noirceur.",
+    ],
+    goodEn: [XMAS_EN, COLOURS_EN, "No electronics inside: nothing to charge, easy to mail as a gift.", hygieneEn("socks, scrunchie, sleep mask, cleansing puff"), PARCELS_EN],
+    goodFr: [XMAS_FR, COLOURS_FR, "Aucun appareil électronique : rien à recharger, facile à poster en cadeau.", hygieneFr("bas, chouchou, masque de nuit, houppette"), PARCELS_FR],
+  },
+  {
+    slug: "set-for-mom",
+    nameEn: "For Mom",
+    nameFr: "Pour maman",
+    tagline: "The lift device she wouldn't buy herself. Christmas edition",
+    taglineFr: "L'appareil lift qu'elle ne s'achèterait pas. Édition de Noël",
+    priceCents: 12499,
+    prevPriceCents: 12499,
+    tags: ["sets", "sculpt", "christmas", "gift", "limited", "new"],
+    sortOrder: 42,
+    hookEn:
+      "<p><strong>The one she'd never buy for herself.</strong> Our Microcurrent Facial Lift Device, with a facial ice roller for the mornings, a satin pillowcase for the nights, and a spa headband for both. Five minutes a day, at home, no appointment.</p>",
+    hookFr:
+      "<p><strong>Celui qu'elle ne s'achèterait jamais elle-même.</strong> Notre Appareil microcourant effet lift, avec un rouleau de glace pour les matins, une taie d'oreiller en satin pour les nuits, et un bandeau spa pour les deux. Cinq minutes par jour, à la maison, sans rendez-vous.</p>",
+    routineEn: [
+      "Morning: ice roller from the freezer, two minutes.",
+      "Evening: headband on, conductive gel, five minutes of microcurrent along the jaw and cheekbones.",
+      "Moisturize, then the satin pillowcase does the rest.",
+    ],
+    routineFr: [
+      "Matin : rouleau de glace sorti du congélateur, deux minutes.",
+      "Soir : bandeau en place, gel conducteur, cinq minutes de microcourant le long de la mâchoire et des pommettes.",
+      "Hydratez, puis la taie en satin fait le reste.",
+    ],
+    goodEn: [
+      XMAS_EN,
+      COLOURS_EN,
+      "Cosmetic at-home device, not a medical device. Do not use the microcurrent device if you are pregnant, have a pacemaker or implanted electronic device, epilepsy, metal implants in the face, or an active skin condition. Ask your doctor if unsure.",
+      "The pillowcase is polyester satin, not silk.",
+      hygieneEn("pillowcase, headband"),
+      PARCELS_EN,
+    ],
+    goodFr: [
+      XMAS_FR,
+      COLOURS_FR,
+      "Appareil cosmétique à usage domestique, pas un dispositif médical. Ne pas utiliser l'appareil microcourant si vous êtes enceinte, portez un stimulateur cardiaque ou un dispositif électronique implanté, souffrez d'épilepsie, avez des implants métalliques au visage ou une affection cutanée active. En cas de doute, consultez votre médecin.",
+      "La taie est en satin de polyester, pas en soie.",
+      hygieneFr("taie, bandeau"),
+      PARCELS_FR,
+    ],
+  },
+  {
+    slug: "set-first-glow",
+    nameEn: "First Glow Kit",
+    nameFr: "Trousse Premier éclat",
+    tagline: "A first real routine, for a teen or a student. Christmas edition",
+    taglineFr: "Une première vraie routine, pour une ado ou une étudiante. Édition de Noël",
+    priceCents: 7999,
+    prevPriceCents: 7999,
+    tags: ["sets", "essentials", "christmas", "gift", "limited", "new"],
+    sortOrder: 43,
+    hookEn:
+      "<p><strong>Cleanse properly, sleep properly.</strong> A sonic silicone cleansing brush that's gentle enough for every day, a reusable cleansing puff, a satin-feel sleep mask, a spa headband and a satin scrunchie. Simple to use, hard to get wrong, nice enough to show friends.</p>",
+    hookFr:
+      "<p><strong>Bien nettoyer, bien dormir.</strong> Une brosse nettoyante sonique en silicone assez douce pour tous les jours, une houppette démaquillante réutilisable, un masque de nuit effet satin, un bandeau spa et un chouchou en satin. Simple à utiliser, difficile à rater, assez joli pour le montrer aux amies.</p>",
+    routineEn: [
+      "Headband on, hair up with the scrunchie.",
+      "Wet face, a little cleanser, one minute with the sonic brush.",
+      "Wipe with the reusable puff, rinse, moisturize.",
+      "Sleep mask on.",
+    ],
+    routineFr: [
+      "Bandeau en place, cheveux attachés avec le chouchou.",
+      "Visage mouillé, un peu de nettoyant, une minute avec la brosse sonique.",
+      "Essuyez avec la houppette réutilisable, rincez, hydratez.",
+      "Masque de nuit sur les yeux.",
+    ],
+    goodEn: [XMAS_EN, COLOURS_EN, "The cleansing brush is a cosmetic at-home device, USB rechargeable, water-resistant for the sink (not for the shower).", hygieneEn("puff, headband, scrunchie, sleep mask"), PARCELS_EN],
+    goodFr: [XMAS_FR, COLOURS_FR, "La brosse nettoyante est un appareil cosmétique à usage domestique, rechargeable par USB, résistante à l'eau pour le lavabo (pas pour la douche).", hygieneFr("houppette, bandeau, chouchou, masque de nuit"), PARCELS_FR],
+  },
+  {
+    slug: "set-silky-hair",
+    nameEn: "Silky Hair Box",
+    nameFr: "Coffret Cheveux soyeux",
+    tagline: "Satin for the pillow, a massager for wash day. Christmas edition",
+    taglineFr: "Du satin pour l'oreiller, un masseur pour le jour du shampoing. Édition de Noël",
+    priceCents: 6299,
+    prevPriceCents: 6299,
+    tags: ["sets", "hair", "christmas", "gift", "limited", "new"],
+    sortOrder: 44,
+    hookEn:
+      "<p><strong>For hair that gets tangled, pulled and dried too hot.</strong> A satin pillowcase and a satin scrunchie for less friction, an electric scalp massager for wash day, and a spa headband to keep everything out of the way. The hair gift that isn't a hair tool.</p>",
+    hookFr:
+      "<p><strong>Pour les cheveux qui s'emmêlent, qu'on tire et qu'on sèche trop chaud.</strong> Une taie d'oreiller en satin et un chouchou en satin pour moins de friction, un masseur électrique pour le jour du shampoing, et un bandeau spa pour tout garder hors du chemin. Le cadeau cheveux qui n'est pas un fer.</p>",
+    routineEn: [
+      "Wash day: scalp massager with your shampoo, two minutes.",
+      "Every night: hair up with the scrunchie, head on the satin pillowcase.",
+      "Mask night: headband on.",
+    ],
+    routineFr: [
+      "Jour du shampoing : masseur avec votre shampoing, deux minutes.",
+      "Chaque soir : cheveux attachés avec le chouchou, tête sur la taie en satin.",
+      "Soirée masque : bandeau en place.",
+    ],
+    goodEn: [XMAS_EN, COLOURS_EN, "The scalp massager is a cosmetic at-home device, USB rechargeable, waterproof for the shower. The pillowcase is polyester satin, not silk.", hygieneEn("pillowcase, scrunchie, headband"), PARCELS_EN],
+    goodFr: [XMAS_FR, COLOURS_FR, "Le masseur est un appareil cosmétique à usage domestique, rechargeable par USB, étanche pour la douche. La taie est en satin de polyester, pas en soie.", hygieneFr("taie, chouchou, bandeau"), PARCELS_FR],
   },
 ];
 
