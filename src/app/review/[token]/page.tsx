@@ -26,8 +26,8 @@ export default async function ReviewPage({
             <h1 className="mt-3 text-[clamp(2rem,1.6rem+2vw,3rem)]">{fr ? "Lien expiré ou invalide" : "This link isn't valid"}</h1>
             <p className="mt-3 text-ink-soft">
               {fr
-                ? "Ce lien d'avis ne correspond à aucune commande. Écrivez-nous à cmacbeauty.ca@outlook.com et nous vous enverrons un nouveau lien."
-                : "This review link doesn't match an order. Write to cmacbeauty.ca@outlook.com and we'll send you a new one."}
+                ? "Ce lien d'avis ne correspond à aucune commande. Écrivez-nous à bonjour@cmacbeauty.ca et nous vous enverrons un nouveau lien."
+                : "This review link doesn't match an order. Write to bonjour@cmacbeauty.ca and we'll send you a new one."}
             </p>
           </>
         ) : stop === "1" ? (

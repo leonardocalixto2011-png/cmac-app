@@ -13,7 +13,6 @@ export function integrationStatus() {
     { key: "stripe", label: "Stripe payments", env: "STRIPE_SECRET_KEY", ok: has("STRIPE_SECRET_KEY") },
     { key: "webhook", label: "Stripe webhook", env: "STRIPE_WEBHOOK_SECRET", ok: has("STRIPE_WEBHOOK_SECRET") },
     { key: "resend", label: "Resend email", env: "RESEND_API_KEY", ok: has("RESEND_API_KEY") },
-    { key: "from", label: "Sender address", env: "EMAIL_FROM", ok: has("EMAIL_FROM") },
     { key: "address", label: "Mailing address (CASL)", env: "BUSINESS_MAILING_ADDRESS", ok: has("BUSINESS_MAILING_ADDRESS") },
     { key: "cron", label: "Birthday cron", env: "CRON_SECRET", ok: has("CRON_SECRET") },
   ];

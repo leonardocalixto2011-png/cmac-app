@@ -49,8 +49,15 @@ export type SendInput = {
   headers?: Record<string, string>;
 };
 
+/**
+ * Sender shown to customers. Our domain is verified in Resend, so the default is
+ * the public address; EMAIL_FROM can override it only with another address on
+ * our domain (a resend.dev or third-party sender would be flagged by inboxes).
+ */
 export function emailFrom(): string {
-  return process.env.EMAIL_FROM || `${BRAND.name} <onboarding@resend.dev>`;
+  const env = process.env.EMAIL_FROM?.trim();
+  if (env && /@cmacbeauty.ca>?$/i.test(env)) return env;
+  return `${BRAND.name} <${BRAND.email}>`;
 }
 
 /** Logs an unsent email: full body in dev only (links / tokens never reach production logs). */

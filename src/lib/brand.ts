@@ -15,8 +15,9 @@ export const BRAND = {
   domain: "https://cmacbeauty.ca",
   area: "Montréal & L'Assomption, Québec",
   areaFr: "Montréal et L'Assomption, Québec",
-  /** Public contact mailbox (owner-created 2026-09-21). */
-  email: "cmacbeauty.ca@outlook.com",
+  /** Public contact address on our own domain (Cloudflare Email Routing, 2026-09-25):
+   * mail to it lands in the owner's Outlook inbox. Also our verified Resend sender. */
+  email: "bonjour@cmacbeauty.ca",
   /** Published 2026-09-23. Québec's Consumer Protection Act requires a phone number
    * before a distance contract, so it appears on Contact, in Terms and in emails. */
   phone: "514 894-9813",

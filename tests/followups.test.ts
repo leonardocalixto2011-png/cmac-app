@@ -12,7 +12,7 @@ describe("checkout reminder", () => {
     expect(m.text).toContain("https://cmacbeauty.ca/cart?restore=abc");
     expect(m.text).toContain("45,01");
     expect(m.text).toContain("209 rue Paré");
-    expect(m.text).toContain("mailto:cmacbeauty.ca@outlook.com?subject=unsubscribe");
+    expect(m.text).toContain("mailto:bonjour@cmacbeauty.ca?subject=unsubscribe");
     expect(m.text).toContain("seul rappel");
   });
 });
