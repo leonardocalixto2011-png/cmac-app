@@ -26,8 +26,9 @@ export function ProductDetail({ product, components = [] }: { product: ProductVi
   const isSet = product.tags.includes("sets");
   const pct = onSale ? Math.round(((product.compareAtCents! - product.priceCents) / product.compareAtCents!) * 100) : 0;
 
+  // First value preselected: one tap less, and the pill + cart line both show the choice.
   const [selected, setSelected] = useState<Record<string, string>>(() =>
-    Object.fromEntries(product.options.map((o) => [o.nameEn, ""])),
+    Object.fromEntries(product.options.map((o) => [o.nameEn, o.values[0]?.value ?? ""])),
   );
   const [qty, setQty] = useState(1);
   const [added, setAdded] = useState(false);
@@ -190,8 +191,13 @@ export function ProductDetail({ product, components = [] }: { product: ProductVi
                   type="button"
                   className="pill"
                   aria-pressed={selected[o.nameEn] === v.value}
-                  onClick={() => setSelected((s) => ({ ...s, [o.nameEn]: v.value }))}
+                  onClick={() => {
+                    setSelected((s) => ({ ...s, [o.nameEn]: v.value }));
+                    const idx = v.image ? product.images.indexOf(v.image) : -1;
+                    if (idx >= 0) setActiveImage(idx);
+                  }}
                 >
+                  {v.hex && <span aria-hidden="true" className="inline-block h-3 w-3 rounded-full border border-black/15" style={{ background: v.hex }} />}
                   {locale === "fr" ? v.labelFr : v.labelEn}
                 </button>
               ))}

@@ -48,7 +48,7 @@ const AE = "https://www.aliexpress.com/item";
 /** Product photos we host ourselves (downloaded from the supplier, resized to 1400 px). */
 const SITE = "https://cmacbeauty.ca/products";
 
-type OptionValue = { value: string; labelEn: string; labelFr: string };
+type OptionValue = { value: string; labelEn: string; labelFr: string; hex?: string; image?: string };
 type Option = { nameEn: string; nameFr: string; values: OptionValue[] };
 
 type SeedProduct = {
@@ -747,6 +747,18 @@ const PRODUCTS: SeedProduct[] = [
     descriptionFr: `<p><strong>La couverture qui vous suit partout.</strong> Une couverture sherpa à capuchon, avec manches et grande poche avant, assez longue pour couvrir les genoux quand vous êtes assise. Vous l'enfilez pour le masque LED, le film, le café de 6 h.</p><h3>Détails</h3><ul><li>Taille unique, environ 120 cm de long : convient à la plupart des adultes, volontairement surdimensionnée.</li><li>Sherpa à poils longs à l'extérieur, molleton doux à l'intérieur, poignets côtelés.</li><li>Composition : polyester, selon le fournisseur.</li><li>Lavage à l'eau froide, cycle délicat ; séchage à basse température ou à l'air. Secouez-la : un tissu à poils longs perd un peu au premier lavage.</li></ul><p>Ce n'est pas un produit de marque : fabriqué pour nous par un fournisseur textile, sans logo.</p>${FOOTER_HYGIENE_FR}`,
     options: [
       colour([
+        { value: "Khaki", labelEn: "Khaki", labelFr: "Kaki", hex: "#B6A27B" },
+        { value: "Light Brown", labelEn: "Light brown", labelFr: "Brun pâle", hex: "#A9825E" },
+        { value: "Light Grey", labelEn: "Light grey", labelFr: "Gris pâle", hex: "#C8C8C8" },
+        { value: "Grey", labelEn: "Grey", labelFr: "Gris", hex: "#9A9A9A" },
+        { value: "Dark Grey", labelEn: "Dark grey", labelFr: "Gris foncé", hex: "#5E5E5E" },
+        { value: "White", labelEn: "White", labelFr: "Blanc", hex: "#F5F5F5" },
+        { value: "Black", labelEn: "Black", labelFr: "Noir", hex: "#1E1E1E" },
+        { value: "Pink", labelEn: "Pink", labelFr: "Rose", hex: "#F2B9C4" },
+      ]),
+    ],
+    legacyOptions: [
+      colour([
         { value: "Khaki", labelEn: "Khaki", labelFr: "Kaki" },
         { value: "Light Brown", labelEn: "Light brown", labelFr: "Brun pâle" },
         { value: "Light Grey", labelEn: "Light grey", labelFr: "Gris pâle" },
@@ -817,6 +829,19 @@ const PRODUCTS: SeedProduct[] = [
     descriptionEn: `<p><strong>The easiest hair habit there is.</strong> A smooth satin pillowcase lets hair glide instead of catching, so you wake with fewer tangles and creases. It also feels cool against the face on warm nights.</p><h3>Details</h3><ul><li>One pillowcase, 51 × 74 cm (20 × 29 in): fits a standard or queen pillow.</li><li>Fibre content: polyester satin, as stated by the supplier. Not silk.</li><li>Wash cold on gentle, air-dry or tumble low. Colours may vary slightly from the photos.</li><li>Pairs with the Satin Beauty-Sleep Set and the satin scrunchie.</li></ul>${FOOTER_HYGIENE_EN}`,
     descriptionFr: `<p><strong>L'habitude capillaire la plus simple qui soit.</strong> Une taie en satin lisse laisse glisser les cheveux au lieu de les accrocher : moins de nœuds et de plis au réveil. Elle est aussi fraîche contre le visage les nuits chaudes.</p><h3>Détails</h3><ul><li>Une taie, 51 × 74 cm (20 × 29 po) : pour un oreiller standard ou queen.</li><li>Composition : satin de polyester, selon le fournisseur. Ce n'est pas de la soie.</li><li>Lavage à l'eau froide, cycle délicat ; séchage à l'air ou à basse température. Les couleurs peuvent varier légèrement des photos.</li><li>S'agence à l'Ensemble beauté-sommeil en satin et au chouchou en satin.</li></ul>${FOOTER_HYGIENE_FR}`,
     options: [
+      colour([
+        { value: "Champagne", labelEn: "Champagne", labelFr: "Champagne", hex: "#E8D9B5" },
+        { value: "Beige", labelEn: "Beige", labelFr: "Beige", hex: "#D9C3A5" },
+        { value: "Pink", labelEn: "Pink", labelFr: "Rose", hex: "#F2B9C4" },
+        { value: "Silver", labelEn: "Silver", labelFr: "Argent", hex: "#C9CBD1" },
+        { value: "Grey", labelEn: "Grey", labelFr: "Gris", hex: "#9A9A9A" },
+        { value: "Blue", labelEn: "Blue", labelFr: "Bleu", hex: "#7FA6D9" },
+        { value: "Coffee", labelEn: "Coffee", labelFr: "Café", hex: "#6B4A32" },
+        { value: "White", labelEn: "White", labelFr: "Blanc", hex: "#F5F5F5" },
+        { value: "Black", labelEn: "Black", labelFr: "Noir", hex: "#1E1E1E" },
+      ]),
+    ],
+    legacyOptions: [
       colour([
         { value: "Champagne", labelEn: "Champagne", labelFr: "Champagne" },
         { value: "Beige", labelEn: "Beige", labelFr: "Beige" },

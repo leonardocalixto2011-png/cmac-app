@@ -3,7 +3,15 @@ import { shippingCentsForTier, type Tier } from "./loyalty-rules";
 import { applyBundle } from "./bundle";
 import { SET_CONTENTS, SET_TAG } from "./sets";
 
-export type ProductOptionValue = { value: string; labelFr: string; labelEn: string };
+export type ProductOptionValue = {
+  value: string;
+  labelFr: string;
+  labelEn: string;
+  /** Swatch colour shown in the pill (CSS colour). */
+  hex?: string;
+  /** One of the product's image URLs to show when this value is picked. */
+  image?: string;
+};
 export type ProductOption = { nameFr: string; nameEn: string; values: ProductOptionValue[] };
 /** Short muted supplier clip (Cloudinary mp4) + poster frame. */
 export type ProductVideo = { mp4: string; poster: string };
