@@ -109,6 +109,9 @@ const GIFT_TAGGED = [
 ];
 
 /** Rows shown on /collections/hair (tag "hair"). Added if missing, never removed. */
+/** Rows shown on /collections/nails (tag "nails"). */
+const NAILS_TAGGED = ["set-between-appointments", "set-pedi-night", "set-mani-pedi", "rose-gold-manicure-kit", "gel-manicure-gloves", "nail-care-pen", "electric-foot-file"];
+
 const HAIR_TAGGED = ["satin-pillowcase", "satin-bonnet", "hair-towel-wrap", "heatless-curl-set", "satin-scrunchie", "satin-beauty-sleep-set", "electric-scalp-massager", "spa-headband"];
 
 /** Collection tags a row must carry (gift, hair): the new list, or null when nothing changes. */
@@ -116,6 +119,7 @@ function addGiftTag(slug: string, tags: string[]): string[] | null {
   let out = tags;
   if (GIFT_TAGGED.includes(slug) && !out.includes("gift")) out = [...out, "gift"];
   if (HAIR_TAGGED.includes(slug) && !out.includes("hair")) out = [...out, "hair"];
+  if (NAILS_TAGGED.includes(slug) && !out.includes("nails")) out = [...out, "nails"];
   return out === tags ? null : out;
 }
 
@@ -945,6 +949,72 @@ const PRODUCTS: SeedProduct[] = [
     supplierSku: "AE-1005009863899370",
     shippingNote:
       "AliExpress (not CJ). 5,000+ sold, 4.7. Order the 3pcs variant in the chosen colour (supplier names: 3pcs Pink / 3pcs-Khaki / 3pcsBrown / 3pcs Black); NOT the 6pcs. Listing price about C$4-8 incl. free shipping to Canada (2026-09-25). Delivery quoted Oct 3-8. Landed ≤ C$8 → ≥ 68% at 24.99.",
+  },
+  // -------------------------------------------------------------------------
+  // Nails (2026-09-26): AliExpress, free shipping to Canada, about 1-2 weeks.
+  // -------------------------------------------------------------------------
+  {
+    slug: "usb-nail-lamp",
+    nameEn: "USB UV/LED Nail Lamp",
+    nameFr: "Lampe à ongles UV/LED USB",
+    tagline: "Cures gel polish at home, plugs into any USB charger",
+    taglineFr: "Fait durcir le vernis gel à la maison, se branche sur n'importe quel chargeur USB",
+    priceCents: 3499,
+    compareAtCents: null,
+    tags: ["nails", "essentials", "gift", "new"],
+    sortOrder: 37,
+    descriptionEn: `<p><strong>The lamp for touch-ups between appointments.</strong> A compact UV/LED lamp with 24 beads that cures gel polish, builder gel and top coat. It runs off any USB port or phone charger, so there's no bulky adapter and nothing to certify: same low voltage as our other tools.</p><h3>How to use</h3><ol><li>Apply a thin coat of gel polish.</li><li>Slide the hand in and press the button: 30 to 60 seconds per coat, depending on the polish.</li><li>Repeat for each coat and the top coat.</li></ol><h3>Good to know</h3><ul><li>USB powered (cable included; use a 5 V / 2 A charger). Fits one hand or one foot at a time.</li><li>Cosmetic tool for home use. Don't look directly at the beads; sunscreen or UV gloves on the hands are a good habit.</li><li>Not for use with regular (non-gel) polish: it won't cure.</li></ul>${FOOTER_EN}`,
+    descriptionFr: `<p><strong>La lampe pour les retouches entre deux rendez-vous.</strong> Une lampe UV/LED compacte à 24 diodes qui fait durcir le vernis gel, le gel de construction et le top coat. Elle fonctionne sur n'importe quel port USB ou chargeur de téléphone : pas d'adaptateur encombrant, rien à certifier, la même basse tension que nos autres outils.</p><h3>Mode d'emploi</h3><ol><li>Appliquez une couche mince de vernis gel.</li><li>Glissez la main et appuyez sur le bouton : 30 à 60 secondes par couche, selon le vernis.</li><li>Répétez pour chaque couche et pour le top coat.</li></ol><h3>Bon à savoir</h3><ul><li>Alimentation USB (câble inclus ; utilisez un chargeur 5 V / 2 A). Une main ou un pied à la fois.</li><li>Outil cosmétique à usage domestique. Ne regardez pas directement les diodes ; un écran solaire ou des gants anti-UV sur les mains, c'est une bonne habitude.</li><li>Ne convient pas au vernis ordinaire (non gel) : il ne durcira pas.</li></ul>${FOOTER_FR}`,
+    options: [],
+    images: [1, 2, 3, 4].map((n) => `${SITE}/usb-nail-lamp-${n}.jpg`),
+    supplierUrl: `${AE}/1005007181406990.html?shipCountry=CA&currency=CAD`,
+    supplierSku: "AE-1005007181406990",
+    shippingNote:
+      "AliExpress (not CJ). Order variant 'S6' with Plugs Type = USB (the default shown). C$11.51 incl. free shipping to Canada on 2026-09-26; delivery ~1-2 weeks. USB-powered only (no wall adapter) — that is why this one and not the 48 W mains lamps. Landed ~C$11.51 → 67% at 34.99. New listing (12 sold): check the first unit yourself before the second order.",
+  },
+  {
+    slug: "cuticle-care-duo",
+    nameEn: "Cuticle Care Duo",
+    nameFr: "Duo soin des cuticules",
+    tagline: "Nipper + dual-end pusher, stainless steel",
+    taglineFr: "Pince + poussoir double, en acier inoxydable",
+    priceCents: 1499,
+    compareAtCents: null,
+    tags: ["nails", "essentials", "gift", "new"],
+    sortOrder: 38,
+    descriptionEn: `<p><strong>The two tools every manicure starts with.</strong> A sharp stainless-steel cuticle nipper and a dual-end pusher (spoon on one side, scraper on the other) to tidy the cuticle line before polish, or just to keep hands neat between salon visits.</p><h3>Details</h3><ul><li>2 pieces, stainless steel, as stated by the supplier.</li><li>Push cuticles back after a shower when they're soft; nip only loose skin, never live skin.</li><li>Wipe with alcohol after use, store dry.</li></ul>${FOOTER_HYGIENE_EN}`,
+    descriptionFr: `<p><strong>Les deux outils par lesquels toute manucure commence.</strong> Une pince à cuticules bien affûtée en acier inoxydable et un poussoir à double embout (cuillère d'un côté, grattoir de l'autre) pour nettoyer la ligne des cuticules avant le vernis, ou simplement garder des mains soignées entre deux visites au salon.</p><h3>Détails</h3><ul><li>2 pièces, acier inoxydable, selon le fournisseur.</li><li>Repoussez les cuticules après la douche, quand elles sont souples ; coupez seulement les peaux détachées, jamais la peau vive.</li><li>Essuyez à l'alcool après usage, rangez au sec.</li></ul>${FOOTER_HYGIENE_FR}`,
+    options: [],
+    images: [1, 2, 3].map((n) => `${SITE}/cuticle-care-duo-${n}.jpg`),
+    supplierUrl: `${AE}/1005007805477717.html?shipCountry=CA&currency=CAD`,
+    supplierSku: "AE-1005007805477717",
+    shippingNote:
+      "AliExpress (not CJ). Order variant 'Set 1-2Pcs' (nipper + pusher). Listing price C$3.99 incl. free shipping to Canada on 2026-09-26 (detail page shows a first-order price). 1,000+ sold, 4.9. Landed ~C$4 → 73% at 14.99.",
+  },
+  {
+    slug: "glass-nail-file",
+    nameEn: "Glass Nail File with Case",
+    nameFr: "Lime à ongles en verre avec étui",
+    tagline: "Seals the nail edge instead of shredding it. Lasts for years",
+    taglineFr: "Scelle le bord de l'ongle au lieu de l'effilocher. Dure des années",
+    priceCents: 1299,
+    compareAtCents: null,
+    tags: ["nails", "essentials", "gift", "new"],
+    sortOrder: 39,
+    descriptionEn: `<p><strong>The file that replaces a drawer of emery boards.</strong> Etched glass files in one direction with a fine, even grit, so the free edge stays sealed and doesn't peel. Rinse it, it's like new. Comes in a protective case for the purse.</p><h3>Details</h3><ul><li>Tempered glass, about 9 cm, with case. Choose the tip shape.</li><li>File in one direction, from the side to the centre.</li><li>Rinse under water, air-dry. Don't drop it on tile.</li></ul>${FOOTER_HYGIENE_EN}`,
+    descriptionFr: `<p><strong>La lime qui remplace un tiroir de limes en carton.</strong> Le verre gravé lime dans un seul sens avec un grain fin et régulier : le bord libre reste scellé et ne se dédouble pas. Un rinçage et elle est comme neuve. Livrée dans un étui pour le sac à main.</p><h3>Détails</h3><ul><li>Verre trempé, environ 9 cm, avec étui. Choisissez la forme de la pointe.</li><li>Limez dans un seul sens, du côté vers le centre.</li><li>Rincez à l'eau, séchez à l'air. Ne pas échapper sur la céramique.</li></ul>${FOOTER_HYGIENE_FR}`,
+    options: [
+      { nameEn: "Shape", nameFr: "Forme", values: [
+        { value: "Round head", labelEn: "Round tip", labelFr: "Pointe ronde" },
+        { value: "Pointed", labelEn: "Pointed tip", labelFr: "Pointe effilée" },
+        { value: "Square", labelEn: "Square", labelFr: "Carrée" },
+      ] },
+    ],
+    images: [1, 2, 3].map((n) => `${SITE}/glass-nail-file-${n}.jpg`),
+    supplierUrl: `${AE}/1005008770183594.html?shipCountry=CA&currency=CAD`,
+    supplierSku: "AE-1005008770183594",
+    shippingNote:
+      "AliExpress (not CJ). Order the shape the customer chose (Round head / Pointed / Square), 1 pc with box. Listing price C$4.59 incl. free shipping to Canada on 2026-09-26. 4,000+ sold, 4.7. Landed ~C$4.60 → 65% at 12.99.",
   },
 ];
 
