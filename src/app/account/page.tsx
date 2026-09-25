@@ -5,6 +5,7 @@ import { serverT } from "@/i18n/server";
 import { stripeConfigured } from "@/lib/stripe";
 import { orderItems } from "@/lib/shop";
 import { AccountDashboard } from "@/components/account/AccountDashboard";
+import { ensureReferralCode } from "@/lib/referrals";
 
 export const dynamic = "force-dynamic";
 
@@ -16,6 +17,10 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function AccountPage() {
   const { user, customer } = await requireMember("/account");
   const now = new Date();
+  const referral = await ensureReferralCode(customer.id).catch((err) => {
+    console.error("[referral] code creation failed", err);
+    return null;
+  });
   const [orders, codes, entries] = await Promise.all([
     prisma.order.findMany({
       where: { customerId: customer.id, status: { not: "PENDING" } },
@@ -32,6 +37,7 @@ export default async function AccountPage() {
       points={customer.points}
       lifetimeSpendCents={customer.lifetimeSpendCents}
       redeemEnabled={stripeConfigured()}
+      referral={referral}
       orders={orders.map((o) => ({
         reference: o.reference,
         status: o.status,

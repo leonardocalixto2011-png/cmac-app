@@ -34,6 +34,7 @@ export function AccountDashboard({
   points,
   lifetimeSpendCents,
   redeemEnabled,
+  referral,
   orders,
   codes,
   entries,
@@ -42,6 +43,7 @@ export function AccountDashboard({
   points: number;
   lifetimeSpendCents: number;
   redeemEnabled: boolean;
+  referral: { code: string; url: string } | null;
   orders: DashOrder[];
   codes: DashCode[];
   entries: DashEntry[];
@@ -97,6 +99,8 @@ export function AccountDashboard({
         {/* Points + redeem */}
         <RedeemCard points={points} enabled={redeemEnabled} />
       </div>
+
+      {referral && <ReferralCard code={referral.code} url={referral.url} />}
 
       <section className="rounded-[var(--radius-card)] bg-warm-white p-[clamp(1.25rem,4vw,2rem)]" data-reveal>
         <h2 className="text-[1.35rem]">{t("acc.codesTitle")}</h2>
@@ -281,5 +285,34 @@ function RewardCodeCard({ c }: { c: DashCode }) {
         </button>
       )}
     </li>
+  );
+}
+
+/** Invite a friend: personal link, copy button, what each side gets. */
+function ReferralCard({ code, url }: { code: string; url: string }) {
+  const { t } = useLocale();
+  const [copied, setCopied] = useState(false);
+  async function copy() {
+    try {
+      await navigator.clipboard.writeText(url);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2500);
+    } catch {
+      /* clipboard blocked: the link is selectable below */
+    }
+  }
+  return (
+    <section className="rounded-[var(--radius-card)] bg-warm-white p-[clamp(1.25rem,4vw,2rem)]" data-reveal>
+      <p className="font-ui text-[0.72rem] font-semibold uppercase tracking-[0.2em] text-terra">{t("acc.refEyebrow")}</p>
+      <h2 className="mt-2 text-[1.35rem]">{t("acc.refTitle")}</h2>
+      <p className="mt-2 text-[0.9rem] text-ink-soft">{t("acc.refLead")}</p>
+      <div className="mt-4 flex flex-wrap items-center gap-3">
+        <code className="select-all rounded-full bg-cream px-4 py-2 text-[0.9rem] text-ink">{url}</code>
+        <button type="button" onClick={copy} className="btn btn-sm">
+          {copied ? t("acc.refCopied") : t("acc.refCopy")}
+        </button>
+      </div>
+      <p className="mt-3 text-[0.8rem] text-ink-faint">{t("acc.refFine", { code })}</p>
+    </section>
   );
 }

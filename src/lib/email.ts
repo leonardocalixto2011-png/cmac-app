@@ -26,6 +26,7 @@ import {
   renderOrderConfirmation,
   renderOwnerOrder,
   renderPasswordReset,
+  renderReferralBonus,
   renderRewardCode,
   renderShipped,
   type ItemView,
@@ -373,6 +374,15 @@ export async function sendAccountWelcome(
 }
 
 /** Sent when a member redeems points for a reward code (the code is also shown in /account). */
+export async function sendReferralBonus(
+  to: string,
+  locale: Locale,
+  data: { name: string | null; points: number; balance: number },
+): Promise<boolean> {
+  const m = renderReferralBonus({ locale, ...data });
+  return sendEmail({ to, subject: m.subject, html: m.html, text: m.text, replyTo: BRAND.email });
+}
+
 export async function sendRewardCode(
   to: string,
   locale: Locale,

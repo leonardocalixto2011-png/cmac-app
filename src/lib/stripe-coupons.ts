@@ -21,7 +21,7 @@ function isMissing(err: unknown): boolean {
   return e?.statusCode === 404 || e?.code === "resource_missing";
 }
 
-async function ensureCoupon(stripe: Stripe, id: string, params: Stripe.CouponCreateParams): Promise<Stripe.Coupon> {
+export async function ensureCoupon(stripe: Stripe, id: string, params: Stripe.CouponCreateParams): Promise<Stripe.Coupon> {
   try {
     return await stripe.coupons.retrieve(id);
   } catch (err) {

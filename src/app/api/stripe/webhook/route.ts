@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { sendOrderConfirmation, sendOwnerOrderNotice } from "@/lib/email";
 import { normalizeLocale } from "@/i18n/messages";
 import { creditOrder, markCodesRedeemed } from "@/lib/loyalty";
+import { creditReferrer } from "@/lib/referrals";
 import { subscribeEmail } from "@/lib/newsletter";
 
 /**
@@ -97,6 +98,8 @@ export async function POST(req: NextRequest) {
       const points = await creditOrder(updated.id);
       if (points) console.info(`[loyalty] +${points} pts for order ${updated.reference}`);
       await markCodesRedeemed(promoIds);
+      const bonus = await creditReferrer(updated.id);
+      if (bonus) console.info(`[referral] +${bonus} pts to the referrer of order ${updated.reference}`);
     } catch (err) {
       console.error("[loyalty] webhook bookkeeping failed", err);
     }

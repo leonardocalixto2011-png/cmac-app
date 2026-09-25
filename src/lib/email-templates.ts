@@ -1342,3 +1342,48 @@ ${sig.html}`;
     text: [T.hero, "", T.lead, "", items.text, "", `${T.cta}: ${i.reviewUrl}`, "", T.honest, T.issue, "", sig.text, "", foot.text].join("\n"),
   };
 }
+
+// ---------------------------------------------------------------------------
+// 4e. Referral bonus (a friend's first order was paid)
+// ---------------------------------------------------------------------------
+
+export function renderReferralBonus(i: { locale: Locale; name: string | null; points: number; balance: number }): RenderedEmail {
+  const l = i.locale;
+  const first = firstNameOf(i.name);
+  const T = fr(l)
+    ? {
+        subject: `Votre amie a commandé : +${i.points} points pour vous ✨`,
+        preheader: `Merci d'avoir parlé de nous. Vos points sont déjà dans votre compte.`,
+        eyebrow: "Parrainage Glow Club",
+        hero: first ? `Merci, ${NB(first)}.` : "Merci.",
+        lead: `Une amie a passé sa première commande avec votre lien. On vient d'ajouter ${i.points} points à votre compte : c'est une récompense de 10 $ à échanger quand vous voulez.`,
+        balance: `Votre solde : ${i.balance} points.`,
+        cta: "Voir mon compte",
+      }
+    : {
+        subject: `Your friend ordered: +${i.points} points for you ✨`,
+        preheader: `Thanks for telling them about us. The points are already in your account.`,
+        eyebrow: "Glow Club referral",
+        hero: first ? `Thank you, ${NB(first)}.` : "Thank you.",
+        lead: `A friend placed their first order with your link. We just added ${i.points} points to your account: that's a $10 reward, ready whenever you are.`,
+        balance: `Your balance: ${i.balance} points.`,
+        cta: "See my account",
+      };
+  const sig = signOff(l);
+  const foot = transactionalFooter(l, "referral");
+  const url = utm("/account", "referral");
+  const body = `
+${eyebrow(T.eyebrow)}
+${h1(T.hero)}
+${para(esc(T.lead), { margin: "0 0 20px" })}
+${para(esc(T.balance), { size: 14, margin: "0 0 26px" })}
+${button(url, T.cta)}
+${spacer(32)}
+${sig.html}`;
+  return {
+    subject: T.subject,
+    preheader: T.preheader,
+    html: layout({ locale: l, title: T.subject, preheader: T.preheader, body, footer: foot.html }),
+    text: [T.hero, "", T.lead, "", T.balance, "", `${T.cta}: ${url}`, "", sig.text, "", foot.text].join("\n"),
+  };
+}

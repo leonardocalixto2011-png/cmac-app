@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useSyncExternalStore } from "react";
 import { usePathname } from "next/navigation";
 import { useLocale } from "@/i18n/LocaleProvider";
 import { activePromo, promoEndLabel, promoText } from "@/lib/promos";
@@ -11,10 +12,29 @@ import { activePromo, promoEndLabel, promoText } from "@/lib/promos";
  * disappears by itself. Hidden in the admin area.
  */
 export function PromoBar() {
-  const { locale } = useLocale();
+  const { locale, t: tr } = useLocale();
   const pathname = usePathname();
   const promo = activePromo();
-  if (!promo || pathname?.startsWith("/admin")) return null;
+  // Referral cookie (set by /r/<code>): the friend's bar wins over a seasonal one.
+  const referred = useSyncExternalStore(
+    () => () => {},
+    () => /(?:^|; )cmac-ref=AMIE-/.test(document.cookie),
+    () => false,
+  );
+  if (pathname?.startsWith("/admin")) return null;
+  if (referred) {
+    return (
+      <div className="bg-ink text-cream">
+        <div className="wrap flex flex-wrap items-center justify-center gap-x-3 gap-y-1 py-2 text-center text-[0.82rem] leading-snug">
+          <span>{tr("ref.bar")}</span>
+          <Link href="/shop" className="font-semibold text-cream underline underline-offset-4 hover:text-terra-2">
+            {tr("ref.cta")}
+          </Link>
+        </div>
+      </div>
+    );
+  }
+  if (!promo) return null;
 
   const t = promoText(promo, locale);
   return (

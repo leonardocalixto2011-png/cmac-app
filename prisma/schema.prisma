@@ -93,6 +93,8 @@ model Order {
   reviews                 Review[]
   // "Convoy": orders that chose a shared dispatch date (see Drop)
   dropId                  String?
+  // Referral program: the member whose code was applied at checkout (credited once the order is paid)
+  referredById            String?
   drop                    Drop?          @relation(fields: [dropId], references: [id])
   customerId              String?
   customer                Customer?      @relation(fields: [customerId], references: [id])
@@ -101,6 +103,7 @@ model Order {
   updatedAt               DateTime       @updatedAt
 
   @@index([status])
+  @@index([referredById])
   @@index([createdAt])
 }
 
@@ -122,6 +125,9 @@ model Customer {
   // Cached sums of the LoyaltyEntry ledger (source of truth), updated in the same transaction
   points             Int            @default(0)
   lifetimeSpendCents Int            @default(0)
+  // Referral program: personal code (AMIE-XXXX) = a Stripe promotion code, created on first visit to /account
+  referralCode       String?        @unique
+  referralPromoId    String?        @unique
   orders             Order[]
   loyaltyEntries     LoyaltyEntry[]
   rewardCodes        RewardCode[]
@@ -138,6 +144,7 @@ enum LoyaltyReason {
   ORDER_REVERSAL
   REDEEM
   ADJUSTMENT
+  REFERRAL_BONUS
 }
 
 // Append-only ledger. (orderId, reason) unique → an order is credited / reversed at most once.

@@ -5,6 +5,8 @@ import { prisma } from "@/lib/prisma";
 import { getStripe } from "@/lib/stripe";
 import { validateCart, type CartLineInput } from "@/lib/shop";
 import { BRAND, GIFT, SHIPPING, giftEarned } from "@/lib/brand";
+import { cookies } from "next/headers";
+import { REFERRAL_COOKIE, resolveReferral } from "@/lib/referrals";
 import { normalizeLocale } from "@/i18n/messages";
 import { currentMemberTier } from "@/lib/account";
 import { openDrop } from "@/lib/drops";
@@ -104,9 +106,19 @@ export async function checkout(
   const isFree = shippingCents === 0;
   const waitWeeks = drop ? Math.max(0, Math.ceil((drop.closesAt.getTime() - Date.now()) / (7 * 864e5))) : 0;
 
+  // Referral: a friend who arrived through /r/<code> gets the member's 10 % applied
+  // without typing anything. Stripe refuses `discounts` together with
+  // `allow_promotion_codes`, and rejects the code for a returning customer, so
+  // we try with it first and fall back to the normal promo-code field.
+  const referral = await cookies()
+    .then((c) => resolveReferral(c.get(REFERRAL_COOKIE)?.value))
+    .catch(() => null);
+  const referredBy = referral && referral.customerId !== member?.customerId ? referral : null;
+
   try {
     const origin = await siteOrigin();
-    const session = await stripe.checkout.sessions.create({
+    const createSession = (withReferral: boolean) =>
+      stripe.checkout.sessions.create({
       mode: "payment",
       ...(member ? { customer_email: member.email } : guestEmail ? { customer_email: guestEmail } : {}),
       currency: "cad",
@@ -116,7 +128,7 @@ export async function checkout(
       phone_number_collection: { enabled: true },
       automatic_tax: { enabled: false },
       // Lets customers enter promo codes created in the Stripe dashboard (Products > Coupons)
-      allow_promotion_codes: true,
+      ...(withReferral && referredBy ? { discounts: [{ promotion_code: referredBy.promoId }] } : { allow_promotion_codes: true }),
       shipping_options: [
         {
           shipping_rate_data: {
@@ -174,6 +186,7 @@ export async function checkout(
         reference: order.reference,
         ...(member ? { glowTier: member.tier.id } : {}),
         ...(drop ? { convoy: drop.code } : {}),
+        ...(withReferral && referredBy ? { referral: referredBy.code } : {}),
       },
       payment_intent_data: {
         description: `${BRAND.name} — order ${shortRef}`,
@@ -182,10 +195,23 @@ export async function checkout(
       success_url: `${origin}/shop/thanks?order=${order.reference}`,
       cancel_url: `${origin}/cart`,
     });
+    let session;
+    let appliedReferral = false;
+    if (referredBy) {
+      try {
+        session = await createSession(true);
+        appliedReferral = true;
+      } catch (err) {
+        console.info("[shop] referral code not applicable, plain checkout", (err as Error).message);
+        session = await createSession(false);
+      }
+    } else {
+      session = await createSession(false);
+    }
     if (!session.url) throw new Error("NO_SESSION_URL");
     await prisma.order.update({
       where: { id: order.id },
-      data: { stripeCheckoutSessionId: session.id },
+      data: { stripeCheckoutSessionId: session.id, ...(appliedReferral && referredBy ? { referredById: referredBy.customerId } : {}) },
     });
     return { ok: true, url: session.url };
   } catch (err) {
