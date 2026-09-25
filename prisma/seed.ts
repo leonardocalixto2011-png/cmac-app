@@ -792,7 +792,7 @@ const PRODUCTS: SeedProduct[] = [
     descriptionEn: `<p><strong>The easiest way to make a room feel like October.</strong> A soft velvet cover with an embroidered pumpkin, in warm tones that go with wood, cream and rust. Slip it over a cushion you already own.</p><h3>Details</h3><ul><li>Cover only, 45 × 45 cm (18 × 18 in). Fits a standard 18-inch insert; no insert included.</li><li>Hidden zipper. Embroidered front, plain velvet back.</li><li>Fibre content: polyester velvet, as stated by the supplier.</li><li>Wash cold on gentle, inside out; air-dry.</li></ul>${FOOTER_HYGIENE_EN}`,
     descriptionFr: `<p><strong>La façon la plus simple de donner un air d'octobre à une pièce.</strong> Une housse en velours doux, avec une citrouille brodée, dans des tons chauds qui s'accordent au bois, au crème et à la rouille. Elle se glisse sur un coussin que vous avez déjà.</p><h3>Détails</h3><ul><li>Housse seulement, 45 × 45 cm (18 × 18 po). Pour un coussin standard de 18 po ; coussin non inclus.</li><li>Fermeture éclair invisible. Devant brodé, dos en velours uni.</li><li>Composition : velours de polyester, selon le fournisseur.</li><li>Lavage à l'eau froide, cycle délicat, à l'envers ; séchage à l'air.</li></ul>${FOOTER_HYGIENE_FR}`,
     options: [],
-    images: [1, 2, 3, 4].map((n) => `${SITE}/pumpkin-velvet-cushion-cover-${n}.jpg`),
+    images: [4, 1, 2, 3].map((n) => `${SITE}/pumpkin-velvet-cushion-cover-${n}.jpg`),
     supplierUrl: `${AE}/1005009784126272.html?shipCountry=CA&currency=CAD`,
     supplierSku: "AE-1005009784126272",
     shippingNote:
@@ -858,7 +858,7 @@ const PRODUCTS: SeedProduct[] = [
         { value: "Black", labelEn: "Black", labelFr: "Noir" },
       ]),
     ],
-    images: [1, 4, 5, 2, 3].map((n) => `${SITE}/satin-pillowcase-${n}.jpg`),
+    images: [1, 4, 2, 3].map((n) => `${SITE}/satin-pillowcase-${n}.jpg`),
     supplierUrl: `${CJ}/x-p-F25DF9B2-5E6B-42C9-85FD-B34D55E39822.html`,
     supplierSku: "CJJJJFZT00222-Beige-20X29inches-1PC",
     shippingNote:
@@ -894,7 +894,7 @@ const PRODUCTS: SeedProduct[] = [
         { value: "BLACK", labelEn: "Black", labelFr: "Noir", hex: "#1E1E1E" },
       ]),
     ],
-    images: [1, 2, 3, 4].map((n) => `${SITE}/satin-bonnet-${n}.jpg`),
+    images: [3, 2, 4, 1].map((n) => `${SITE}/satin-bonnet-${n}.jpg`),
     supplierUrl: `${AE}/1005007805493925.html?shipCountry=CA&currency=CAD`,
     supplierSku: "AE-1005007805493925",
     shippingNote:
@@ -966,7 +966,8 @@ const PRODUCTS: SeedProduct[] = [
     descriptionEn: `<p><strong>The lamp for touch-ups between appointments.</strong> A compact UV/LED lamp with 24 beads that cures gel polish, builder gel and top coat. It runs off any USB port or phone charger, so there's no bulky adapter and nothing to certify: same low voltage as our other tools.</p><h3>How to use</h3><ol><li>Apply a thin coat of gel polish.</li><li>Slide the hand in and press the button: 30 to 60 seconds per coat, depending on the polish.</li><li>Repeat for each coat and the top coat.</li></ol><h3>Good to know</h3><ul><li>USB powered (cable included; use a 5 V / 2 A charger). Fits one hand or one foot at a time.</li><li>Cosmetic tool for home use. Don't look directly at the beads; sunscreen or UV gloves on the hands are a good habit.</li><li>Not for use with regular (non-gel) polish: it won't cure.</li></ul>${FOOTER_EN}`,
     descriptionFr: `<p><strong>La lampe pour les retouches entre deux rendez-vous.</strong> Une lampe UV/LED compacte à 24 diodes qui fait durcir le vernis gel, le gel de construction et le top coat. Elle fonctionne sur n'importe quel port USB ou chargeur de téléphone : pas d'adaptateur encombrant, rien à certifier, la même basse tension que nos autres outils.</p><h3>Mode d'emploi</h3><ol><li>Appliquez une couche mince de vernis gel.</li><li>Glissez la main et appuyez sur le bouton : 30 à 60 secondes par couche, selon le vernis.</li><li>Répétez pour chaque couche et pour le top coat.</li></ol><h3>Bon à savoir</h3><ul><li>Alimentation USB (câble inclus ; utilisez un chargeur 5 V / 2 A). Une main ou un pied à la fois.</li><li>Outil cosmétique à usage domestique. Ne regardez pas directement les diodes ; un écran solaire ou des gants anti-UV sur les mains, c'est une bonne habitude.</li><li>Ne convient pas au vernis ordinaire (non gel) : il ne durcira pas.</li></ul>${FOOTER_FR}`,
     options: [],
-    images: [1, 2, 3, 4].map((n) => `${SITE}/usb-nail-lamp-${n}.jpg`),
+    // 5 and 6 are our crops of the supplier photos (the originals carry marketing overlays).
+    images: [5, 6].map((n) => `${SITE}/usb-nail-lamp-${n}.jpg`),
     supplierUrl: `${AE}/1005007181406990.html?shipCountry=CA&currency=CAD`,
     supplierSku: "AE-1005007181406990",
     shippingNote:
@@ -2034,6 +2035,14 @@ async function main() {
       // Still the raw CJ photos the seed put there → swap in the processed Cloudinary set.
       update.images = media.images;
       notes.push("images → Cloudinary");
+    } else if (
+      Array.isArray(existing.images) &&
+      existing.images.every((u) => typeof u === "string" && u.startsWith(SITE + "/")) &&
+      !sameJson(existing.images, p.images)
+    ) {
+      // Self-hosted photos are seed-owned: a reordered or trimmed list in the seed wins.
+      update.images = p.images;
+      notes.push("images refreshed");
     }
     if (!reset && hasImages && p.legacyOptions && sameJson(existing.options, p.legacyOptions)) {
       update.options = supplier.options;
