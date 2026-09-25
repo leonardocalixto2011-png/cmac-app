@@ -109,7 +109,7 @@ const GIFT_TAGGED = [
 ];
 
 /** Rows shown on /collections/hair (tag "hair"). Added if missing, never removed. */
-const HAIR_TAGGED = ["satin-pillowcase", "satin-scrunchie", "satin-beauty-sleep-set", "electric-scalp-massager", "spa-headband"];
+const HAIR_TAGGED = ["satin-pillowcase", "satin-bonnet", "hair-towel-wrap", "heatless-curl-set", "satin-scrunchie", "satin-beauty-sleep-set", "electric-scalp-massager", "spa-headband"];
 
 /** Collection tags a row must carry (gift, hair): the new list, or null when nothing changes. */
 function addGiftTag(slug: string, tags: string[]): string[] | null {
@@ -859,6 +859,92 @@ const PRODUCTS: SeedProduct[] = [
     supplierSku: "CJJJJFZT00222-Beige-20X29inches-1PC",
     shippingNote:
       "CJ (China warehouse, factory stock 32k). Variant = <Colour> + Dimensions 20X29inches + Quantity 1PC; SKU pattern CJJJJFZT00222-<Color>-20X29inches-1PC (colour spelled as on CJ: black / white lowercase). $1.75-2.00 USD, 120 g. Only 'Champagne' and 'Silk white' in 75x50 are mulberry silk: we sell the polyester satin 20x29 only. CJPacket to CA about $4.90 USD alone; landed ~$6.90 USD ≈ C$9.50 → 52% at 19.99.",
+  },
+  // -------------------------------------------------------------------------
+  // Hair range, part 2 (2026-09-26): AliExpress, free shipping to Canada,
+  // about 1-2 weeks. Ordered by hand the same day as the CJ order.
+  // -------------------------------------------------------------------------
+  {
+    slug: "satin-bonnet",
+    nameEn: "Adjustable Satin Bonnet",
+    nameFr: "Bonnet en satin ajustable",
+    tagline: "Curls, braids or a blowout: it all survives the night",
+    taglineFr: "Boucles, tresses ou brushing : tout survit à la nuit",
+    priceCents: 1699,
+    compareAtCents: null,
+    tags: ["hair", "essentials", "gift", "new"],
+    sortOrder: 34,
+    descriptionEn: `<p><strong>The bonnet that stays on.</strong> Satin inside and out, with a long tie band you wrap and knot, so it fits a low bun as well as a head of curls and doesn't slide off by 3 a.m. Less friction, less frizz, fewer wash days.</p><h3>Details</h3><ul><li>One size, adjustable with the tie band. Double layer.</li><li>Fibre content: polyester satin, as stated by the supplier. Not silk.</li><li>Wash cold by hand or in a laundry bag, air-dry.</li><li>Also good over a hair mask or overnight oil.</li></ul>${FOOTER_HYGIENE_EN}`,
+    descriptionFr: `<p><strong>Le bonnet qui reste en place.</strong> Satin dedans et dehors, avec un long ruban qu'on enroule et qu'on noue : il tient sur un chignon bas comme sur une tête de boucles, et ne glisse pas à 3 h du matin. Moins de friction, moins de frisottis, moins de jours de shampoing.</p><h3>Détails</h3><ul><li>Taille unique, ajustable avec le ruban. Double épaisseur.</li><li>Composition : satin de polyester, selon le fournisseur. Ce n'est pas de la soie.</li><li>Lavage à la main ou en filet à l'eau froide, séchage à l'air.</li><li>Parfait aussi par-dessus un masque capillaire ou une huile de nuit.</li></ul>${FOOTER_HYGIENE_FR}`,
+    options: [
+      colour([
+        { value: "Champagne", labelEn: "Champagne", labelFr: "Champagne", hex: "#E8D9B5" },
+        { value: "Beige", labelEn: "Beige", labelFr: "Beige", hex: "#D9C3A5" },
+        { value: "Light Pink", labelEn: "Light pink", labelFr: "Rose pâle", hex: "#F2C6CF" },
+        { value: "Rose", labelEn: "Rose", labelFr: "Vieux rose", hex: "#D98A9A" },
+        { value: "Light Purple", labelEn: "Lavender", labelFr: "Lavande", hex: "#C9B6E4" },
+        { value: "Sky Blue", labelEn: "Sky blue", labelFr: "Bleu ciel", hex: "#A9CBEA" },
+        { value: "Navy Blue", labelEn: "Navy", labelFr: "Marine", hex: "#243B6B" },
+        { value: "Khaki", labelEn: "Khaki", labelFr: "Kaki", hex: "#B6A27B" },
+        { value: "Coffee", labelEn: "Coffee", labelFr: "Café", hex: "#6B4A32" },
+        { value: "BLACK", labelEn: "Black", labelFr: "Noir", hex: "#1E1E1E" },
+      ]),
+    ],
+    images: [1, 2, 3, 4].map((n) => `${SITE}/satin-bonnet-${n}.jpg`),
+    supplierUrl: `${AE}/1005007805493925.html?shipCountry=CA&currency=CAD`,
+    supplierSku: "AE-1005007805493925",
+    shippingNote:
+      "AliExpress (not CJ). 50,000+ sold, 4.9. Order the colour exactly as the customer chose (supplier colour names: Champagne, Beige, Light Pink, Rose, Light Purple, Sky Blue, Navy Blue, Khaki, Coffee, BLACK). Listing price C$5.79 incl. free shipping to Canada on 2026-09-25 (detail page may show a lower first-order price). Delivery quoted Oct 3-8. Landed ~C$5.79 → 66% at 16.99.",
+  },
+  {
+    slug: "hair-towel-wrap",
+    nameEn: "Microfiber Hair Towel Wrap",
+    nameFr: "Serviette turban en microfibre",
+    tagline: "Twist, loop, done: hair dries while you do your face",
+    taglineFr: "On enroule, on accroche, c'est fait : les cheveux sèchent pendant la routine",
+    priceCents: 1799,
+    compareAtCents: null,
+    tags: ["hair", "essentials", "gift", "new"],
+    sortOrder: 35,
+    descriptionEn: `<p><strong>Less time with the hair dryer.</strong> A soft microfiber turban with an elastic loop and button: twist your hair in, flip it back, hook it, and it stays put while you do the rest of the routine. It soaks up far more than a cotton towel and is gentler on wet hair.</p><h3>Details</h3><ul><li>Extra-large size for long or thick hair. Elastic loop with button.</li><li>Fibre content: polyester microfiber, as stated by the supplier.</li><li>Wash warm, tumble low. No fabric softener (it kills the absorbency).</li></ul>${FOOTER_HYGIENE_EN}`,
+    descriptionFr: `<p><strong>Moins de temps sous le séchoir.</strong> Un turban doux en microfibre avec une boucle élastique et un bouton : on enroule les cheveux, on rabat, on accroche, et ça tient pendant le reste de la routine. Il absorbe bien plus qu'une serviette de coton et il est plus doux pour les cheveux mouillés.</p><h3>Détails</h3><ul><li>Format très grand, pour cheveux longs ou épais. Boucle élastique avec bouton.</li><li>Composition : microfibre de polyester, selon le fournisseur.</li><li>Lavage à l'eau tiède, séchage à basse température. Pas d'assouplissant (ça tue l'absorption).</li></ul>${FOOTER_HYGIENE_FR}`,
+    options: [
+      colour([
+        { value: "GRAY", labelEn: "Grey", labelFr: "Gris", hex: "#9A9A9A" },
+        { value: "Khaki", labelEn: "Khaki", labelFr: "Kaki", hex: "#B6A27B" },
+      ]),
+    ],
+    images: [1, 2, 3, 4, 5].map((n) => `${SITE}/hair-towel-wrap-${n}.jpg`),
+    supplierUrl: `${AE}/1005010502437774.html?shipCountry=CA&currency=CAD`,
+    supplierSku: "AE-1005010502437774",
+    shippingNote:
+      "AliExpress (not CJ). 2,000+ sold, 4.5. Colours GRAY / Khaki. Listing price about C$3.27-7.29 incl. free shipping to Canada (2026-09-25; detail page shows a first-order price). Delivery quoted Oct 3-8. Landed ≤ C$7.30 → ≥ 59% at 17.99.",
+  },
+  {
+    slug: "heatless-curl-set",
+    nameEn: "Heatless Curling Set",
+    nameFr: "Ensemble boucles sans chaleur",
+    tagline: "Wrap it at night, unwrap waves in the morning. No heat",
+    taglineFr: "On enroule le soir, on déroule des ondulations le matin. Sans chaleur",
+    priceCents: 2499,
+    compareAtCents: null,
+    tags: ["hair", "essentials", "gift", "new"],
+    sortOrder: 36,
+    descriptionEn: `<p><strong>The curls your flat iron can't do without damage.</strong> A soft satin-covered rod you set on top of your head, two scrunchies to hold the ends, and a clip. Wrap slightly damp hair around it, sleep, unwrap: loose waves, no heat, no crunch.</p><h3>Details</h3><ul><li>3 pieces: satin curling rod, 2 satin scrunchies, 1 clip. Rod about 1 m long, works on shoulder-length hair and longer.</li><li>Fibre content: polyester satin over a foam core, as stated by the supplier.</li><li>Hair should be damp, not wet. A little leave-in helps the waves last.</li><li>Spot clean; the scrunchies wash cold by hand.</li></ul>${FOOTER_HYGIENE_EN}`,
+    descriptionFr: `<p><strong>Les boucles que votre fer ne fait pas sans abîmer.</strong> Un rouleau souple recouvert de satin qu'on pose sur la tête, deux chouchous pour tenir les pointes, et une pince. On enroule les cheveux légèrement humides, on dort, on déroule : des ondulations souples, sans chaleur, sans effet cartonné.</p><h3>Détails</h3><ul><li>3 pièces : rouleau en satin, 2 chouchous en satin, 1 pince. Rouleau d'environ 1 m, pour cheveux aux épaules et plus longs.</li><li>Composition : satin de polyester sur un cœur en mousse, selon le fournisseur.</li><li>Cheveux humides, pas mouillés. Un peu de soin sans rinçage aide les ondulations à tenir.</li><li>Nettoyage localisé ; les chouchous se lavent à la main à l'eau froide.</li></ul>${FOOTER_HYGIENE_FR}`,
+    options: [
+      colour([
+        { value: "3pcs Pink", labelEn: "Pink", labelFr: "Rose", hex: "#F2B9C4" },
+        { value: "3pcs-Khaki", labelEn: "Khaki", labelFr: "Kaki", hex: "#B6A27B" },
+        { value: "3pcsBrown", labelEn: "Brown", labelFr: "Brun", hex: "#6B4A32" },
+        { value: "3pcs Black", labelEn: "Black", labelFr: "Noir", hex: "#1E1E1E" },
+      ]),
+    ],
+    images: [1, 2, 3].map((n) => `${SITE}/heatless-curl-set-${n}.jpg`),
+    supplierUrl: `${AE}/1005009863899370.html?shipCountry=CA&currency=CAD`,
+    supplierSku: "AE-1005009863899370",
+    shippingNote:
+      "AliExpress (not CJ). 5,000+ sold, 4.7. Order the 3pcs variant in the chosen colour (supplier names: 3pcs Pink / 3pcs-Khaki / 3pcsBrown / 3pcs Black); NOT the 6pcs. Listing price about C$4-8 incl. free shipping to Canada (2026-09-25). Delivery quoted Oct 3-8. Landed ≤ C$8 → ≥ 68% at 24.99.",
   },
 ];
 
