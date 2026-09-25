@@ -146,6 +146,12 @@ export function CartView({
           </ul>
 
           <dl className="mt-4 flex flex-col gap-1.5 border-t border-[var(--line)] pt-4 text-[0.95rem]">
+            {cart.bundle.percent > 0 && (
+              <div className="flex justify-between text-terra">
+                <dt>{t("shop.bundleRow", { percent: cart.bundle.percent })}</dt>
+                <dd className="tabular-nums">−{formatMoneyFromCents(cart.bundle.savingCents, locale)}</dd>
+              </div>
+            )}
             <div className="flex justify-between">
               <dt className="text-ink-soft">{t("shop.subtotal")}</dt>
               <dd className="tabular-nums">{formatMoneyFromCents(cart.subtotalCents, locale)}</dd>
@@ -179,6 +185,13 @@ export function CartView({
               <div className="mt-1 h-1.5 w-full overflow-hidden rounded-full bg-cream-2" aria-hidden="true">
                 <div className="h-full rounded-full bg-terra transition-[width] duration-500" style={{ width: `${Math.min(100, Math.round((cart.subtotalCents / freeFrom) * 100))}%` }} />
               </div>
+            )}
+            {!cart.bundle.paused && (
+              <p className={cn("mt-2", cart.bundle.percent ? "font-semibold text-terra" : "")}>
+                {cart.bundle.next
+                  ? t(cart.bundle.percent ? "shop.bundleMore" : "shop.bundleAway", { n: cart.bundle.next.items, percent: cart.bundle.next.percent, current: cart.bundle.percent })
+                  : t("shop.bundleMax", { percent: cart.bundle.percent })}
+              </p>
             )}
           </div>
           {suggestions.length > 0 && (

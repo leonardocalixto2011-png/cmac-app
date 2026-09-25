@@ -168,6 +168,12 @@ export async function checkout(
           : []),
         ...validated.lines.map((l) => {
         const optStr = Object.values(locale === "fr" ? l.options : l.optionsEn).join(" · ");
+        const tierNote =
+          validated.bundlePercent && !l.slug.startsWith("set-")
+            ? locale === "fr"
+              ? `Compose ta trousse : −${validated.bundlePercent} %`
+              : `Build your own set: −${validated.bundlePercent} %`
+            : "";
         return {
           quantity: l.qty,
           price_data: {
@@ -175,7 +181,7 @@ export async function checkout(
             unit_amount: l.priceCents,
             product_data: {
               name: locale === "fr" ? l.nameFr : l.nameEn,
-              description: optStr || undefined,
+              description: [optStr, tierNote].filter(Boolean).join(" · ") || undefined,
             },
           },
         };
@@ -187,6 +193,7 @@ export async function checkout(
         ...(member ? { glowTier: member.tier.id } : {}),
         ...(drop ? { convoy: drop.code } : {}),
         ...(withReferral && referredBy ? { referral: referredBy.code } : {}),
+        ...(validated.bundlePercent ? { bundle: `${validated.bundlePercent}%` } : {}),
       },
       payment_intent_data: {
         description: `${BRAND.name} — order ${shortRef}`,

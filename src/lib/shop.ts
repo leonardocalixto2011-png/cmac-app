@@ -1,5 +1,6 @@
 import { prisma } from "./prisma";
 import { shippingCentsForTier, type Tier } from "./loyalty-rules";
+import { applyBundle } from "./bundle";
 import { SET_CONTENTS, SET_TAG } from "./sets";
 
 export type ProductOptionValue = { value: string; labelFr: string; labelEn: string };
@@ -147,6 +148,9 @@ export async function validateCart(
   subtotalCents: number;
   shippingCents: number;
   totalCents: number;
+  /** Build-your-own-set tier applied to the single items (0 = none). */
+  bundlePercent: number;
+  bundleSavingCents: number;
 }> {
   if (!lines.length) throw new Error("EMPTY_CART");
   const slugs = [...new Set(lines.map((l) => l.slug))];
@@ -182,9 +186,18 @@ export async function validateCart(
     });
   }
 
-  const subtotalCents = out.reduce((s, l) => s + l.priceCents * l.qty, 0);
+  // Build-your-own-set tiers (src/lib/bundle.ts): unit prices below are what is charged.
+  const bundle = applyBundle(out);
+  const subtotalCents = bundle.lines.reduce((s, l) => s + l.priceCents * l.qty, 0);
   const shippingCents = shippingCentsForTier(subtotalCents, opts.tier ?? null);
-  return { lines: out, subtotalCents, shippingCents, totalCents: subtotalCents + shippingCents };
+  return {
+    lines: bundle.lines,
+    subtotalCents,
+    shippingCents,
+    totalCents: subtotalCents + shippingCents,
+    bundlePercent: bundle.percent,
+    bundleSavingCents: bundle.savingCents,
+  };
 }
 
 export async function getOrderByReference(reference: string) {

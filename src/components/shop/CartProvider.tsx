@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
+import { bundleFor, type BundleState } from "@/lib/bundle";
 import { shippingCentsFor } from "@/lib/brand";
 
 export type CartItem = {
@@ -20,6 +21,10 @@ export type CartItem = {
 type CartCtx = {
   items: CartItem[];
   count: number;
+  /** Sum of list prices, before the build-your-own-set tier. */
+  listCents: number;
+  /** Build-your-own-set tier (src/lib/bundle.ts). */
+  bundle: BundleState;
   subtotalCents: number;
   shippingCents: number;
   totalCents: number;
@@ -94,11 +99,15 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const replace = useCallback((next: CartItem[]) => setItems(next.slice(0, 20)), []);
 
   const value = useMemo<CartCtx>(() => {
-    const subtotalCents = items.reduce((s, i) => s + i.priceCents * i.qty, 0);
+    const listCents = items.reduce((s, i) => s + i.priceCents * i.qty, 0);
+    const bundle = bundleFor(items);
+    const subtotalCents = listCents - bundle.savingCents;
     const shippingCents = items.length ? shippingCentsFor(subtotalCents) : 0;
     return {
       items,
       count: items.reduce((s, i) => s + i.qty, 0),
+      listCents,
+      bundle,
       subtotalCents,
       shippingCents,
       totalCents: subtotalCents + shippingCents,
