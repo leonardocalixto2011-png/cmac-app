@@ -115,6 +115,9 @@ const NAILS_TAGGED = ["set-between-appointments", "set-pedi-night", "set-mani-pe
 /** Rows shown on /collections/body (tag "body"). */
 const BODY_TAGGED = ["electric-foot-file", "cozy-fleece-socks", "reusable-cleansing-puff", "set-pedi-night"];
 
+/** Rows shown on /collections/men (tag "men"). */
+const MEN_TAGGED = ["electric-scalp-massager", "electric-foot-file", "led-red-light-mask", "hooded-sherpa-blanket", "sonic-silicone-cleansing-brush"];
+
 const HAIR_TAGGED = ["satin-pillowcase", "satin-bonnet", "hair-towel-wrap", "heatless-curl-set", "satin-scrunchie", "satin-beauty-sleep-set", "electric-scalp-massager", "spa-headband"];
 
 /** Collection tags a row must carry (gift, hair): the new list, or null when nothing changes. */
@@ -124,6 +127,7 @@ function addGiftTag(slug: string, tags: string[]): string[] | null {
   if (HAIR_TAGGED.includes(slug) && !out.includes("hair")) out = [...out, "hair"];
   if (NAILS_TAGGED.includes(slug) && !out.includes("nails")) out = [...out, "nails"];
   if (BODY_TAGGED.includes(slug) && !out.includes("body")) out = [...out, "body"];
+  if (MEN_TAGGED.includes(slug) && !out.includes("men")) out = [...out, "men"];
   return out === tags ? null : out;
 }
 
@@ -1087,6 +1091,47 @@ const PRODUCTS: SeedProduct[] = [
     supplierSku: "AE-1005009717850634",
     shippingNote:
       "AliExpress (not CJ). Order variant 'With cover 1pcs'. Listing price C$2.02 incl. free shipping to Canada on 2026-09-26 (supplier calls it a 'lymphatic drainage' brush: never use that wording on the site). 1,000+ sold, 4.7. Landed ~C$2-4 → ≥ 73% at 14.99.",
+  },
+  // -------------------------------------------------------------------------
+  // Men (2026-09-26): AliExpress, free shipping to Canada, 1-2 weeks.
+  // -------------------------------------------------------------------------
+  {
+    slug: "mini-shaver",
+    nameEn: "Pocket Electric Shaver",
+    nameFr: "Rasoir électrique de poche",
+    tagline: "Two floating heads, USB-C, fits in a jeans pocket",
+    taglineFr: "Deux têtes flottantes, USB-C, tient dans une poche de jeans",
+    priceCents: 2999,
+    compareAtCents: null,
+    tags: ["men", "essentials", "gift", "new"],
+    sortOrder: 48,
+    descriptionEn: `<p><strong>The shaver that lives in the car, the gym bag or the carry-on.</strong> Two rotary heads on a floating mount for a quick clean-up of the jaw and neck, a small screen for the battery, and a USB-C port. Rinse the head under the tap. It is a touch-up tool, not a replacement for a full-size shaver.</p><h3>Details</h3><ul><li>USB-C rechargeable (cable included), about 60 minutes per charge. Detachable washable head.</li><li>Body in ABS plastic, as stated by the supplier. Colour as pictured.</li><li>Cosmetic grooming tool. Don't use on broken skin; clean the head after each use.</li></ul>${FOOTER_EN}`,
+    descriptionFr: `<p><strong>Le rasoir qui vit dans l'auto, le sac de gym ou le bagage cabine.</strong> Deux têtes rotatives sur support flottant pour un rafraîchissement rapide de la mâchoire et du cou, un petit écran pour la batterie, et un port USB-C. La tête se rince sous le robinet. C'est un outil de retouche, pas un remplacement du rasoir pleine taille.</p><h3>Détails</h3><ul><li>Rechargeable en USB-C (câble inclus), environ 60 minutes par charge. Tête amovible et lavable.</li><li>Boîtier en plastique ABS, selon le fournisseur. Couleur comme sur la photo.</li><li>Outil de toilette cosmétique. Ne pas utiliser sur une peau lésée ; nettoyez la tête après chaque usage.</li></ul>${FOOTER_FR}`,
+    options: [],
+    images: [1].map((n) => `${SITE}/mini-shaver-${n}.jpg`),
+    supplierUrl: `${AE}/1005009332690596.html?shipCountry=CA&currency=CAD`,
+    supplierSku: "AE-1005009332690596",
+    shippingNote:
+      "AliExpress (not CJ). Order variant 'Orange' (the one pictured; the body is printed SHAVER). C$8.79 incl. free shipping to Canada on 2026-09-26. 4,000+ sold, 4.5. Landed ~C$8.79 → 71% at 29.99. Only one clean photo from the supplier: take your own once the first unit arrives.",
+  },
+  {
+    slug: "nose-trimmer",
+    nameEn: "Nose & Ear Trimmer",
+    nameFr: "Tondeuse nez et oreilles",
+    tagline: "Rotary blade, washable, USB-C. The small job done right",
+    taglineFr: "Lame rotative, lavable, USB-C. Le petit boulot bien fait",
+    priceCents: 1999,
+    compareAtCents: null,
+    tags: ["men", "essentials", "gift", "new"],
+    sortOrder: 49,
+    descriptionEn: `<p><strong>The tool nobody talks about and everybody needs.</strong> A pocket trimmer with a rounded rotary blade that trims nose, ear and brow hair without pulling. Twist the head off to rinse it. USB-C, so it charges with the phone cable.</p><h3>Details</h3><ul><li>USB-C rechargeable, detachable washable head, protective cap.</li><li>Rounded blade guard: no direct contact with the skin. Use dry.</li><li>Cosmetic grooming tool. Clean the head after use and let it dry before capping.</li></ul>${FOOTER_EN}`,
+    descriptionFr: `<p><strong>L'outil dont personne ne parle et dont tout le monde a besoin.</strong> Une tondeuse de poche à lame rotative arrondie qui coupe les poils du nez, des oreilles et des sourcils sans tirer. La tête se dévisse pour se rincer. USB-C : elle se charge avec le câble du téléphone.</p><h3>Détails</h3><ul><li>Rechargeable en USB-C, tête amovible et lavable, capuchon de protection.</li><li>Garde arrondie : aucun contact direct avec la peau. Utiliser à sec.</li><li>Outil de toilette cosmétique. Nettoyez la tête après usage et laissez sécher avant de remettre le capuchon.</li></ul>${FOOTER_FR}`,
+    options: [],
+    images: [7].map((n) => `${SITE}/nose-trimmer-${n}.jpg`),
+    supplierUrl: `${AE}/1005009313597952.html?shipCountry=CA&currency=CAD`,
+    supplierSku: "AE-1005009313597952",
+    shippingNote:
+      "AliExpress (not CJ). Order variant 'black'. Listing price about C$4-8 incl. free shipping to Canada on 2026-09-26 (detail page shows a first-order price). 50,000+ sold, 4.6. Landed ≤ C$8 → ≥ 60% at 19.99. Supplier photos carry a KEAJOR brand mark; only our crop is used. Take your own photo once the first unit arrives.",
   },
 ];
 

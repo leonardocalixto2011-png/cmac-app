@@ -28,6 +28,7 @@ export function Footer() {
         { href: "/collections/hair", label: t("nav.hair") },
         { href: "/collections/nails", label: t("nav.nails") },
         { href: "/collections/body", label: t("nav.body") },
+        { href: "/collections/men", label: t("nav.men") },
         { href: "/collections/cozy", label: t("nav.cozy") },
       ],
     },
