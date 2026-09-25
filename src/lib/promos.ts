@@ -21,6 +21,8 @@ export type Promo = {
   id: string;
   /** Stripe promotion code, or null for an offer that needs no code (e.g. free shipping threshold). */
   code: string | null;
+  /** What the code takes off the cart (whole cart: checkout uses ad-hoc prices, so Stripe can't restrict by product). */
+  percentOff: number;
   startsAt: string;
   endsAt: string;
   /** Where the bar links. */
@@ -33,6 +35,7 @@ export const PROMOS: Promo[] = [
   {
     id: "black-friday-2026",
     code: "BF20",
+    percentOff: 20,
     startsAt: "2026-11-27T05:00:00Z",
     endsAt: "2026-12-02T05:00:00Z",
     href: "/collections/gifts",
@@ -50,6 +53,7 @@ export const PROMOS: Promo[] = [
   {
     id: "boxing-day-2026",
     code: "BOXING25",
+    percentOff: 25,
     startsAt: "2026-12-26T05:00:00Z",
     endsAt: "2027-01-05T05:00:00Z",
     href: "/collections/gifts",
@@ -67,6 +71,7 @@ export const PROMOS: Promo[] = [
   {
     id: "galentines-2027",
     code: "BESTIE15",
+    percentOff: 15,
     startsAt: "2027-01-28T05:00:00Z",
     endsAt: "2027-02-15T05:00:00Z",
     href: "/shop/set-bestie-duo",
@@ -76,6 +81,7 @@ export const PROMOS: Promo[] = [
   {
     id: "mothers-day-2027",
     code: "MAMAN15",
+    percentOff: 15,
     startsAt: "2027-04-26T04:00:00Z",
     endsAt: "2027-05-10T04:00:00Z",
     href: "/collections/gifts",

@@ -10,6 +10,7 @@
 import type Stripe from "stripe";
 import { getStripe } from "./stripe";
 import { BIRTHDAY_PERCENT_OFF, REWARD_VALUE_CENTS, WELCOME_PERCENT_OFF, rewardCouponId } from "./loyalty-rules";
+import { PROMOS } from "./promos";
 
 export const BIRTHDAY_COUPON_ID = "glow-birthday-15";
 export const WELCOME_COUPON_ID = "welcome-10";
@@ -104,4 +105,40 @@ export async function ensureWelcomeCode(): Promise<string | null> {
     console.error("[stripe] ensureWelcomeCode failed", err);
     return null;
   }
+}
+
+/**
+ * Seasonal campaign codes (src/lib/promos.ts): one coupon + one promotion code
+ * each, created only when missing. The promotion code expires exactly when the
+ * campaign ends, so a Black Friday code can't leak into March. Safe to run on
+ * every deploy; returns what was created vs. already there.
+ */
+export async function ensureSeasonalCodes(): Promise<{ created: string[]; existing: string[]; skipped?: string }> {
+  const stripe = getStripe();
+  if (!stripe) return { created: [], existing: [], skipped: "stripe not configured" };
+  const created: string[] = [];
+  const existing: string[] = [];
+  for (const p of PROMOS) {
+    if (!p.code) continue;
+    const found = await stripe.promotionCodes.list({ code: p.code, limit: 1 });
+    if (found.data.length) {
+      existing.push(p.code);
+      continue;
+    }
+    const coupon = await ensureCoupon(stripe, `season-${p.id}`, {
+      percent_off: p.percentOff,
+      duration: "once",
+      name: `${p.en.label} — ${p.percentOff}% off`,
+      metadata: { program: "seasonal", campaign: p.id },
+    });
+    await stripe.promotionCodes.create({
+      promotion: { type: "coupon", coupon: coupon.id },
+      code: p.code,
+      active: true,
+      expires_at: Math.floor(Date.parse(p.endsAt) / 1000),
+      metadata: { program: "seasonal", campaign: p.id },
+    });
+    created.push(p.code);
+  }
+  return { created, existing };
 }

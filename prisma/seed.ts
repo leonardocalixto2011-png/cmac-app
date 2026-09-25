@@ -31,6 +31,7 @@ import { PrismaClient, type Prisma } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import { SET_CONTENTS } from "../src/lib/sets";
 import { MEDIA } from "./media";
+import { ensureSeasonalCodes } from "../src/lib/stripe-coupons";
 
 const prisma = new PrismaClient();
 
@@ -1488,6 +1489,13 @@ async function seedSets(reset: boolean) {
 }
 
 async function main() {
+  // Seasonal promotion codes (BF20, BOXING25, …) exist in Stripe before their campaign starts.
+  try {
+    const codes = await ensureSeasonalCodes();
+    console.log(`Seasonal codes: created [${codes.created.join(", ")}] existing [${codes.existing.join(", ")}]${codes.skipped ? " (" + codes.skipped + ")" : ""}`);
+  } catch (err) {
+    console.error("Seasonal codes failed (continuing):", err);
+  }
   const reset = process.env.RESET_PRODUCTS === "1";
   for (const p of PRODUCTS) {
     const media = MEDIA[p.slug];
