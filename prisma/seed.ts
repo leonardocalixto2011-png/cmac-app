@@ -103,8 +103,15 @@ const GIFT_TAGGED = [
   "satin-beauty-sleep-set",
 ];
 
+/** Rows shown on /collections/hair (tag "hair"). Added if missing, never removed. */
+const HAIR_TAGGED = ["satin-pillowcase", "satin-scrunchie", "satin-beauty-sleep-set", "electric-scalp-massager", "spa-headband"];
+
+/** Collection tags a row must carry (gift, hair): the new list, or null when nothing changes. */
 function addGiftTag(slug: string, tags: string[]): string[] | null {
-  return GIFT_TAGGED.includes(slug) && !tags.includes("gift") ? [...tags, "gift"] : null;
+  let out = tags;
+  if (GIFT_TAGGED.includes(slug) && !out.includes("gift")) out = [...out, "gift"];
+  if (HAIR_TAGGED.includes(slug) && !out.includes("hair")) out = [...out, "hair"];
+  return out === tags ? null : out;
 }
 
 const PRICE_REVIEW: [string, number, number][] = [
@@ -788,6 +795,40 @@ const PRODUCTS: SeedProduct[] = [
     supplierSku: "AE-1005012975458134",
     shippingNote:
       "AliExpress (not CJ). Order the variant '30pcs-D' (the default, matches the photos). C$8.62 incl. free shipping to Canada on 2026-09-25, delivery quoted Oct 3-8. Landed C$8.62 → 65% margin at 24.99. Replaces the flocked pumpkin candle jar idea: no candle (fire risk + shipping restrictions).",
+  },
+  // -------------------------------------------------------------------------
+  // Hair (2026-09-25): first piece of the /collections/hair range.
+  // -------------------------------------------------------------------------
+  {
+    slug: "satin-pillowcase",
+    nameEn: "Satin Pillowcase",
+    nameFr: "Taie d'oreiller en satin",
+    tagline: "Less friction on hair and skin, every night",
+    taglineFr: "Moins de friction sur les cheveux et la peau, chaque nuit",
+    priceCents: 1999,
+    compareAtCents: null,
+    tags: ["hair", "essentials", "gift", "new"],
+    sortOrder: 33,
+    descriptionEn: `<p><strong>The easiest hair habit there is.</strong> A smooth satin pillowcase lets hair glide instead of catching, so you wake with fewer tangles and creases. It also feels cool against the face on warm nights.</p><h3>Details</h3><ul><li>One pillowcase, 51 × 74 cm (20 × 29 in): fits a standard or queen pillow.</li><li>Fibre content: polyester satin, as stated by the supplier. Not silk.</li><li>Wash cold on gentle, air-dry or tumble low. Colours may vary slightly from the photos.</li><li>Pairs with the Satin Beauty-Sleep Set and the satin scrunchie.</li></ul>${FOOTER_HYGIENE_EN}`,
+    descriptionFr: `<p><strong>L'habitude capillaire la plus simple qui soit.</strong> Une taie en satin lisse laisse glisser les cheveux au lieu de les accrocher : moins de nœuds et de plis au réveil. Elle est aussi fraîche contre le visage les nuits chaudes.</p><h3>Détails</h3><ul><li>Une taie, 51 × 74 cm (20 × 29 po) : pour un oreiller standard ou queen.</li><li>Composition : satin de polyester, selon le fournisseur. Ce n'est pas de la soie.</li><li>Lavage à l'eau froide, cycle délicat ; séchage à l'air ou à basse température. Les couleurs peuvent varier légèrement des photos.</li><li>S'agence à l'Ensemble beauté-sommeil en satin et au chouchou en satin.</li></ul>${FOOTER_HYGIENE_FR}`,
+    options: [
+      colour([
+        { value: "Champagne", labelEn: "Champagne", labelFr: "Champagne" },
+        { value: "Beige", labelEn: "Beige", labelFr: "Beige" },
+        { value: "Pink", labelEn: "Pink", labelFr: "Rose" },
+        { value: "Silver", labelEn: "Silver", labelFr: "Argent" },
+        { value: "Grey", labelEn: "Grey", labelFr: "Gris" },
+        { value: "Blue", labelEn: "Blue", labelFr: "Bleu" },
+        { value: "Coffee", labelEn: "Coffee", labelFr: "Café" },
+        { value: "White", labelEn: "White", labelFr: "Blanc" },
+        { value: "Black", labelEn: "Black", labelFr: "Noir" },
+      ]),
+    ],
+    images: [1, 4, 5, 2, 3].map((n) => `${SITE}/satin-pillowcase-${n}.jpg`),
+    supplierUrl: `${CJ}/x-p-F25DF9B2-5E6B-42C9-85FD-B34D55E39822.html`,
+    supplierSku: "CJJJJFZT00222-Beige-20X29inches-1PC",
+    shippingNote:
+      "CJ (China warehouse, factory stock 32k). Variant = <Colour> + Dimensions 20X29inches + Quantity 1PC; SKU pattern CJJJJFZT00222-<Color>-20X29inches-1PC (colour spelled as on CJ: black / white lowercase). $1.75-2.00 USD, 120 g. Only 'Champagne' and 'Silk white' in 75x50 are mulberry silk: we sell the polyester satin 20x29 only. CJPacket to CA about $4.90 USD alone; landed ~$6.90 USD ≈ C$9.50 → 52% at 19.99.",
   },
 ];
 
