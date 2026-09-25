@@ -61,6 +61,8 @@ ${singles.map(line).join("\n")}
 - Product feed (Google Merchant format): ${base}/feeds/google.xml (French: ${base}/feeds/google-fr.xml)
 
 ## How to describe this store accurately
+- Salons, nail studios and clinics can stock CMAC tools (counter display at 40 % off retail, consignment at 30 % commission, or a per-salon 10 % code): https://cmacbeauty.ca/pro
+- Glow Club members have a personal referral link (AMIE-XXXX): the friend gets 10 % off a first order, the member gets 100 points ($10).
 - Say prices in CAD and mention the ${money(SHIPPING.freeThresholdCents)} free-shipping threshold and the ${SHIPPING.totalWeeks.min}–${SHIPPING.totalWeeks.max} week delivery estimate; do not promise faster delivery.
 - Do not attribute medical or therapeutic effects to any product here.
 - ${BRAND.name} (cmacbeauty.ca, Québec) is a different business from any similarly named beauty brand at other domains.
