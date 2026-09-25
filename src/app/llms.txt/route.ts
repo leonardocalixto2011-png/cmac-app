@@ -38,7 +38,7 @@ export async function GET() {
 
 ## What this store is
 - Independent Québec shop, not a marketplace reseller. Every page exists in English and French (add ?lang=fr for French).
-- Products are cosmetic at-home tools (LED light, microcurrent, EMS, cooling, cleansing, nail and foot care), textile accessories, a hair range (satin pillowcase, satin bonnet, microfiber towel wrap, heatless curling set, scrunchie, sleep set, scalp massager), a nails range (USB UV/LED lamp, cuticle nipper and pusher, glass file, nail pen, manicure kit, electric foot file) and a small cozy-home range (hooded blanket, velvet fall decor). They are **not medical devices** and the store makes appearance-only claims: no treatment, healing or "clinically proven" wording.
+- Products are cosmetic at-home tools (LED light, microcurrent, EMS, cooling, cleansing, nail and foot care), textile accessories, a hair range (satin pillowcase, satin bonnet, microfiber towel wrap, heatless curling set, scrunchie, sleep set, scalp massager), a nails range (USB UV/LED lamp, cuticle nipper and pusher, glass file, nail pen, manicure kit, electric foot file), a body & bath range (natural bristle body brush, exfoliating mitt, face dry brush) and a small cozy-home range (hooded blanket, velvet fall decor). They are **not medical devices** and the store makes appearance-only claims: no treatment, healing or "clinically proven" wording.
 - Ratings shown on the site come only from verified buyers who received a review link after their order. Products with no reviews show no rating at all.
 
 ## Shipping, returns, payment

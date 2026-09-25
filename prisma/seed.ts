@@ -112,6 +112,9 @@ const GIFT_TAGGED = [
 /** Rows shown on /collections/nails (tag "nails"). */
 const NAILS_TAGGED = ["set-between-appointments", "set-pedi-night", "set-mani-pedi", "rose-gold-manicure-kit", "gel-manicure-gloves", "nail-care-pen", "electric-foot-file"];
 
+/** Rows shown on /collections/body (tag "body"). */
+const BODY_TAGGED = ["electric-foot-file", "cozy-fleece-socks", "reusable-cleansing-puff", "set-pedi-night"];
+
 const HAIR_TAGGED = ["satin-pillowcase", "satin-bonnet", "hair-towel-wrap", "heatless-curl-set", "satin-scrunchie", "satin-beauty-sleep-set", "electric-scalp-massager", "spa-headband"];
 
 /** Collection tags a row must carry (gift, hair): the new list, or null when nothing changes. */
@@ -120,6 +123,7 @@ function addGiftTag(slug: string, tags: string[]): string[] | null {
   if (GIFT_TAGGED.includes(slug) && !out.includes("gift")) out = [...out, "gift"];
   if (HAIR_TAGGED.includes(slug) && !out.includes("hair")) out = [...out, "hair"];
   if (NAILS_TAGGED.includes(slug) && !out.includes("nails")) out = [...out, "nails"];
+  if (BODY_TAGGED.includes(slug) && !out.includes("body")) out = [...out, "body"];
   return out === tags ? null : out;
 }
 
@@ -1016,6 +1020,73 @@ const PRODUCTS: SeedProduct[] = [
     supplierSku: "AE-1005008770183594",
     shippingNote:
       "AliExpress (not CJ). Order the shape the customer chose (Round head / Pointed / Square), 1 pc with box. Listing price C$4.59 incl. free shipping to Canada on 2026-09-26. 4,000+ sold, 4.7. Landed ~C$4.60 → 65% at 12.99.",
+  },
+  // -------------------------------------------------------------------------
+  // Body & bath (2026-09-26): AliExpress, free shipping to Canada, 1-2 weeks.
+  // -------------------------------------------------------------------------
+  {
+    slug: "bristle-body-brush",
+    nameEn: "Natural Bristle Body Brush",
+    nameFr: "Brosse pour le corps en soies naturelles",
+    tagline: "Dry brushing before the shower, with a handle that reaches your back",
+    taglineFr: "Le brossage à sec avant la douche, avec un manche qui atteint le dos",
+    priceCents: 2299,
+    compareAtCents: null,
+    tags: ["body", "essentials", "gift", "new"],
+    sortOrder: 45,
+    descriptionEn: `<p><strong>Two minutes before the shower, and skin feels smoother by the weekend.</strong> A natural-bristle brush on a long detachable wooden handle: use the handle for the back and the legs, pop the head off for arms and shoulders. Brush dry skin in long strokes toward the heart, then shower as usual.</p><h3>Details</h3><ul><li>Natural bristles on a wooden head, detachable handle about 40 cm, hanging cord. Materials as stated by the supplier.</li><li>Light pressure: it should feel brisk, never scratchy. Skip broken or irritated skin.</li><li>Keep the bristles dry; tap out and hang after use. Wash the head with mild soap once a month and dry bristles-down.</li></ul>${FOOTER_HYGIENE_EN}`,
+    descriptionFr: `<p><strong>Deux minutes avant la douche, et la peau est plus douce dès la fin de semaine.</strong> Une brosse en soies naturelles sur un long manche de bois amovible : le manche pour le dos et les jambes, la tête seule pour les bras et les épaules. On brosse la peau sèche en longs mouvements vers le cœur, puis on prend sa douche comme d'habitude.</p><h3>Détails</h3><ul><li>Soies naturelles sur tête de bois, manche amovible d'environ 40 cm, cordon de suspension. Matériaux selon le fournisseur.</li><li>Pression légère : ça doit être vif, jamais irritant. Évitez la peau lésée ou irritée.</li><li>Gardez les soies au sec ; tapotez et suspendez après usage. Lavez la tête au savon doux une fois par mois, séchez soies vers le bas.</li></ul>${FOOTER_HYGIENE_FR}`,
+    options: [],
+    images: [1, 2, 3].map((n) => `${SITE}/bristle-body-brush-${n}.jpg`),
+    supplierUrl: `${AE}/1005010415622779.html?shipCountry=CA&currency=CAD`,
+    supplierSku: "AE-1005010415622779",
+    shippingNote:
+      "AliExpress (not CJ). Order variant '1PC handle brush' (NOT 2PCS). Listing price C$8.49 incl. free shipping to Canada on 2026-09-26. 485 sold, 4.7. Landed ~C$8.50 → 63% at 22.99.",
+  },
+  {
+    slug: "exfoliating-mitt",
+    nameEn: "Deep Exfoliating Mitt",
+    nameFr: "Gant exfoliant profond",
+    tagline: "The hammam glove: rolls dead skin off in the shower",
+    taglineFr: "Le gant du hammam : la peau morte roule sous les doigts, dans la douche",
+    priceCents: 1299,
+    compareAtCents: null,
+    tags: ["body", "essentials", "gift", "new"],
+    sortOrder: 46,
+    descriptionEn: `<p><strong>The glove spas use, for the price of a coffee and a muffin.</strong> A viscose-fibre mitt with a slightly rough weave: soak in warm water a few minutes, no soap, then rub the skin in firm strokes. Dead skin lifts off in little rolls, which is oddly satisfying, and skin feels polished for days.</p><h3>Details</h3><ul><li>One mitt, viscose fibre, elastic wrist, hanging loop. Material as stated by the supplier.</li><li>Use once a week on wet, soap-free skin. Not for the face, and not on sunburnt or broken skin.</li><li>Rinse, wring, hang to dry. Machine wash cold in a laundry bag.</li></ul>${FOOTER_HYGIENE_EN}`,
+    descriptionFr: `<p><strong>Le gant des spas, pour le prix d'un café et d'un muffin.</strong> Un gant en fibre de viscose au tissage légèrement rugueux : on le trempe quelques minutes dans l'eau chaude, sans savon, puis on frotte la peau en mouvements fermes. La peau morte se détache en petits rouleaux, c'est étrangement satisfaisant, et la peau reste polie pendant des jours.</p><h3>Détails</h3><ul><li>Un gant, fibre de viscose, poignet élastique, boucle de suspension. Matériau selon le fournisseur.</li><li>Une fois par semaine, sur peau mouillée et sans savon. Pas pour le visage, ni sur une peau brûlée par le soleil ou lésée.</li><li>Rincez, essorez, suspendez. Lavage à la machine à l'eau froide, dans un filet.</li></ul>${FOOTER_HYGIENE_FR}`,
+    options: [
+      colour([
+        { value: "black", labelEn: "Black", labelFr: "Noir", hex: "#1E1E1E" },
+        { value: "WHITE", labelEn: "White", labelFr: "Blanc", hex: "#F5F5F5" },
+        { value: "Pink", labelEn: "Pink", labelFr: "Rose", hex: "#F2B9C4" },
+        { value: "PURPLE", labelEn: "Lavender", labelFr: "Lavande", hex: "#C9B6E4" },
+      ]),
+    ],
+    images: [1, 3, 5].map((n) => `${SITE}/exfoliating-mitt-${n}.jpg`),
+    supplierUrl: `${AE}/1005006138237107.html?shipCountry=CA&currency=CAD`,
+    supplierSku: "AE-1005006138237107",
+    shippingNote:
+      "AliExpress (not CJ). Colours on the listing: WHITE / black / Pink / PURPLE. Listing price about C$3-5 incl. free shipping to Canada on 2026-09-26 (detail page shows a first-order price). 2,000+ sold, 4.7. Landed ≤ C$5 → ≥ 61% at 12.99.",
+  },
+  {
+    slug: "face-dry-brush",
+    nameEn: "Face Dry Brush",
+    nameFr: "Brosse visage à sec",
+    tagline: "Soft bristles, a curved wooden head: a minute of glow before serum",
+    taglineFr: "Des soies douces, une tête de bois courbée : une minute d'éclat avant le sérum",
+    priceCents: 1499,
+    compareAtCents: null,
+    tags: ["body", "glow", "gift", "new"],
+    sortOrder: 47,
+    descriptionEn: `<p><strong>The body-brushing habit, scaled down for the face.</strong> A curved wooden head with very soft bristles and rounded massage nubs on the back. Sweep it over dry, clean skin from the centre of the face outward for a minute: skin looks fresher and a little rosier, and serum spreads more evenly after.</p><h3>Details</h3><ul><li>Wooden head with soft synthetic bristles and massage nubs; comes with a protective cover. Materials as stated by the supplier.</li><li>Cosmetic tool for appearance only. Feather-light pressure; skip active breakouts, broken or sunburnt skin.</li><li>Keep it dry. Tap out after use, brush the bristles with a dry cloth weekly.</li></ul>${FOOTER_HYGIENE_EN}`,
+    descriptionFr: `<p><strong>L'habitude du brossage du corps, adaptée au visage.</strong> Une tête de bois courbée aux soies très douces, avec des picots de massage arrondis au dos. On la passe sur la peau sèche et propre, du centre du visage vers l'extérieur, pendant une minute : le teint paraît plus frais, un peu plus rosé, et le sérum s'étale mieux ensuite.</p><h3>Détails</h3><ul><li>Tête de bois, soies synthétiques douces et picots de massage ; livrée avec un étui de protection. Matériaux selon le fournisseur.</li><li>Outil cosmétique, pour l'apparence seulement. Pression légère comme une plume ; évitez les boutons actifs, la peau lésée ou brûlée par le soleil.</li><li>Gardez-la au sec. Tapotez après usage, passez un linge sec sur les soies chaque semaine.</li></ul>${FOOTER_HYGIENE_FR}`,
+    options: [],
+    images: [2, 4, 1, 3].map((n) => `${SITE}/face-dry-brush-${n}.jpg`),
+    supplierUrl: `${AE}/1005009717850634.html?shipCountry=CA&currency=CAD`,
+    supplierSku: "AE-1005009717850634",
+    shippingNote:
+      "AliExpress (not CJ). Order variant 'With cover 1pcs'. Listing price C$2.02 incl. free shipping to Canada on 2026-09-26 (supplier calls it a 'lymphatic drainage' brush: never use that wording on the site). 1,000+ sold, 4.7. Landed ~C$2-4 → ≥ 73% at 14.99.",
   },
 ];
 
