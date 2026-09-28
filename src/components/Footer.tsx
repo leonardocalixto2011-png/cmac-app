@@ -37,6 +37,7 @@ export function Footer() {
       links: [
         { href: "/about", label: t("nav.about") },
         { href: "/pro", label: t("nav.pro") },
+        { href: "/entreprises", label: t("nav.corp") },
         { href: "/convoi", label: t("nav.convoy") },
         { href: "/journal", label: "Journal" },
         { href: "/glow-club", label: t("footer.glowClub") },
