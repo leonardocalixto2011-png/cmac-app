@@ -259,9 +259,9 @@ export const JOURNAL: Record<Locale, Article[]> = {
     {
       slug: "led-mask-canada-price-guide",
       updated: "2026-09-22",
-      title: "Masques DEL à domicile au Canada : ce que vous obtenez à chaque prix",
+      title: "Masque LED au Canada : ce que vous obtenez vraiment à chaque prix",
       answer:
-        "Au Canada, les masques DEL lumière rouge à domicile se vendent environ 60 $ à 500 $. Sous 100 $, vous avez un masque en silicone souple ou rigide avec lumière rouge et minuterie ; au-dessus de 300 $, vous payez surtout plus de DEL, une finition de clinique, une application et une garantie plus longue.",
+        "Au Canada, les masques LED lumière rouge à domicile se vendent environ 60 $ à 500 $. Sous 100 $, vous avez un masque en silicone souple ou rigide avec lumière rouge et minuterie ; au-dessus de 300 $, vous payez surtout plus de LED, une finition de clinique, une application et une garantie plus longue.",
       intro:
         "Les prix semblent aléatoires tant qu'on n'aligne pas ce qui change vraiment d'un modèle à l'autre. Voici la version honnête, écrite par une petite boutique québécoise qui en vend un.",
       blocks: [
@@ -270,16 +270,16 @@ export const JOURNAL: Record<Locale, Article[]> = {
           table: {
             head: ["Tranche de prix (CA)", "Ce qu'on trouve", "Ce qu'on n'a pas"],
             rows: [
-              ["50–100 $", "Lumière rouge, minuterie de 10 minutes, rechargeable, protection des yeux", "Moins de DEL, pas d'application, garantie plus courte, aucune étude publiée sur le modèle"],
-              ["100–300 $", "Plus de DEL, plusieurs couleurs, parfois un module pour le cou", "Toujours rarement des tests publiés sur ce modèle précis"],
-              ["300 $ et +", "Beaucoup de DEL, certifications dans certains marchés, application, garantie 1 à 2 ans", "Le prix. Pour la plupart des gens, le confort et l'habitude comptent plus que la fiche technique"],
+              ["50–100 $", "Lumière rouge, minuterie de 10 minutes, rechargeable, protection des yeux", "Moins de LED, pas d'application, garantie plus courte, aucune étude publiée sur le modèle"],
+              ["100–300 $", "Plus de LED, plusieurs couleurs, parfois un module pour le cou", "Toujours rarement des tests publiés sur ce modèle précis"],
+              ["300 $ et +", "Beaucoup de LED, certifications dans certains marchés, application, garantie 1 à 2 ans", "Le prix. Pour la plupart des gens, le confort et l'habitude comptent plus que la fiche technique"],
             ],
           },
         },
         {
           h: "Ce que personne n'annonce",
           p: [
-            "Le masque que vous utilisez quatre soirs par semaine vaut mieux que le meilleur masque utilisé deux fois par mois. C'est le poids, le confort de la sangle et la durée des séances qui décident, pas le nombre de DEL.",
+            "Le masque que vous utilisez quatre soirs par semaine vaut mieux que le meilleur masque utilisé deux fois par mois. C'est le poids, le confort de la sangle et la durée des séances qui décident, pas le nombre de LED.",
             "La règle canadienne compte ici : un appareil vendu avec des promesses de traitement devient un instrument médical et exige une licence. Les appareils vendus comme outils cosmétiques, comme le nôtre, se décrivent en matière d'apparence seulement. Une fiche qui promet de guérir l'acné en dit long sur le vendeur.",
           ],
         },
@@ -294,7 +294,7 @@ export const JOURNAL: Record<Locale, Article[]> = {
         },
       ],
       faq: [
-        { q: "Un masque DEL à 60 $, c'est une arnaque ?", a: "Pas nécessairement. À ce prix, attendez-vous à un masque à lumière rouge simple, avec minuterie et batterie rechargeable, vendu comme outil cosmétique. N'attendez pas d'étude clinique publiée sur ce modèle, ni de promesse médicale." },
+        { q: "Un masque LED à 60 $, c'est une arnaque ?", a: "Pas nécessairement. À ce prix, attendez-vous à un masque à lumière rouge simple, avec minuterie et batterie rechargeable, vendu comme outil cosmétique. N'attendez pas d'étude clinique publiée sur ce modèle, ni de promesse médicale." },
         { q: "À quelle fréquence l'utiliser ?", a: "La plupart des masques à domicile sont conçus pour environ 10 minutes, trois à quatre fois par semaine. Plus n'est pas mieux : c'est la régularité qui se remarque." },
         { q: "Qui devrait l'éviter ?", a: "En cas de grossesse, de photosensibilité, de médication photosensibilisante ou d'affection cutanée active, consultez d'abord votre médecin. Gardez les yeux fermés pendant les séances." },
       ],

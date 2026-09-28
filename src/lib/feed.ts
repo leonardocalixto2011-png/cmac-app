@@ -18,6 +18,24 @@ const money = (cents: number) => `${(cents / 100).toFixed(2)} CAD`;
 
 const DEFAULT_CATEGORY = "Health & Beauty > Personal Care > Cosmetics > Cosmetic Tools > Skin Care Tools";
 /** Non-device add-ons get a closer Google category than the default skin-care-tool one. */
+/** Our own breadcrumb for Google: coarse, stable, and useful for bid grouping later. */
+function productType(p: { tags: string[] }, fr: boolean): string {
+  const map: Record<string, [string, string]> = {
+    sets: ["Gift sets", "Coffrets"],
+    hair: ["Hair", "Cheveux"],
+    nails: ["Nails", "Ongles"],
+    body: ["Body & bath", "Corps et bain"],
+    men: ["Men", "Hommes"],
+    cozy: ["Cozy home", "Cocooning"],
+    glow: ["Glow", "Éclat"],
+    sculpt: ["Sculpt", "Sculpter"],
+    cool: ["Cooling", "Fraîcheur"],
+  };
+  const hit = p.tags.map((t) => map[t]).find(Boolean);
+  const head = fr ? "Beauté" : "Beauty";
+  return hit ? `${head} > ${fr ? hit[1] : hit[0]}` : head;
+}
+
 const CATEGORY_BY_SLUG: Record<string, string> = {
   "satin-scrunchie": "Apparel & Accessories > Clothing Accessories > Hair Accessories",
   "pink-shell-makeup-pouch": "Luggage & Bags > Cosmetic & Toiletry Bags",
@@ -43,8 +61,11 @@ export async function buildGoogleFeed(locale: "en" | "fr"): Promise<Response> {
       const onSale = !p.tags.includes("sets") && p.compareAtCents != null && p.compareAtCents > p.priceCents;
       const name = fr ? p.nameFr : p.nameEn;
       const tag = fr ? p.taglineFr : p.tagline;
-      const title = tag ? `${name} – ${tag}` : name;
-      const desc = plain(fr ? p.descriptionFr : p.descriptionEn) || title;
+      // Google Shopping matches the title against the query: brand + product words win,
+      // taglines do not. The tagline still opens the description, where it sells.
+      const title = `${BRAND.name} ${name}`;
+      const body = plain(fr ? p.descriptionFr : p.descriptionEn);
+      const desc = [tag, body].filter(Boolean).join(" — ") || title;
       const extra = p.images
         .slice(1, 10)
         .map((u) => `<g:additional_image_link>${esc(u)}</g:additional_image_link>`)
@@ -62,6 +83,7 @@ export async function buildGoogleFeed(locale: "en" | "fr"): Promise<Response> {
       <g:brand>${esc(BRAND.name)}</g:brand>
       <g:identifier_exists>no</g:identifier_exists>${p.tags.includes("sets") ? `
       <g:is_bundle>yes</g:is_bundle>` : ""}
+      <g:product_type>${esc(productType(p, fr))}</g:product_type>
       <g:google_product_category>${esc(CATEGORY_BY_SLUG[p.slug] ?? DEFAULT_CATEGORY)}</g:google_product_category>
       <g:price>${money(onSale ? p.compareAtCents! : p.priceCents)}</g:price>${onSale ? `
       <g:sale_price>${money(p.priceCents)}</g:sale_price>` : ""}
