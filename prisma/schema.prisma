@@ -93,6 +93,8 @@ model Order {
   reviews                 Review[]
   // "Convoy": orders that chose a shared dispatch date (see Drop)
   dropId                  String?
+  // Local pickup: no courier, no shipping fee; we arrange the handover by email
+  pickup                  Boolean        @default(false)
   // Referral program: the member whose code was applied at checkout (credited once the order is paid)
   referredById            String?
   drop                    Drop?          @relation(fields: [dropId], references: [id])

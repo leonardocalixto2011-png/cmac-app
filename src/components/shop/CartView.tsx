@@ -11,6 +11,7 @@ import { checkout } from "@/app/shop/actions";
 import { Icon } from "@/components/Icon";
 import { formatMoneyFromCents, formatWholeDollars, cn } from "@/lib/utils";
 import { BRAND, GIFT, SHIPPING, giftEarned } from "@/lib/brand";
+import { PICKUP } from "@/lib/pickup";
 import { getTier, pointsFor, type TierId } from "@/lib/loyalty-rules";
 import { trackAddToCart, trackInitiateCheckout } from "@/lib/pixels";
 
@@ -51,6 +52,7 @@ export function CartView({
   const [optIn, setOptIn] = useState(false); // CASL: unchecked by default
   const [email, setEmail] = useState("");
   const [joinConvoy, setJoinConvoy] = useState(false);
+  const [pickup, setPickup] = useState(false);
   const router = useRouter();
 
   // Restore link: replace the cart once, then drop the query string.
@@ -72,7 +74,7 @@ export function CartView({
       const res = await checkout(
         cart.items.map((i) => ({ slug: i.slug, qty: i.qty, selected: i.selected })),
         locale,
-        { newsletter: optIn, email: optIn && !member ? email.trim() : undefined, convoy: joinConvoy },
+        { newsletter: optIn, email: optIn && !member ? email.trim() : undefined, convoy: joinConvoy && !pickup, pickup },
       );
       if (res.ok) {
         window.location.href = res.url;
@@ -89,7 +91,7 @@ export function CartView({
   // Preview only — checkout recomputes shipping server-side from the session's tier.
   const freeFrom = member ? member.freeShippingFromCents : SHIPPING.freeThresholdCents;
   const baseShippingCents = cart.items.length && cart.subtotalCents < freeFrom ? SHIPPING.flatCents : 0;
-  const shippingCents = joinConvoy ? 0 : baseShippingCents;
+  const shippingCents = pickup || joinConvoy ? 0 : baseShippingCents;
   const totalCents = cart.subtotalCents + shippingCents;
   const remaining = freeFrom - cart.subtotalCents;
   const tierName = member ? t(`tier.${member.tier}`) : "";
@@ -177,11 +179,13 @@ export function CartView({
               </p>
             )}
             <p>
-              {remaining > 0
-                ? t("shop.freeShipAway", { amount: formatMoneyFromCents(remaining, locale) })
-                : t("shop.freeShipUnlocked")}
+              {pickup
+                ? t("pickup.barNote")
+                : remaining > 0
+                  ? t("shop.freeShipAway", { amount: formatMoneyFromCents(remaining, locale) })
+                  : t("shop.freeShipUnlocked")}
             </p>
-            {remaining > 0 && (
+            {!pickup && remaining > 0 && (
               <div className="mt-1 h-1.5 w-full overflow-hidden rounded-full bg-cream-2" aria-hidden="true">
                 <div className="h-full rounded-full bg-terra transition-[width] duration-500" style={{ width: `${Math.min(100, Math.round((cart.subtotalCents / freeFrom) * 100))}%` }} />
               </div>
@@ -256,7 +260,29 @@ export function CartView({
             </p>
           )}
 
-          {convoy && (
+          <label
+            className={cn(
+              "mt-4 flex cursor-pointer items-start gap-3 rounded-2xl border px-4 py-3 text-[0.85rem] leading-relaxed transition-colors",
+              pickup ? "border-terra bg-terra/5" : "border-[var(--line)]",
+            )}
+          >
+            <input
+              type="checkbox"
+              className="mt-1 h-4 w-4 flex-none accent-[var(--color-terra)]"
+              checked={pickup}
+              onChange={(e) => setPickup(e.target.checked)}
+            />
+            <span>
+              <span className="block font-semibold text-ink">
+                {t("pickup.cartTitle", { amount: formatMoneyFromCents(baseShippingCents || SHIPPING.flatCents, locale) })}
+              </span>
+              <span className="mt-1 block">
+                {t(PICKUP.localStock ? "pickup.cartBodyStock" : "pickup.cartBody", { area: locale === "fr" ? PICKUP.areaFr : PICKUP.areaEn })}
+              </span>
+            </span>
+          </label>
+
+          {convoy && !pickup && (
             <label
               className={cn(
                 "mt-4 flex cursor-pointer items-start gap-3 rounded-2xl border px-4 py-3 text-[0.85rem] leading-relaxed transition-colors",

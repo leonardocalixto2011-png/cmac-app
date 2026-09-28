@@ -10,6 +10,7 @@ import { REFERRAL_COOKIE, resolveReferral } from "@/lib/referrals";
 import { normalizeLocale } from "@/i18n/messages";
 import { currentMemberTier } from "@/lib/account";
 import { openDrop } from "@/lib/drops";
+import { PICKUP } from "@/lib/pickup";
 
 export type CheckoutResult = { ok: true; url: string } | { ok: false; error: string };
 
@@ -35,7 +36,7 @@ async function siteOrigin(): Promise<string> {
 export async function checkout(
   lines: CartLineInput[],
   rawLocale: string,
-  opts: { newsletter?: boolean; email?: string; convoy?: boolean } = {},
+  opts: { newsletter?: boolean; email?: string; convoy?: boolean; pickup?: boolean } = {},
 ): Promise<CheckoutResult> {
   const locale = normalizeLocale(rawLocale);
   const member = await currentMemberTier().catch(() => null);
@@ -49,8 +50,11 @@ export async function checkout(
   const stripe = getStripe();
   if (!stripe) return { ok: false, error: "PAYMENT_UNAVAILABLE" };
 
+  // Local pickup: collected in person around L'Assomption, so no courier and no fee.
+  // It wins over the convoy — one parcel can't both ride the convoy and be picked up.
+  const pickup = opts.pickup === true;
   // Convoy: the customer accepts a shared dispatch date, we drop the shipping fee.
-  const drop = opts.convoy === true ? await openDrop() : null;
+  const drop = !pickup && opts.convoy === true ? await openDrop() : null;
 
   // Gift with purchase: a $0 line so fulfilment ships it and the customer sees it on the receipt.
   const giftProduct = giftEarned(validated.subtotalCents)
@@ -70,7 +74,7 @@ export async function checkout(
         gift: true,
       }
     : null;
-  const shippingCents = drop ? 0 : validated.shippingCents;
+  const shippingCents = pickup || drop ? 0 : validated.shippingCents;
   const totalCents = validated.subtotalCents + shippingCents;
 
   // Email typed next to the consent box (guests only). Prefills Stripe and allows one cart reminder.
@@ -96,6 +100,7 @@ export async function checkout(
       shippingCents,
       totalCents,
       dropId: drop?.id,
+      pickup,
       locale,
       customerId: member?.customerId,
       newsletterOptIn: opts.newsletter === true,
@@ -123,13 +128,14 @@ export async function checkout(
       ...(member ? { customer_email: member.email } : guestEmail ? { customer_email: guestEmail } : {}),
       currency: "cad",
       locale: locale === "fr" ? "fr-CA" : "en",
-      billing_address_collection: "auto",
-      shipping_address_collection: { allowed_countries: ["CA"] },
+      // Pickup has no courier: we take the name and address from billing instead.
+      billing_address_collection: pickup ? "required" : "auto",
+      ...(pickup ? {} : { shipping_address_collection: { allowed_countries: ["CA" as const] } }),
       phone_number_collection: { enabled: true },
       automatic_tax: { enabled: false },
       // Lets customers enter promo codes created in the Stripe dashboard (Products > Coupons)
       ...(withReferral && referredBy ? { discounts: [{ promotion_code: referredBy.promoId }] } : { allow_promotion_codes: true }),
-      shipping_options: [
+      ...(pickup ? {} : { shipping_options: [
         {
           shipping_rate_data: {
             type: "fixed_amount",
@@ -152,7 +158,7 @@ export async function checkout(
             },
           },
         },
-      ],
+      ] }),
       line_items: [
         ...(giftItem
           ? [
@@ -194,6 +200,7 @@ export async function checkout(
         ...(drop ? { convoy: drop.code } : {}),
         ...(withReferral && referredBy ? { referral: referredBy.code } : {}),
         ...(validated.bundlePercent ? { bundle: `${validated.bundlePercent}%` } : {}),
+        ...(pickup ? { pickup: PICKUP.cityEn } : {}),
       },
       payment_intent_data: {
         description: `${BRAND.name} — order ${shortRef}`,

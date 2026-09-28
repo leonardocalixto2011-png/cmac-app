@@ -267,6 +267,7 @@ async function buildOrderView(d: OrderEmailData): Promise<{ view: OrderView; row
     shippingCents: d.shippingCents,
     totalCents: d.totalCents,
     address: addressLines(d.shippingJson, false),
+    pickup: row?.pickup ?? false,
     convoy: row?.drop
       ? {
           code: row.drop.code,

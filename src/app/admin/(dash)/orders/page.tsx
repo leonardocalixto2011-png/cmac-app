@@ -47,6 +47,7 @@ export default async function AdminOrders({ searchParams }: { searchParams: Prom
                     <span className="font-mono text-[0.78rem] text-ink-faint">#{o.reference.slice(-8).toUpperCase()}</span>
                     <span className="text-ink-faint">{fmtDateTime(o.createdAt, "en")}</span>
                     <span className="rounded-full bg-cream-2 px-2 text-[0.7rem] font-semibold uppercase">{o.locale}</span>
+                    {o.pickup && <span className="rounded-full bg-terra px-2 text-[0.7rem] font-semibold uppercase text-white">Pickup</span>}
                   </p>
                   <p className="mt-1 font-semibold">{o.contactName || "—"}</p>
                   <p>

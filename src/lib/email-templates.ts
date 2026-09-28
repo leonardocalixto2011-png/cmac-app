@@ -9,6 +9,7 @@
  */
 import type { Locale } from "@/i18n/messages";
 import { BRAND, POLICY, SHIPPING, siteUrl } from "./brand";
+import { PICKUP } from "./pickup";
 import { formatMoneyFromCents, formatWholeDollars } from "./utils";
 import { fmtDate } from "./fmt";
 import { POINTS_PER_REWARD, REWARD_VALUE_CENTS, TIERS, type TierId } from "./loyalty-rules";
@@ -88,6 +89,8 @@ export type OrderView = {
   trackingUrl?: string | null;
   /** Set when the order joined a convoy: the shared dispatch day and the window promised at checkout. */
   convoy?: { code: string; ordersOn: Date; deliveryFrom: Date; deliveryTo: Date } | null;
+  /** True when the customer collects the order in person instead of having it shipped. */
+  pickup?: boolean;
 };
 
 export type CardProduct = { slug: string; name: string; priceCents: number; compareAtCents: number | null; image: string | null; isSet: boolean };
@@ -362,6 +365,35 @@ function convoyBlock(o: OrderView): Block {
   };
 }
 
+function pickupBlock(o: OrderView): Block {
+  if (!o.pickup) return { html: "", text: "" };
+  const isFr = o.locale === "fr";
+  const T = isFr
+    ? {
+        eyebrow: "Ramassage local",
+        line: `Vous avez choisi le ramassage à ${PICKUP.cityFr} : aucuns frais de livraison, on se donne rendez-vous.`,
+        when: PICKUP.localStock
+          ? "Votre commande est déjà sur place : on vous écrit d'ici 48 h pour convenir de l'heure et de l'endroit."
+          : "On vous écrit dès que votre commande arrive chez nous pour convenir de l'heure et de l'endroit. Le délai reste celui d'une livraison : 2 à 4 semaines.",
+        where: `Secteur : ${PICKUP.areaFr}. Si ça ne vous convient plus, répondez à ce courriel et on l'expédie par la poste, sans frais supplémentaires.`,
+      }
+    : {
+        eyebrow: "Local pickup",
+        line: `You chose to collect this order in ${PICKUP.cityEn}: no shipping fee, we arrange a time together.`,
+        when: PICKUP.localStock
+          ? "Your order is already here: we'll write within 48 hours to agree on a time and a place."
+          : "We'll write as soon as your order reaches us to agree on a time and a place. The wait is the same as a delivery: 2 to 4 weeks.",
+        where: `Area: ${PICKUP.areaEn}. If that no longer suits you, reply to this email and we'll mail it instead, at no extra cost.`,
+      };
+  return {
+    html: panel(`${eyebrow(T.eyebrow, C.sage)}${para(esc(T.line), { margin: "0 0 8px" })}${para(esc(T.when), { margin: "0 0 8px" })}${para(esc(T.where), { size: 13, color: C.faint, margin: "0" })}`, {
+      bg: C.cream,
+      margin: "0 0 22px",
+    }),
+    text: [T.eyebrow.toUpperCase(), T.line, T.when, T.where].join("\n"),
+  };
+}
+
 function loyaltyBlock(o: OrderView): Block {
   const lo = o.loyalty;
   const l = o.locale;
@@ -415,6 +447,7 @@ ${button(url, cta, { color: C.sage, width: 250 })}`,
 }
 
 function addressBlock(o: OrderView): Block {
+  if (!o.address.length) return { html: "", text: "" };
   if (!o.address.length) return { html: "", text: "" };
   const L = fr(o.locale) ? { to: "Livraison à", contact: "Confirmation envoyée à" } : { to: "Shipping to", contact: "Confirmation sent to" };
   const html = `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 8px;"><tr>
@@ -477,6 +510,7 @@ export function renderOrderConfirmation(o: OrderView): RenderedEmail {
   const totals = totalsBlock(o);
   const timeline = timelineBlock(o);
   const convoy = convoyBlock(o);
+  const pickupInfo = pickupBlock(o);
   const tips = tipsBlock(o.items, l, T.waitTitle, T.waitIntro);
   const loyalty = loyaltyBlock(o);
   const addr = addressBlock(o);
@@ -494,6 +528,7 @@ ${panel(`${eyebrow(T.summary)}${spacer(6)}${items.html}${rule("22px 0 14px")}${t
 ${addr.html}
 ${rule("26px 0 30px")}
 ${convoy.html}
+${pickupInfo.html}
 ${timeline.html}
 ${rule("30px 0 30px")}
 ${tips.html}
@@ -517,6 +552,7 @@ ${sig.html}`;
     addr.text,
     "",
     ...(convoy.text ? [convoy.text, ""] : []),
+    ...(pickupInfo.text ? [pickupInfo.text, ""] : []),
     timeline.text,
     "",
     tips.text,
