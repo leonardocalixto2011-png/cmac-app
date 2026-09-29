@@ -1278,6 +1278,12 @@ const COLOURS_FR = "Couleurs choisies par nous pour s'agencer au coffret ; les p
 
 const SETS: SeedSet[] = [
   {
+    // CJ bundled this set into ONE SKU on 2026-09-28 (ticket T202609251605109331):
+    // CJPF205440207GT = the five components packed and shipped together, instead
+    // of five parcels each carrying its own international postage. Price, weight
+    // and processing time are still pending — order by this SKU once CJ confirms
+    // them, and do not compute the set's landed cost from the per-item notes
+    // below, which assume separate parcels.
     slug: "set-full-ritual",
     nameEn: "The Full Ritual",
     nameFr: "Le Rituel complet",
