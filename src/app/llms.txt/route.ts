@@ -3,7 +3,10 @@ import { listProducts } from "@/lib/shop";
 import { SET_TAG } from "@/lib/sets";
 import { productReviews } from "@/lib/reviews";
 
-export const revalidate = 3600;
+// Rendered per request, cached at the edge for 10 minutes. A build-time prerender kept
+// serving pre-repricing set prices to assistants while the product pages were already
+// correct, and a price an assistant quotes has to be the price at checkout.
+export const dynamic = "force-dynamic";
 
 /**
  * /llms.txt — the plain-text brief assistants (ChatGPT, Claude, Perplexity,
@@ -74,6 +77,6 @@ Last generated: ${new Date().toISOString().slice(0, 10)}
 `;
 
   return new Response(body, {
-    headers: { "Content-Type": "text/plain; charset=utf-8", "Cache-Control": "public, max-age=0, s-maxage=3600, stale-while-revalidate=86400" },
+    headers: { "Content-Type": "text/plain; charset=utf-8", "Cache-Control": "public, max-age=0, s-maxage=600, stale-while-revalidate=3600" },
   });
 }
