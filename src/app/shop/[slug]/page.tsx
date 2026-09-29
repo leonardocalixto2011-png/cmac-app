@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
+import { JOURNAL } from "@/content/journal";
 import { getProduct, getSetComponents } from "@/lib/shop";
 import { serverLocale } from "@/i18n/server";
 import { stripHtml } from "@/lib/utils";
@@ -38,6 +40,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
     getSetComponents(product.slug),
     productReviews(product.slug).catch(() => ({ count: 0, average: 0, reviews: [] })),
   ]);
+  const guides = JOURNAL[locale].filter((a) => a.related.includes(product.slug));
 
   return (
     <section className="section-pad">
@@ -51,6 +54,26 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
       <div className="wrap">
         <ProductDetail product={product} components={components} />
         <ProductReviews summary={reviews} locale={locale} />
+        {guides.length > 0 && (
+          // The guides already link to this product; linking back gives a hesitant shopper
+          // the comparison she was about to leave for, and tells search engines the two
+          // pages belong together.
+          <aside className="mx-auto mt-16 max-w-[820px]" aria-labelledby="guides-h">
+            <h2 id="guides-h" className="text-[1.5rem]">
+              {locale === "fr" ? "Guides d'achat" : "Buying guides"}
+            </h2>
+            <ul className="mt-4 flex flex-col divide-y divide-[var(--line)]">
+              {guides.map((a) => (
+                <li key={a.slug} className="py-4">
+                  <Link href={`/journal/${a.slug}`} className="font-semibold hover:text-terra">
+                    {a.title}
+                  </Link>
+                  <p className="mt-1 text-[0.95rem] leading-relaxed text-ink-soft">{a.answer}</p>
+                </li>
+              ))}
+            </ul>
+          </aside>
+        )}
       </div>
     </section>
   );

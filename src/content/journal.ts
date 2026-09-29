@@ -412,6 +412,121 @@ export const JOURNAL: Record<Locale, Article[]> = {
       ],
       related: ["set-cozy-night", "set-silky-hair", "facial-ice-roller", "heatless-curl-set"],
     },
+    {
+      slug: "exfoliating-mitt-vs-dry-brush",
+      updated: "2026-09-29",
+      title: "Exfoliating mitt, dry brush or face brush in Canada: which one, and how often",
+      answer:
+        "Use a hammam-style exfoliating mitt on wet, soap-free skin once a week for the strongest polish; a natural-bristle dry brush for two minutes before the shower if you want a daily habit; and a soft face dry brush for a one-minute routine on the face, never the body tools. At CMAC Beauty they cost $12.99, $22.99 and $14.99.",
+      intro:
+        "Three tools, three textures, and the most common mistake is using the rough one too often. Here is what each one does, how to use it, and when to leave it on the hook.",
+      blocks: [
+        {
+          h: "The three tools side by side",
+          table: {
+            head: ["Tool", "How it's used", "How often", "Price"],
+            rows: [
+              ["Exfoliating mitt (hammam glove)", "Soak in warm water a few minutes, no soap, then firm strokes on wet skin", "Once a week", "$12.99"],
+              ["Natural bristle body brush", "On dry skin, long strokes toward the heart, before the shower", "Daily or every other day, light pressure", "$22.99"],
+              ["Face dry brush", "On a dry, clean face, from the centre outward, feather-light, about a minute", "A few times a week", "$14.99"],
+            ],
+          },
+        },
+        {
+          h: "The one rule: body tools stay on the body",
+          p: [
+            "The mitt and the body brush are made to be rough, and facial skin is thinner. Use them from the neck down. The face brush has much softer bristles for exactly that reason, and even then the pressure should be feather-light.",
+            "Rough is also why the mitt is a once-a-week tool. If skin feels tender or looks red afterwards, you went too hard or too often; give it a longer break.",
+          ],
+        },
+        {
+          h: "When to skip it",
+          ul: [
+            "Sunburnt, broken, irritated or freshly scratched skin.",
+            "Active breakouts, for the face brush.",
+            "The day of shaving or waxing: wait a day.",
+            "If you already use exfoliating acids or retinoids, go gentler and less often, and ask your pharmacist if you're unsure.",
+          ],
+        },
+        {
+          h: "Keeping them clean",
+          ul: [
+            "Mitt: rinse, wring and hang it to dry after each use. Machine wash cold in a laundry bag.",
+            "Body brush: keep the bristles dry, tap them out and hang the brush. Wash the head with mild soap once a month and dry it bristles-down.",
+            "Face brush: tap it out after use, wipe the bristles with a dry cloth weekly and keep the cover on.",
+            "Replace any of them once the bristles splay or the mitt goes thin and smooth.",
+          ],
+        },
+      ],
+      faq: [
+        {
+          q: "Is a hammam mitt the same as a Korean “Italy towel”?",
+          a: "Same idea: a rough viscose weave used on wet skin to lift dead skin. The name changes with the country (kessa in the hammam, Italy towel in Korean spas).",
+        },
+        {
+          q: "Can I use the mitt with soap?",
+          a: "No. Soap makes the skin slippery and the weave stops gripping. Soak, then use it on wet skin with no product, and wash afterwards.",
+        },
+        {
+          q: "Does dry brushing detox the body or reduce cellulite?",
+          a: "We only claim what you can see and feel: smoother, polished-feeling skin. Detox and cellulite claims are not well enough supported for us to make them, and we would rather you buy the brush for the right reason.",
+        },
+      ],
+      related: ["exfoliating-mitt", "bristle-body-brush", "face-dry-brush"],
+    },
+    {
+      slug: "satin-vs-silk-pillowcase",
+      updated: "2026-09-29",
+      title: "Satin or silk pillowcase: what the difference actually is",
+      answer:
+        "Silk is a natural protein fibre; satin is a weave, usually made of polyester. Both give hair and skin a smoother surface than cotton, which many people notice as less morning frizz. Silk feels cooler and costs several times more; polyester satin costs a fraction, goes in the washing machine and lasts well. Ours is polyester satin at $9.99, and we call it satin, not silk.",
+      intro:
+        "Half the listings you'll see say “silky”, “silk-feel” or “satin silk”, and that is not an accident. Here is how to tell what you are actually buying, and which one is worth it for you.",
+      blocks: [
+        {
+          h: "Satin and silk side by side",
+          table: {
+            head: ["", "Satin (polyester)", "Silk (mulberry)"],
+            rows: [
+              ["What it is", "A smooth, shiny weave; the fibre is usually polyester", "A natural protein fibre from silkworm cocoons"],
+              ["Feel", "Smooth and slippery, slightly warmer", "Smooth, cooler, breathes a little better"],
+              ["Care", "Machine wash, dries fast, forgiving", "Cold hand or delicate wash, mild detergent, no heat"],
+              ["Price", "Low: our satin pillowcase is $9.99", "Several times the price of satin"],
+              ["Who it suits", "Most people, and anyone who wants to try before spending more", "People who run hot at night, or want the natural fibre"],
+            ],
+          },
+        },
+        {
+          h: "What “momme” means",
+          p: [
+            "Momme is the weight of silk fabric. Pillowcases are commonly 19 to 25 momme; a higher number means a denser, more durable fabric and a higher price. Polyester satin has no momme rating, so a “22 momme satin” listing is mixing two things up.",
+          ],
+        },
+        {
+          h: "How to tell what you're buying",
+          ul: [
+            "“Satin” on a label describes the weave, not the fibre. Look for the fibre content: 100% polyester or 100% mulberry silk.",
+            "“Silky”, “silk-feel” and “silk touch” mean it is not silk.",
+            "In Canada, textiles must show their fibre content on the label. If a product won't tell you what it is made of, move on.",
+            "Real silk at a satin price is a red flag, not a bargain.",
+          ],
+        },
+        {
+          h: "Keeping it smooth",
+          ul: [
+            "Satin: wash cold with like colours, skip fabric softener, low heat or hang to dry.",
+            "Silk: cold hand wash or a delicate cycle in a mesh bag, a detergent made for silk, dry flat away from the sun.",
+            "Either one: pairing it with a satin bonnet or a scrunchie instead of a tight elastic does more for morning hair than any single product.",
+          ],
+        },
+      ],
+      faq: [
+        { q: "Does a satin pillowcase prevent wrinkles?", a: "No pillowcase changes wrinkles. Sleep creases on waking are temporary; a smoother surface may leave fewer of them, and that is the honest extent of it." },
+        { q: "Is satin good for curly or textured hair?", a: "Many people with curly or textured hair use satin for exactly this reason, often together with a satin bonnet, because a smooth surface drags less on the hair overnight." },
+        { q: "Why is your satin pillowcase only $9.99?", a: "Because it is polyester satin, sold without a marketplace commission, and shipping is charged separately. It is not silk, and it is not priced as if it were." },
+      ],
+      related: ["satin-pillowcase", "satin-bonnet", "satin-beauty-sleep-set", "set-silky-hair"],
+    },
   ],
   fr: [
     {
@@ -765,6 +880,112 @@ export const JOURNAL: Record<Locale, Article[]> = {
         { q: "Pourquoi des outils plutôt que des soins ?", a: "Parce qu'on ne devine pas le type de peau de quelqu'un de l'autre bout du bureau. Un outil n'a ni teinte, ni parfum, ni ingrédient qui irrite." },
       ],
       related: ["set-cozy-night", "set-silky-hair", "facial-ice-roller", "heatless-curl-set"],
+    },
+    {
+      slug: "exfoliating-mitt-vs-dry-brush",
+      updated: "2026-09-29",
+      title: "Gant exfoliant, brosse à sec ou brosse visage : lequel choisir, et à quelle fréquence",
+      answer:
+        "Utilisez un gant exfoliant de type hammam sur la peau mouillée, sans savon, une fois par semaine pour l'effet le plus poli ; une brosse à sec en soies naturelles deux minutes avant la douche si vous voulez une habitude quotidienne ; et une brosse visage douce pour une routine d'une minute sur le visage, jamais les outils pour le corps. Chez CMAC Beauty, ils coûtent 12,99 $, 22,99 $ et 14,99 $.",
+      intro:
+        "Trois outils, trois textures, et l'erreur la plus courante est d'utiliser le plus rugueux trop souvent. Voici ce que fait chacun, comment s'en servir, et quand le laisser au crochet.",
+      blocks: [
+        {
+          h: "Les trois outils côte à côte",
+          table: {
+            head: ["Outil", "Comment l'utiliser", "À quelle fréquence", "Prix"],
+            rows: [
+              ["Gant exfoliant (gant de hammam)", "Laisser tremper quelques minutes dans l'eau chaude, sans savon, puis frotter fermement la peau mouillée", "Une fois par semaine", "12,99 $"],
+              ["Brosse pour le corps en soies naturelles", "Sur la peau sèche, de longs mouvements vers le cœur, avant la douche", "Tous les jours ou aux deux jours, pression légère", "22,99 $"],
+              ["Brosse visage à sec", "Sur le visage sec et propre, du centre vers l'extérieur, tout en légèreté, environ une minute", "Quelques fois par semaine", "14,99 $"],
+            ],
+          },
+        },
+        {
+          h: "La seule règle : les outils pour le corps restent sur le corps",
+          p: [
+            "Le gant et la brosse pour le corps sont faits pour être rugueux, et la peau du visage est plus mince. Utilisez-les à partir du cou vers le bas. La brosse visage a des soies bien plus douces justement pour ça, et même avec elle la pression doit rester très légère.",
+            "C'est aussi pour ça que le gant s'utilise une fois par semaine. Si la peau est sensible ou rouge après, vous avez frotté trop fort ou trop souvent : laissez-lui une plus longue pause.",
+          ],
+        },
+        {
+          h: "Quand s'abstenir",
+          ul: [
+            "Peau brûlée par le soleil, lésée, irritée ou fraîchement égratignée.",
+            "Boutons actifs, pour la brosse visage.",
+            "Le jour du rasage ou de l'épilation à la cire : attendez un jour.",
+            "Si vous utilisez déjà des acides exfoliants ou des rétinoïdes, allez-y plus doucement et moins souvent, et demandez conseil à votre pharmacien en cas de doute.",
+          ],
+        },
+        {
+          h: "Les garder propres",
+          ul: [
+            "Gant : rincer, essorer et suspendre pour sécher après chaque usage. Lavable à la machine à l'eau froide, dans un filet.",
+            "Brosse pour le corps : garder les soies au sec, les secouer et suspendre la brosse. Laver la tête au savon doux une fois par mois et la faire sécher soies vers le bas.",
+            "Brosse visage : la secouer après usage, essuyer les soies avec un linge sec chaque semaine et garder le couvercle.",
+            "Remplacez-les dès que les soies s'écartent ou que le gant devient mince et lisse.",
+          ],
+        },
+      ],
+      faq: [
+        { q: "Un gant de hammam, c'est comme la « serviette Italie » coréenne ?", a: "Même principe : un tissage de viscose rugueux, utilisé sur la peau mouillée pour décoller les peaux mortes. Le nom change selon le pays (kessa au hammam, serviette Italie dans les spas coréens)." },
+        { q: "Peut-on utiliser le gant avec du savon ?", a: "Non. Le savon rend la peau glissante et le tissage n'accroche plus. Laissez tremper, utilisez le gant sur la peau mouillée sans produit, puis lavez-vous ensuite." },
+        { q: "Le brossage à sec détoxifie-t-il le corps ou réduit-il la cellulite ?", a: "On ne promet que ce qui se voit et se sent : une peau plus lisse, qui semble polie. Les promesses de détox et de cellulite ne sont pas assez appuyées pour qu'on les fasse, et on préfère que vous achetiez la brosse pour la bonne raison." },
+      ],
+      related: ["exfoliating-mitt", "bristle-body-brush", "face-dry-brush"],
+    },
+    {
+      slug: "satin-vs-silk-pillowcase",
+      updated: "2026-09-29",
+      title: "Taie d'oreiller en satin ou en soie : la vraie différence",
+      answer:
+        "La soie est une fibre naturelle de protéine ; le satin est un tissage, le plus souvent en polyester. Les deux offrent aux cheveux et à la peau une surface plus lisse que le coton, ce que beaucoup de gens remarquent par des cheveux moins frisottés le matin. La soie est plus fraîche et coûte plusieurs fois plus cher ; le satin de polyester coûte une fraction du prix, va à la machine et dure bien. La nôtre est en satin de polyester à 9,99 $, et on l'appelle satin, pas soie.",
+      intro:
+        "La moitié des annonces disent « soyeux », « effet soie » ou « satin de soie », et ce n'est pas un hasard. Voici comment savoir ce que vous achetez vraiment, et lequel vaut la peine pour vous.",
+      blocks: [
+        {
+          h: "Satin et soie côte à côte",
+          table: {
+            head: ["", "Satin (polyester)", "Soie (de mûrier)"],
+            rows: [
+              ["Ce que c'est", "Un tissage lisse et brillant ; la fibre est le plus souvent du polyester", "Une fibre naturelle de protéine tirée du cocon du ver à soie"],
+              ["Au toucher", "Lisse et glissant, un peu plus chaud", "Lisse, plus frais, respire un peu mieux"],
+              ["Entretien", "Lavable à la machine, sèche vite, pardonne les erreurs", "Lavage à la main ou délicat à l'eau froide, savon doux, sans chaleur"],
+              ["Prix", "Bas : notre taie en satin est à 9,99 $", "Plusieurs fois le prix du satin"],
+              ["Pour qui", "La plupart des gens, et quiconque veut essayer avant de dépenser plus", "Celles qui ont chaud la nuit, ou qui tiennent à la fibre naturelle"],
+            ],
+          },
+        },
+        {
+          h: "Ce que veut dire « momme »",
+          p: [
+            "Le momme est le poids du tissu de soie. Les taies d'oreiller font souvent de 19 à 25 mommes ; plus le chiffre est élevé, plus le tissu est dense, durable et cher. Le satin de polyester n'a pas de momme : une annonce « satin 22 mommes » mélange deux choses.",
+          ],
+        },
+        {
+          h: "Comment savoir ce que vous achetez",
+          ul: [
+            "« Satin » sur une étiquette décrit le tissage, pas la fibre. Cherchez la composition : 100 % polyester ou 100 % soie de mûrier.",
+            "« Soyeux », « effet soie » et « toucher soie » veulent dire que ce n'est pas de la soie.",
+            "Au Canada, les textiles doivent indiquer leur composition sur l'étiquette. Si un produit ne vous dit pas en quoi il est fait, passez votre chemin.",
+            "De la vraie soie au prix du satin, c'est un signal d'alarme, pas une aubaine.",
+          ],
+        },
+        {
+          h: "Le garder lisse",
+          ul: [
+            "Satin : laver à l'eau froide avec des couleurs semblables, sans assouplissant, sécher à basse température ou à plat.",
+            "Soie : lavage à la main à l'eau froide ou cycle délicat dans un filet, savon pour la soie, séchage à plat à l'abri du soleil.",
+            "Dans les deux cas : un bonnet en satin ou un chouchou au lieu d'un élastique serré fait plus pour les cheveux du matin que n'importe quel produit seul.",
+          ],
+        },
+      ],
+      faq: [
+        { q: "Une taie en satin empêche-t-elle les rides ?", a: "Aucune taie ne change les rides. Les plis de sommeil au réveil sont temporaires ; une surface plus lisse peut en laisser moins, et c'est honnêtement tout." },
+        { q: "Le satin convient-il aux cheveux bouclés ou texturés ?", a: "Beaucoup de personnes aux cheveux bouclés ou texturés utilisent le satin justement pour ça, souvent avec un bonnet en satin, parce qu'une surface lisse tire moins sur les cheveux pendant la nuit." },
+        { q: "Pourquoi votre taie en satin est-elle seulement à 9,99 $ ?", a: "Parce qu'elle est en satin de polyester, vendue sans commission de place de marché, et que la livraison est facturée à part. Ce n'est pas de la soie, et elle n'est pas vendue au prix de la soie." },
+      ],
+      related: ["satin-pillowcase", "satin-bonnet", "satin-beauty-sleep-set", "set-silky-hair"],
     },
   ],
 };

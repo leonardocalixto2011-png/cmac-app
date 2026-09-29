@@ -1843,8 +1843,8 @@ const SETS: SeedSet[] = [
     nameFr: "Le coffret Éclat de Noël",
     tagline: "The LED mask, wrapped for the tree. Christmas edition",
     taglineFr: "Le masque LED, emballé pour le sapin. Édition de Noël",
-    priceCents: 7499,
-    prevPriceCents: 8999,
+    priceCents: 7599,
+    prevPriceCents: 7499,
     tags: ["sets", "glow", "christmas", "gift", "limited", "new"],
     sortOrder: 40,
     hookEn:
