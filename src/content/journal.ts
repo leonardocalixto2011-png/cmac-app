@@ -126,6 +126,60 @@ export const JOURNAL: Record<Locale, Article[]> = {
       related: ["led-red-light-mask", "set-midnight-glow"],
     },
     {
+      slug: "red-light-hand-masks-canada",
+      updated: "2026-09-28",
+      title: "“LED hand masks” in Canada: what is actually being sold",
+      answer:
+        "Most devices sold online as LED hand masks are near-infrared gloves advertised for arthritis and joint pain. In Canada, a device sold with pain-relief claims is a medical device and needs a Health Canada licence. That is why the honest cosmetic version of this product is a much smaller category, and why we do not sell one today.",
+      intro:
+        "People search for this, land on beauty shops, and find a product that is not really a beauty product. Here is the difference, from a shop that looked into selling one and decided against it.",
+      blocks: [
+        {
+          h: "Three different products, one name",
+          table: {
+            head: ["What it really is", "How it is advertised", "What that means in Canada"],
+            rows: [
+              ["Near-infrared glove, 660 / 850 nm", "Arthritis, joint pain, circulation, stiff fingers", "Those are therapeutic claims: the device becomes a medical device and needs a Health Canada licence"],
+              ["Cosmetic light device for hands", "The look of the skin on the backs of the hands", "A cosmetic tool, described in terms of appearance only, under the same rules as our face mask"],
+              ["Hand sheet mask or moisturising glove treatment", "Softness, hydration", "A cosmetic. It must be notified to Health Canada, with a full ingredient list"],
+            ],
+          },
+        },
+        {
+          h: "Why we don't sell one",
+          p: [
+            "We went looking. Almost every hand device a small shop can source is the first kind: the listing, the manual and the box all talk about arthritis and pain relief. We could write cosmetic copy on our own page, but the printed sheet inside the box would still make claims we do not make and cannot stand behind. Shipping someone else's promises is not something we are willing to do.",
+            "Price is the second reason. The credible units land around $65 to $100 before anything we add, which would make this the most expensive thing we sell, in a category we cannot describe honestly at that price.",
+            "If we find a hand device sold as a cosmetic tool, with packaging that matches, we will add it and update this page. Until then, the answer to “do you sell an LED hand mask?” is no, and this is why.",
+          ],
+        },
+        {
+          h: "What actually changes how your hands look",
+          ul: [
+            "Sunscreen on the backs of the hands, every day, all year. Hands collect more cumulative sun than almost anywhere else and almost never get protected. It is free, and it is the biggest lever you have.",
+            "A thick cream at night, then cotton gloves. Unglamorous, costs almost nothing, works on dryness and texture.",
+            "Gloves for dish soap and for the cold. Most rough hands in Québec are water, detergent and January, not age.",
+            "Anything promising to erase spots or reverse ageing is selling you a claim, not a result. Ask what the device is actually licensed to do.",
+          ],
+        },
+      ],
+      faq: [
+        {
+          q: "Is an LED hand mask the same thing as an LED face mask?",
+          a: "Usually not. Face masks in this price range are sold as cosmetic tools, described in terms of appearance. Most hand devices are sold as pain-relief products, which is a different category with different rules.",
+        },
+        {
+          q: "Does red light help arthritis?",
+          a: "That is not a question a shop should answer, and a shop that answers it confidently is telling you something about itself. Ask a pharmacist or a doctor. If you do buy a device for pain, check that it carries a Health Canada medical device licence number.",
+        },
+        {
+          q: "Can I use a face LED mask on my hands?",
+          a: "Follow the manufacturer's instructions for the device you own. Ours is designed and sold for facial use, and we describe it for that use only.",
+        },
+      ],
+      related: ["led-red-light-mask"],
+    },
+    {
       slug: "puffy-face-tools-compared",
       updated: "2026-09-22",
       title: "Ice roller, gua sha or microcurrent: which one for a puffy-looking morning?",
@@ -299,6 +353,51 @@ export const JOURNAL: Record<Locale, Article[]> = {
         { q: "Qui devrait l'éviter ?", a: "En cas de grossesse, de photosensibilité, de médication photosensibilisante ou d'affection cutanée active, consultez d'abord votre médecin. Gardez les yeux fermés pendant les séances." },
       ],
       related: ["led-red-light-mask", "set-midnight-glow"],
+    },
+    {
+      slug: "red-light-hand-masks-canada",
+      updated: "2026-09-28",
+      title: "« Masque LED pour les mains » au Canada : ce qu'on vous vend vraiment",
+      answer:
+        "La plupart des appareils vendus en ligne comme « masques LED pour les mains » sont des gants à infrarouge proche annoncés contre l'arthrite et les douleurs articulaires. Au Canada, un appareil vendu avec une promesse de soulager la douleur devient un instrument médical et exige une licence de Santé Canada. C'est pourquoi la version cosmétique honnête de ce produit est une catégorie beaucoup plus petite, et pourquoi nous n'en vendons pas aujourd'hui.",
+      intro:
+        "Les gens cherchent ça, arrivent sur des boutiques beauté, et tombent sur un produit qui n'en est pas vraiment un. Voici la différence, écrite par une boutique qui a envisagé d'en vendre un et a dit non.",
+      blocks: [
+        {
+          h: "Trois produits différents, un seul nom",
+          table: {
+            head: ["Ce que c'est vraiment", "Comment c'est annoncé", "Ce que ça veut dire au Canada"],
+            rows: [
+              ["Gant à infrarouge proche, 660 / 850 nm", "Arthrite, douleurs articulaires, circulation, doigts raides", "Ce sont des promesses thérapeutiques : l'appareil devient un instrument médical et exige une licence de Santé Canada"],
+              ["Appareil lumineux cosmétique pour les mains", "L'apparence de la peau du dessus des mains", "Un outil cosmétique, décrit en matière d'apparence seulement, sous les mêmes règles que notre masque visage"],
+              ["Masque en tissu ou gant hydratant pour les mains", "Douceur, hydratation", "Un cosmétique. Il doit être déclaré à Santé Canada, avec la liste complète des ingrédients"],
+            ],
+          },
+        },
+        {
+          h: "Pourquoi nous n'en vendons pas",
+          p: [
+            "Nous avons cherché. Presque tous les appareils pour les mains accessibles à une petite boutique sont du premier type : la fiche, le manuel et la boîte parlent d'arthrite et de soulagement de la douleur. On pourrait écrire un texte cosmétique sur notre propre page, mais le feuillet imprimé dans la boîte, lui, continuerait d'affirmer des choses que nous ne disons pas et que nous ne pouvons pas défendre. Expédier les promesses de quelqu'un d'autre, ce n'est pas quelque chose qu'on est prêt à faire.",
+            "Le prix est la deuxième raison. Les unités crédibles arrivent autour de 65 à 100 $ avant tout ce qu'on ajoute, ce qui en ferait l'article le plus cher de la boutique, dans une catégorie qu'on ne peut pas décrire honnêtement à ce prix.",
+            "Si nous trouvons un appareil pour les mains vendu comme outil cosmétique, avec un emballage qui dit la même chose, nous l'ajouterons et nous mettrons cette page à jour. D'ici là, la réponse à « vendez-vous un masque LED pour les mains ? » est non, et voici pourquoi.",
+          ],
+        },
+        {
+          h: "Ce qui change vraiment l'apparence de vos mains",
+          ul: [
+            "De la crème solaire sur le dessus des mains, tous les jours, toute l'année. Les mains reçoivent plus de soleil cumulatif que presque partout ailleurs et ne sont presque jamais protégées. C'est gratuit, et c'est le plus gros levier.",
+            "Une crème épaisse le soir, puis des gants de coton. Pas glamour, coûte presque rien, agit sur la sécheresse et la texture.",
+            "Des gants pour le savon à vaisselle et pour le froid. Au Québec, des mains rugueuses, c'est l'eau, le détergent et janvier — pas l'âge.",
+            "Tout ce qui promet d'effacer les taches ou de renverser le vieillissement vous vend une promesse, pas un résultat. Demandez ce que l'appareil a vraiment le droit de faire.",
+          ],
+        },
+      ],
+      faq: [
+        { q: "Un masque LED pour les mains, c'est comme un masque LED visage ?", a: "Généralement non. Les masques visage dans cette gamme de prix sont vendus comme outils cosmétiques, décrits en matière d'apparence. La plupart des appareils pour les mains sont vendus comme produits antidouleur, ce qui est une autre catégorie avec d'autres règles." },
+        { q: "Est-ce que la lumière rouge aide contre l'arthrite ?", a: "Ce n'est pas une question à laquelle une boutique devrait répondre, et une boutique qui y répond avec assurance vous apprend quelque chose sur elle-même. Demandez à votre pharmacien ou à votre médecin. Si vous achetez un appareil pour la douleur, vérifiez qu'il porte un numéro de licence d'instrument médical de Santé Canada." },
+        { q: "Puis-je utiliser un masque LED visage sur mes mains ?", a: "Suivez le mode d'emploi de l'appareil que vous possédez. Le nôtre est conçu et vendu pour le visage, et c'est le seul usage que nous décrivons." },
+      ],
+      related: ["led-red-light-mask"],
     },
     {
       slug: "puffy-face-tools-compared",
