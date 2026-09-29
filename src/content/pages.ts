@@ -311,7 +311,7 @@ export const PAGES: Record<string, Record<Locale, PageContent>> = {
         {
           h: "Person in charge of the protection of personal information",
           p: [
-            `Leonart Calixte, owner — ${BRAND.name}, L'Assomption, Québec, Canada — ${BRAND.email}. Write to this address for any question, request or complaint about your personal information.`,
+            `Leonart Calixte, owner — ${BRAND.name}, 6894 boul. Gouin Est, Montréal, QC H1G 6N4, Canada — ${BRAND.email}. Write to this address for any question, request or complaint about your personal information.`,
           ],
         },
         {
@@ -377,7 +377,7 @@ export const PAGES: Record<string, Record<Locale, PageContent>> = {
         {
           h: "Personne responsable de la protection des renseignements personnels",
           p: [
-            `Leonart Calixte, propriétaire — ${BRAND.name}, L'Assomption, Québec, Canada — ${BRAND.email}. Écrivez à cette adresse pour toute question, demande ou plainte concernant vos renseignements personnels.`,
+            `Leonart Calixte, propriétaire — ${BRAND.name}, 6894, boul. Gouin Est, Montréal (Québec) H1G 6N4, Canada — ${BRAND.email}. Écrivez à cette adresse pour toute question, demande ou plainte concernant vos renseignements personnels.`,
           ],
         },
         {
@@ -404,7 +404,7 @@ export const PAGES: Record<string, Record<Locale, PageContent>> = {
           h: "Orders and payment",
           ul: [
             "Prices are in Canadian dollars and are the final amount: no sales tax is added at checkout. If CMAC Beauty becomes required to register for GST/QST, prices and this page will be updated before any tax is charged.",
-            `Québec customers: this is a distance contract under the Consumer Protection Act. You are buying from ${BRAND.name}, 209 rue Paré, L'Assomption (QC) J5W 0K5, Canada — ${BRAND.email}, ${BRAND.phone}. The total cost and the delivery window are shown before you pay, and your order confirmation repeats them.`,
+            `Québec customers: this is a distance contract under the Consumer Protection Act. You are buying from ${BRAND.name}, 6894 boul. Gouin Est, Montréal, QC H1G 6N4, Canada — ${BRAND.email}, ${BRAND.phone}. The total cost and the delivery window are shown before you pay, and your order confirmation repeats them.`,
             "Payment is processed by Stripe. Your order is confirmed once payment succeeds; you'll receive an email confirmation.",
             "We may cancel an order if an item becomes unavailable, if we suspect fraud, or if there was an obvious pricing error. You'll be refunded in full.",
           ],
@@ -473,7 +473,7 @@ export const PAGES: Record<string, Record<Locale, PageContent>> = {
           h: "Commandes et paiement",
           ul: [
             "Les prix sont en dollars canadiens et constituent le montant final : aucune taxe de vente n'est ajoutée au paiement. Si CMAC Beauty devient tenue de s'inscrire à la TPS et à la TVQ, les prix et cette page seront mis à jour avant toute taxe facturée.",
-            `Clientèle du Québec : il s'agit d'un contrat à distance au sens de la Loi sur la protection du consommateur. Vous achetez de ${BRAND.name}, 209 rue Paré, L'Assomption (QC) J5W 0K5, Canada — ${BRAND.email}, ${BRAND.phone}. Le coût total et le délai de livraison sont affichés avant le paiement, et votre confirmation de commande les reprend.`,
+            `Clientèle du Québec : il s'agit d'un contrat à distance au sens de la Loi sur la protection du consommateur. Vous achetez de ${BRAND.name}, 6894, boul. Gouin Est, Montréal (Québec) H1G 6N4, Canada — ${BRAND.email}, ${BRAND.phone}. Le coût total et le délai de livraison sont affichés avant le paiement, et votre confirmation de commande les reprend.`,
             "Le paiement est traité par Stripe. Votre commande est confirmée dès que le paiement est accepté ; vous recevrez une confirmation par courriel.",
             "Nous pouvons annuler une commande si un article devient indisponible, en cas de soupçon de fraude, ou en cas d'erreur de prix manifeste. Vous serez remboursé en entier.",
           ],
