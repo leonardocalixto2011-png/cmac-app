@@ -312,7 +312,8 @@
 .cmac-hero__badge { position: absolute; right: 4%; bottom: 8%; width: 108px; height: 108px; border-radius: 50%; background: var(--color-ink); color: var(--color-cream); display: grid; place-items: center; text-align: center; font: 500 0.74rem/1.25 var(--font-display); padding: 12px; animation: cmac-float 6s ease-in-out infinite reverse; }
 @media (max-width: 989px) {
   .cmac-hero__grid { grid-template-columns: 1fr; }
-  .cmac-hero__visual { max-width: 420px; margin: 0 auto; }
+  .cmac-hero__visual { width: 100%; max-width: 420px; margin: 0 auto; }
+  .cmac-hero__badge { width: 92px; height: 92px; font-size: 0.68rem; padding: 10px; top: 2%; bottom: auto; right: 0; }
 }
 
 /* ---- Marquee ---- */
