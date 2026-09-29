@@ -574,6 +574,52 @@ export const JOURNAL: Record<Locale, Article[]> = {
       ],
       related: ["set-christmas-glow", "set-cozy-night", "set-for-mom", "set-silky-hair"],
     },
+    {
+      slug: "gel-manicure-between-appointments",
+      updated: "2026-09-29",
+      title: "Keeping a gel manicure looking fresh between appointments",
+      answer:
+        "A gel manicure typically looks its best for two to three weeks. What makes it last is simple: gloves for dishes and cleaning products, hand cream or cuticle oil every day, never peeling a lifting edge, and filing natural nails in one direction only. Tidy natural nails at home; leave gel repairs and removal to your technician. Our Between Appointments kit is $54.99.",
+      intro:
+        "Most gel manicures don't fail at the salon. They fail at the sink, on a stubborn lid or when a lifting corner gets picked at on the couch. Here is what helps, what to do yourself, and what to leave for your next appointment.",
+      blocks: [
+        {
+          h: "What actually makes it last",
+          ul: [
+            "Gloves for dishwater and cleaning products. Hot water and detergent are what loosen gel at the edges.",
+            "Hand cream or cuticle oil every day, on the cuticles as much as the hands.",
+            "Nails are not tools: no opening cans or scraping labels.",
+            "Never peel a lifting edge. Gel that comes off in one piece takes the top layer of the natural nail with it.",
+            "File in one direction, from the side toward the centre. Back-and-forth filing frays the edge.",
+          ],
+        },
+        {
+          h: "At home, or at the studio?",
+          table: {
+            head: ["Task", "At home", "Leave to your technician"],
+            rows: [
+              ["Shape natural nails", "Glass nail file ($12.99), or the 5-in-1 nail pen ($29.99) on bare natural nails", "—"],
+              ["Tidy cuticles", "Push them back after a shower; nip only loose skin (Cuticle Care Duo, $14.99)", "Full cuticle work"],
+              ["A lifting gel edge", "Keep it dry, don't peel it, book a fill", "Repair or fill"],
+              ["Removing gel", "Never by prying or hard filing", "Proper removal"],
+              ["Doing your own gel", "USB UV/LED lamp ($24.99): thin coats, 30 to 60 seconds per coat", "—"],
+            ],
+          },
+        },
+        {
+          h: "Under the lamp",
+          p: [
+            "Many people prefer to keep the backs of their hands covered while gel cures. Our cover gloves ($8.99) are fabric covers with open fingertips, so the technician works as usual. They are a cover, not a sunscreen.",
+          ],
+        },
+      ],
+      faq: [
+        { q: "How often can I use the nail care pen?", a: "Once a week is plenty, on clean, bare natural nails, at the lower speed." },
+        { q: "Can I file my gel with it?", a: "No. Leave gel and builder gel to your technician; the pen is for natural nails between visits." },
+        { q: "Is a USB lamp as good as a salon lamp?", a: "It is a compact 24-bead lamp for touch-ups and home gel; salon lamps are larger. Follow the curing time on your polish, usually 30 to 60 seconds per coat." },
+      ],
+      related: ["set-between-appointments", "cuticle-care-duo", "glass-nail-file", "usb-nail-lamp"],
+    },
   ],
   fr: [
     {
@@ -1080,6 +1126,52 @@ export const JOURNAL: Record<Locale, Article[]> = {
         { q: "Vos prix vont-ils monter avant le Vendredi fou ?", a: "Non. On n'augmente pas nos prix avant une vente pour faire paraître un rabais plus gros ; le code s'applique sur le prix que vous voyez aujourd'hui." },
       ],
       related: ["set-christmas-glow", "set-cozy-night", "set-for-mom", "set-silky-hair"],
+    },
+    {
+      slug: "gel-manicure-between-appointments",
+      updated: "2026-09-29",
+      title: "Faire durer sa manucure au gel entre deux rendez-vous",
+      answer:
+        "Une manucure au gel reste belle habituellement deux à trois semaines. Ce qui la fait durer est simple : des gants pour la vaisselle et les produits ménagers, de la crème à mains ou de l'huile à cuticules chaque jour, ne jamais arracher un coin qui décolle, et limer les ongles naturels dans un seul sens. On entretient les ongles naturels à la maison ; les réparations et le retrait du gel, on les laisse à sa technicienne. Notre trousse Entre deux rendez-vous est à 54,99 $.",
+      intro:
+        "La plupart des manucures au gel ne ratent pas au salon. Elles ratent à l'évier, sur un couvercle récalcitrant ou quand on gratte un coin qui lève, devant la télé. Voici ce qui aide, ce qu'on peut faire soi-même, et ce qu'on garde pour le prochain rendez-vous.",
+      blocks: [
+        {
+          h: "Ce qui la fait vraiment durer",
+          ul: [
+            "Des gants pour l'eau de vaisselle et les produits ménagers. L'eau chaude et le détergent, c'est ce qui décolle le gel sur les bords.",
+            "De la crème à mains ou de l'huile à cuticules chaque jour, sur les cuticules autant que sur les mains.",
+            "Les ongles ne sont pas des outils : pas pour ouvrir une canette ni gratter une étiquette.",
+            "Ne jamais arracher un coin qui décolle. Le gel qui part d'un coup emporte la couche du dessus de l'ongle naturel.",
+            "Limer dans un seul sens, du côté vers le centre. Limer en va-et-vient effiloche le bord.",
+          ],
+        },
+        {
+          h: "À la maison ou au studio ?",
+          table: {
+            head: ["Tâche", "À la maison", "À laisser à votre technicienne"],
+            rows: [
+              ["Donner forme aux ongles naturels", "Lime en verre (12,99 $), ou le stylo soin des ongles 5 en 1 (29,99 $) sur ongles naturels nus", "—"],
+              ["Entretenir les cuticules", "Les repousser après la douche ; couper seulement les peaux détachées (Duo soin des cuticules, 14,99 $)", "Le travail complet des cuticules"],
+              ["Un coin de gel qui lève", "Le garder au sec, ne pas l'arracher, prendre rendez-vous pour un remplissage", "Réparation ou remplissage"],
+              ["Retirer le gel", "Jamais en le soulevant ni en limant fort", "Le retrait fait correctement"],
+              ["Faire son gel soi-même", "Lampe UV/LED USB (24,99 $) : couches minces, 30 à 60 secondes par couche", "—"],
+            ],
+          },
+        },
+        {
+          h: "Sous la lampe",
+          p: [
+            "Beaucoup de gens préfèrent garder le dessus des mains couvert pendant que le gel sèche. Nos gants couvrants (8,99 $) sont en tissu, avec le bout des doigts dégagé : la technicienne travaille comme d'habitude. C'est une couverture, pas un écran solaire.",
+          ],
+        },
+      ],
+      faq: [
+        { q: "À quelle fréquence utiliser le stylo soin des ongles ?", a: "Une fois par semaine suffit, sur des ongles naturels propres et nus, à la vitesse la plus basse." },
+        { q: "Puis-je limer mon gel avec ?", a: "Non. Le gel et le gel de construction, on les laisse à sa technicienne ; le stylo sert aux ongles naturels entre deux visites." },
+        { q: "Une lampe USB vaut-elle une lampe de salon ?", a: "C'est une lampe compacte de 24 LED pour les retouches et le gel maison ; les lampes de salon sont plus grandes. Suivez le temps de séchage indiqué sur votre vernis, habituellement 30 à 60 secondes par couche." },
+      ],
+      related: ["set-between-appointments", "cuticle-care-duo", "glass-nail-file", "usb-nail-lamp"],
     },
   ],
 };
