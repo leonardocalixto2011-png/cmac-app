@@ -68,6 +68,9 @@
     scroll-behavior: smooth;
     scroll-padding-top: calc(var(--nav-h) + 18px);
     -webkit-text-size-adjust: 100%;
+    /* Needed as well as body: with html left visible, body's overflow is handed to the
+       viewport and stops clipping, so a decorative hero blob widened phones by 2px. */
+    overflow-x: clip;
   }
 
   body {
