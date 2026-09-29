@@ -66,12 +66,12 @@ export function Nav({ signedIn = false }: { signedIn?: boolean }) {
             <span className="mt-1 text-[0.58rem] font-semibold uppercase tracking-[0.34em] text-sage">Beauty</span>
           </Link>
 
-          <nav aria-label={t("nav.home")} className="hidden items-center gap-[clamp(0.9rem,2vw,1.7rem)] lg:flex">
+          <nav aria-label={t("nav.home")} className="hidden items-center gap-[0.8rem] lg:flex xl:gap-[clamp(0.9rem,2vw,1.7rem)]">
             {LINKS.map((l) => (
               <Link
                 key={l.href}
                 href={l.href}
-                className="py-1.5 text-[0.9rem] font-medium tracking-[0.01em] text-ink-soft transition-colors hover:text-ink"
+                className="whitespace-nowrap py-1.5 text-[0.9rem] font-medium tracking-[0.01em] text-ink-soft transition-colors hover:text-ink"
               >
                 {t(l.key)}
               </Link>
