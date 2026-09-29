@@ -57,7 +57,8 @@ const en: Dict = {
   "hero.proof2": "30-day returns",
   "hero.proof3": "Ships to all of Canada",
   "hero.badge": "New · Fall glow edit",
-  "hero.visualAlt": "CMAC Beauty at-home device",
+  "hero.visualAlt": "CMAC Beauty LED red light mask with its USB cable",
+  "hero.visualLabel": "LED red light mask",
 
   "marquee.label": "Store highlights",
   "marquee.holiday": "Holiday gifts: order by {date} to receive them before Christmas",
@@ -395,7 +396,8 @@ const fr: Dict = {
   "hero.proof2": "Retours sous 30 jours",
   "hero.proof3": "Livraison partout au Canada",
   "hero.badge": "Nouveau · Édition éclat d'automne",
-  "hero.visualAlt": "Appareil beauté à domicile CMAC Beauty",
+  "hero.visualAlt": "Masque LED lumière rouge CMAC Beauty et son câble USB",
+  "hero.visualLabel": "Masque LED lumière rouge",
 
   "marquee.label": "Points forts de la boutique",
   "marquee.holiday": "Cadeaux des Fêtes : commandez d'ici le {date} pour les recevoir avant Noël",

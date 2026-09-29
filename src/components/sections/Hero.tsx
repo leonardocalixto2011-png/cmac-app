@@ -1,10 +1,15 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useLocale } from "@/i18n/LocaleProvider";
 import { Icon } from "@/components/Icon";
 import { SHIPPING } from "@/lib/brand";
 import { formatWholeDollars } from "@/lib/utils";
+
+/** Hero product photo: the LED mask cut out on the brand cream (same file as its product page). */
+const HERO_PHOTO =
+  "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790013183/cmac/products/led-red-light-mask/final-0";
 
 const D = (ms: number) => ({ "--d": `${ms}ms` }) as React.CSSProperties;
 
@@ -62,16 +67,20 @@ export function Hero() {
 
         <div className="cmac-hero__visual" data-reveal="scale" style={D(200)}>
           <div className="cmac-hero__ring" aria-hidden="true" />
-          {/* PLACEHOLDER hero visual — swap for a product photo (<Image>) when available. */}
-          <div className="cmac-hero__img" role="img" aria-label={t("hero.visualAlt")}>
-            <div className="absolute inset-0 bg-[linear-gradient(160deg,#fffdf9_0%,#ede6da_45%,#e4a48e_100%)]" />
-            <div className="absolute left-1/2 top-1/2 h-[62%] w-[70%] -translate-x-1/2 -translate-y-1/2 rounded-[40%_40%_46%_46%/48%_48%_52%_52%] bg-[linear-gradient(180deg,#fffdf9,#f5f1ea)] shadow-[inset_0_-18px_40px_-20px_rgba(201,123,99,0.45),0_30px_60px_-30px_rgba(31,36,34,0.35)]" />
-            <div className="absolute left-1/2 top-[44%] h-[6%] w-[46%] -translate-x-1/2 rounded-full bg-[radial-gradient(circle,rgba(201,123,99,0.9),rgba(228,164,142,0.2)_70%,transparent)] blur-[2px]" />
-            <div className="absolute left-1/2 top-[58%] h-[4%] w-[34%] -translate-x-1/2 rounded-full bg-[radial-gradient(circle,rgba(217,179,112,0.8),transparent_70%)] blur-[2px]" />
-            <span className="absolute bottom-5 left-5 font-ui text-[0.62rem] font-semibold uppercase tracking-[0.24em] text-ink/55">
-              CMAC Beauty
+          <Link className="cmac-hero__img" href="/shop/led-red-light-mask">
+            <Image
+              src={HERO_PHOTO}
+              alt={t("hero.visualAlt")}
+              fill
+              priority
+              sizes="(min-width: 900px) 38vw, 80vw"
+              className="object-cover"
+            />
+            <span className="cmac-hero__caption">
+              {t("hero.visualLabel")}
+              <Icon name="arrow" />
             </span>
-          </div>
+          </Link>
           <div className="cmac-hero__badge">
             <span>{t("hero.badge")}</span>
           </div>
