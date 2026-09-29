@@ -33,6 +33,31 @@ export type Promo = {
 
 export const PROMOS: Promo[] = [
   {
+    // A week, not a day: Black Friday itself (Nov 27) falls after the Christmas cutoff
+    // (Nov 26, from a 2-4 week delivery), so a one-day sale would have discounted
+    // exactly the orders that can no longer arrive in time. Starting Nov 20 gives a
+    // week where the discount and a Christmas delivery overlap, and the bar says so.
+    // Two entries, one code: the bar must stop promising Christmas the moment the
+    // cutoff passes. BF20 is created once in Stripe (ensureSeasonalCodes skips a code
+    // that exists) and expires with the later entry, on Dec 2.
+    id: "black-friday-week-2026",
+    code: "BF20",
+    percentOff: 20,
+    startsAt: "2026-11-20T05:00:00Z",
+    endsAt: "2026-11-27T05:00:00Z",
+    href: "/collections/gifts",
+    en: {
+      label: "Black Friday week",
+      detail: "20% off every gift set with code BF20. Order by Nov 26 for delivery before Christmas",
+      cta: "See the sets",
+    },
+    fr: {
+      label: "Semaine du Vendredi fou",
+      detail: "20 % de rabais sur tous les coffrets avec le code BF20. Commandez avant le 26 novembre pour Noël",
+      cta: "Voir les coffrets",
+    },
+  },
+  {
     id: "black-friday-2026",
     code: "BF20",
     percentOff: 20,
@@ -41,12 +66,12 @@ export const PROMOS: Promo[] = [
     href: "/collections/gifts",
     en: {
       label: "Black Friday",
-      detail: "20% off every gift set with code BF20",
+      detail: "20% off every gift set with code BF20. Delivery before Christmas is no longer guaranteed",
       cta: "See the sets",
     },
     fr: {
       label: "Vendredi fou",
-      detail: "20 % de rabais sur tous les coffrets avec le code BF20",
+      detail: "20 % de rabais sur tous les coffrets avec le code BF20. Livraison avant Noël non garantie",
       cta: "Voir les coffrets",
     },
   },

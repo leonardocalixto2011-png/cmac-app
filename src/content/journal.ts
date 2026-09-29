@@ -527,6 +527,53 @@ export const JOURNAL: Record<Locale, Article[]> = {
       ],
       related: ["satin-pillowcase", "satin-bonnet", "satin-beauty-sleep-set", "set-silky-hair"],
     },
+    {
+      slug: "black-friday-beauty-canada-2026",
+      updated: "2026-09-29",
+      title: "Black Friday 2026 in Canada: what arrives before Christmas, and how to spot a fake discount",
+      answer:
+        "At CMAC Beauty, Black Friday week runs November 20 to December 1, 2026: 20% off every gift set with code BF20. Orders placed by November 26 are expected before Christmas, since delivery takes 2 to 4 weeks; from November 27 the discount continues but Christmas delivery is no longer guaranteed. Boxing Week runs December 26 to January 4, with 25% off sets using code BOXING25.",
+      intro:
+        "Black Friday is the busiest week of the year for staged discounts and for gifts that arrive on December 28. Here is our calendar with the delivery arithmetic already done, and the checks that separate a real discount from a dressed-up one.",
+      blocks: [
+        {
+          h: "Our holiday calendar",
+          table: {
+            head: ["Dates", "What", "Before Christmas?"],
+            rows: [
+              ["Until November 19", `Regular prices, free shipping from ${FREE_EN}`, "Yes"],
+              ["November 20 to 26", "Black Friday week: 20% off every gift set with code BF20", "Yes"],
+              ["November 27 to December 1", "Black Friday: BF20 continues", "Not guaranteed"],
+              ["December 26 to January 4", "Boxing Week: 25% off sets with code BOXING25", "After the holidays"],
+            ],
+          },
+        },
+        {
+          h: "How to tell a real Black Friday discount",
+          ul: [
+            "The “was” price has to be one the shop actually charged, for a real period, before the sale. In Canada, inflating a regular price to advertise a bigger saving is misleading advertising under the Competition Act.",
+            "Check the price a few weeks earlier. A product at $59.99 in October that becomes “$59.99, 40% off” in November has no discount at all.",
+            "A countdown that restarts when you reload the page is a sales tactic, not a deadline.",
+            "Compare totals with shipping, not headline percentages. 30% off plus $15 shipping can cost more than 20% off with free shipping.",
+          ],
+        },
+        {
+          h: "Our own rules for the season",
+          ul: [
+            "Discounts come off our normal price, the one on the site all year. We don't raise prices ahead of a sale to make the saving look bigger.",
+            "Every code says what it gives and when it ends, and it disappears when it ends.",
+            "Our “buy 3, save 10%; buy 5, save 15%” tiers pause while a seasonal code runs, so the two never stack.",
+            "The Christmas cutoff is November 26. After that we say “not guaranteed” rather than hope.",
+          ],
+        },
+      ],
+      faq: [
+        { q: "Can I use BF20 on a set I'm giving for Christmas?", a: "Yes, from November 20 to 26. Orders placed in that window are expected before Christmas." },
+        { q: "Does BF20 combine with the 3-item discount?", a: "No. The build-your-own-set tiers pause while a seasonal code is running, so you get one or the other, never both." },
+        { q: "Will your prices go up before Black Friday?", a: "No. We don't raise prices before a sale to make a discount look bigger; the code comes off the price you can see today." },
+      ],
+      related: ["set-christmas-glow", "set-cozy-night", "set-for-mom", "set-silky-hair"],
+    },
   ],
   fr: [
     {
@@ -986,6 +1033,53 @@ export const JOURNAL: Record<Locale, Article[]> = {
         { q: "Pourquoi votre taie en satin est-elle seulement à 9,99 $ ?", a: "Parce qu'elle est en satin de polyester, vendue sans commission de place de marché, et que la livraison est facturée à part. Ce n'est pas de la soie, et elle n'est pas vendue au prix de la soie." },
       ],
       related: ["satin-pillowcase", "satin-bonnet", "satin-beauty-sleep-set", "set-silky-hair"],
+    },
+    {
+      slug: "black-friday-beauty-canada-2026",
+      updated: "2026-09-29",
+      title: "Vendredi fou 2026 au Canada : ce qui arrive avant Noël, et comment repérer un faux rabais",
+      answer:
+        "Chez CMAC Beauty, la semaine du Vendredi fou va du 20 novembre au 1er décembre 2026 : 20 % de rabais sur tous les coffrets avec le code BF20. Les commandes passées d'ici le 26 novembre devraient arriver avant Noël, puisque la livraison prend de 2 à 4 semaines ; à partir du 27 novembre, le rabais continue mais la livraison avant Noël n'est plus garantie. L'après-Noël va du 26 décembre au 4 janvier, avec 25 % de rabais sur les coffrets grâce au code BOXING25.",
+      intro:
+        "Le Vendredi fou, c'est la semaine de l'année où l'on voit le plus de rabais maquillés et de cadeaux qui arrivent le 28 décembre. Voici notre calendrier, avec le calcul de livraison déjà fait, et les vérifications qui séparent un vrai rabais d'un faux.",
+      blocks: [
+        {
+          h: "Notre calendrier des Fêtes",
+          table: {
+            head: ["Dates", "Quoi", "Avant Noël ?"],
+            rows: [
+              ["Jusqu'au 19 novembre", `Prix habituels, livraison gratuite dès ${FREE_FR}`, "Oui"],
+              ["Du 20 au 26 novembre", "Semaine du Vendredi fou : 20 % de rabais sur tous les coffrets avec le code BF20", "Oui"],
+              ["Du 27 novembre au 1er décembre", "Vendredi fou : BF20 continue", "Non garanti"],
+              ["Du 26 décembre au 4 janvier", "Après-Noël : 25 % de rabais sur les coffrets avec le code BOXING25", "Après les Fêtes"],
+            ],
+          },
+        },
+        {
+          h: "Comment reconnaître un vrai rabais du Vendredi fou",
+          ul: [
+            "Le prix « avant » doit être un prix que la boutique a vraiment demandé, pendant une vraie période, avant la vente. Au Canada, gonfler un prix habituel pour annoncer une plus grosse économie est une publicité trompeuse au sens de la Loi sur la concurrence.",
+            "Vérifiez le prix quelques semaines avant. Un produit à 59,99 $ en octobre qui devient « 59,99 $, −40 % » en novembre n'a aucun rabais.",
+            "Un compte à rebours qui repart à zéro quand on recharge la page est une technique de vente, pas une date limite.",
+            "Comparez les totaux avec la livraison, pas les pourcentages en gros caractères. −30 % plus 15 $ de livraison peut coûter plus cher que −20 % livré gratuitement.",
+          ],
+        },
+        {
+          h: "Nos propres règles pour la saison",
+          ul: [
+            "Nos rabais s'appliquent sur notre prix habituel, celui du site toute l'année. On n'augmente pas nos prix avant une vente pour faire paraître l'économie plus grosse.",
+            "Chaque code dit ce qu'il donne et quand il se termine, et il disparaît à la fin.",
+            "Nos paliers « 3 articles −10 %, 5 articles −15 % » sont suspendus pendant un code saisonnier : les deux ne se cumulent jamais.",
+            "La date limite de Noël est le 26 novembre. Après, on écrit « non garanti » plutôt que d'espérer.",
+          ],
+        },
+      ],
+      faq: [
+        { q: "Puis-je utiliser BF20 sur un coffret à offrir à Noël ?", a: "Oui, du 20 au 26 novembre. Les commandes passées pendant cette période devraient arriver avant Noël." },
+        { q: "BF20 se combine-t-il avec le rabais de 3 articles ?", a: "Non. Les paliers « Compose ta trousse » sont suspendus pendant un code saisonnier : c'est l'un ou l'autre, jamais les deux." },
+        { q: "Vos prix vont-ils monter avant le Vendredi fou ?", a: "Non. On n'augmente pas nos prix avant une vente pour faire paraître un rabais plus gros ; le code s'applique sur le prix que vous voyez aujourd'hui." },
+      ],
+      related: ["set-christmas-glow", "set-cozy-night", "set-for-mom", "set-silky-hair"],
     },
   ],
 };
