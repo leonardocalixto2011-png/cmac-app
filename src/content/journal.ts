@@ -74,7 +74,7 @@ export const JOURNAL: Record<Locale, Article[]> = {
     },
     {
       slug: "led-mask-canada-price-guide",
-      updated: "2026-09-22",
+      updated: "2026-09-28",
       title: "At-home LED masks in Canada: what you actually get at each price",
       answer:
         "In Canada, at-home red-light masks sell for roughly $60 to $500. Under $100 you get a flexible silicone or hard-shell mask with red light and a timer; above $300 you mostly pay for more LEDs, a clinical-looking finish, an app and a longer warranty.",
@@ -91,6 +91,26 @@ export const JOURNAL: Record<Locale, Article[]> = {
               ["$300+", "High LED count, medical-grade certifications in some markets, app, 1–2 year warranty, brand support", "Price. Comfort and habit matter more than specs for most people"],
             ],
           },
+        },
+        {
+          h: "What the market actually charges right now",
+          table: {
+            head: ["Where", "Asking price (CAD)"],
+            rows: [
+              ["Amazon.ca, cheapest full-face mask on the first page of results", "$89.99"],
+              ["Amazon.ca, the range most listings sit in", "$129.99 – $169.99"],
+              ["Amazon.ca, Health Canada authorised medical-grade model", "$498.00"],
+              ["CMAC Beauty (this shop)", "$59.99"],
+            ],
+          },
+        },
+        {
+          h: "Why we can be the cheapest",
+          p: [
+            "Competitor prices above were checked on Amazon.ca on September 28, 2026, on the search “led red light therapy face mask”. Prices move, so treat them as a snapshot and check before you buy.",
+            "We are not cheaper because the device is worse. We are cheaper because of where it is sold. A seller on a marketplace pays roughly 15% commission in beauty, plus fulfilment per unit, plus advertising to stay visible at all: around a third of the price is gone before any margin. We pay card processing and ship direct, so the same class of device lands at $59.99 and we still make a healthy margin on it. That is the whole trick, and there isn't a second one.",
+            "The trade-off is honest and it is delivery. Ours takes about 2 to 4 weeks because it ships from the supplier's warehouse, not from a Canadian one. If you need it this week, pay the marketplace premium — that is what it buys.",
+          ],
         },
         {
           h: "The part nobody advertises",
@@ -312,7 +332,7 @@ export const JOURNAL: Record<Locale, Article[]> = {
     },
     {
       slug: "led-mask-canada-price-guide",
-      updated: "2026-09-22",
+      updated: "2026-09-28",
       title: "Masque LED au Canada : ce que vous obtenez vraiment à chaque prix",
       answer:
         "Au Canada, les masques LED lumière rouge à domicile se vendent environ 60 $ à 500 $. Sous 100 $, vous avez un masque en silicone souple ou rigide avec lumière rouge et minuterie ; au-dessus de 300 $, vous payez surtout plus de LED, une finition de clinique, une application et une garantie plus longue.",
@@ -329,6 +349,26 @@ export const JOURNAL: Record<Locale, Article[]> = {
               ["300 $ et +", "Beaucoup de LED, certifications dans certains marchés, application, garantie 1 à 2 ans", "Le prix. Pour la plupart des gens, le confort et l'habitude comptent plus que la fiche technique"],
             ],
           },
+        },
+        {
+          h: "Ce que le marché demande vraiment en ce moment",
+          table: {
+            head: ["Où", "Prix demandé (CA)"],
+            rows: [
+              ["Amazon.ca, le masque complet le moins cher de la première page", "89,99 $"],
+              ["Amazon.ca, la fourchette où se situent la plupart des fiches", "129,99 $ à 169,99 $"],
+              ["Amazon.ca, modèle de qualité médicale autorisé par Santé Canada", "498,00 $"],
+              ["CMAC Beauty (cette boutique)", "59,99 $"],
+            ],
+          },
+        },
+        {
+          h: "Pourquoi on peut être le moins cher",
+          p: [
+            "Les prix des concurrents ci-dessus ont été relevés sur Amazon.ca le 28 septembre 2026, sur la recherche « led red light therapy face mask ». Les prix bougent : prenez-le comme une photo à un instant donné et vérifiez avant d'acheter.",
+            "On n'est pas moins cher parce que l'appareil est moins bon. On est moins cher à cause de l'endroit où il est vendu. Un vendeur sur une place de marché paie environ 15 % de commission en beauté, plus l'expédition à l'unité, plus de la publicité pour rester visible tout court : près du tiers du prix est parti avant la moindre marge. Nous, on paie les frais de carte et on expédie directement, alors le même type d'appareil se retrouve à 59,99 $ et il nous reste une marge saine. C'est toute l'astuce, et il n'y en a pas de deuxième.",
+            "La contrepartie est honnête, et c'est le délai. Le nôtre prend de 2 à 4 semaines, parce qu'il part de l'entrepôt du fournisseur et non d'un entrepôt canadien. S'il vous le faut cette semaine, payez la prime de la place de marché : c'est exactement ce qu'elle achète.",
+          ],
         },
         {
           h: "Ce que personne n'annonce",
