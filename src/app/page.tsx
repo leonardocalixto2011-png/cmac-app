@@ -14,6 +14,7 @@ import { FounderNote } from "@/components/sections/FounderNote";
 import { Faq } from "@/components/sections/Faq";
 import { Newsletter } from "@/components/sections/Newsletter";
 import { GlowBand } from "@/components/sections/GlowBand";
+import { PriceProof } from "@/components/sections/PriceProof";
 
 export const dynamic = "force-dynamic";
 
@@ -29,6 +30,7 @@ export default async function HomePage() {
     <>
       <JsonLd data={faqLd(faq)} />
       <Hero />
+      <PriceProof products={products} locale={locale} />
       <Marquee />
       <FeaturedProducts products={singles} />
       <FeaturedProducts products={homeSets} variant="sets" />

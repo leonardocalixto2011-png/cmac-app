@@ -45,11 +45,11 @@ const en: Dict = {
   "nav.skip": "Skip to content",
   "lang.switch": "Passer au français",
 
-  "hero.eyebrow": "Beauty tech · Montréal",
+  "hero.eyebrow": "Beauty devices · Fair prices · Québec",
   "hero.title": "Skin that looks",
   "hero.words": "rested,lifted,glowing,de-puffed",
   "hero.lead":
-    "Clinic-inspired devices for your 10-minute evening ritual. LED light, microcurrent and cooling tools, curated and shipped to your door in Canada.",
+    "Clinic-inspired devices for your 10-minute evening ritual: LED light, microcurrent and cooling tools, at a fair price because we sell direct. Shipped across Canada.",
   "hero.cta1": "Shop the ritual",
   "hero.cta2": "How it works",
   "hero.proof1": "Free shipping over {free}",
@@ -380,11 +380,11 @@ const fr: Dict = {
   "nav.skip": "Aller au contenu",
   "lang.switch": "Switch to English",
 
-  "hero.eyebrow": "Beauty tech · Montréal",
+  "hero.eyebrow": "Appareils beauté · Juste prix · Québec",
   "hero.title": "Une peau à l'air",
   "hero.words": "reposée,liftée,lumineuse,dégonflée",
   "hero.lead":
-    "Des appareils inspirés des cliniques pour votre rituel du soir de 10 minutes. Lumière LED, microcourant et outils rafraîchissants, sélectionnés avec soin et livrés à votre porte, partout au Canada.",
+    "Des appareils inspirés des cliniques pour votre rituel du soir de 10 minutes : lumière LED, microcourant et outils rafraîchissants, au juste prix parce qu'on vend en direct. Livrés partout au Canada.",
   "hero.cta1": "Magasiner le rituel",
   "hero.cta2": "Comment ça marche",
   "hero.proof1": "Livraison gratuite dès {free}",
