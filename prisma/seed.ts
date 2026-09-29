@@ -166,6 +166,7 @@ const PRICE_REVIEW: [string, number, number][] = [
   ["satin-pillowcase", 1999, 999], // Amazon 2 for $9.75-13.99; ~C$3.90
   ["facial-ice-roller", 1999, 1499], // Amazon from $12.56; ~C$3.70
   ["gel-manicure-gloves", 1499, 899], // Amazon UV gloves $8.99-11.99; ~C$2.40
+  ["satin-beauty-sleep-set", 3999, 2999], // was dearer than our own mask + pillowcase + scrunchie + headband bought singly ($34.96); landed C$14.70
 ];
 
 const PRODUCTS: SeedProduct[] = [
@@ -506,7 +507,7 @@ const PRODUCTS: SeedProduct[] = [
     nameFr: "Ensemble beauté-sommeil en satin (4 pièces)",
     tagline: "Eye mask, pillowcase, scrunchie and headband in champagne satin",
     taglineFr: "Masque, taie, chouchou et bandeau en satin champagne",
-    priceCents: 3999,
+    priceCents: 2999,
     compareAtCents: null,
     tags: ["essentials", "sleep", "gift", "new"],
     sortOrder: 10,
@@ -1402,8 +1403,8 @@ const SETS: SeedSet[] = [
     nameFr: "Rituel Éclat de minuit",
     tagline: "Cleanse, glow, lights out",
     taglineFr: "Nettoyage, éclat, extinction des feux",
-    priceCents: 10999,
-    prevPriceCents: 9999,
+    priceCents: 10499,
+    prevPriceCents: 10999,
     swaps: [
       [
         "then a satin-feel mask for lights out.",

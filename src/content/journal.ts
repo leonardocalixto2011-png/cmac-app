@@ -352,6 +352,66 @@ export const JOURNAL: Record<Locale, Article[]> = {
       ],
       related: ["led-red-light-mask", "microcurrent-facial-lift-device"],
     },
+    {
+      slug: "beauty-gifts-under-50-canada",
+      updated: "2026-09-29",
+      title: "Beauty gifts under $25 and under $50 in Canada, for the office gift exchange",
+      answer:
+        `For a Canadian gift exchange, $25 buys one useful beauty tool (at CMAC Beauty, a facial ice roller at $14.99, a satin bonnet at $16.99 or a heatless curling set at $24.99) and $50 buys a complete boxed gift, such as the Cozy Night Box at $41.99 or the Silky Hair Box at $45.99. Order by November 26 for delivery before Christmas, and put the whole exchange in one order: shipping is free from ${FREE_EN}.`,
+      intro:
+        "The office exchange comes with a budget, a deadline and a colleague whose skin type you don't know. Tools solve the last one: no shade to match, no scent to dislike, no ingredient to react to. Here is what each budget actually buys, with prices checked on September 29, 2026.",
+      blocks: [
+        {
+          h: "Under $25: one good tool",
+          table: {
+            head: ["Gift", "Price", "For whom"],
+            rows: [
+              ["Facial ice roller", "$14.99", "Anyone who wakes up puffy-looking"],
+              ["Satin-feel sleep mask", "$12.99", "A light sleeper, or someone who travels"],
+              ["Adjustable satin bonnet", "$16.99", "Curly or textured hair"],
+              ["Microfiber hair towel wrap", "$17.99", "Long hair and no patience for drying it"],
+              ["Natural bristle body brush", "$22.99", "Someone who likes a long shower"],
+              ["Heatless curling set", "$24.99", "Wants curls without heat"],
+              ["USB UV/LED nail lamp", "$24.99", "Does her own gel nails"],
+            ],
+          },
+        },
+        {
+          h: "Under $50: a complete box",
+          table: {
+            head: ["Gift", "Price", "What's inside"],
+            rows: [
+              ["The Cozy Night Box", "$41.99", "Ice roller, satin-feel sleep mask, fleece socks, scrunchie, cleansing puff. Nothing to charge"],
+              ["Silky Hair Box", "$45.99", "Satin pillowcase, scalp massager, scrunchie, spa headband"],
+              ["Bestie Glow Duo", "$46.99", "Two identical kits (ice roller, headband, scrunchie): one to give, one to keep"],
+              ["Pedi Night In", "$47.99", "Electric foot file, fleece socks, spa headband, scrunchie"],
+              ["Under-Eye Glow Wand", "$44.99", "The one device under $50 that still feels like a real present"],
+            ],
+          },
+        },
+        {
+          h: "The shipping math for an exchange",
+          ul: [
+            `Shipping is a flat $9.99 below ${FREE_EN} and free above it. A single $14.99 gift therefore costs $24.98 delivered, while five gifts in one order ship free.`,
+            "Collecting for the whole office? One person orders everything, pays once and hands out the boxes. It is the cheapest way to buy any gift here.",
+            "Ten or more of the same box, or delivery to several addresses: our corporate page (cmacbeauty.ca/entreprises) handles quantity pricing and per-address shipping.",
+            "Sets arrive in the supplier's plain packaging. We don't gift-wrap, and we would rather say so now than on December 20.",
+          ],
+        },
+        {
+          h: "The deadline",
+          p: [
+            "Our parcels take about 2 to 4 weeks door to door, because they ship from the supplier's warehouse. The last safe day to order for Christmas is November 26. After that we can't promise the 24th, and we won't pretend to.",
+          ],
+        },
+      ],
+      faq: [
+        { q: "Can I send a gift straight to a colleague?", a: "Yes: enter their address at checkout. One order goes to one address; for several addresses, use the corporate page." },
+        { q: "What if she already owns it?", a: "Unused items can be returned within 30 days. Hygiene items, like the cleansing puff, only if unopened." },
+        { q: "Why tools rather than skincare?", a: "Because you can't guess someone's skin type from across the office. A tool has no shade, no scent and no ingredient to react to." },
+      ],
+      related: ["set-cozy-night", "set-silky-hair", "facial-ice-roller", "heatless-curl-set"],
+    },
   ],
   fr: [
     {
@@ -645,6 +705,66 @@ export const JOURNAL: Record<Locale, Article[]> = {
         { q: "Comment repérer des avis achetés ?", a: "Regardez le rapport entre le nombre d'avis et l'âge de la fiche, si les formulations se répètent d'un produit sans lien à l'autre, et si un seul avis mentionne un problème. Un vrai ensemble d'avis contient toujours des plaintes." },
       ],
       related: ["led-red-light-mask", "microcurrent-facial-lift-device"],
+    },
+    {
+      slug: "beauty-gifts-under-50-canada",
+      updated: "2026-09-29",
+      title: "Cadeaux beauté à moins de 25 $ et de 50 $ au Canada, pour l'échange de cadeaux du bureau",
+      answer:
+        `Pour un échange de cadeaux au Canada, 25 $ achète un bon outil beauté (chez CMAC Beauty, un rouleau de glace à 14,99 $, un bonnet en satin à 16,99 $ ou un ensemble boucles sans chaleur à 24,99 $) et 50 $ achète un coffret complet, comme la boîte Soirée douillette à 41,99 $ ou le coffret Cheveux soyeux à 45,99 $. Commandez avant le 26 novembre pour une livraison avant Noël, et regroupez tout l'échange dans une seule commande : la livraison est gratuite dès ${FREE_FR}.`,
+      intro:
+        "L'échange de cadeaux du bureau vient avec un budget, une date limite et une collègue dont on ne connaît pas le type de peau. Les outils règlent ce dernier problème : aucune teinte à deviner, aucun parfum qui déplaît, aucun ingrédient qui irrite. Voici ce que chaque budget permet vraiment, avec les prix relevés le 29 septembre 2026.",
+      blocks: [
+        {
+          h: "Moins de 25 $ : un bon outil",
+          table: {
+            head: ["Cadeau", "Prix", "Pour qui"],
+            rows: [
+              ["Rouleau de glace pour le visage", "14,99 $", "Celle qui se réveille avec le visage bouffi"],
+              ["Masque de nuit effet satin", "12,99 $", "Celle qui a le sommeil léger, ou qui voyage"],
+              ["Bonnet en satin ajustable", "16,99 $", "Cheveux bouclés ou texturés"],
+              ["Serviette turban en microfibre", "17,99 $", "Cheveux longs et aucune patience pour les sécher"],
+              ["Brosse pour le corps en soies naturelles", "22,99 $", "Celle qui aime les longues douches"],
+              ["Ensemble boucles sans chaleur", "24,99 $", "Veut des boucles sans fer à friser"],
+              ["Lampe à ongles UV/LED USB", "24,99 $", "Se fait elle-même ses ongles au gel"],
+            ],
+          },
+        },
+        {
+          h: "Moins de 50 $ : un coffret complet",
+          table: {
+            head: ["Cadeau", "Prix", "Ce qu'il contient"],
+            rows: [
+              ["La boîte Soirée douillette", "41,99 $", "Rouleau de glace, masque de nuit effet satin, bas en molleton, chouchou, houppette. Rien à recharger"],
+              ["Coffret Cheveux soyeux", "45,99 $", "Taie d'oreiller en satin, masseur pour le cuir chevelu, chouchou, bandeau spa"],
+              ["Duo Glow entre copines", "46,99 $", "Deux trousses identiques (rouleau de glace, bandeau, chouchou) : une à offrir, une à garder"],
+              ["Soirée pédi à la maison", "47,99 $", "Râpe électrique pour les pieds, bas en molleton, bandeau spa, chouchou"],
+              ["Baguette éclat contour des yeux", "44,99 $", "Le seul appareil sous 50 $ qui a vraiment l'air d'un cadeau"],
+            ],
+          },
+        },
+        {
+          h: "Le calcul de la livraison pour un échange",
+          ul: [
+            `La livraison coûte 9,99 $ sous ${FREE_FR} et elle est gratuite au-dessus. Un seul cadeau à 14,99 $ revient donc à 24,98 $ livré, alors que cinq cadeaux dans une même commande sont livrés gratuitement.`,
+            "Vous faites les achats pour tout le bureau ? Une seule personne commande tout, paie une fois et distribue les boîtes. C'est la façon la moins chère d'acheter n'importe quel cadeau ici.",
+            "Dix boîtes identiques ou plus, ou une livraison à plusieurs adresses : notre page entreprises (cmacbeauty.ca/entreprises) s'occupe des prix de quantité et de la livraison par adresse.",
+            "Les coffrets arrivent dans l'emballage neutre du fournisseur. On ne fait pas d'emballage-cadeau, et on préfère le dire maintenant que le 20 décembre.",
+          ],
+        },
+        {
+          h: "La date limite",
+          p: [
+            "Nos colis prennent environ 2 à 4 semaines, porte à porte, parce qu'ils partent de l'entrepôt du fournisseur. La dernière date sûre pour commander pour Noël est le 26 novembre. Après, on ne peut plus promettre le 24, et on ne fera pas semblant.",
+          ],
+        },
+      ],
+      faq: [
+        { q: "Puis-je envoyer un cadeau directement à une collègue ?", a: "Oui : entrez son adresse au moment de payer. Une commande va à une seule adresse ; pour plusieurs adresses, passez par la page entreprises." },
+        { q: "Et si elle l'a déjà ?", a: "Les articles inutilisés se retournent sous 30 jours. Les articles d'hygiène, comme la houppette, seulement s'ils ne sont pas ouverts." },
+        { q: "Pourquoi des outils plutôt que des soins ?", a: "Parce qu'on ne devine pas le type de peau de quelqu'un de l'autre bout du bureau. Un outil n'a ni teinte, ni parfum, ni ingrédient qui irrite." },
+      ],
+      related: ["set-cozy-night", "set-silky-hair", "facial-ice-roller", "heatless-curl-set"],
     },
   ],
 };
