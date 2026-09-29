@@ -79,6 +79,8 @@
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
     overflow-x: hidden;
+    /* clip, not hidden: iOS Safari still lets a hidden-overflow body pan sideways. */
+    overflow-x: clip;
   }
 
   h1, h2, h3, h4 {
@@ -234,6 +236,12 @@
   [data-reveal="left"] { transform: translateX(-36px); }
   [data-reveal="right"] { transform: translateX(36px); }
   [data-reveal="scale"] { transform: scale(0.94); }
+  /* Sideways slides push an off-screen element past a phone's edge until it is
+     revealed, which made /contact, /pro and /entreprises pan sideways on phones
+     and tablets. Rise instead. */
+  @media (max-width: 1023px) {
+    [data-reveal="left"], [data-reveal="right"] { transform: translateY(28px); }
+  }
 
   .tilt {
     transform-style: preserve-3d;
@@ -365,11 +373,11 @@
 .cmac-routine h2 { font-size: clamp(2rem, 4vw, 3.4rem); margin: 14px 0 18px; }
 .cmac-routine__lead { line-height: 1.65; color: var(--color-sage-light); margin-bottom: 28px; max-width: 44ch; }
 .cmac-routine__intro { position: sticky; top: 100px; }
-.cmac-routine__steps { list-style: none; margin: 0; padding: 0 0 0 36px; position: relative; display: grid; gap: 34px; }
-.cmac-routine__line { position: absolute; left: 11px; top: 8px; width: 2px; height: calc(100% - 16px); color: rgba(245, 241, 234, 0.35); }
+.cmac-routine__steps { list-style: none; margin: 0; padding: 0; position: relative; display: grid; gap: 34px; }
+.cmac-routine__line { position: absolute; left: 16px; top: 8px; width: 2px; height: calc(100% - 16px); color: rgba(245, 241, 234, 0.35); }
 .cmac-routine__steps:has(.is-in) .cmac-routine__line path { animation: cmac-draw 2.2s var(--ease-cmac) forwards; }
-.cmac-routine__step { display: grid; grid-template-columns: auto 1fr; gap: 18px; align-items: start; }
-.cmac-routine__num { width: 34px; height: 34px; border-radius: 50%; background: var(--color-terra); color: #fff; display: grid; place-items: center; font: 600 0.78rem var(--font-ui); margin-left: -53px; box-shadow: 0 0 0 6px var(--color-sage); }
+.cmac-routine__step { display: grid; grid-template-columns: 34px 1fr; gap: 18px; align-items: start; }
+.cmac-routine__num { width: 34px; height: 34px; border-radius: 50%; background: var(--color-terra); color: #fff; display: grid; place-items: center; font: 600 0.78rem var(--font-ui); box-shadow: 0 0 0 6px var(--color-sage); }
 .cmac-routine h3 { font-size: 1.3rem; display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; }
 .cmac-routine h3 small { font: 500 0.72rem var(--font-ui); letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-terra-2); }
 .cmac-routine__step p { margin: 8px 0 0; color: var(--color-sage-light); line-height: 1.6; font-size: 0.95rem; }

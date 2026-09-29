@@ -81,10 +81,10 @@ export function Footer() {
         {cols.map((c) => (
           <nav key={c.title} aria-label={c.title}>
             <h4 className="mb-4 font-ui text-[0.72rem] font-semibold uppercase tracking-[0.2em] text-terra-2">{c.title}</h4>
-            <ul className="flex flex-col gap-2.5 text-[0.94rem]">
+            <ul className="flex flex-col text-[0.94rem] md:gap-2.5">
               {c.links.map((l) => (
                 <li key={l.href}>
-                  <Link href={l.href} className="text-sage-light transition-colors hover:text-cream">
+                  <Link href={l.href} className="inline-block py-2 text-sage-light transition-colors hover:text-cream md:py-0">
                     {l.label}
                   </Link>
                 </li>

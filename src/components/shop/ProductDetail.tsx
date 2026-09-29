@@ -74,7 +74,7 @@ export function ProductDetail({ product, components = [] }: { product: ProductVi
   return (
     <div className="grid gap-10 md:grid-cols-[1.05fr_0.95fr] md:gap-14">
       <div>
-        <Link href="/shop" className="mb-4 inline-block text-sm text-ink-soft hover:text-terra">
+        <Link href="/shop" className="mb-2 inline-block py-2 text-sm text-ink-soft hover:text-terra">
           {t("shop.backToShop")}
         </Link>
         <div className="relative aspect-[4/5] overflow-hidden rounded-[var(--radius-card)] bg-cream-2" data-reveal="scale">
