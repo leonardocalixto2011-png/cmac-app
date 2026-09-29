@@ -151,6 +151,21 @@ const PRICE_REVIEW: [string, number, number][] = [
   ["usb-nail-lamp", 3499, 2499], // MelodySusie handheld $25.99; landed C$11.51
   ["facial-ice-roller", 2699, 1999], // from $12.56; landed C$8.96
   ["ems-sculpting-v-roller", 4999, 4499], // EMS lifting units from $37.00; landed C$27.32
+  // 2026-09-29, single-unit accessories. They were priced as if each had to carry
+  // its own international parcel, while the customer ALSO pays that parcel through
+  // shipping ($9.99, free from $75): the same box was charged twice, which is how a
+  // $0.33 scrunchie reached $12.99 beside Amazon's eight for $11.99. The flat fee or
+  // the free-shipping threshold pays the parcel, and CJ packs an order's items
+  // together, so an accessory only needs to cover itself plus a little postage.
+  // Margins below are on that marginal cost; alone, the shipping fee covers the box.
+  ["satin-scrunchie", 1299, 499], // Amazon 5-8 for $11.99; cost ~C$1 in a shared parcel
+  ["spa-headband", 1299, 699], // Amazon 6 for $21.99, single $10.20; ~C$1.50
+  ["satin-sleep-mask", 2299, 1299], // Amazon 4 for $9.89 up to Kitsch $24.99; ~C$6.10
+  ["cozy-fleece-socks", 1499, 699], // Amazon multipacks ~$5 a pair; ~C$1.70
+  ["reusable-cleansing-puff", 1599, 799], // Amazon face sponges $9.99-11.99; ~C$2.70
+  ["satin-pillowcase", 1999, 999], // Amazon 2 for $9.75-13.99; ~C$3.90
+  ["facial-ice-roller", 1999, 1499], // Amazon from $12.56; ~C$3.70
+  ["gel-manicure-gloves", 1499, 899], // Amazon UV gloves $8.99-11.99; ~C$2.40
 ];
 
 const PRODUCTS: SeedProduct[] = [
@@ -320,7 +335,7 @@ const PRODUCTS: SeedProduct[] = [
     nameFr: "Rouleau de glace pour le visage",
     tagline: "Sixty-second morning reset",
     taglineFr: "La remise à zéro du matin, en soixante secondes",
-    priceCents: 1999,
+    priceCents: 1499,
     compareAtCents: null,
     tags: ["cool", "ice-roller", "de-puff", "hygiene"],
     sortOrder: 3,
@@ -390,7 +405,7 @@ const PRODUCTS: SeedProduct[] = [
     nameFr: "Masque de nuit effet satin",
     tagline: "Lights out, the soft way",
     taglineFr: "Extinction des feux, tout en douceur",
-    priceCents: 2299,
+    priceCents: 1299,
     compareAtCents: null,
     tags: ["essentials", "sleep", "new"],
     sortOrder: 7,
@@ -423,7 +438,7 @@ const PRODUCTS: SeedProduct[] = [
     nameFr: "Bandeau spa",
     tagline: "Hair off your face, ritual on",
     taglineFr: "Les cheveux dégagés, le rituel commence",
-    priceCents: 1299,
+    priceCents: 699,
     compareAtCents: null,
     tags: ["essentials", "spa", "new"],
     sortOrder: 8,
@@ -510,7 +525,7 @@ const PRODUCTS: SeedProduct[] = [
     nameFr: "Chouchou en satin",
     tagline: "A soft hold for buns and ponytails",
     taglineFr: "Une tenue douce pour chignons et queues de cheval",
-    priceCents: 1299,
+    priceCents: 499,
     compareAtCents: null,
     tags: ["essentials", "hair", "new"],
     sortOrder: 11,
@@ -603,7 +618,7 @@ const PRODUCTS: SeedProduct[] = [
     nameFr: "Bas douillets en molleton",
     tagline: "Fluffy socks for long evenings in",
     taglineFr: "Des bas moelleux pour les longues soirées à la maison",
-    priceCents: 1499,
+    priceCents: 699,
     compareAtCents: null,
     tags: ["essentials", "cozy", "fall", "new"],
     sortOrder: 14,
@@ -636,7 +651,7 @@ const PRODUCTS: SeedProduct[] = [
     nameFr: "Houppette démaquillante réutilisable",
     tagline: "A soft round pad for your cleanser, again and again",
     taglineFr: "Un disque doux pour votre nettoyant, encore et encore",
-    priceCents: 1599,
+    priceCents: 799,
     compareAtCents: null,
     tags: ["essentials", "cleansing", "hygiene", "new"],
     sortOrder: 15,
@@ -704,7 +719,7 @@ const PRODUCTS: SeedProduct[] = [
     nameFr: "Gants couvrants pour manucure au gel",
     tagline: "Hands covered, fingertips free under the lamp",
     taglineFr: "Les mains couvertes, le bout des doigts libre sous la lampe",
-    priceCents: 1499,
+    priceCents: 899,
     compareAtCents: null,
     tags: ["essentials", "nails", "hands", "new"],
     sortOrder: 18,
@@ -843,7 +858,7 @@ const PRODUCTS: SeedProduct[] = [
     nameFr: "Taie d'oreiller en satin",
     tagline: "Less friction on hair and skin, every night",
     taglineFr: "Moins de friction sur les cheveux et la peau, chaque nuit",
-    priceCents: 1999,
+    priceCents: 999,
     compareAtCents: null,
     tags: ["hair", "essentials", "gift", "new"],
     sortOrder: 33,
@@ -1344,8 +1359,8 @@ const SETS: SeedSet[] = [
     nameFr: "Le Reset de 7 h",
     tagline: "From pillow face to ready in 5 minutes",
     taglineFr: "De l'oreiller à la porte en 5 minutes",
-    priceCents: 7999,
-    prevPriceCents: 7699,
+    priceCents: 6999,
+    prevPriceCents: 7999,
     tags: ["sets", "cool", "glow", "essentials", "gift"],
     sortOrder: 21,
     hookEn:
@@ -1440,7 +1455,7 @@ const SETS: SeedSet[] = [
     nameFr: "Trousse Temps de pull",
     tagline: "Your skin's cozy season. Fall limited edition",
     taglineFr: "La saison douillette de votre peau. Édition limitée d'automne",
-    priceCents: 10999,
+    priceCents: 10299,
     prevPriceCents: 10999,
     swaps: [
       [
@@ -1601,7 +1616,7 @@ const SETS: SeedSet[] = [
     nameFr: "Duo Glow entre copines",
     tagline: "One for you, one for your bestie",
     taglineFr: "Un pour toi, un pour ta meilleure amie",
-    priceCents: 6999,
+    priceCents: 4699,
     prevPriceCents: 6999,
     swaps: [
       [
@@ -1696,8 +1711,8 @@ const SETS: SeedSet[] = [
     nameFr: "Soirée pédi à la maison",
     tagline: "Soft-looking heels and fluffy socks, no appointment needed",
     taglineFr: "Des talons d'apparence douce et des bas moelleux, sans rendez-vous",
-    priceCents: 5999,
-    prevPriceCents: 7999, // 2026-09-22 market review
+    priceCents: 4799,
+    prevPriceCents: 5999, // 2026-09-22 market review
     tags: ["sets", "essentials", "feet", "cozy", "gift", "new"],
     sortOrder: 28,
     hygieneOnly: false,
@@ -1780,8 +1795,8 @@ const SETS: SeedSet[] = [
     nameFr: "Le panier d'automne",
     tagline: "A cozy night in, packed in a caramel case. Fall limited edition",
     taglineFr: "Une soirée douillette, dans un étui caramel. Édition limitée d'automne",
-    priceCents: 8499,
-    prevPriceCents: 8999, // 2026-09-22 market review
+    priceCents: 5999,
+    prevPriceCents: 8499, // 2026-09-22 market review
     tags: ["sets", "essentials", "cozy", "fall", "gift", "new"],
     sortOrder: 30,
     hygieneOnly: true,
@@ -1827,7 +1842,7 @@ const SETS: SeedSet[] = [
     nameFr: "Le coffret Éclat de Noël",
     tagline: "The LED mask, wrapped for the tree. Christmas edition",
     taglineFr: "Le masque LED, emballé pour le sapin. Édition de Noël",
-    priceCents: 8999,
+    priceCents: 7499,
     prevPriceCents: 8999,
     tags: ["sets", "glow", "christmas", "gift", "limited", "new"],
     sortOrder: 40,
@@ -1868,7 +1883,7 @@ const SETS: SeedSet[] = [
     nameFr: "La boîte Soirée douillette",
     tagline: "Everything soft, nothing to charge. Christmas edition",
     taglineFr: "Tout ce qui est doux, rien à recharger. Édition de Noël",
-    priceCents: 7499,
+    priceCents: 4199,
     prevPriceCents: 7499,
     tags: ["sets", "essentials", "cozy", "christmas", "gift", "limited", "new"],
     sortOrder: 41,
@@ -1898,7 +1913,7 @@ const SETS: SeedSet[] = [
     nameFr: "Pour maman",
     tagline: "The lift device she wouldn't buy herself. Christmas edition",
     taglineFr: "L'appareil lift qu'elle ne s'achèterait pas. Édition de Noël",
-    priceCents: 12499,
+    priceCents: 10799,
     prevPriceCents: 12499,
     tags: ["sets", "sculpt", "christmas", "gift", "limited", "new"],
     sortOrder: 42,
@@ -1939,7 +1954,7 @@ const SETS: SeedSet[] = [
     nameFr: "Trousse Premier éclat",
     tagline: "A first real routine, for a teen or a student. Christmas edition",
     taglineFr: "Une première vraie routine, pour une ado ou une étudiante. Édition de Noël",
-    priceCents: 7999,
+    priceCents: 5399,
     prevPriceCents: 7999,
     tags: ["sets", "essentials", "christmas", "gift", "limited", "new"],
     sortOrder: 43,
@@ -1968,7 +1983,7 @@ const SETS: SeedSet[] = [
     nameFr: "Coffret Cheveux soyeux",
     tagline: "Satin for the pillow, a massager for wash day. Christmas edition",
     taglineFr: "Du satin pour l'oreiller, un masseur pour le jour du shampoing. Édition de Noël",
-    priceCents: 6299,
+    priceCents: 4599,
     prevPriceCents: 6299,
     tags: ["sets", "hair", "christmas", "gift", "limited", "new"],
     sortOrder: 44,
@@ -2146,13 +2161,18 @@ async function seedSets(reset: boolean) {
     const notes: string[] = [];
     if (reset) Object.assign(update, copy, commerce, { options: [] });
     else {
-      // New launch price (and compare-at) only while the owner hasn't changed the old price.
-      if (
-        existing.priceCents === s.prevPriceCents &&
-        (existing.priceCents !== s.priceCents || existing.compareAtCents !== commerce.compareAtCents)
-      ) {
-        Object.assign(update, { priceCents: s.priceCents, compareAtCents: commerce.compareAtCents });
+      // New launch price only while the owner hasn't changed the old price.
+      if (existing.priceCents === s.prevPriceCents && existing.priceCents !== s.priceCents) {
+        update.priceCents = s.priceCents;
         notes.push("price");
+      }
+      // Compare-at is "the items bought separately", derived from component prices and
+      // shown as a saving: it must follow every component price change, or the store
+      // advertises a saving that is no longer true. It used to move only with the set's
+      // own price, so repricing a device left its sets overstating the saving.
+      if (existing.compareAtCents !== commerce.compareAtCents) {
+        update.compareAtCents = commerce.compareAtCents;
+        notes.push("compare-at");
       }
       const en = refreshSetDescription(existing.descriptionEn ?? "", s, "en");
       const fr = refreshSetDescription(existing.descriptionFr ?? "", s, "fr");

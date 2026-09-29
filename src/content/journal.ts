@@ -201,7 +201,7 @@ export const JOURNAL: Record<Locale, Article[]> = {
     },
     {
       slug: "puffy-face-tools-compared",
-      updated: "2026-09-22",
+      updated: "2026-09-29",
       title: "Ice roller, gua sha or microcurrent: which one for a puffy-looking morning?",
       answer:
         "For a face that looks puffy in the morning, a cooling tool (ice roller) is the cheapest and fastest option, an electronic gua sha adds warmth and vibration for a longer massage, and a microcurrent device is aimed at a lifted look rather than morning puffiness.",
@@ -230,7 +230,7 @@ export const JOURNAL: Record<Locale, Article[]> = {
           h: "When to skip",
           p: [
             "Microcurrent devices are not for everyone: pacemakers, implanted electronic devices, epilepsy and pregnancy are standard contraindications. Ask your doctor if you are unsure.",
-            "If your goal is a five-minute morning, a $300 device you won't charge is worse than a $20 roller you keep in the freezer door.",
+            "If your goal is a five-minute morning, a $300 device you won't charge is worse than a $15 roller you keep in the freezer door.",
           ],
         },
       ],
@@ -243,7 +243,7 @@ export const JOURNAL: Record<Locale, Article[]> = {
     },
     {
       slug: "beauty-gift-sets-canada-under-100",
-      updated: "2026-09-22",
+      updated: "2026-09-29",
       title: "Beauty gift sets under $100 in Canada: what makes one actually good",
       answer:
         `A good beauty gift set under $100 has one clear moment (morning, night, travel), no products that need a specific skin type, and free shipping. At CMAC Beauty, sets in that range include the 7 AM Reset ($79.99), Carry-On Glow ($79.99) and the Bestie Glow Duo ($69.99); free shipping starts at ${FREE_EN}.`,
@@ -265,10 +265,10 @@ export const JOURNAL: Record<Locale, Article[]> = {
           table: {
             head: ["Set", "Price (CAD)", "For"],
             rows: [
-              ["The 7 AM Reset", "$79.99", "Someone who gets ready in a hurry and wakes up puffy-looking"],
+              ["The 7 AM Reset", "$69.99", "Someone who gets ready in a hurry and wakes up puffy-looking"],
               ["Carry-On Glow", "$79.99", "A frequent flyer or a student going back and forth"],
-              ["Bestie Glow Duo", "$69.99", "Two people: one set for you, one for your friend"],
-              ["Between Appointments Kit", "$59.99", "Someone who gets her nails done and wants them neat in between"],
+              ["Bestie Glow Duo", "$46.99", "Two people: one set for you, one for your friend"],
+              ["Between Appointments Kit", "$54.99", "Someone who gets her nails done and wants them neat in between"],
             ],
           },
         },
@@ -507,7 +507,7 @@ export const JOURNAL: Record<Locale, Article[]> = {
     },
     {
       slug: "puffy-face-tools-compared",
-      updated: "2026-09-22",
+      updated: "2026-09-29",
       title: "Rouleau de glace, gua sha ou microcourant : lequel pour un matin bouffi ?",
       answer:
         "Pour un visage qui paraît bouffi le matin, le rouleau de glace est l'option la plus rapide et la moins chère, le gua sha électronique ajoute chaleur et vibration pour un massage plus long, et l'appareil à microcourant vise plutôt un air plus tonique que la bouffissure du matin.",
@@ -536,7 +536,7 @@ export const JOURNAL: Record<Locale, Article[]> = {
           h: "Quand s'abstenir",
           p: [
             "Le microcourant ne convient pas à tout le monde : stimulateur cardiaque, dispositif électronique implanté, épilepsie et grossesse sont des contre-indications courantes. En cas de doute, consultez votre médecin.",
-            "Si votre objectif, c'est un matin de cinq minutes, un appareil à 300 $ jamais rechargé vaut moins qu'un rouleau à 20 $ dans la porte du congélateur.",
+            "Si votre objectif, c'est un matin de cinq minutes, un appareil à 300 $ jamais rechargé vaut moins qu'un rouleau à 15 $ dans la porte du congélateur.",
           ],
         },
       ],
@@ -549,7 +549,7 @@ export const JOURNAL: Record<Locale, Article[]> = {
     },
     {
       slug: "beauty-gift-sets-canada-under-100",
-      updated: "2026-09-22",
+      updated: "2026-09-29",
       title: "Ensembles beauté à moins de 100 $ au Canada : ce qui en fait un bon cadeau",
       answer:
         `Un bon ensemble beauté sous 100 $ a un moment clair (matin, soir, voyage), aucun produit qui dépend du type de peau, et la livraison gratuite. Chez CMAC Beauty, dans cette tranche : le 7 AM Reset (79,99 $), Carry-On Glow (79,99 $) et le Duo Glow entre copines (69,99 $) ; la livraison gratuite commence à ${FREE_FR}.`,
@@ -571,10 +571,10 @@ export const JOURNAL: Record<Locale, Article[]> = {
           table: {
             head: ["Ensemble", "Prix (CA)", "Pour qui"],
             rows: [
-              ["The 7 AM Reset", "79,99 $", "Celle qui se prépare vite et se réveille bouffie"],
+              ["The 7 AM Reset", "69,99 $", "Celle qui se prépare vite et se réveille bouffie"],
               ["Carry-On Glow", "79,99 $", "Celle qui voyage souvent, ou l'étudiante qui fait des allers-retours"],
-              ["Duo Glow entre copines", "69,99 $", "Deux personnes : un ensemble pour toi, un pour ton amie"],
-              ["Trousse Entre deux rendez-vous", "59,99 $", "Celle qui se fait faire les ongles et veut qu'ils restent soignés"],
+              ["Duo Glow entre copines", "46,99 $", "Deux personnes : un ensemble pour toi, un pour ton amie"],
+              ["Trousse Entre deux rendez-vous", "54,99 $", "Celle qui se fait faire les ongles et veut qu'ils restent soignés"],
             ],
           },
         },
