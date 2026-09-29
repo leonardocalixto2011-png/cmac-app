@@ -142,6 +142,15 @@ const PRICE_REVIEW: [string, number, number][] = [
   ["electric-foot-file", 4499, 3499],
   ["rose-gold-manicure-kit", 2999, 2499],
   ["pink-shell-makeup-pouch", 2499, 1999],
+  // 2026-09-28, priced against Amazon.ca the same day. Devices are the one place
+  // a no-stock shop can undercut a marketplace, because a seller there loses
+  // ~15% referral plus per-unit fulfilment plus the ads needed to stay visible
+  // before any margin. On these four we take the lowest credible price in the
+  // country and still keep 39-58% gross on our own landed cost.
+  ["sonic-silicone-cleansing-brush", 3499, 2799], // cheapest comparable $29.99; landed C$11.85
+  ["usb-nail-lamp", 3499, 2499], // MelodySusie handheld $25.99; landed C$11.51
+  ["facial-ice-roller", 2699, 1999], // from $12.56; landed C$8.96
+  ["ems-sculpting-v-roller", 4999, 4499], // EMS lifting units from $37.00; landed C$27.32
 ];
 
 const PRODUCTS: SeedProduct[] = [
@@ -207,7 +216,7 @@ const PRODUCTS: SeedProduct[] = [
     nameFr: "Brosse nettoyante sonique en silicone",
     tagline: "The first step, made softer",
     taglineFr: "La première étape, en plus doux",
-    priceCents: 3499,
+    priceCents: 2799,
     compareAtCents: null,
     tags: ["glow", "cleansing", "essentials", "new"],
     sortOrder: 5,
@@ -264,7 +273,7 @@ const PRODUCTS: SeedProduct[] = [
     nameFr: "Rouleau sculptant EMS en V",
     tagline: "Roll along the jaw, sculpt the look of your contours",
     taglineFr: "Roulez le long de la mâchoire, sculptez l'allure de vos contours",
-    priceCents: 4999,
+    priceCents: 4499,
     compareAtCents: null,
     tags: ["sculpt", "ems", "roller", "new"],
     sortOrder: 2,
@@ -311,7 +320,7 @@ const PRODUCTS: SeedProduct[] = [
     nameFr: "Rouleau de glace pour le visage",
     tagline: "Sixty-second morning reset",
     taglineFr: "La remise à zéro du matin, en soixante secondes",
-    priceCents: 2699,
+    priceCents: 1999,
     compareAtCents: null,
     tags: ["cool", "ice-roller", "de-puff", "hygiene"],
     sortOrder: 3,
@@ -967,7 +976,7 @@ const PRODUCTS: SeedProduct[] = [
     nameFr: "Lampe à ongles UV/LED USB",
     tagline: "Cures gel polish at home, plugs into any USB charger",
     taglineFr: "Fait durcir le vernis gel à la maison, se branche sur n'importe quel chargeur USB",
-    priceCents: 3499,
+    priceCents: 2499,
     compareAtCents: null,
     tags: ["nails", "essentials", "gift", "new"],
     sortOrder: 37,
