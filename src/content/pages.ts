@@ -311,7 +311,7 @@ export const PAGES: Record<string, Record<Locale, PageContent>> = {
         {
           h: "Person in charge of the protection of personal information",
           p: [
-            `Leonart Calixte, owner — ${BRAND.name}, 209 rue Paré, L'Assomption, QC J5W 0K5, Canada — ${BRAND.email}. Write to this address for any question, request or complaint about your personal information.`,
+            `Leonart Calixte, owner — ${BRAND.name}, L'Assomption, Québec, Canada — ${BRAND.email}. Write to this address for any question, request or complaint about your personal information.`,
           ],
         },
         {
@@ -377,7 +377,7 @@ export const PAGES: Record<string, Record<Locale, PageContent>> = {
         {
           h: "Personne responsable de la protection des renseignements personnels",
           p: [
-            `Leonart Calixte, propriétaire — ${BRAND.name}, 209 rue Paré, L'Assomption (Québec) J5W 0K5, Canada — ${BRAND.email}. Écrivez à cette adresse pour toute question, demande ou plainte concernant vos renseignements personnels.`,
+            `Leonart Calixte, propriétaire — ${BRAND.name}, L'Assomption, Québec, Canada — ${BRAND.email}. Écrivez à cette adresse pour toute question, demande ou plainte concernant vos renseignements personnels.`,
           ],
         },
         {
