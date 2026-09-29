@@ -230,7 +230,7 @@ export const JOURNAL: Record<Locale, Article[]> = {
           h: "When to skip",
           p: [
             "Microcurrent devices are not for everyone: pacemakers, implanted electronic devices, epilepsy and pregnancy are standard contraindications. Ask your doctor if you are unsure.",
-            "If your goal is a five-minute morning, a $300 device you won't charge is worse than a $27 roller you keep in the freezer door.",
+            "If your goal is a five-minute morning, a $300 device you won't charge is worse than a $20 roller you keep in the freezer door.",
           ],
         },
       ],
@@ -285,6 +285,72 @@ export const JOURNAL: Record<Locale, Article[]> = {
         { q: "What if she already owns one of the items?", a: "Pick a set built around a moment she doesn't have covered, or write to us: a person answers, and we can suggest a swap." },
       ],
       related: ["set-7am-reset", "set-carry-on-glow", "set-bestie-duo", "set-between-appointments"],
+    },
+    {
+      slug: "buying-beauty-devices-canada",
+      updated: "2026-09-28",
+      title: "Buying a beauty device in Canada: the rules nobody tells you",
+      answer:
+        "In Canada a device sold with a treatment claim is a medical device and needs a Health Canada licence; a device sold as a cosmetic tool must describe appearance only. Before/after photos cannot stand in for proof, and a “was” price the seller never charged is illegal. Most of what you read while shopping breaks at least one of these rules.",
+      intro:
+        "We sell these devices, so read this with that in mind. It is still the page we wish had existed when we started, because every rule below is one a Canadian seller is already supposed to follow — and you can check each one yourself in under a minute.",
+      blocks: [
+        {
+          h: "The four rules, and how to check them",
+          table: {
+            head: ["The rule", "A compliant listing", "A red flag"],
+            rows: [
+              ["Treatment claims make it a medical device", "“The look of fine lines”, “appears smoother”, “less puffy-looking”", "“Treats acne”, “heals”, “stimulates collagen” — with no Health Canada licence number anywhere"],
+              ["Before/after photos are not proof", "Product shots, and an honest description of what a session feels like", "Split-image faces. Lighting, makeup and angle do that work, not the device"],
+              ["A “was” price must be one actually charged", "One price, or a discount off a price the shop genuinely used", "A permanent “50% off” that has run since the listing first appeared"],
+              ["Reviews must come from real buyers", "Few reviews, or none, on a young shop", "Four hundred five-star reviews on a device launched last month"],
+            ],
+          },
+        },
+        {
+          h: "Why the same device costs $60 or $300",
+          p: [
+            "Often it is the same factory. What changes is the route it takes to your door. A seller on a large marketplace pays roughly 15% commission in beauty, plus a per-unit fulfilment fee, plus the advertising needed to appear at all — about a third of the sticker before anyone earns anything. A clinic brand adds retail margin, packaging and a warranty desk. A direct shop pays card processing and postage.",
+            "So price tells you about the distribution, not the hardware. What genuinely differs between a $60 and a $300 mask is LED count, build quality, strap comfort, warranty length, and whether anyone answers when it stops working. Those are worth paying for. The word “clinical” on a box is not, unless a licence number sits beside it.",
+          ],
+        },
+        {
+          h: "The questions worth asking before you pay",
+          ul: [
+            "Who is the seller, and is there a name and a phone number? A listing with neither is a gamble you cannot follow up on.",
+            "What is the total time to my door — processing plus transit, not one of them? A shop showing only one number is hiding the other.",
+            "What happens if it breaks in month four? Get the warranty in writing before, not after.",
+            "Is the price the final price? Some Canadian shops add tax at checkout and some do not: a small supplier under the $30,000 threshold is not required to charge it.",
+            "Does the listing say who should not use it? Pregnancy, photosensitivity, light-sensitising medication, pacemakers and active skin conditions are standard cautions. A listing with no cautions has not thought about you.",
+          ],
+        },
+        {
+          h: "Where we stand, since you are on our site",
+          p: [
+            "We are a small shop in L'Assomption, Québec. Our LED mask is $59.99, and on September 28, 2026 the cheapest full-face mask on the first page of Amazon.ca was $89.99, with most listings between $129.99 and $169.99. We are cheaper because of the route, not the hardware, and the honest trade-off is delivery: ours takes about 2 to 4 weeks because it ships from the supplier's warehouse.",
+            "We also do not have hundreds of reviews, because only verified buyers can leave one and we are new. You are allowed to hold that against us. We would rather say it than buy them.",
+          ],
+        },
+      ],
+      faq: [
+        {
+          q: "Is it legal to sell an LED mask in Canada without a Health Canada licence?",
+          a: "Yes, when it is sold as a cosmetic tool and described in terms of appearance only. The licence requirement attaches to the claim, not to the device: the moment a seller says it treats a condition, it becomes a medical device and has to be licensed.",
+        },
+        {
+          q: "Are before/after photos illegal?",
+          a: "Using them as proof of a performance claim is the problem. Canadian advertising law requires a performance claim to rest on adequate and proper testing done before the claim is made, and a pair of photos is not testing. Honest shops leave them out.",
+        },
+        {
+          q: "Why do some Canadian shops not charge tax?",
+          a: "A supplier whose worldwide sales stay under $30,000 over four consecutive quarters is a small supplier and is not required to register for GST/HST. It is not a trick, and the listed price is then the final price.",
+        },
+        {
+          q: "How do I spot bought reviews?",
+          a: "Look at the ratio of reviews to the age of the listing, at whether the wording repeats across unrelated products, and at whether any review mentions something going wrong. Real review sets always contain complaints.",
+        },
+      ],
+      related: ["led-red-light-mask", "microcurrent-facial-lift-device"],
     },
   ],
   fr: [
@@ -470,7 +536,7 @@ export const JOURNAL: Record<Locale, Article[]> = {
           h: "Quand s'abstenir",
           p: [
             "Le microcourant ne convient pas à tout le monde : stimulateur cardiaque, dispositif électronique implanté, épilepsie et grossesse sont des contre-indications courantes. En cas de doute, consultez votre médecin.",
-            "Si votre objectif, c'est un matin de cinq minutes, un appareil à 300 $ jamais rechargé vaut moins qu'un rouleau à 27 $ dans la porte du congélateur.",
+            "Si votre objectif, c'est un matin de cinq minutes, un appareil à 300 $ jamais rechargé vaut moins qu'un rouleau à 20 $ dans la porte du congélateur.",
           ],
         },
       ],
@@ -525,6 +591,60 @@ export const JOURNAL: Record<Locale, Article[]> = {
         { q: "Et si elle a déjà un des articles ?", a: "Choisissez un coffret construit autour d'un moment qu'elle n'a pas encore couvert, ou écrivez-nous : une vraie personne répond et peut suggérer un échange." },
       ],
       related: ["set-7am-reset", "set-carry-on-glow", "set-bestie-duo", "set-between-appointments"],
+    },
+    {
+      slug: "buying-beauty-devices-canada",
+      updated: "2026-09-28",
+      title: "Acheter un appareil de beauté au Canada : les règles que personne ne vous dit",
+      answer:
+        "Au Canada, un appareil vendu avec une promesse de traitement devient un instrument médical et exige une licence de Santé Canada ; un appareil vendu comme outil cosmétique doit se décrire en matière d'apparence seulement. Les photos avant/après ne tiennent pas lieu de preuve, et un prix « avant » que le vendeur n'a jamais demandé est illégal. La plupart de ce que vous lisez en magasinant enfreint au moins une de ces règles.",
+      intro:
+        "On vend ces appareils : lisez ceci en le sachant. C'est quand même la page qu'on aurait voulu trouver en commençant, parce que chaque règle ci-dessous, un vendeur canadien est déjà censé la respecter — et vous pouvez vérifier chacune vous-même en moins d'une minute.",
+      blocks: [
+        {
+          h: "Les quatre règles, et comment les vérifier",
+          table: {
+            head: ["La règle", "Une fiche conforme", "Un drapeau rouge"],
+            rows: [
+              ["Une promesse de traitement en fait un instrument médical", "« L'apparence des ridules », « paraît plus lisse », « l'air moins bouffi »", "« Traite l'acné », « guérit », « stimule le collagène » — sans aucun numéro de licence de Santé Canada"],
+              ["Les photos avant/après ne sont pas une preuve", "Des photos du produit, et une description honnête de ce que la séance fait ressentir", "Des visages en deux moitiés. C'est l'éclairage, le maquillage et l'angle qui travaillent, pas l'appareil"],
+              ["Un prix « avant » doit avoir été demandé pour vrai", "Un seul prix, ou un rabais sur un prix que la boutique a vraiment utilisé", "Un « −50 % » permanent, affiché depuis la création de la fiche"],
+              ["Les avis doivent venir de vrais acheteurs", "Peu d'avis, ou aucun, sur une boutique récente", "Quatre cents avis cinq étoiles sur un appareil lancé le mois dernier"],
+            ],
+          },
+        },
+        {
+          h: "Pourquoi le même appareil coûte 60 $ ou 300 $",
+          p: [
+            "Souvent, c'est la même usine. Ce qui change, c'est le chemin parcouru jusqu'à votre porte. Un vendeur sur une grande place de marché paie environ 15 % de commission en beauté, plus des frais d'expédition à l'unité, plus la publicité nécessaire pour seulement apparaître : près du tiers du prix affiché avant que qui que ce soit gagne quoi que ce soit. Une marque de clinique ajoute sa marge de détail, l'emballage et un service de garantie. Une boutique directe paie les frais de carte et la poste.",
+            "Le prix vous renseigne donc sur la distribution, pas sur la quincaillerie. Ce qui diffère vraiment entre un masque à 60 $ et un à 300 $ : le nombre de LED, la qualité de fabrication, le confort de la sangle, la durée de la garantie, et le fait que quelqu'un réponde quand ça brise. Ça, ça vaut de payer. Le mot « clinique » sur une boîte, non — sauf si un numéro de licence est écrit juste à côté.",
+          ],
+        },
+        {
+          h: "Les questions à poser avant de payer",
+          ul: [
+            "Qui est le vendeur, et y a-t-il un nom et un numéro de téléphone ? Une fiche sans les deux, c'est un pari qu'on ne peut pas relancer.",
+            "Quel est le délai total jusqu'à ma porte — traitement plus transport, pas l'un des deux ? Une boutique qui n'affiche qu'un seul chiffre cache l'autre.",
+            "Qu'est-ce qui arrive si ça brise au quatrième mois ? Faites écrire la garantie avant, pas après.",
+            "Le prix affiché est-il le prix final ? Certaines boutiques canadiennes ajoutent la taxe au paiement et d'autres non : un petit fournisseur sous le seuil de 30 000 $ n'est pas tenu de la facturer.",
+            "La fiche dit-elle qui ne devrait pas l'utiliser ? Grossesse, photosensibilité, médication photosensibilisante, stimulateur cardiaque et affection cutanée active sont les mises en garde habituelles. Une fiche sans aucune mise en garde n'a pas pensé à vous.",
+          ],
+        },
+        {
+          h: "Où on se situe, puisque vous êtes sur notre site",
+          p: [
+            "On est une petite boutique de L'Assomption, au Québec. Notre masque LED est à 59,99 $, et le 28 septembre 2026 le masque complet le moins cher de la première page d'Amazon.ca était à 89,99 $, la plupart des fiches se situant entre 129,99 $ et 169,99 $. On est moins cher à cause du chemin parcouru, pas de la quincaillerie, et la contrepartie honnête c'est le délai : le nôtre prend de 2 à 4 semaines parce qu'il part de l'entrepôt du fournisseur.",
+            "On n'a pas non plus des centaines d'avis, parce que seuls les acheteurs vérifiés peuvent en laisser un et qu'on est nouveaux. Vous avez le droit de nous le reprocher. On préfère le dire plutôt que d'en acheter.",
+          ],
+        },
+      ],
+      faq: [
+        { q: "Est-ce légal de vendre un masque LED au Canada sans licence de Santé Canada ?", a: "Oui, quand il est vendu comme outil cosmétique et décrit en matière d'apparence seulement. L'exigence de licence s'attache à la promesse, pas à l'appareil : dès qu'un vendeur affirme qu'il traite une affection, ça devient un instrument médical qui doit être homologué." },
+        { q: "Les photos avant/après sont-elles illégales ?", a: "C'est de s'en servir comme preuve d'une promesse de rendement qui pose problème. La loi canadienne exige qu'une promesse de rendement repose sur des épreuves suffisantes et appropriées faites avant de la formuler, et deux photos ne sont pas des épreuves. Les boutiques honnêtes n'en publient pas." },
+        { q: "Pourquoi certaines boutiques canadiennes ne facturent pas de taxe ?", a: "Un fournisseur dont les ventes mondiales restent sous 30 000 $ sur quatre trimestres consécutifs est un petit fournisseur et n'est pas tenu de s'inscrire à la TPS/TVH. Ce n'est pas un truc, et le prix affiché est alors le prix final." },
+        { q: "Comment repérer des avis achetés ?", a: "Regardez le rapport entre le nombre d'avis et l'âge de la fiche, si les formulations se répètent d'un produit sans lien à l'autre, et si un seul avis mentionne un problème. Un vrai ensemble d'avis contient toujours des plaintes." },
+      ],
+      related: ["led-red-light-mask", "microcurrent-facial-lift-device"],
     },
   ],
 };
