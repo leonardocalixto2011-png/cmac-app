@@ -49,13 +49,39 @@ const CATEGORY_BY_SLUG: Record<string, string> = {
   "electric-foot-file": "Health & Beauty > Personal Care > Cosmetics > Cosmetic Tools > Nail Tools",
 };
 
+/**
+ * Single-unit commodities we do not advertise, because Shopping puts our unit
+ * price beside a multipack and we lose by 3-8x (Amazon.ca, checked 2026-09-28:
+ * 5-8 satin scrunchies $11.99, 2 satin pillowcases $9.75, 4 sleep masks $9.89,
+ * 6 spa headbands $21.99, fleece socks ~$5/pair, hooded blankets from $37.72).
+ *
+ * The cause is structural, not a bad supplier deal: per-unit dropship shipping
+ * is nearly flat, so on a $0.33 scrunchie the $3.81 parcel is 92% of our cost.
+ * Inside a set parcel the same scrunchie adds ~$0.40, which is why these items
+ * still earn their place as set components — just not as standalone ads. One
+ * impression of a lone $12.99 scrunchie next to a $11.99 eight-pack costs us
+ * the credibility of the LED mask, where we are the cheapest in the country.
+ *
+ * Revisit each line when local stock lands (multipacks become possible) or the
+ * price moves; they stay purchasable on the site throughout.
+ */
+const FEED_EXCLUDE = new Set([
+  "satin-scrunchie",
+  "satin-pillowcase",
+  "satin-sleep-mask",
+  "spa-headband",
+  "cozy-fleece-socks",
+  "hooded-sherpa-blanket",
+  "facial-ice-roller",
+]);
+
 export async function buildGoogleFeed(locale: "en" | "fr"): Promise<Response> {
   const base = siteUrl();
   const products = await listProducts();
   const fr = locale === "fr";
 
   const items = products
-    .filter((p) => p.images.length > 0)
+    .filter((p) => p.images.length > 0 && !FEED_EXCLUDE.has(p.slug))
     .map((p) => {
       // Sets: compareAt = the items bought separately, not a former price → never a Google sale_price.
       const onSale = !p.tags.includes("sets") && p.compareAtCents != null && p.compareAtCents > p.priceCents;
