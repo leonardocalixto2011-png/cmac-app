@@ -118,6 +118,9 @@ const BODY_TAGGED = ["electric-foot-file", "cozy-fleece-socks", "reusable-cleans
 /** Rows shown on /collections/men (tag "men"). */
 const MEN_TAGGED = ["electric-scalp-massager", "electric-foot-file", "led-red-light-mask", "hooded-sherpa-blanket", "sonic-silicone-cleansing-brush"];
 
+/** Rows shown on /collections/devices (tag "devices"): everything that plugs in or charges. The positioning lives here: devices are where a no-stock shop beats a marketplace on price. */
+const DEVICES_TAGGED = ["led-red-light-mask", "microcurrent-facial-lift-device", "ems-sculpting-v-roller", "under-eye-glow-wand", "electronic-gua-sha-massager", "sonic-silicone-cleansing-brush", "electric-scalp-massager", "electric-makeup-brush-cleaner", "usb-nail-lamp", "electric-foot-file", "nail-care-pen", "mini-shaver", "nose-trimmer"];
+
 const HAIR_TAGGED = ["satin-pillowcase", "satin-bonnet", "hair-towel-wrap", "heatless-curl-set", "satin-scrunchie", "satin-beauty-sleep-set", "electric-scalp-massager", "spa-headband"];
 
 /** Collection tags a row must carry (gift, hair): the new list, or null when nothing changes. */
@@ -128,6 +131,7 @@ function addGiftTag(slug: string, tags: string[]): string[] | null {
   if (NAILS_TAGGED.includes(slug) && !out.includes("nails")) out = [...out, "nails"];
   if (BODY_TAGGED.includes(slug) && !out.includes("body")) out = [...out, "body"];
   if (MEN_TAGGED.includes(slug) && !out.includes("men")) out = [...out, "men"];
+  if (DEVICES_TAGGED.includes(slug) && !out.includes("devices")) out = [...out, "devices"];
   return out === tags ? null : out;
 }
 

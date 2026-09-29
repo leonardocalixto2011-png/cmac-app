@@ -22,6 +22,7 @@ const en: Dict = {
 
   "nav.home": "Home",
   "nav.shop": "Shop",
+  "nav.devices": "Devices",
   "nav.glow": "Glow",
   "nav.sculpt": "Sculpt",
   "nav.cool": "Cool",
@@ -196,6 +197,8 @@ const en: Dict = {
 
   "coll.glow.t": "Glow",
   "coll.glow.d": "Light-based tools for a rested, even-looking complexion. The lie-back-and-relax part of the routine.",
+  "coll.devices.t": "Devices",
+  "coll.devices.d": "Everything that plugs in or charges, at a fair price because we sell direct: the LED mask, microcurrent, the cleansing brush, the scalp massager and more. Cosmetic tools, described in terms of appearance only.",
   "coll.sculpt.t": "Sculpt",
   "coll.sculpt.d": "Microcurrent and EMS devices for the cheekbones and jawline you already have.",
   "coll.cool.t": "Cool",
@@ -357,6 +360,7 @@ const fr: Dict = {
 
   "nav.home": "Accueil",
   "nav.shop": "Boutique",
+  "nav.devices": "Appareils",
   "nav.glow": "Éclat",
   "nav.sculpt": "Sculpter",
   "nav.cool": "Fraîcheur",
@@ -531,6 +535,8 @@ const fr: Dict = {
 
   "coll.glow.t": "Éclat",
   "coll.glow.d": "Des outils à base de lumière pour un teint à l'air reposé et uniforme. La partie « on s'allonge et on relaxe » de la routine.",
+  "coll.devices.t": "Appareils",
+  "coll.devices.d": "Tout ce qui se branche ou se recharge, au juste prix parce qu'on vend en direct : le masque LED, le microcourant, la brosse nettoyante, le masseur pour le cuir chevelu et plus. Des outils cosmétiques, décrits en matière d'apparence seulement.",
   "coll.sculpt.t": "Sculpter",
   "coll.sculpt.d": "Des appareils microcourant et EMS pour les pommettes et la mâchoire que vous avez déjà.",
   "coll.cool.t": "Fraîcheur",
