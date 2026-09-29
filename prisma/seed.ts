@@ -1005,7 +1005,7 @@ const PRODUCTS: SeedProduct[] = [
     descriptionFr: `<p><strong>La lampe pour les retouches entre deux rendez-vous.</strong> Une lampe UV/LED compacte à 24 diodes qui fait durcir le vernis gel, le gel de construction et le top coat. Elle fonctionne sur n'importe quel port USB ou chargeur de téléphone : pas d'adaptateur encombrant, rien à certifier, la même basse tension que nos autres outils.</p><h3>Mode d'emploi</h3><ol><li>Appliquez une couche mince de vernis gel.</li><li>Glissez la main et appuyez sur le bouton : 30 à 60 secondes par couche, selon le vernis.</li><li>Répétez pour chaque couche et pour le top coat.</li></ol><h3>Bon à savoir</h3><ul><li>Alimentation USB (câble inclus ; utilisez un chargeur 5 V / 2 A). Une main ou un pied à la fois.</li><li>Outil cosmétique à usage domestique. Ne regardez pas directement les diodes ; un écran solaire ou des gants anti-UV sur les mains, c'est une bonne habitude.</li><li>Ne convient pas au vernis ordinaire (non gel) : il ne durcira pas.</li></ul>${FOOTER_FR}`,
     options: [],
     // 5 and 6 are our crops of the supplier photos (the originals carry marketing overlays).
-    images: [`${SITE}/usb-nail-lamp-hero.jpg`, ...[5, 6].map((n) => `${SITE}/usb-nail-lamp-${n}.jpg`)],
+    images: [`${SITE}/usb-nail-lamp-hero.jpg`, ...[5, 3, 4].map((n) => `${SITE}/usb-nail-lamp-${n}.jpg`)],
     supplierUrl: `${AE}/1005007181406990.html?shipCountry=CA&currency=CAD`,
     supplierSku: "AE-1005007181406990",
     shippingNote:
