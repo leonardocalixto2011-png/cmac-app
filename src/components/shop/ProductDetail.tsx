@@ -77,7 +77,7 @@ export function ProductDetail({ product, components = [] }: { product: ProductVi
         <Link href="/shop" className="mb-2 inline-block py-2 text-sm text-ink-soft hover:text-terra">
           {t("shop.backToShop")}
         </Link>
-        <div className="relative aspect-[4/5] overflow-hidden rounded-[var(--radius-card)] bg-cream-2" data-reveal="scale">
+        <div className="relative aspect-[4/5] overflow-hidden rounded-[var(--radius-card)] bg-warm-white" data-reveal="scale">
           {active?.kind === "video" ? (
             <video
               key={active.src}
@@ -92,7 +92,7 @@ export function ProductDetail({ product, components = [] }: { product: ProductVi
               className="h-full w-full object-cover"
             />
           ) : (
-            <ProductArt images={active ? [active.src] : []} name={name} tags={product.tags} priority />
+            <ProductArt images={active ? [active.src] : []} name={name} tags={product.tags} priority fit="contain" sizes="(min-width: 1024px) 50vw, 100vw" />
           )}
           {onSale && <span className="product-card__badge">−{pct}%</span>}
         </div>

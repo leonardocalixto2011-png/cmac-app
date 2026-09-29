@@ -737,6 +737,7 @@ const PRODUCTS: SeedProduct[] = [
       ]),
     ],
     images: [
+      `${SITE}/gel-manicure-gloves-hero.jpg`, // cutout of the CJ photo below on the CMAC cream
       `${CF}/9020d42c-6bfd-41d7-b217-60168580470d.jpg`,
       `${CF}/a666a215-62e5-4b7f-8e75-c4777d755db8.jpg`,
     ],
@@ -895,7 +896,7 @@ const PRODUCTS: SeedProduct[] = [
         { value: "Black", labelEn: "Black", labelFr: "Noir" },
       ]),
     ],
-    images: [1, 4, 2, 3].map((n) => `${SITE}/satin-pillowcase-${n}.jpg`),
+    images: [`${SITE}/satin-pillowcase-hero.jpg`, ...[4, 2, 3, 1].map((n) => `${SITE}/satin-pillowcase-${n}.jpg`)],
     supplierUrl: `${CJ}/x-p-F25DF9B2-5E6B-42C9-85FD-B34D55E39822.html`,
     supplierSku: "CJJJJFZT00222-Beige-20X29inches-1PC",
     shippingNote:
@@ -931,7 +932,7 @@ const PRODUCTS: SeedProduct[] = [
         { value: "BLACK", labelEn: "Black", labelFr: "Noir", hex: "#1E1E1E" },
       ]),
     ],
-    images: [3, 2, 4, 1].map((n) => `${SITE}/satin-bonnet-${n}.jpg`),
+    images: [`${SITE}/satin-bonnet-hero.jpg`, ...[2, 4, 1].map((n) => `${SITE}/satin-bonnet-${n}.jpg`)],
     supplierUrl: `${AE}/1005007805493925.html?shipCountry=CA&currency=CAD`,
     supplierSku: "AE-1005007805493925",
     shippingNote:
@@ -981,7 +982,7 @@ const PRODUCTS: SeedProduct[] = [
         { value: "3pcs Black", labelEn: "Black", labelFr: "Noir", hex: "#1E1E1E" },
       ]),
     ],
-    images: [1, 2, 3].map((n) => `${SITE}/heatless-curl-set-${n}.jpg`),
+    images: [`${SITE}/heatless-curl-set-hero.jpg`, ...[2, 3, 1].map((n) => `${SITE}/heatless-curl-set-${n}.jpg`)],
     supplierUrl: `${AE}/1005009863899370.html?shipCountry=CA&currency=CAD`,
     supplierSku: "AE-1005009863899370",
     shippingNote:
@@ -1004,7 +1005,7 @@ const PRODUCTS: SeedProduct[] = [
     descriptionFr: `<p><strong>La lampe pour les retouches entre deux rendez-vous.</strong> Une lampe UV/LED compacte à 24 diodes qui fait durcir le vernis gel, le gel de construction et le top coat. Elle fonctionne sur n'importe quel port USB ou chargeur de téléphone : pas d'adaptateur encombrant, rien à certifier, la même basse tension que nos autres outils.</p><h3>Mode d'emploi</h3><ol><li>Appliquez une couche mince de vernis gel.</li><li>Glissez la main et appuyez sur le bouton : 30 à 60 secondes par couche, selon le vernis.</li><li>Répétez pour chaque couche et pour le top coat.</li></ol><h3>Bon à savoir</h3><ul><li>Alimentation USB (câble inclus ; utilisez un chargeur 5 V / 2 A). Une main ou un pied à la fois.</li><li>Outil cosmétique à usage domestique. Ne regardez pas directement les diodes ; un écran solaire ou des gants anti-UV sur les mains, c'est une bonne habitude.</li><li>Ne convient pas au vernis ordinaire (non gel) : il ne durcira pas.</li></ul>${FOOTER_FR}`,
     options: [],
     // 5 and 6 are our crops of the supplier photos (the originals carry marketing overlays).
-    images: [5, 6].map((n) => `${SITE}/usb-nail-lamp-${n}.jpg`),
+    images: [`${SITE}/usb-nail-lamp-hero.jpg`, ...[5, 6].map((n) => `${SITE}/usb-nail-lamp-${n}.jpg`)],
     supplierUrl: `${AE}/1005007181406990.html?shipCountry=CA&currency=CAD`,
     supplierSku: "AE-1005007181406990",
     shippingNote:
@@ -1023,7 +1024,7 @@ const PRODUCTS: SeedProduct[] = [
     descriptionEn: `<p><strong>The two tools every manicure starts with.</strong> A sharp stainless-steel cuticle nipper and a dual-end pusher (spoon on one side, scraper on the other) to tidy the cuticle line before polish, or just to keep hands neat between salon visits.</p><h3>Details</h3><ul><li>2 pieces, stainless steel, as stated by the supplier.</li><li>Push cuticles back after a shower when they're soft; nip only loose skin, never live skin.</li><li>Wipe with alcohol after use, store dry.</li></ul>${FOOTER_HYGIENE_EN}`,
     descriptionFr: `<p><strong>Les deux outils par lesquels toute manucure commence.</strong> Une pince à cuticules bien affûtée en acier inoxydable et un poussoir à double embout (cuillère d'un côté, grattoir de l'autre) pour nettoyer la ligne des cuticules avant le vernis, ou simplement garder des mains soignées entre deux visites au salon.</p><h3>Détails</h3><ul><li>2 pièces, acier inoxydable, selon le fournisseur.</li><li>Repoussez les cuticules après la douche, quand elles sont souples ; coupez seulement les peaux détachées, jamais la peau vive.</li><li>Essuyez à l'alcool après usage, rangez au sec.</li></ul>${FOOTER_HYGIENE_FR}`,
     options: [],
-    images: [1, 2, 3].map((n) => `${SITE}/cuticle-care-duo-${n}.jpg`),
+    images: [`${SITE}/cuticle-care-duo-hero.jpg`, ...[3, 2, 1].map((n) => `${SITE}/cuticle-care-duo-${n}.jpg`)],
     supplierUrl: `${AE}/1005007805477717.html?shipCountry=CA&currency=CAD`,
     supplierSku: "AE-1005007805477717",
     shippingNote:
@@ -1070,7 +1071,7 @@ const PRODUCTS: SeedProduct[] = [
     descriptionEn: `<p><strong>Two minutes before the shower, and skin feels smoother by the weekend.</strong> A natural-bristle brush on a long detachable wooden handle: use the handle for the back and the legs, pop the head off for arms and shoulders. Brush dry skin in long strokes toward the heart, then shower as usual.</p><h3>Details</h3><ul><li>Natural bristles on a wooden head, detachable handle about 40 cm, hanging cord. Materials as stated by the supplier.</li><li>Light pressure: it should feel brisk, never scratchy. Skip broken or irritated skin.</li><li>Keep the bristles dry; tap out and hang after use. Wash the head with mild soap once a month and dry bristles-down.</li></ul>${FOOTER_HYGIENE_EN}`,
     descriptionFr: `<p><strong>Deux minutes avant la douche, et la peau est plus douce dès la fin de semaine.</strong> Une brosse en soies naturelles sur un long manche de bois amovible : le manche pour le dos et les jambes, la tête seule pour les bras et les épaules. On brosse la peau sèche en longs mouvements vers le cœur, puis on prend sa douche comme d'habitude.</p><h3>Détails</h3><ul><li>Soies naturelles sur tête de bois, manche amovible d'environ 40 cm, cordon de suspension. Matériaux selon le fournisseur.</li><li>Pression légère : ça doit être vif, jamais irritant. Évitez la peau lésée ou irritée.</li><li>Gardez les soies au sec ; tapotez et suspendez après usage. Lavez la tête au savon doux une fois par mois, séchez soies vers le bas.</li></ul>${FOOTER_HYGIENE_FR}`,
     options: [],
-    images: [1, 2, 3].map((n) => `${SITE}/bristle-body-brush-${n}.jpg`),
+    images: [`${SITE}/bristle-body-brush-hero.jpg`, ...[2, 3, 1].map((n) => `${SITE}/bristle-body-brush-${n}.jpg`)],
     supplierUrl: `${AE}/1005010415622779.html?shipCountry=CA&currency=CAD`,
     supplierSku: "AE-1005010415622779",
     shippingNote:
@@ -1096,7 +1097,7 @@ const PRODUCTS: SeedProduct[] = [
         { value: "PURPLE", labelEn: "Lavender", labelFr: "Lavande", hex: "#C9B6E4" },
       ]),
     ],
-    images: [1, 3, 5].map((n) => `${SITE}/exfoliating-mitt-${n}.jpg`),
+    images: [`${SITE}/exfoliating-mitt-hero.jpg`, ...[3, 5, 1].map((n) => `${SITE}/exfoliating-mitt-${n}.jpg`)],
     supplierUrl: `${AE}/1005006138237107.html?shipCountry=CA&currency=CAD`,
     supplierSku: "AE-1005006138237107",
     shippingNote:
@@ -1115,7 +1116,7 @@ const PRODUCTS: SeedProduct[] = [
     descriptionEn: `<p><strong>The body-brushing habit, scaled down for the face.</strong> A curved wooden head with very soft bristles and rounded massage nubs on the back. Sweep it over dry, clean skin from the centre of the face outward for a minute: skin looks fresher and a little rosier, and serum spreads more evenly after.</p><h3>Details</h3><ul><li>Wooden head with soft synthetic bristles and massage nubs; comes with a protective cover. Materials as stated by the supplier.</li><li>Cosmetic tool for appearance only. Feather-light pressure; skip active breakouts, broken or sunburnt skin.</li><li>Keep it dry. Tap out after use, brush the bristles with a dry cloth weekly.</li></ul>${FOOTER_HYGIENE_EN}`,
     descriptionFr: `<p><strong>L'habitude du brossage du corps, adaptée au visage.</strong> Une tête de bois courbée aux soies très douces, avec des picots de massage arrondis au dos. On la passe sur la peau sèche et propre, du centre du visage vers l'extérieur, pendant une minute : le teint paraît plus frais, un peu plus rosé, et le sérum s'étale mieux ensuite.</p><h3>Détails</h3><ul><li>Tête de bois, soies synthétiques douces et picots de massage ; livrée avec un étui de protection. Matériaux selon le fournisseur.</li><li>Outil cosmétique, pour l'apparence seulement. Pression légère comme une plume ; évitez les boutons actifs, la peau lésée ou brûlée par le soleil.</li><li>Gardez-la au sec. Tapotez après usage, passez un linge sec sur les soies chaque semaine.</li></ul>${FOOTER_HYGIENE_FR}`,
     options: [],
-    images: [2, 4, 1, 3].map((n) => `${SITE}/face-dry-brush-${n}.jpg`),
+    images: [`${SITE}/face-dry-brush-hero.jpg`, ...[4, 1, 3, 2].map((n) => `${SITE}/face-dry-brush-${n}.jpg`)],
     supplierUrl: `${AE}/1005009717850634.html?shipCountry=CA&currency=CAD`,
     supplierSku: "AE-1005009717850634",
     shippingNote:
@@ -1137,7 +1138,7 @@ const PRODUCTS: SeedProduct[] = [
     descriptionEn: `<p><strong>The shaver that lives in the car, the gym bag or the carry-on.</strong> Two rotary heads on a floating mount for a quick clean-up of the jaw and neck, a small screen for the battery, and a USB-C port. Rinse the head under the tap. It is a touch-up tool, not a replacement for a full-size shaver.</p><h3>Details</h3><ul><li>USB-C rechargeable (cable included), about 60 minutes per charge. Detachable washable head.</li><li>Body in ABS plastic, as stated by the supplier. Colour as pictured.</li><li>Cosmetic grooming tool. Don't use on broken skin; clean the head after each use.</li></ul>${FOOTER_EN}`,
     descriptionFr: `<p><strong>Le rasoir qui vit dans l'auto, le sac de gym ou le bagage cabine.</strong> Deux têtes rotatives sur support flottant pour un rafraîchissement rapide de la mâchoire et du cou, un petit écran pour la batterie, et un port USB-C. La tête se rince sous le robinet. C'est un outil de retouche, pas un remplacement du rasoir pleine taille.</p><h3>Détails</h3><ul><li>Rechargeable en USB-C (câble inclus), environ 60 minutes par charge. Tête amovible et lavable.</li><li>Boîtier en plastique ABS, selon le fournisseur. Couleur comme sur la photo.</li><li>Outil de toilette cosmétique. Ne pas utiliser sur une peau lésée ; nettoyez la tête après chaque usage.</li></ul>${FOOTER_FR}`,
     options: [],
-    images: [1].map((n) => `${SITE}/mini-shaver-${n}.jpg`),
+    images: [`${SITE}/mini-shaver-hero.jpg`, ...[1].map((n) => `${SITE}/mini-shaver-${n}.jpg`)],
     supplierUrl: `${AE}/1005009332690596.html?shipCountry=CA&currency=CAD`,
     supplierSku: "AE-1005009332690596",
     shippingNote:
@@ -2278,10 +2279,10 @@ async function main() {
       notes.push("images → Cloudinary");
     } else if (
       Array.isArray(existing.images) &&
-      existing.images.every((u) => typeof u === "string" && u.startsWith(SITE + "/")) &&
+      existing.images.every((u) => typeof u === "string" && (u.startsWith(SITE + "/") || CJ_HOST.test(u))) &&
       !sameJson(existing.images, p.images)
     ) {
-      // Self-hosted photos are seed-owned: a reordered or trimmed list in the seed wins.
+      // Self-hosted and supplier photos are seed-owned: a reordered, trimmed or re-shot list in the seed wins.
       update.images = p.images;
       notes.push("images refreshed");
     }

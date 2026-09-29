@@ -21,6 +21,7 @@ export function ProductArt({
   sizes = "(max-width: 700px) 100vw, 480px",
   priority = false,
   hoverImage,
+  fit = "cover",
 }: {
   images: string[];
   name: string;
@@ -30,11 +31,13 @@ export function ProductArt({
   priority?: boolean;
   /** Optional second photo, cross-faded in on card hover (see .product-art__hover). */
   hoverImage?: string;
+  /** "contain" shows the whole photo (product page), "cover" fills the frame (cards). */
+  fit?: "cover" | "contain";
 }) {
   if (images[0]) {
     return (
       <div className={cn("relative h-full w-full overflow-hidden", className)}>
-        <Image src={images[0]} alt={name} fill priority={priority} className="object-cover" sizes={sizes} />
+        <Image src={images[0]} alt={name} fill priority={priority} className={fit === "contain" ? "object-contain" : "object-cover"} sizes={sizes} />
         {hoverImage && hoverImage !== images[0] && (
           <Image src={hoverImage} alt="" aria-hidden="true" fill className="product-art__hover object-cover" sizes={sizes} />
         )}
