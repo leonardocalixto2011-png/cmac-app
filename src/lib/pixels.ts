@@ -1,16 +1,30 @@
 /**
  * Ad pixels (TikTok, Meta, Pinterest) — client side, loaded only after the
  * visitor accepts advertising cookies (Québec Law 25: tracking used for ad
- * profiling needs opt-in). IDs are public build-time env vars; with none set,
- * nothing loads and no cookie banner is shown.
+ * profiling needs opt-in). IDs are public; with none set, nothing loads and no
+ * cookie banner is shown.
  *
  * content_id = the product slug = the `g:id` of /feeds/google.xml, so the
  * catalog uploaded to TikTok / Meta / Pinterest matches these events.
  */
+/**
+ * "CMAC Beauty Pixel" in Events Manager (ad account 967187833809789). A pixel ID
+ * is public — it ships in the client bundle of every site that uses one — so it
+ * lives here instead of an env var. NEXT_PUBLIC_META_PIXEL_ID still wins, and
+ * setting it to "off" turns Meta off without a code change.
+ */
+const META_PIXEL_ID = "4550476965268589";
+
+const envId = (v: string | undefined, fallback = "") => {
+  const id = v?.trim();
+  if (id === "off") return "";
+  return id || fallback;
+};
+
 export const PIXEL_IDS = {
-  tiktok: process.env.NEXT_PUBLIC_TIKTOK_PIXEL_ID?.trim() || "",
-  meta: process.env.NEXT_PUBLIC_META_PIXEL_ID?.trim() || "",
-  pinterest: process.env.NEXT_PUBLIC_PINTEREST_TAG_ID?.trim() || "",
+  tiktok: envId(process.env.NEXT_PUBLIC_TIKTOK_PIXEL_ID),
+  meta: envId(process.env.NEXT_PUBLIC_META_PIXEL_ID, META_PIXEL_ID),
+  pinterest: envId(process.env.NEXT_PUBLIC_PINTEREST_TAG_ID),
 };
 
 export const anyPixel = () => Boolean(PIXEL_IDS.tiktok || PIXEL_IDS.meta || PIXEL_IDS.pinterest);
