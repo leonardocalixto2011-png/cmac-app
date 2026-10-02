@@ -620,6 +620,53 @@ export const JOURNAL: Record<Locale, Article[]> = {
       ],
       related: ["set-between-appointments", "cuticle-care-duo", "glass-nail-file", "usb-nail-lamp"],
     },
+    {
+      slug: "beauty-gift-for-mom-canada",
+      updated: "2026-10-02",
+      title: "What to give your mother that she will actually use",
+      answer:
+        "The gifts that get used are the ones with nothing to guess: no shade, no size, no scent, nothing to learn. A satin pillowcase at $9.99, a scalp massager at $29.99 or a cooling ice roller at $14.99 all pass that test. Our For Mom box is $107.99. If it is for Christmas, order by November 26 — delivery takes 2 to 4 weeks.",
+      intro:
+        "Beauty gifts fail for predictable reasons. The shade is wrong, the scent is not hers, the device needs a technique she has no interest in learning. Here is how to pick one that ends up on the nightstand instead of in a drawer.",
+      blocks: [
+        {
+          h: "The drawer test",
+          ul: [
+            "Nothing to choose wrong. No foundation shades, no clothing sizes, no perfume. A pillowcase, a roller or a headband fits everyone.",
+            "Nothing to learn. If it needs a technique or a tutorial, it gets used twice.",
+            "Nothing to replace. Avoid anything with refills, pods or cartridges she will have to buy again.",
+            "It fits a routine she already has. The best gift slots into an evening she already spends on the couch.",
+          ],
+        },
+        {
+          h: "By budget",
+          table: {
+            head: ["Budget", "What we would pick", "Why it works"],
+            rows: [
+              ["Under $20", "Satin pillowcase $9.99, satin sleep mask $12.99, facial ice roller $14.99", "One size, one colour choice, immediately useful"],
+              ["$20 to $50", "Scalp massager $29.99, heatless curl set $24.99, hair towel wrap $17.99", "Small devices with no learning curve and nothing to refill"],
+              ["$40 to $50 as a set", "Cozy Night box $41.99, Silky Hair box $45.99", "Arrives wrapped and complete; nothing else to buy"],
+              ["Over $100", "For Mom box $107.99", "Microcurrent device, ice roller, satin pillowcase and spa headband in one box"],
+            ],
+          },
+        },
+        {
+          h: "What we would avoid",
+          ul: [
+            "Anything with a shade: foundation, lipstick, tinted cream. The odds are against you.",
+            "Perfume, unless you have smelled it on her.",
+            "Devices that promise a transformation. Set the expectation at pleasant, not life-changing, and the gift lands better.",
+            "Subscriptions. A gift should end, not become a monthly line on someone's statement.",
+          ],
+        },
+      ],
+      faq: [
+        { q: "What if she already has everything?", a: "Replace something she uses daily with a nicer version. A satin pillowcase instead of a cotton one costs $9.99 and she will feel it the first night." },
+        { q: "Is a beauty device a safe gift for someone in her sixties or seventies?", a: "Our devices are cosmetic, not medical. If she has a skin condition, is photosensitive or takes light-sensitising medication, ask her doctor first — and that is true at any age." },
+        { q: "When is the last day to order for Christmas?", a: "November 26. Delivery takes 2 to 4 weeks, so after that date we cannot promise it arrives in time, and we would rather say so than hope." },
+      ],
+      related: ["set-for-mom", "satin-pillowcase", "electric-scalp-massager", "facial-ice-roller"],
+    },
   ],
   fr: [
     {
@@ -1172,6 +1219,53 @@ export const JOURNAL: Record<Locale, Article[]> = {
         { q: "Une lampe USB vaut-elle une lampe de salon ?", a: "C'est une lampe compacte de 24 LED pour les retouches et le gel maison ; les lampes de salon sont plus grandes. Suivez le temps de séchage indiqué sur votre vernis, habituellement 30 à 60 secondes par couche." },
       ],
       related: ["set-between-appointments", "cuticle-care-duo", "glass-nail-file", "usb-nail-lamp"],
+    },
+    {
+      slug: "beauty-gift-for-mom-canada",
+      updated: "2026-10-02",
+      title: "Quoi offrir à sa mère pour que ça serve vraiment",
+      answer:
+        "Les cadeaux qui servent sont ceux où il n'y a rien à deviner : pas de teinte, pas de taille, pas de parfum, rien à apprendre. Une taie d'oreiller en satin à 9,99 $, un masseur de cuir chevelu à 29,99 $ ou un rouleau de glace à 14,99 $ passent tous le test. Notre coffret Pour maman est à 107,99 $. Pour Noël, commandez avant le 26 novembre : la livraison prend de 2 à 4 semaines.",
+      intro:
+        "Les cadeaux beauté ratent pour des raisons prévisibles. La teinte n'est pas la bonne, le parfum n'est pas le sien, l'appareil exige une technique qu'elle n'a aucune envie d'apprendre. Voici comment en choisir un qui finit sur la table de chevet plutôt que dans un tiroir.",
+      blocks: [
+        {
+          h: "Le test du tiroir",
+          ul: [
+            "Rien à se tromper. Pas de teinte de fond de teint, pas de taille, pas de parfum. Une taie, un rouleau ou un bandeau vont à tout le monde.",
+            "Rien à apprendre. Si ça demande une technique ou un tutoriel, ça sert deux fois.",
+            "Rien à remplacer. Évitez ce qui a des recharges ou des cartouches qu'elle devra racheter.",
+            "Ça entre dans une routine qu'elle a déjà. Le meilleur cadeau se glisse dans une soirée qu'elle passe déjà sur le divan.",
+          ],
+        },
+        {
+          h: "Selon le budget",
+          table: {
+            head: ["Budget", "Ce qu'on choisirait", "Pourquoi ça marche"],
+            rows: [
+              ["Moins de 20 $", "Taie en satin 9,99 $, masque de nuit 12,99 $, rouleau de glace 14,99 $", "Une seule taille, un seul choix, utile tout de suite"],
+              ["20 à 50 $", "Masseur de cuir chevelu 29,99 $, bigoudis sans chaleur 24,99 $, serviette turban 17,99 $", "De petits appareils sans apprentissage et sans recharge"],
+              ["40 à 50 $ en coffret", "Soirée douillette 41,99 $, Cheveux soyeux 45,99 $", "Arrive complet et prêt à offrir ; rien d'autre à acheter"],
+              ["Plus de 100 $", "Coffret Pour maman 107,99 $", "Appareil à microcourant, rouleau de glace, taie en satin et bandeau spa dans une seule boîte"],
+            ],
+          },
+        },
+        {
+          h: "Ce qu'on éviterait",
+          ul: [
+            "Tout ce qui a une teinte : fond de teint, rouge à lèvres, crème teintée. Les chances sont contre vous.",
+            "Le parfum, sauf si vous l'avez senti sur elle.",
+            "Les appareils qui promettent une transformation. Visez agréable plutôt que spectaculaire, et le cadeau est mieux reçu.",
+            "Les abonnements. Un cadeau devrait se terminer, pas devenir une ligne mensuelle sur un relevé.",
+          ],
+        },
+      ],
+      faq: [
+        { q: "Et si elle a déjà tout ?", a: "Remplacez par une plus belle version quelque chose qu'elle utilise tous les jours. Une taie en satin au lieu du coton coûte 9,99 $ et elle le sentira dès la première nuit." },
+        { q: "Un appareil beauté, est-ce un bon cadeau pour quelqu'un dans la soixantaine ou la soixante-dizaine ?", a: "Nos appareils sont cosmétiques, pas médicaux. Si elle a une condition de peau, est photosensible ou prend un médicament photosensibilisant, demandez d'abord à son médecin — et c'est vrai à tout âge." },
+        { q: "Quelle est la dernière date pour commander pour Noël ?", a: "Le 26 novembre. La livraison prend de 2 à 4 semaines, alors après cette date on ne peut pas promettre que ça arrive à temps, et on préfère le dire plutôt que d'espérer." },
+      ],
+      related: ["set-for-mom", "satin-pillowcase", "electric-scalp-massager", "facial-ice-roller"],
     },
   ],
 };
