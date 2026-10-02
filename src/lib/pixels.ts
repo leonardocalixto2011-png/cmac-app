@@ -15,6 +15,13 @@
  */
 const META_PIXEL_ID = "4550476965268589";
 
+/**
+ * Pinterest tag, ad account 549770852161. Same reasoning as the Meta pixel: the
+ * id is public, so it ships here rather than in an env var, and
+ * NEXT_PUBLIC_PINTEREST_TAG_ID="off" is the kill switch.
+ */
+const PINTEREST_TAG_ID = "2612476197885";
+
 const envId = (v: string | undefined, fallback = "") => {
   const id = v?.trim();
   if (id === "off") return "";
@@ -24,7 +31,7 @@ const envId = (v: string | undefined, fallback = "") => {
 export const PIXEL_IDS = {
   tiktok: envId(process.env.NEXT_PUBLIC_TIKTOK_PIXEL_ID),
   meta: envId(process.env.NEXT_PUBLIC_META_PIXEL_ID, META_PIXEL_ID),
-  pinterest: envId(process.env.NEXT_PUBLIC_PINTEREST_TAG_ID),
+  pinterest: envId(process.env.NEXT_PUBLIC_PINTEREST_TAG_ID, PINTEREST_TAG_ID),
 };
 
 export const anyPixel = () => Boolean(PIXEL_IDS.tiktok || PIXEL_IDS.meta || PIXEL_IDS.pinterest);
