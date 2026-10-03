@@ -667,6 +667,60 @@ export const JOURNAL: Record<Locale, Article[]> = {
       ],
       related: ["set-for-mom", "satin-pillowcase", "electric-scalp-massager", "facial-ice-roller"],
     },
+    {
+      slug: "beauty-gift-for-partner-canada",
+      updated: "2026-10-03",
+      title: "A beauty gift for your partner when you know nothing about beauty",
+      answer:
+        "Pick something with no shade, no scent and no size, that works straight out of the box, and give it as time for themselves rather than as a fix. Our Éclat de Noël box at $75.99 (LED mask, sleep mask, spa headband and scrunchie) is the safe choice; the Cozy Night box at $41.99 is the option with no device at all. For Christmas, order by November 26: delivery takes 2 to 4 weeks.",
+      intro:
+        "Plenty of beauty gifts are bought by people who never use beauty products themselves. That is fine. None of the rules below require knowing anything about skin care, and none of them involve guessing a shade.",
+      blocks: [
+        {
+          h: "Three rules that do the knowing for you",
+          ul: [
+            "No shade, no scent, no size. Foundation, perfume and clothing are where gifts go wrong. A device, a satin set or a box avoids all three.",
+            "Complete in the box. If it needs a refill, a cartridge or an app, it turns into homework. Everything in our sets works as it arrives; the LED mask recharges by USB.",
+            "Give it as time, not as a fix. \"Ten minutes for yourself\" lands well. Anything that sounds like \"this will fix your wrinkles\" does not, and we do not promise that anyway.",
+          ],
+        },
+        {
+          h: "By budget",
+          table: {
+            head: ["Budget", "What we would pick", "Why it works"],
+            rows: [
+              ["Under $50", "Cozy Night box $41.99 or Silky Hair box $45.99", "No device and nothing to learn. Cozy Night is an ice roller, sleep mask, fleece socks, scrunchie and cleansing puff; Silky Hair is a satin pillowcase, scalp massager, scrunchie and headband"],
+              ["$50 to $80", "LED mask $59.99 alone, or the Éclat de Noël box $75.99", "The box adds a sleep mask, spa headband and scrunchie, arrives as one parcel and ships free"],
+              ["Around $100", "Midnight Glow $104.99", "Sonic cleansing brush, LED mask and a 4-piece satin sleep set; orders over $100 also get a satin scrunchie added free"],
+              ["Going all out", "The Full Ritual $169.99", "LED mask, microcurrent device, ice roller, spa headband and the satin sleep set: our most complete set"],
+            ],
+          },
+        },
+        {
+          h: "The practical part",
+          ul: [
+            "Order by November 26 for Christmas. Delivery takes 2 to 4 weeks, and we would rather say so now than promise the 24th.",
+            "Have it shipped to yourself if you want to wrap it. It arrives in shipping packaging, not gift wrap.",
+            "Shipping is free from $75. Unused items can be returned within 30 days.",
+          ],
+        },
+        {
+          h: "What we would skip",
+          ul: [
+            "Anything that implies a flaw. A gift sold as \"anti-wrinkle\" says something you did not mean to say.",
+            "Perfume and makeup, unless you know the exact product and shade.",
+            "Subscription boxes. A gift should end, not become a monthly charge.",
+          ],
+        },
+      ],
+      faq: [
+        { q: "Is an LED mask a safe gift?", a: "It is a cosmetic device, not a medical one. It is not for anyone who is pregnant, photosensitive, on light-sensitising medication or dealing with an active skin condition. If you are unsure, the Cozy Night or Silky Hair box has no device at all." },
+        { q: "What if they already own a lot of skin care?", a: "Skip skin care and give them the evening instead. Cozy Night and Silky Hair do not overlap with anything already on a bathroom shelf." },
+        { q: "Does it come gift-wrapped?", a: "No. It ships in ordinary shipping packaging. Have it delivered to your own address and wrap it yourself." },
+        { q: "When is the last day to order for Christmas?", a: "November 26. Delivery takes 2 to 4 weeks, so after that date we cannot promise it arrives in time." },
+      ],
+      related: ["set-christmas-glow", "led-red-light-mask", "set-cozy-night", "set-silky-hair"],
+    },
   ],
   fr: [
     {
@@ -1266,6 +1320,60 @@ export const JOURNAL: Record<Locale, Article[]> = {
         { q: "Quelle est la dernière date pour commander pour Noël ?", a: "Le 26 novembre. La livraison prend de 2 à 4 semaines, alors après cette date on ne peut pas promettre que ça arrive à temps, et on préfère le dire plutôt que d'espérer." },
       ],
       related: ["set-for-mom", "satin-pillowcase", "electric-scalp-massager", "facial-ice-roller"],
+    },
+    {
+      slug: "beauty-gift-for-partner-canada",
+      updated: "2026-10-03",
+      title: "Un cadeau beauté pour sa blonde (ou son chum), quand on n'y connaît rien",
+      answer:
+        "Choisissez quelque chose sans teinte, sans parfum et sans taille, qui fonctionne dès la sortie de la boîte, et offrez-le comme du temps pour soi plutôt que comme une correction. Notre coffret Éclat de Noël à 75,99 $ (masque DEL, masque de nuit, bandeau spa et chouchou) est le choix sûr ; la boîte Soirée douillette à 41,99 $ est l'option sans aucun appareil. Pour Noël, commandez avant le 26 novembre : la livraison prend de 2 à 4 semaines.",
+      intro:
+        "Beaucoup de cadeaux beauté sont achetés par des gens qui n'utilisent eux-mêmes aucun produit de beauté. Ce n'est pas un problème. Aucune des règles ci-dessous ne demande de connaître les soins de la peau, et aucune ne demande de deviner une teinte.",
+      blocks: [
+        {
+          h: "Trois règles qui en savent plus que vous",
+          ul: [
+            "Pas de teinte, pas de parfum, pas de taille. Fond de teint, parfum et vêtements, c'est là que les cadeaux ratent. Un appareil, un ensemble en satin ou un coffret évite les trois.",
+            "Complet dans la boîte. S'il faut une recharge, une cartouche ou une application, ça devient un devoir. Tout ce qui est dans nos coffrets fonctionne tel quel ; le masque DEL se recharge par USB.",
+            "Offrez du temps, pas une correction. « Dix minutes pour toi », ça fait plaisir. Tout ce qui ressemble à « ça va régler tes rides », non — et de toute façon, on ne le promet pas.",
+          ],
+        },
+        {
+          h: "Selon le budget",
+          table: {
+            head: ["Budget", "Ce qu'on choisirait", "Pourquoi ça marche"],
+            rows: [
+              ["Moins de 50 $", "Boîte Soirée douillette 41,99 $ ou coffret Cheveux soyeux 45,99 $", "Aucun appareil, rien à apprendre. Soirée douillette : rouleau de glace, masque de nuit, bas en molleton, chouchou et houppette ; Cheveux soyeux : taie en satin, masseur de cuir chevelu, chouchou et bandeau"],
+              ["50 à 80 $", "Le masque DEL seul à 59,99 $, ou le coffret Éclat de Noël à 75,99 $", "Le coffret ajoute un masque de nuit, un bandeau spa et un chouchou, arrive en un seul colis et la livraison est gratuite"],
+              ["Autour de 100 $", "Rituel Éclat de minuit 104,99 $", "Brosse nettoyante sonique, masque DEL et ensemble sommeil en satin de 4 pièces ; un chouchou en satin est ajouté gratuitement aux commandes de plus de 100 $"],
+              ["Pour faire les choses en grand", "Le Rituel complet 169,99 $", "Masque DEL, appareil à microcourant, rouleau de glace, bandeau spa et ensemble sommeil en satin : notre coffret le plus complet"],
+            ],
+          },
+        },
+        {
+          h: "Le côté pratique",
+          ul: [
+            "Pour Noël, commandez avant le 26 novembre. La livraison prend de 2 à 4 semaines, et on préfère vous le dire maintenant plutôt que de promettre le 24.",
+            "Faites-le livrer chez vous si vous voulez l'emballer. Il arrive dans un emballage d'expédition, pas dans du papier cadeau.",
+            "Livraison gratuite dès 75 $. Les articles non utilisés peuvent être retournés dans les 30 jours.",
+          ],
+        },
+        {
+          h: "Ce qu'on éviterait",
+          ul: [
+            "Tout ce qui sous-entend un défaut. Un cadeau vendu comme « antirides » dit quelque chose que vous ne vouliez pas dire.",
+            "Le parfum et le maquillage, sauf si vous connaissez le produit et la teinte exacts.",
+            "Les abonnements. Un cadeau devrait se terminer, pas devenir un prélèvement mensuel.",
+          ],
+        },
+      ],
+      faq: [
+        { q: "Un masque DEL, est-ce un cadeau sans risque ?", a: "C'est un appareil cosmétique, pas un appareil médical. Il ne convient pas aux personnes enceintes, photosensibles, sous médicament photosensibilisant ou avec une condition de peau active. Dans le doute, les coffrets Soirée douillette et Cheveux soyeux ne contiennent aucun appareil." },
+        { q: "Et si elle (ou il) a déjà plein de produits de soin ?", a: "Laissez tomber les soins et offrez plutôt la soirée. Soirée douillette et Cheveux soyeux ne font doublon avec rien de ce qui est déjà sur la tablette de la salle de bain." },
+        { q: "Est-ce que c'est emballé pour offrir ?", a: "Non. Le colis arrive dans un emballage d'expédition ordinaire. Faites-le livrer à votre adresse et emballez-le vous-même." },
+        { q: "Quelle est la dernière date pour commander pour Noël ?", a: "Le 26 novembre. La livraison prend de 2 à 4 semaines, alors après cette date on ne peut pas promettre que ça arrive à temps." },
+      ],
+      related: ["set-christmas-glow", "led-red-light-mask", "set-cozy-night", "set-silky-hair"],
     },
   ],
 };
