@@ -75,6 +75,27 @@ const FEED_EXCLUDE = new Set([
   "facial-ice-roller",
 ]);
 
+/**
+ * Every feed image is served from our own domain.
+ *
+ * Pinterest ingested the feed twice (2026-10-02 and 10-03) with the same result:
+ * 7 products rejected with "cannot fetch image" and 22 extra images answered 429.
+ * The rejected products were exactly the ones whose main image sat on
+ * res.cloudinary.com — the LED mask among them — while all 32 products with a
+ * main image on cmacbeauty.ca went through. Pre-warming the Cloudinary URLs
+ * changed nothing, so it is the crawler being refused, not a cold cache.
+ * Supplier CDNs (CJ, Aliyun) refuse hotlinks the same way.
+ *
+ * Routing through /_next/image makes Vercel fetch each source once and cache
+ * it; crawlers only ever talk to us. f_auto becomes f_jpg so the answer is a
+ * JPEG, which every catalog accepts.
+ */
+function feedImage(url: string, base: string): string {
+  if (url.startsWith(base) || url.startsWith("/")) return url.startsWith("/") ? `${base}${url}` : url;
+  const src = url.replace("/f_auto/", "/f_jpg/");
+  return `${base}/_next/image?url=${encodeURIComponent(src)}&w=1200&q=75`;
+}
+
 export async function buildGoogleFeed(locale: "en" | "fr"): Promise<Response> {
   const base = siteUrl();
   const products = await listProducts();
@@ -94,7 +115,7 @@ export async function buildGoogleFeed(locale: "en" | "fr"): Promise<Response> {
       const desc = [tag, body].filter(Boolean).join(" — ") || title;
       const extra = p.images
         .slice(1, 10)
-        .map((u) => `<g:additional_image_link>${esc(u)}</g:additional_image_link>`)
+        .map((u) => `<g:additional_image_link>${esc(feedImage(u, base))}</g:additional_image_link>`)
         .join("");
       return `
     <item>
@@ -103,7 +124,7 @@ export async function buildGoogleFeed(locale: "en" | "fr"): Promise<Response> {
       <g:title>${esc(title.slice(0, 150))}</g:title>
       <g:description>${esc(desc)}</g:description>
       <g:link>${esc(`${base}/shop/${p.slug}${fr ? "?lang=fr" : ""}`)}</g:link>
-      <g:image_link>${esc(p.images[0])}</g:image_link>${extra}
+      <g:image_link>${esc(feedImage(p.images[0], base))}</g:image_link>${extra}
       <g:availability>in_stock</g:availability>
       <g:condition>new</g:condition>
       <g:brand>${esc(BRAND.name)}</g:brand>
