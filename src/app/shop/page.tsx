@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { listProducts } from "@/lib/shop";
+import { gridReady, listProducts } from "@/lib/shop";
 import { serverT } from "@/i18n/server";
 import { ProductGrid } from "@/components/shop/ProductGrid";
 
@@ -12,7 +12,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function ShopPage() {
   const { t } = await serverT();
-  const products = await listProducts();
+  const products = gridReady(await listProducts());
   return (
     <section className="section-pad">
       <div className="wrap">

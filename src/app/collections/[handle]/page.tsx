@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { isCollectionHandle, listProducts } from "@/lib/shop";
+import { gridReady, isCollectionHandle, listProducts } from "@/lib/shop";
 import { serverT } from "@/i18n/server";
 import { ProductGrid } from "@/components/shop/ProductGrid";
 import { JsonLd, breadcrumbLd, itemListLd } from "@/components/JsonLd";
@@ -25,7 +25,7 @@ export default async function CollectionPage({ params }: { params: Promise<{ han
   const { handle } = await params;
   if (!isCollectionHandle(handle)) notFound();
   const { t, locale } = await serverT();
-  const products = await listProducts(handle);
+  const products = gridReady(await listProducts(handle));
 
   // Gift guide: people shop gifts by budget, so the page is split that way.
   const bands =

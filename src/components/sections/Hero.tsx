@@ -20,9 +20,7 @@ export function Hero() {
   const free = formatWholeDollars(SHIPPING.freeThresholdCents, locale);
 
   return (
-    <section className="cmac-hero grain" data-glow id="top">
-      <div className="cmac-hero__blob cmac-hero__blob--a" aria-hidden="true" />
-      <div className="cmac-hero__blob cmac-hero__blob--b" aria-hidden="true" />
+    <section className="cmac-hero" id="top">
       <div className="wrap cmac-hero__grid">
         <div>
           <p className="eyebrow" data-reveal>
@@ -38,18 +36,7 @@ export function Hero() {
               </span>
             ))}
             <br />
-            <span
-              className="cmac-hero__rotator"
-              aria-hidden="true"
-              style={{ "--words-dur": `${words.length * 2.4}s` } as React.CSSProperties}
-            >
-              {words.map((w, i) => (
-                <span key={w} style={{ animationDelay: `${i * 2.4}s` }}>
-                  {w}
-                </span>
-              ))}
-            </span>
-            <span className="sr-only-text">{words[0]}</span>
+            <em className="cmac-hero__accent">{words[0]}</em>
           </h1>
           <p className="cmac-hero__lead" data-reveal style={D(160)}>
             {t("hero.lead")}
@@ -59,8 +46,9 @@ export function Hero() {
               {t("hero.cta1")}
               <Icon name="arrow" />
             </Link>
-            <Link className="btn btn--ghost" href="#routine">
+            <Link className="cmac-hero__link" href="#routine">
               {t("hero.cta2")}
+              <Icon name="arrow" />
             </Link>
           </div>
           <ul className="cmac-hero__proof" data-reveal style={D(320)}>
@@ -74,9 +62,6 @@ export function Hero() {
         </div>
 
         <div className="cmac-hero__visual" data-reveal="scale" style={D(200)}>
-          {/* The seven LED colours of the mask, cycling slowly behind it. */}
-          <div className="cmac-hero__glow" aria-hidden="true" />
-          <div className="cmac-hero__ring" aria-hidden="true" />
           <Link className="cmac-hero__img" href="/shop/led-red-light-mask">
             <Image
               src={HERO_PHOTO}
@@ -91,9 +76,6 @@ export function Hero() {
               <Icon name="arrow" />
             </span>
           </Link>
-          <div className="cmac-hero__badge">
-            <span>{t("hero.badge")}</span>
-          </div>
         </div>
       </div>
     </section>

@@ -70,6 +70,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   return (
     <html lang={locale} className={`${fraunces.variable} ${inter.variable} h-full antialiased`}>
       <body className="flex min-h-full flex-col">
+        {/* Marks the document as scripted before first paint; the scroll-reveal CSS only hides content under html.js. */}
+        <script dangerouslySetInnerHTML={{ __html: "document.documentElement.classList.add('js')" }} />
         <JsonLd data={organizationLd()} />
         <LocaleProvider initialLocale={locale}>
           <CartProvider>

@@ -76,6 +76,33 @@ function toView(p: {
   };
 }
 
+/**
+ * Products whose only photos are supplier collages, model shots or a retail
+ * box (photo audit, 2026-10-09). They stay purchasable at /shop/<slug> and in
+ * search, but do not appear in the homepage or collection grids until they
+ * have a real photo. Remove a slug the day its photo is fixed.
+ */
+export const GRID_HIDDEN = new Set([
+  "nail-care-pen",
+  "glass-nail-file",
+  "nose-trimmer",
+  "hair-towel-wrap",
+  "hooded-sherpa-blanket",
+  "pink-shell-makeup-pouch",
+  "electric-foot-file",
+  "heatless-curl-set",
+  "usb-nail-lamp",
+  "bristle-body-brush",
+  "set-between-appointments",
+  "set-pedi-night",
+  "set-mani-pedi",
+]);
+
+/** The grid view of a list: everything that has a photo we would put our name on. */
+export function gridReady(products: ProductView[]): ProductView[] {
+  return products.filter((p) => !GRID_HIDDEN.has(p.slug));
+}
+
 export async function listProducts(collection?: CollectionHandle): Promise<ProductView[]> {
   const rows = await prisma.product.findMany({
     where: {

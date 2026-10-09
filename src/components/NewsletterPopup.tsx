@@ -11,7 +11,18 @@ import { Icon } from "./Icon";
 
 const KEY = "cmac-news-popup";
 const SNOOZE_MS = 14 * 24 * 60 * 60 * 1000;
-const DELAY_MS = 25_000;
+const DELAY_MS = 40_000;
+/** Session page-view counter: the offer waits for a second page, so a first visit is never interrupted. */
+const VIEWS_KEY = "cmac-views";
+function countView(): number {
+  try {
+    const n = Number(sessionStorage.getItem(VIEWS_KEY) || 0) + 1;
+    sessionStorage.setItem(VIEWS_KEY, String(n));
+    return n;
+  } catch {
+    return 1;
+  }
+}
 const EXCLUDED = ["/cart", "/account", "/admin", "/newsletter", "/shop/thanks"];
 
 function snoozed(): boolean {
@@ -32,8 +43,9 @@ function snooze() {
 }
 
 /**
- * "10% off your first order" slide-in. Shows after 25 s or 50 % scroll, never
- * on cart / account / admin / newsletter pages, never to signed-in subscribers,
+ * "10% off your first order" slide-in. Shows after 40 s on the second page of a
+ * visit, never on product pages, never on cart / account / admin / newsletter
+ * pages, never to signed-in subscribers,
  * and not again for 14 days once dismissed (or after signing up).
  * Accessible modal: labelled dialog, Esc closes, focus is trapped and restored.
  */
@@ -48,11 +60,12 @@ export function NewsletterPopup({ suppressed }: { suppressed: boolean }) {
   const inputRef = useRef<HTMLInputElement>(null);
   const lastFocus = useRef<Element | null>(null);
 
-  const excluded = suppressed || EXCLUDED.some((p) => pathname === p || pathname.startsWith(`${p}/`));
+  const excluded = suppressed || pathname.startsWith("/shop/") || EXCLUDED.some((p) => pathname === p || pathname.startsWith(`${p}/`));
 
-  // Trigger: 25 s or 50 % scroll, once per page view.
+  // Trigger: 40 s, from the second page view of the session on. No scroll trigger.
   useEffect(() => {
-    if (excluded || snoozed()) return;
+    const views = countView();
+    if (excluded || snoozed() || views < 2) return;
     let fired = false;
     const fire = () => {
       if (fired || snoozed()) return;
@@ -61,15 +74,7 @@ export function NewsletterPopup({ suppressed }: { suppressed: boolean }) {
       setOpen(true);
     };
     const timer = window.setTimeout(fire, DELAY_MS);
-    const onScroll = () => {
-      const max = document.documentElement.scrollHeight - window.innerHeight;
-      if (max > 0 && window.scrollY / max >= 0.5) fire();
-    };
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => {
-      window.clearTimeout(timer);
-      window.removeEventListener("scroll", onScroll);
-    };
+    return () => window.clearTimeout(timer);
   }, [excluded]);
 
   const close = useCallback(() => {

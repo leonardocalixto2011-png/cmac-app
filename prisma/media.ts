@@ -53,9 +53,9 @@ export const MEDIA: Record<string, ProductMedia> = {
   },
   "under-eye-glow-wand": {
     "images": [
+      "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1791504751/cmac/products/under-eye-glow-wand/cut-2",
       "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790013203/cmac/products/under-eye-glow-wand/final-0",
-      "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790013204/cmac/products/under-eye-glow-wand/final-1",
-      "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1791504751/cmac/products/under-eye-glow-wand/cut-2"
+      "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790013204/cmac/products/under-eye-glow-wand/final-1"
     ],
     "videos": [
       {
@@ -204,9 +204,9 @@ export const MEDIA_PREVIOUS: Record<string, string[]> = {
     "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790013202/cmac/products/travel-makeup-organizer/final-1",
   ],
   "under-eye-glow-wand": [
-    "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790013203/cmac/products/under-eye-glow-wand/final-0",
-    "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790013204/cmac/products/under-eye-glow-wand/final-1",
-    "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790013204/cmac/products/under-eye-glow-wand/final-2",
+      "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790013203/cmac/products/under-eye-glow-wand/final-0",
+      "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790013204/cmac/products/under-eye-glow-wand/final-1",
+      "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1791504751/cmac/products/under-eye-glow-wand/cut-2",
   ],
   "facial-ice-roller": [
     "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790013180/cmac/products/facial-ice-roller/colour-pink",

@@ -123,7 +123,24 @@ export const SET_CONTENTS: Record<string, SetComponent[]> = {
 };
 
 /** Order of the four sets featured on the homepage. */
-export const HOME_SETS = ["set-christmas-glow", "set-full-ritual", "set-7am-reset", "set-midnight-glow"] as const;
+/** The three sets on the homepage, in order. */
+export const HOME_SETS = ["set-christmas-glow", "set-full-ritual", "set-midnight-glow"] as const;
+
+/**
+ * The eight single products on the homepage, in order: the ones whose photos
+ * carry the brand today (clean packshots on the cream). Everything else stays
+ * in /shop. Revisit when new photos land.
+ */
+export const HOME_PICKS = [
+  "led-red-light-mask",
+  "sonic-silicone-cleansing-brush",
+  "under-eye-glow-wand",
+  "electric-makeup-brush-cleaner",
+  "ems-sculpting-v-roller",
+  "electric-scalp-massager",
+  "satin-beauty-sleep-set",
+  "gel-manicure-gloves",
+] as const;
 
 export function isSetSlug(slug: string): boolean {
   return slug in SET_CONTENTS;

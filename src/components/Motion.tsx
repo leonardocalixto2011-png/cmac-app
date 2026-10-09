@@ -4,9 +4,9 @@ import { useEffect } from "react";
 import { usePathname } from "next/navigation";
 
 /**
- * Port of cmac-motion.js: scroll reveal ([data-reveal] → .is-in), 3D card
- * tilt (.tilt), counting stats ([data-count]), cursor glow ([data-glow]) and
- * magnetic buttons (.btn, pointer devices only).
+ * Scroll reveal ([data-reveal] → .is-in) and counting stats ([data-count]).
+ * The 3D tilt, cursor glow and magnetic buttons were removed on 2026-10-09:
+ * a premium page is mostly still.
  * Mounted once in the root layout; re-runs on every route change and watches
  * the DOM for late-mounted sections. Honours prefers-reduced-motion.
  */
@@ -40,29 +40,6 @@ export function Motion() {
       cleanups.push(() => io.disconnect());
     }
 
-    function tilt() {
-      if (reduce || !window.matchMedia("(hover:hover)").matches) return;
-      document.querySelectorAll<HTMLElement>(".tilt").forEach((card) => {
-        if (card.dataset.tiltBound) return;
-        card.dataset.tiltBound = "1";
-        const move = (e: MouseEvent) => {
-          const r = card.getBoundingClientRect();
-          const x = (e.clientX - r.left) / r.width - 0.5;
-          const y = (e.clientY - r.top) / r.height - 0.5;
-          card.style.transform = `perspective(900px) rotateX(${-y * 6}deg) rotateY(${x * 8}deg) translateY(-6px)`;
-        };
-        const leave = () => {
-          card.style.transform = "";
-        };
-        card.addEventListener("mousemove", move);
-        card.addEventListener("mouseleave", leave);
-        cleanups.push(() => {
-          card.removeEventListener("mousemove", move);
-          card.removeEventListener("mouseleave", leave);
-          delete card.dataset.tiltBound;
-        });
-      });
-    }
 
     function counters() {
       document.querySelectorAll<HTMLElement>("[data-count]").forEach((el) => {
@@ -102,54 +79,11 @@ export function Motion() {
       });
     }
 
-    function glow() {
-      if (reduce) return;
-      document.querySelectorAll<HTMLElement>("[data-glow]").forEach((sec) => {
-        if (sec.dataset.glowBound) return;
-        sec.dataset.glowBound = "1";
-        const move = (e: PointerEvent) => {
-          const r = sec.getBoundingClientRect();
-          sec.style.setProperty("--mx", `${((e.clientX - r.left) / r.width) * 100}%`);
-          sec.style.setProperty("--my", `${((e.clientY - r.top) / r.height) * 100}%`);
-        };
-        sec.addEventListener("pointermove", move);
-        cleanups.push(() => {
-          sec.removeEventListener("pointermove", move);
-          delete sec.dataset.glowBound;
-        });
-      });
-    }
 
-    function magnet() {
-      if (reduce || !window.matchMedia("(hover:hover)").matches) return;
-      document.querySelectorAll<HTMLElement>(".btn:not(.btn--block)").forEach((btn) => {
-        if (btn.dataset.magnetBound) return;
-        btn.dataset.magnetBound = "1";
-        const move = (e: MouseEvent) => {
-          const r = btn.getBoundingClientRect();
-          const x = e.clientX - (r.left + r.width / 2);
-          const y = e.clientY - (r.top + r.height / 2);
-          btn.style.transform = `translate(${x * 0.16}px, ${y * 0.22 - 2}px)`;
-        };
-        const leave = () => {
-          btn.style.transform = "";
-        };
-        btn.addEventListener("mousemove", move);
-        btn.addEventListener("mouseleave", leave);
-        cleanups.push(() => {
-          btn.removeEventListener("mousemove", move);
-          btn.removeEventListener("mouseleave", leave);
-          delete btn.dataset.magnetBound;
-        });
-      });
-    }
 
     const init = () => {
       reveal();
-      tilt();
       counters();
-      glow();
-      magnet();
     };
     init();
 

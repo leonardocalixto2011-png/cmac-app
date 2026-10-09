@@ -28,7 +28,7 @@ export const accountEn: Dict = {
   "popup.noThanks": "No thanks",
 
   "glowband.eyebrow": "Glow Club",
-  "glowband.title": "Free to join. Points on every order.",
+  "glowband.title": "Free to join. Every order counts.",
   "glowband.lead": "Earn 1 point per $1, turn 100 points into $10 off, get a birthday treat and unlock free shipping from $50 at Radiance.",
   "glowband.cta": "Join the Glow Club",
   "glowband.more": "How it works",
@@ -259,9 +259,9 @@ export const accountFr: Dict = {
   "popup.noThanks": "Non merci",
 
   "glowband.eyebrow": "Glow Club",
-  "glowband.title": "Gratuit. Des points sur chaque commande.",
+  "glowband.title": "Adhésion gratuite. Chaque commande compte.",
   "glowband.lead": "1 point par dollar, 100 points = 10 $ de rabais, une surprise d'anniversaire et la livraison gratuite dès 50 $ au niveau Radiance.",
-  "glowband.cta": "Joindre le Glow Club",
+  "glowband.cta": "Devenir membre du Glow Club",
   "glowband.more": "Comment ça marche",
 
   "glow.metaTitle": "Glow Club — programme de fidélité gratuit",
