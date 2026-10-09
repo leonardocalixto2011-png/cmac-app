@@ -352,8 +352,9 @@
 /* Transparent cut-out with a soft contact shadow; the mask glows red on itself, as in the ritual. */
 .cmac-hero__photo { object-fit: contain; filter: drop-shadow(0 20px 18px rgb(60 40 30 / 0.15)); }
 .cmac-hero__slide--led .cmac-hero__photo { filter: drop-shadow(0 0 14px rgba(255, 80, 60, 0.45)); }
-.cmac-hero__caption { position: absolute; left: 50%; bottom: 4%; z-index: 2; display: inline-flex; align-items: center; gap: 10px; padding: 10px 16px; border-radius: 999px; background: rgb(255 253 249 / 0.86); backdrop-filter: blur(8px); color: var(--color-ink); font: 500 0.82rem var(--font-ui); white-space: nowrap; transform: translateX(-50%); animation: cmac-page-in 0.7s var(--ease-cmac) both; box-shadow: 0 10px 30px -18px rgb(31 36 34 / 0.45); }
-.cmac-hero__price { color: var(--color-ink-faint); font-variant-numeric: tabular-nums; }
+.cmac-hero__caption { position: absolute; left: 50%; bottom: 4%; z-index: 2; display: inline-flex; align-items: center; gap: 10px; padding: 10px 16px; border-radius: 999px; background: rgb(255 253 249 / 0.86); backdrop-filter: blur(8px); color: var(--color-ink); font: 500 0.82rem var(--font-ui); white-space: nowrap; max-width: calc(100% - 16px); translate: -50% 0; animation: cmac-page-in 0.7s var(--ease-cmac) both; box-shadow: 0 10px 30px -18px rgb(31 36 34 / 0.45); }
+.cmac-hero__caption > span:first-child { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.cmac-hero__price { color: var(--color-ink-faint); font-variant-numeric: tabular-nums; flex: none; }
 .cmac-hero__caption svg { width: 13px; height: 13px; transition: transform 0.3s var(--ease-cmac); }
 .cmac-hero__caption:hover svg { transform: translateX(3px); }
 .cmac-hero__controls { position: absolute; left: 50%; bottom: -22px; transform: translateX(-50%); display: flex; align-items: center; gap: 10px; z-index: 2; }
