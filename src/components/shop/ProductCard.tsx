@@ -7,6 +7,7 @@ import { ProductArt } from "./ProductArt";
 import { Icon } from "@/components/Icon";
 import { formatMoneyFromCents } from "@/lib/utils";
 import type { ProductView } from "@/lib/shop";
+import { announceAdded, flyToCart } from "@/lib/motion-fx";
 
 export function ProductCard({ product: p, index = 0 }: { product: ProductView; index?: number }) {
   const { t, locale } = useLocale();
@@ -19,7 +20,9 @@ export function ProductCard({ product: p, index = 0 }: { product: ProductView; i
   const isSet = p.tags.includes("sets");
   const pct = onSale ? Math.round(((p.compareAtCents! - p.priceCents) / p.compareAtCents!) * 100) : 0;
 
-  function quickAdd() {
+  function quickAdd(e: React.MouseEvent<HTMLButtonElement>) {
+    flyToCart(e.currentTarget);
+    announceAdded(name);
     cart.add({
       slug: p.slug,
       qty: 1,

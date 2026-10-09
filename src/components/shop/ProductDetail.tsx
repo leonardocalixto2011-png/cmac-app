@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useLocale } from "@/i18n/LocaleProvider";
 import { useCart } from "./CartProvider";
@@ -10,6 +10,7 @@ import { formatMoneyFromCents, formatWholeDollars, cn } from "@/lib/utils";
 import { POLICY, SHIPPING } from "@/lib/brand";
 import type { ProductView, SetComponentView } from "@/lib/shop";
 import { trackAddToCart, trackViewContent } from "@/lib/pixels";
+import { announceAdded, flyToCart } from "@/lib/motion-fx";
 
 export function ProductDetail({ product, components = [] }: { product: ProductView; components?: SetComponentView[] }) {
   const { t, locale } = useLocale();
@@ -32,6 +33,7 @@ export function ProductDetail({ product, components = [] }: { product: ProductVi
   );
   const [qty, setQty] = useState(1);
   const [added, setAdded] = useState(false);
+  const addBtn = useRef<HTMLButtonElement>(null);
   const [activeImage, setActiveImage] = useState(0);
 
   const missingOption = product.options.some((o) => !selected[o.nameEn]);
@@ -60,6 +62,8 @@ export function ProductDetail({ product, components = [] }: { product: ProductVi
       optionLabelsEn: labelsEn,
     });
     trackAddToCart({ id: product.slug, name: product.nameEn, priceCents: product.priceCents, qty });
+    flyToCart(addBtn.current);
+    announceAdded(locale === "fr" ? product.nameFr : product.nameEn);
     setAdded(true);
     setTimeout(() => setAdded(false), 1400);
   }
@@ -218,7 +222,7 @@ export function ProductDetail({ product, components = [] }: { product: ProductVi
               className="field w-[76px] text-center"
             />
           </label>
-          <button type="button" onClick={addToCart} disabled={missingOption} className="btn flex-1 sm:flex-none">
+          <button ref={addBtn} type="button" onClick={addToCart} disabled={missingOption} className="btn flex-1 sm:flex-none">
             <Icon name={added ? "check" : "plus"} />
             {added ? t("shop.added") : missingOption ? t("shop.chooseOption", { name: locale === "fr" ? product.options[0]?.nameFr : product.options[0]?.nameEn }) : t("shop.addToCart")}
           </button>

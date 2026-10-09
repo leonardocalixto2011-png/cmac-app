@@ -9,6 +9,9 @@ import { Nav } from "@/components/Nav";
 import { PromoBar } from "@/components/PromoBar";
 import { Footer } from "@/components/Footer";
 import { Motion } from "@/components/Motion";
+import { PageFade } from "@/components/PageFade";
+import { CartToast } from "@/components/CartToast";
+import { ScrollProgress } from "@/components/ScrollProgress";
 import { NewsletterPopup } from "@/components/NewsletterPopup";
 import { Pixels } from "@/components/Pixels";
 import { Analytics } from "@vercel/analytics/next";
@@ -79,10 +82,12 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             <PromoBar />
             <Nav signedIn={viewer.signedIn} />
             <main id="main" className="flex-1">
-              {children}
+              <PageFade>{children}</PageFade>
             </main>
             <Footer />
             <Motion />
+            <ScrollProgress />
+            <CartToast />
             <NewsletterPopup suppressed={viewer.signedIn && viewer.subscribed} />
             <Pixels />
             {/* Cookieless visit counts (no personal data, no consent needed) — enable it once in the Vercel dashboard. */}

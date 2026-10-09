@@ -16,6 +16,7 @@ const D = (ms: number) => ({ "--d": `${ms}ms` }) as React.CSSProperties;
 export function Hero() {
   const { t, locale } = useLocale();
   const words = t("hero.words").split(",").map((w) => w.trim());
+  const titleWords = t("hero.title").split(" ");
   const free = formatWholeDollars(SHIPPING.freeThresholdCents, locale);
 
   return (
@@ -28,7 +29,14 @@ export function Hero() {
             {t("hero.eyebrow")}
           </p>
           <h1 className="cmac-hero__title" data-reveal style={D(80)}>
-            {t("hero.title")}
+            {titleWords.map((w, i) => (
+              <span key={i}>
+                <span className="cmac-hero__w" style={{ "--i": i } as React.CSSProperties}>
+                  {w}
+                </span>
+                {i < titleWords.length - 1 ? " " : ""}
+              </span>
+            ))}
             <br />
             <span
               className="cmac-hero__rotator"
@@ -66,6 +74,8 @@ export function Hero() {
         </div>
 
         <div className="cmac-hero__visual" data-reveal="scale" style={D(200)}>
+          {/* The seven LED colours of the mask, cycling slowly behind it. */}
+          <div className="cmac-hero__glow" aria-hidden="true" />
           <div className="cmac-hero__ring" aria-hidden="true" />
           <Link className="cmac-hero__img" href="/shop/led-red-light-mask">
             <Image

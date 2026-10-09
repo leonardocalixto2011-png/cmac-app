@@ -5,7 +5,8 @@ import { usePathname } from "next/navigation";
 
 /**
  * Port of cmac-motion.js: scroll reveal ([data-reveal] → .is-in), 3D card
- * tilt (.tilt), counting stats ([data-count]) and cursor glow ([data-glow]).
+ * tilt (.tilt), counting stats ([data-count]), cursor glow ([data-glow]) and
+ * magnetic buttons (.btn, pointer devices only).
  * Mounted once in the root layout; re-runs on every route change and watches
  * the DOM for late-mounted sections. Honours prefers-reduced-motion.
  */
@@ -119,11 +120,36 @@ export function Motion() {
       });
     }
 
+    function magnet() {
+      if (reduce || !window.matchMedia("(hover:hover)").matches) return;
+      document.querySelectorAll<HTMLElement>(".btn:not(.btn--block)").forEach((btn) => {
+        if (btn.dataset.magnetBound) return;
+        btn.dataset.magnetBound = "1";
+        const move = (e: MouseEvent) => {
+          const r = btn.getBoundingClientRect();
+          const x = e.clientX - (r.left + r.width / 2);
+          const y = e.clientY - (r.top + r.height / 2);
+          btn.style.transform = `translate(${x * 0.16}px, ${y * 0.22 - 2}px)`;
+        };
+        const leave = () => {
+          btn.style.transform = "";
+        };
+        btn.addEventListener("mousemove", move);
+        btn.addEventListener("mouseleave", leave);
+        cleanups.push(() => {
+          btn.removeEventListener("mousemove", move);
+          btn.removeEventListener("mouseleave", leave);
+          delete btn.dataset.magnetBound;
+        });
+      });
+    }
+
     const init = () => {
       reveal();
       tilt();
       counters();
       glow();
+      magnet();
     };
     init();
 

@@ -91,6 +91,7 @@ export function Nav({ signedIn = false }: { signedIn?: boolean }) {
             </Link>
             <Link
               href="/cart"
+              data-cart-target
               aria-label={`${t("nav.cart")}${cart.count ? ` (${cart.count})` : ""}`}
               className="relative inline-flex h-[42px] items-center gap-1.5 rounded-full bg-ink px-3.5 text-[0.82rem] font-semibold text-cream transition-colors hover:bg-terra"
             >

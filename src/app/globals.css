@@ -60,6 +60,20 @@
   36% { opacity: 0; transform: translateY(-100%); }
 }
 @keyframes cmac-fade { from { opacity: 0; transform: translateY(-6px); } }
+/* The mask's seven colours, in the order its touch control cycles them. */
+@keyframes cmac-led {
+  0%, 100% { background: #ff6a5c; }
+  14% { background: #ffd36a; }
+  28% { background: #7fd48c; }
+  43% { background: #5fd6e4; }
+  57% { background: #6e9dff; }
+  71% { background: #b48cff; }
+  86% { background: #fff6ea; }
+}
+@keyframes cmac-rise { from { opacity: 0; transform: translateY(0.55em) rotate(1.5deg); } }
+@keyframes cmac-sweep { 0%, 70%, 100% { transform: translateX(-130%) skewX(-18deg); } 85% { transform: translateX(130%) skewX(-18deg); } }
+@keyframes cmac-page-in { from { opacity: 0; transform: translateY(10px); } }
+@keyframes cmac-bump { 0% { transform: scale(1); } 35% { transform: scale(1.28); } 70% { transform: scale(0.94); } 100% { transform: scale(1); } }
 
 @layer base {
   * { box-sizing: border-box; }
@@ -303,13 +317,17 @@
 .cmac-hero__proof li { display: flex; align-items: center; gap: 7px; }
 .cmac-hero__proof svg { width: 16px; height: 16px; color: var(--color-terra); }
 .cmac-hero__visual { position: relative; aspect-ratio: 1; display: grid; place-items: center; }
+.cmac-hero__title .cmac-hero__w { display: inline-block; animation: cmac-rise 1s var(--ease-cmac) both; animation-delay: calc(140ms + var(--i, 0) * 90ms); }
+.cmac-hero__glow { position: absolute; inset: 2%; border-radius: 50%; filter: blur(70px); opacity: 0.55; animation: cmac-led 28s linear infinite; pointer-events: none; }
 .cmac-hero__ring { position: absolute; inset: 6%; border-radius: 50%; border: 1.5px dashed rgba(74, 93, 78, 0.35); animation: cmac-spin 60s linear infinite; }
 .cmac-hero__ring::after { content: ""; position: absolute; top: -6px; left: 50%; width: 12px; height: 12px; border-radius: 50%; background: var(--color-terra); animation: cmac-pulse 2.4s infinite; }
-.cmac-hero__img { width: 78%; aspect-ratio: 4 / 5; border-radius: var(--radius-card); box-shadow: var(--shadow-card); animation: cmac-float 7s ease-in-out infinite; overflow: hidden; position: relative; display: block; background: var(--color-cream); }
+.cmac-hero__img { width: 78%; aspect-ratio: 4 / 5; border-radius: var(--radius-card); box-shadow: var(--shadow-card); animation: cmac-float 7s ease-in-out infinite; overflow: hidden; position: relative; z-index: 1; display: block; background: var(--color-cream); }
+/* A light sweep across the glossy mask every ~9 s, like a hand passing in front of a lamp. */
+.cmac-hero__img::after { content: ""; position: absolute; inset: -20% -40%; background: linear-gradient(100deg, transparent 40%, rgba(255, 255, 255, 0.35) 50%, transparent 60%); animation: cmac-sweep 9s ease-in-out infinite; pointer-events: none; }
 .cmac-hero__caption { position: absolute; left: 16px; bottom: 16px; display: inline-flex; align-items: center; gap: 8px; padding: 9px 14px; border-radius: 999px; background: rgb(255 253 249 / 0.88); backdrop-filter: blur(6px); color: var(--color-ink); font: 600 0.8rem var(--font-ui); box-shadow: 0 8px 20px -12px rgb(31 36 34 / 0.35); transition: background 0.3s; }
 .cmac-hero__caption svg { width: 14px; height: 14px; transition: transform 0.3s var(--ease-cmac); }
 .cmac-hero__img:hover .cmac-hero__caption svg { transform: translateX(3px); }
-.cmac-hero__badge { position: absolute; right: 4%; bottom: 8%; width: 108px; height: 108px; border-radius: 50%; background: var(--color-ink); color: var(--color-cream); display: grid; place-items: center; text-align: center; font: 500 0.74rem/1.25 var(--font-display); padding: 12px; animation: cmac-float 6s ease-in-out infinite reverse; }
+.cmac-hero__badge { position: absolute; z-index: 2; right: 4%; bottom: 8%; width: 108px; height: 108px; border-radius: 50%; background: var(--color-ink); color: var(--color-cream); display: grid; place-items: center; text-align: center; font: 500 0.74rem/1.25 var(--font-display); padding: 12px; animation: cmac-float 6s ease-in-out infinite reverse; }
 @media (max-width: 989px) {
   .cmac-hero__grid { grid-template-columns: 1fr; }
   .cmac-hero__visual { width: 100%; max-width: 420px; margin: 0 auto; }
@@ -520,6 +538,15 @@
   background: var(--color-warm-white);
   padding: clamp(24px, 4vw, 44px);
 }
+.cmac-glowband__card::before {
+  content: "";
+  position: absolute;
+  inset: -45%;
+  background: conic-gradient(from 0deg, rgba(217, 179, 112, 0.28), rgba(201, 123, 99, 0.16), rgba(110, 130, 114, 0.22), rgba(228, 164, 142, 0.2), rgba(217, 179, 112, 0.28));
+  filter: blur(70px);
+  animation: cmac-spin 32s linear infinite;
+  pointer-events: none;
+}
 .cmac-glowband__card::after {
   content: "";
   position: absolute;
@@ -532,6 +559,50 @@
   pointer-events: none;
 }
 @media (max-width: 760px) { .cmac-glowband__card { grid-template-columns: 1fr; } }
+
+/* ---- Page fade, progress line, cart feedback ---- */
+.cmac-page { animation: cmac-page-in 0.55s var(--ease-cmac) both; }
+.cmac-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  z-index: 120;
+  transform-origin: left;
+  transform: scaleX(var(--p, 0));
+  background: linear-gradient(90deg, var(--color-terra), var(--color-gold));
+  pointer-events: none;
+}
+.cmac-fly { position: fixed; width: 14px; height: 14px; border-radius: 50%; background: var(--color-terra); box-shadow: 0 0 0 4px rgba(201, 123, 99, 0.25); z-index: 160; pointer-events: none; will-change: transform; }
+[data-cart-target].is-bump { animation: cmac-bump 0.6s var(--ease-cmac); }
+.cmac-toast {
+  position: fixed;
+  left: 50%;
+  bottom: calc(22px + env(safe-area-inset-bottom, 0px));
+  z-index: 150;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  max-width: min(92vw, 520px);
+  padding: 11px 14px 11px 12px;
+  border-radius: 999px;
+  background: var(--color-ink);
+  color: var(--color-cream);
+  box-shadow: 0 20px 50px -20px rgba(31, 36, 34, 0.6);
+  opacity: 0;
+  transform: translate(-50%, 18px);
+  pointer-events: none;
+  transition: opacity 0.4s var(--ease-cmac), transform 0.5s var(--ease-cmac);
+}
+.cmac-toast.is-on { opacity: 1; transform: translate(-50%, 0); pointer-events: auto; }
+.cmac-toast__check { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: var(--color-terra); color: #fff; flex: none; }
+.cmac-toast__check svg { width: 14px; height: 14px; }
+.cmac-toast__text { display: flex; flex-direction: column; min-width: 0; font: 500 0.86rem/1.25 var(--font-ui); }
+.cmac-toast__text strong { font-weight: 600; }
+.cmac-toast__name { color: rgba(245, 241, 234, 0.7); font-size: 0.78rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cmac-toast__link { display: inline-flex; align-items: center; gap: 6px; margin-left: 4px; padding: 7px 12px; border-radius: 999px; background: var(--color-cream); color: var(--color-ink); font: 600 0.8rem var(--font-ui); white-space: nowrap; flex: none; }
+.cmac-toast__link svg { width: 12px; height: 12px; }
 
 /* ---- Newsletter popup ---- */
 .cmac-popup-backdrop {
