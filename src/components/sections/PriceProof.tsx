@@ -49,7 +49,7 @@ export function PriceProof({ products, locale }: { products: ProductView[]; loca
   if (!rows.length) return null;
 
   return (
-    <section className="section-pad" aria-labelledby="price-proof-h">
+    <section className="section-pad" aria-labelledby="price-proof-h" data-sky="paper">
       <div className="wrap">
         <div className="mx-auto max-w-[760px] text-center">
           <p className="eyebrow" data-reveal>

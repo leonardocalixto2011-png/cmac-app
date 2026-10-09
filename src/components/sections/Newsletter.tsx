@@ -50,7 +50,7 @@ export function Newsletter() {
   const msg = result ? subscribeMessageKey(result) : null;
 
   return (
-    <section className="cmac-news grain" data-glow id="newsletter">
+    <section className="cmac-news" id="newsletter">
       <div className="wrap cmac-news__inner">
         <p className="eyebrow" data-reveal>
           {t("news.eyebrow")}

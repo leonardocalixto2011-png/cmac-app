@@ -68,7 +68,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const [locale, viewer] = await Promise.all([serverLocale(), viewerInfo()]);
 
   return (
-    <html lang={locale} className={`${fraunces.variable} ${inter.variable} h-full antialiased`}>
+    // suppressHydrationWarning: the inline script below adds the "js" class before React hydrates.
+    <html lang={locale} suppressHydrationWarning className={`${fraunces.variable} ${inter.variable} h-full antialiased`}>
       <body className="flex min-h-full flex-col">
         {/* Marks the document as scripted before first paint; the scroll-reveal CSS only hides content under html.js. */}
         <script dangerouslySetInnerHTML={{ __html: "document.documentElement.classList.add('js')" }} />

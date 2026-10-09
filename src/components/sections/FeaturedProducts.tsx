@@ -16,7 +16,7 @@ export function FeaturedProducts({ products, variant = "edit" }: { products: Pro
   if (sets && products.length === 0) return null;
 
   return (
-    <section className={sets ? "cmac-featured cmac-featured--sets" : "cmac-featured"} id={sets ? "sets" : "shop"}>
+    <section className={sets ? "cmac-featured cmac-featured--sets" : "cmac-featured"} id={sets ? "sets" : "shop"} data-sky={sets ? "linen" : "cream"}>
       <div className="wrap">
         <div className="cmac-featured__head">
           <div>

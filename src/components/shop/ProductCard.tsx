@@ -1,5 +1,6 @@
 "use client";
 
+import { useRef } from "react";
 import Link from "next/link";
 import { useLocale } from "@/i18n/LocaleProvider";
 import { useCart } from "./CartProvider";
@@ -13,10 +14,23 @@ import { announceAdded, flyToCart } from "@/lib/motion-fx";
  * price set directly on the page background. No card, no shadow, no badge,
  * no repeated black button: on pointer devices an "Add" bar slides over the
  * photo on hover; on touch the whole tile is the link to the product page.
+ *
+ * Motion: tiles rise in a cascade along the row, the photo settles from a
+ * slight zoom as it appears, and on pointer devices a product that has a
+ * supplier clip plays it, muted, while the pointer rests on the tile.
  */
-export function ProductCard({ product: p }: { product: ProductView; index?: number }) {
+export function ProductCard({ product: p, index = 0 }: { product: ProductView; index?: number }) {
   const { t, locale } = useLocale();
   const cart = useCart();
+  const video = useRef<HTMLVideoElement>(null);
+  const clip = p.videos[0];
+  const play = () => {
+    const v = video.current;
+    if (!v || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    v.currentTime = 0;
+    v.play().catch(() => {});
+  };
+  const stop = () => video.current?.pause();
   const name = locale === "fr" ? p.nameFr : p.nameEn;
   const tagline = locale === "fr" ? (p.taglineFr ?? p.tagline) : p.tagline;
   const href = `/shop/${p.slug}`;
@@ -45,8 +59,8 @@ export function ProductCard({ product: p }: { product: ProductView; index?: numb
   }
 
   return (
-    <article className="product-card" data-reveal>
-      <div className="product-card__frame">
+    <article className="product-card" data-reveal style={{ "--d": `${(index % 4) * 90}ms` } as React.CSSProperties}>
+      <div className="product-card__frame" onMouseEnter={clip ? play : undefined} onMouseLeave={clip ? stop : undefined}>
         <Link className="product-card__media" href={href} aria-label={name}>
           <ProductArt
             images={p.images}
@@ -56,6 +70,7 @@ export function ProductCard({ product: p }: { product: ProductView; index?: numb
             fit="tile"
             sizes="(min-width: 1024px) 25vw, (min-width: 768px) 33vw, 50vw"
           />
+          {clip && <video ref={video} className="product-card__clip" src={clip.mp4} muted loop playsInline preload="none" aria-hidden="true" />}
         </Link>
         {hasOptions ? (
           <Link className="product-card__quick" href={href} tabIndex={-1} aria-hidden="true">

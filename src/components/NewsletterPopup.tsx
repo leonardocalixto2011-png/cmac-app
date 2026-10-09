@@ -14,9 +14,14 @@ const SNOOZE_MS = 14 * 24 * 60 * 60 * 1000;
 const DELAY_MS = 40_000;
 /** Session page-view counter: the offer waits for a second page, so a first visit is never interrupted. */
 const VIEWS_KEY = "cmac-views";
-function countView(): number {
+/** Counts each pathname once per load, so a double-invoked effect (dev Strict Mode) is not a second page. */
+let countedPath: string | null = null;
+function countView(pathname: string): number {
   try {
-    const n = Number(sessionStorage.getItem(VIEWS_KEY) || 0) + 1;
+    const prev = Number(sessionStorage.getItem(VIEWS_KEY) || 0);
+    if (countedPath === pathname) return prev;
+    countedPath = pathname;
+    const n = prev + 1;
     sessionStorage.setItem(VIEWS_KEY, String(n));
     return n;
   } catch {
@@ -64,7 +69,7 @@ export function NewsletterPopup({ suppressed }: { suppressed: boolean }) {
 
   // Trigger: 40 s, from the second page view of the session on. No scroll trigger.
   useEffect(() => {
-    const views = countView();
+    const views = countView(pathname);
     if (excluded || snoozed() || views < 2) return;
     let fired = false;
     const fire = () => {
@@ -75,7 +80,7 @@ export function NewsletterPopup({ suppressed }: { suppressed: boolean }) {
     };
     const timer = window.setTimeout(fire, DELAY_MS);
     return () => window.clearTimeout(timer);
-  }, [excluded]);
+  }, [excluded, pathname]);
 
   const close = useCallback(() => {
     snooze();
