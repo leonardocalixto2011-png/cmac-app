@@ -1,3 +1,4 @@
+import { useSyncExternalStore } from "react";
 // Small one-off effects that need the DOM: a dot that flies from an "add" button
 // to the cart, and the event the cart toast listens to. Every one of them is a
 // no-op when the visitor asked for reduced motion.
@@ -56,4 +57,15 @@ export function flyToCart(from: HTMLElement | null) {
     dot.remove();
     bump();
   };
+}
+
+// ---- prefers-reduced-motion as a live value (follows the OS setting while the page is open)
+const RM_QUERY = "(prefers-reduced-motion: reduce)";
+function subscribeRM(cb: () => void) {
+  const mq = window.matchMedia(RM_QUERY);
+  mq.addEventListener("change", cb);
+  return () => mq.removeEventListener("change", cb);
+}
+export function useReducedMotion(): boolean {
+  return useSyncExternalStore(subscribeRM, () => window.matchMedia(RM_QUERY).matches, () => false);
 }

@@ -51,7 +51,7 @@ export function Routine({ productNames }: { productNames: Record<string, { en: s
   const angle = Math.min(1, minutes / TOTAL) * 360;
 
   return (
-    <section className={`cmac-ritual cmac-ritual--${step.scene}`} id="routine">
+    <section className={`cmac-ritual cmac-ritual--${step.scene}`} id="routine" data-live>
       <div className="wrap cmac-ritual__head">
         <p className="eyebrow" data-reveal>
           {t("routine.eyebrow")}

@@ -59,6 +59,8 @@ const en: Dict = {
   "hero.badge": "New · Fall glow edit",
   "hero.visualAlt": "CMAC Beauty LED red light mask with its USB cable",
   "hero.visualLabel": "LED red light mask",
+  "hero.pause": "Pause the slideshow",
+  "hero.play": "Play the slideshow",
 
   "marquee.label": "Store highlights",
   "marquee.holiday": "Holiday gifts: order by {date} to receive them before Christmas",
@@ -92,7 +94,7 @@ const en: Dict = {
 
   "routine.eyebrow": "The 15-minute evening ritual",
   "routine.title": "Cool, contour, light. Then rest.",
-  "routine.lead": "Three tools, in the order we use them ourselves. Fifteen minutes, most of them lying down.",
+  "routine.lead": "Four steps, in the order we take them ourselves. Fifteen minutes, most of them lying down.",
   "routine.cta": "Choose my tools",
   "routine.1.t": "Cool",
   "routine.1.time": "1 min",
@@ -400,6 +402,8 @@ const fr: Dict = {
   "hero.badge": "Nouveau · Édition éclat d'automne",
   "hero.visualAlt": "Masque LED lumière rouge CMAC Beauty et son câble USB",
   "hero.visualLabel": "Masque LED lumière rouge",
+  "hero.pause": "Mettre le diaporama en pause",
+  "hero.play": "Relancer le diaporama",
 
   "marquee.label": "Points forts de la boutique",
   "marquee.holiday": "Cadeaux des Fêtes : commandez d'ici le {date} pour les recevoir avant Noël",
@@ -433,7 +437,7 @@ const fr: Dict = {
 
   "routine.eyebrow": "Le rituel du soir, en 15 minutes",
   "routine.title": "Le froid, le contour, la lumière. Puis le repos.",
-  "routine.lead": "Trois outils, dans l'ordre où on les utilise nous-mêmes. Quinze minutes, la plupart à l'horizontale.",
+  "routine.lead": "Quatre gestes, dans l'ordre où on les fait nous-mêmes. Quinze minutes, la plupart à l'horizontale.",
   "routine.cta": "Choisir mes outils",
   "routine.1.t": "Fraîcheur",
   "routine.1.time": "1 min",

@@ -56,9 +56,10 @@ export default async function HomePage() {
       <FeaturedProducts products={picks} />
       <FeaturedProducts products={homeSets} variant="sets" />
       <PriceProof products={products} locale={locale} />
-      <Routine productNames={productNames} />
       <FounderNote />
       <Faq limit={4} />
+      {/* The ritual closes the evening and hands over to the night of the newsletter. */}
+      <Routine productNames={productNames} />
       <Newsletter />
     </div>
   );

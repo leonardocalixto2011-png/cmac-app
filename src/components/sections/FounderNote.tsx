@@ -7,7 +7,7 @@ export function FounderNote() {
   const stamp = t("founder.stamp");
 
   return (
-    <section className="cmac-founder" id="about" data-sky="warm">
+    <section className="cmac-founder" id="about" data-sky="warm" data-live>
       <div className="wrap cmac-founder__grid">
         <div className="cmac-founder__visual" data-reveal="left">
           {/* PLACEHOLDER visual — replace with a founder / studio photo when available. */}

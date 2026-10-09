@@ -10,12 +10,15 @@ import { useEffect, useRef } from "react";
  * page is read. Sections opt in by leaving their own background transparent
  * inside .cmac-skyline (globals.css).
  */
+// Progressively warmer and darker down the page: late afternoon toward evening, until
+// the ritual and the newsletter close the page in the night.
 const SKIES: Record<string, { bg: string; glow: string }> = {
   dusk: { bg: "#f3e8de", glow: "rgba(231, 179, 160, 0.55)" },
   cream: { bg: "#f5f1ea", glow: "rgba(217, 179, 112, 0.28)" },
-  linen: { bg: "#efe6da", glow: "rgba(201, 123, 99, 0.24)" },
-  paper: { bg: "#f1ece3", glow: "rgba(110, 130, 114, 0.22)" },
-  warm: { bg: "#f6ede3", glow: "rgba(228, 164, 142, 0.32)" },
+  linen: { bg: "#eee3d5", glow: "rgba(201, 123, 99, 0.26)" },
+  paper: { bg: "#e9dbcc", glow: "rgba(201, 123, 99, 0.3)" },
+  warm: { bg: "#e3cfbd", glow: "rgba(214, 140, 112, 0.36)" },
+  evening: { bg: "#dcc4b0", glow: "rgba(170, 98, 78, 0.38)" },
 };
 
 export function Sky() {

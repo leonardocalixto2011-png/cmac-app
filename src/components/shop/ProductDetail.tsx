@@ -10,7 +10,7 @@ import { formatMoneyFromCents, formatWholeDollars, cn } from "@/lib/utils";
 import { POLICY, SHIPPING } from "@/lib/brand";
 import type { ProductView, SetComponentView } from "@/lib/shop";
 import { trackAddToCart, trackViewContent } from "@/lib/pixels";
-import { announceAdded, flyToCart } from "@/lib/motion-fx";
+import { announceAdded, flyToCart, useReducedMotion } from "@/lib/motion-fx";
 
 export function ProductDetail({ product, components = [] }: { product: ProductView; components?: SetComponentView[] }) {
   const { t, locale } = useLocale();
@@ -33,6 +33,7 @@ export function ProductDetail({ product, components = [] }: { product: ProductVi
   );
   const [qty, setQty] = useState(1);
   const [added, setAdded] = useState(false);
+  const reduceMotion = useReducedMotion();
   const addBtn = useRef<HTMLButtonElement>(null);
   const [activeImage, setActiveImage] = useState(0);
 
@@ -87,7 +88,8 @@ export function ProductDetail({ product, components = [] }: { product: ProductVi
               key={active.src}
               src={active.src}
               poster={active.poster}
-              autoPlay
+              autoPlay={!reduceMotion}
+              controls={reduceMotion}
               muted
               loop
               playsInline

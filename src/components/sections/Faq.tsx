@@ -18,7 +18,7 @@ export function Faq({ limit, asPage = false }: { limit?: number; asPage?: boolea
   const Heading = asPage ? "h1" : "h2";
 
   return (
-    <section className="cmac-faq" id="faq" data-sky="cream">
+    <section className="cmac-faq" id="faq" data-sky="evening">
       <div className="wrap cmac-faq__grid">
         <div className="cmac-faq__intro">
           <p className="eyebrow" data-reveal>

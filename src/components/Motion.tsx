@@ -34,12 +34,30 @@ export function Motion() {
             }
           }
         },
-        { rootMargin: "0px 0px -10% 0px", threshold: 0.12 },
+        // [0, 0.12]: a target whose own clip/transform hides it still reports isIntersecting at 0.
+        { rootMargin: "0px 0px -10% 0px", threshold: [0, 0.12] },
       );
       els.forEach((e) => io.observe(e));
       cleanups.push(() => io.disconnect());
     }
 
+
+    // Decorative loops ([data-live]) run only while their section is on screen.
+    function live() {
+      const els = document.querySelectorAll<HTMLElement>("[data-live]:not([data-live-bound])");
+      if (!els.length || !hasIO) return;
+      const io = new IntersectionObserver((entries) => {
+        for (const e of entries) e.target.classList.toggle("is-live", e.isIntersecting);
+      });
+      els.forEach((e) => {
+        e.dataset.liveBound = "1";
+        io.observe(e);
+      });
+      cleanups.push(() => {
+        io.disconnect();
+        els.forEach((e) => delete e.dataset.liveBound);
+      });
+    }
 
     function counters() {
       document.querySelectorAll<HTMLElement>("[data-count]").forEach((el) => {
@@ -83,6 +101,7 @@ export function Motion() {
 
     const init = () => {
       reveal();
+      live();
       counters();
     };
     init();
