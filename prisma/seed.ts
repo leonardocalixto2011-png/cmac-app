@@ -30,7 +30,7 @@
 import { PrismaClient, type Prisma } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import { SET_CONTENTS } from "../src/lib/sets";
-import { MEDIA } from "./media";
+import { MEDIA, MEDIA_PREVIOUS } from "./media";
 import { ensureSeasonalCodes } from "../src/lib/stripe-coupons";
 
 const prisma = new PrismaClient();
@@ -2293,6 +2293,10 @@ async function main() {
       if (p.refreshCopyWhenEmpty) Object.assign(update, copy);
       if (p.active === false) update.active = false;
       notes.push("supplier data filled");
+    } else if (media?.images.length && MEDIA_PREVIOUS[p.slug] && sameJson(existing.images, MEDIA_PREVIOUS[p.slug])) {
+      // Exactly the list a previous seed wrote, some of it since re-cut → take the new list.
+      update.images = media.images;
+      notes.push("images re-cut");
     } else if (media?.images.length && onlySupplierPhotos(existing.images)) {
       // Still the raw CJ photos the seed put there → swap in the processed Cloudinary set.
       update.images = media.images;

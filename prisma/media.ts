@@ -55,7 +55,7 @@ export const MEDIA: Record<string, ProductMedia> = {
     "images": [
       "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790013203/cmac/products/under-eye-glow-wand/final-0",
       "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790013204/cmac/products/under-eye-glow-wand/final-1",
-      "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790013204/cmac/products/under-eye-glow-wand/final-2"
+      "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1791504751/cmac/products/under-eye-glow-wand/cut-2"
     ],
     "videos": [
       {
@@ -75,6 +75,7 @@ export const MEDIA: Record<string, ProductMedia> = {
   },
   "facial-ice-roller": {
     "images": [
+      "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1791504751/cmac/products/facial-ice-roller/cut-0",
       "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790013180/cmac/products/facial-ice-roller/colour-pink",
       "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790013180/cmac/products/facial-ice-roller/colour-green",
       "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790013181/cmac/products/facial-ice-roller/colour-purple",
@@ -132,15 +133,15 @@ export const MEDIA: Record<string, ProductMedia> = {
   },
   "satin-scrunchie": {
     "images": [
-      "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790013194/cmac/products/satin-scrunchie/final-0",
-      "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790013194/cmac/products/satin-scrunchie/final-1",
-      "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790013195/cmac/products/satin-scrunchie/final-2"
+      "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1791504748/cmac/products/satin-scrunchie/cut-0",
+      "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1791504749/cmac/products/satin-scrunchie/cut-1",
+      "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1791504749/cmac/products/satin-scrunchie/cut-2"
     ],
     "videos": []
   },
   "pink-shell-makeup-pouch": {
     "images": [
-      "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790013188/cmac/products/pink-shell-makeup-pouch/final-0",
+      "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1791504750/cmac/products/pink-shell-makeup-pouch/scene-0",
       "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790013188/cmac/products/pink-shell-makeup-pouch/final-1",
       "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790013189/cmac/products/pink-shell-makeup-pouch/final-2"
     ],
@@ -148,8 +149,8 @@ export const MEDIA: Record<string, ProductMedia> = {
   },
   "travel-makeup-organizer": {
     "images": [
-      "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790013201/cmac/products/travel-makeup-organizer/final-0",
-      "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790013202/cmac/products/travel-makeup-organizer/final-1"
+      "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1791504750/cmac/products/travel-makeup-organizer/cut-0",
+      "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790013201/cmac/products/travel-makeup-organizer/final-0"
     ],
     "videos": [
       {
@@ -179,4 +180,40 @@ export const MEDIA: Record<string, ProductMedia> = {
     ],
     "videos": []
   }
+};
+
+/**
+ * 2026-10-08: seven cutouts kept a fringe of the old background (the AI mask was 2-3 px
+ * too generous); they were re-cut with the alpha eroded. prisma/seed.ts swaps these old
+ * lists for the new ones above, but only while a product still shows exactly the old list,
+ * so anything re-ordered or replaced in /admin is left alone.
+ */
+export const MEDIA_PREVIOUS: Record<string, string[]> = {
+  "satin-scrunchie": [
+    "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790013194/cmac/products/satin-scrunchie/final-0",
+    "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790013194/cmac/products/satin-scrunchie/final-1",
+    "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790013195/cmac/products/satin-scrunchie/final-2",
+  ],
+  "pink-shell-makeup-pouch": [
+    "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790013188/cmac/products/pink-shell-makeup-pouch/final-0",
+    "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790013188/cmac/products/pink-shell-makeup-pouch/final-1",
+    "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790013189/cmac/products/pink-shell-makeup-pouch/final-2",
+  ],
+  "travel-makeup-organizer": [
+    "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790013201/cmac/products/travel-makeup-organizer/final-0",
+    "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790013202/cmac/products/travel-makeup-organizer/final-1",
+  ],
+  "under-eye-glow-wand": [
+    "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790013203/cmac/products/under-eye-glow-wand/final-0",
+    "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790013204/cmac/products/under-eye-glow-wand/final-1",
+    "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790013204/cmac/products/under-eye-glow-wand/final-2",
+  ],
+  "facial-ice-roller": [
+    "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790013180/cmac/products/facial-ice-roller/colour-pink",
+    "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790013180/cmac/products/facial-ice-roller/colour-green",
+    "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790013181/cmac/products/facial-ice-roller/colour-purple",
+    "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790013182/cmac/products/facial-ice-roller/colour-red",
+    "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790013182/cmac/products/facial-ice-roller/colour-yellow",
+    "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790011252/cmac/products/facial-ice-roller/final-1",
+  ],
 };
