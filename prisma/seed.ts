@@ -751,7 +751,8 @@ const PRODUCTS: SeedProduct[] = [
       ]),
     ],
     images: [
-      `${SITE}/gel-manicure-gloves-hero.jpg`, // cutout of the CJ photo below on the CMAC cream
+      // 2026-10-08: re-cut (AI upscale, eroded alpha) — the flood-filled hero kept a white fringe
+      "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1791509801/cmac/products/gel-manicure-gloves/cut-0",
       `${CF}/9020d42c-6bfd-41d7-b217-60168580470d.jpg`,
       `${CF}/a666a215-62e5-4b7f-8e75-c4777d755db8.jpg`,
     ],
