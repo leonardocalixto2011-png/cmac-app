@@ -947,7 +947,7 @@ const PRODUCTS: SeedProduct[] = [
         { value: "BLACK", labelEn: "Black", labelFr: "Noir", hex: "#1E1E1E" },
       ]),
     ],
-    images: [`${SITE}/satin-bonnet-hero.jpg`, ...[2, 4, 1].map((n) => `${SITE}/satin-bonnet-${n}.jpg`)],
+    images: ["https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1791561231/cmac/products/satin-bonnet/cut-0" /* re-cut 2026-10-09 */, ...[2, 4, 1].map((n) => `${SITE}/satin-bonnet-${n}.jpg`)],
     supplierUrl: `${AE}/1005007805493925.html?shipCountry=CA&currency=CAD`,
     supplierSku: "AE-1005007805493925",
     shippingNote:
@@ -997,7 +997,7 @@ const PRODUCTS: SeedProduct[] = [
         { value: "3pcs Black", labelEn: "Black", labelFr: "Noir", hex: "#1E1E1E" },
       ]),
     ],
-    images: [`${SITE}/heatless-curl-set-hero.jpg`, ...[2, 3, 1].map((n) => `${SITE}/heatless-curl-set-${n}.jpg`)],
+    images: ["https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1791561229/cmac/products/heatless-curl-set/cut-0" /* re-cut 2026-10-09 */, ...[2, 3, 1].map((n) => `${SITE}/heatless-curl-set-${n}.jpg`)],
     supplierUrl: `${AE}/1005009863899370.html?shipCountry=CA&currency=CAD`,
     supplierSku: "AE-1005009863899370",
     shippingNote:
@@ -1020,7 +1020,7 @@ const PRODUCTS: SeedProduct[] = [
     descriptionFr: `<p><strong>La lampe pour les retouches entre deux rendez-vous.</strong> Une lampe UV/LED compacte à 24 diodes qui fait durcir le vernis gel, le gel de construction et le top coat. Elle fonctionne sur n'importe quel port USB ou chargeur de téléphone : pas d'adaptateur encombrant, rien à certifier, la même basse tension que nos autres outils.</p><h3>Mode d'emploi</h3><ol><li>Appliquez une couche mince de vernis gel.</li><li>Glissez la main et appuyez sur le bouton : 30 à 60 secondes par couche, selon le vernis.</li><li>Répétez pour chaque couche et pour le top coat.</li></ol><h3>Bon à savoir</h3><ul><li>Alimentation USB (câble inclus ; utilisez un chargeur 5 V / 2 A). Une main ou un pied à la fois.</li><li>Outil cosmétique à usage domestique. Ne regardez pas directement les diodes ; un écran solaire ou des gants anti-UV sur les mains, c'est une bonne habitude.</li><li>Ne convient pas au vernis ordinaire (non gel) : il ne durcira pas.</li></ul>${FOOTER_FR}`,
     options: [],
     // 5 and 6 are our crops of the supplier photos (the originals carry marketing overlays).
-    images: [`${SITE}/usb-nail-lamp-hero.jpg`, ...[5, 3, 4].map((n) => `${SITE}/usb-nail-lamp-${n}.jpg`)],
+    images: ["https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1791561230/cmac/products/usb-nail-lamp/cut-0" /* re-cut 2026-10-09 */, ...[5, 3, 4].map((n) => `${SITE}/usb-nail-lamp-${n}.jpg`)],
     supplierUrl: `${AE}/1005007181406990.html?shipCountry=CA&currency=CAD`,
     supplierSku: "AE-1005007181406990",
     shippingNote:
@@ -1039,7 +1039,7 @@ const PRODUCTS: SeedProduct[] = [
     descriptionEn: `<p><strong>The two tools every manicure starts with.</strong> A sharp stainless-steel cuticle nipper and a dual-end pusher (spoon on one side, scraper on the other) to tidy the cuticle line before polish, or just to keep hands neat between salon visits.</p><h3>Details</h3><ul><li>2 pieces, stainless steel, as stated by the supplier.</li><li>Push cuticles back after a shower when they're soft; nip only loose skin, never live skin.</li><li>Wipe with alcohol after use, store dry.</li></ul>${FOOTER_HYGIENE_EN}`,
     descriptionFr: `<p><strong>Les deux outils par lesquels toute manucure commence.</strong> Une pince à cuticules bien affûtée en acier inoxydable et un poussoir à double embout (cuillère d'un côté, grattoir de l'autre) pour nettoyer la ligne des cuticules avant le vernis, ou simplement garder des mains soignées entre deux visites au salon.</p><h3>Détails</h3><ul><li>2 pièces, acier inoxydable, selon le fournisseur.</li><li>Repoussez les cuticules après la douche, quand elles sont souples ; coupez seulement les peaux détachées, jamais la peau vive.</li><li>Essuyez à l'alcool après usage, rangez au sec.</li></ul>${FOOTER_HYGIENE_FR}`,
     options: [],
-    images: [`${SITE}/cuticle-care-duo-hero.jpg`, ...[3, 2, 1].map((n) => `${SITE}/cuticle-care-duo-${n}.jpg`)],
+    images: ["https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1791561228/cmac/products/cuticle-care-duo/cut-0" /* re-cut 2026-10-09 */, ...[3, 2, 1].map((n) => `${SITE}/cuticle-care-duo-${n}.jpg`)],
     supplierUrl: `${AE}/1005007805477717.html?shipCountry=CA&currency=CAD`,
     supplierSku: "AE-1005007805477717",
     shippingNote:
@@ -1086,7 +1086,7 @@ const PRODUCTS: SeedProduct[] = [
     descriptionEn: `<p><strong>Two minutes before the shower, and skin feels smoother by the weekend.</strong> A natural-bristle brush on a long detachable wooden handle: use the handle for the back and the legs, pop the head off for arms and shoulders. Brush dry skin in long strokes toward the heart, then shower as usual.</p><h3>Details</h3><ul><li>Natural bristles on a wooden head, detachable handle about 40 cm, hanging cord. Materials as stated by the supplier.</li><li>Light pressure: it should feel brisk, never scratchy. Skip broken or irritated skin.</li><li>Keep the bristles dry; tap out and hang after use. Wash the head with mild soap once a month and dry bristles-down.</li></ul>${FOOTER_HYGIENE_EN}`,
     descriptionFr: `<p><strong>Deux minutes avant la douche, et la peau est plus douce dès la fin de semaine.</strong> Une brosse en soies naturelles sur un long manche de bois amovible : le manche pour le dos et les jambes, la tête seule pour les bras et les épaules. On brosse la peau sèche en longs mouvements vers le cœur, puis on prend sa douche comme d'habitude.</p><h3>Détails</h3><ul><li>Soies naturelles sur tête de bois, manche amovible d'environ 40 cm, cordon de suspension. Matériaux selon le fournisseur.</li><li>Pression légère : ça doit être vif, jamais irritant. Évitez la peau lésée ou irritée.</li><li>Gardez les soies au sec ; tapotez et suspendez après usage. Lavez la tête au savon doux une fois par mois, séchez soies vers le bas.</li></ul>${FOOTER_HYGIENE_FR}`,
     options: [],
-    images: [`${SITE}/bristle-body-brush-hero.jpg`, ...[2, 3, 1].map((n) => `${SITE}/bristle-body-brush-${n}.jpg`)],
+    images: ["https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1791561229/cmac/products/bristle-body-brush/cut-0" /* re-cut 2026-10-09 */, ...[2, 3, 1].map((n) => `${SITE}/bristle-body-brush-${n}.jpg`)],
     supplierUrl: `${AE}/1005010415622779.html?shipCountry=CA&currency=CAD`,
     supplierSku: "AE-1005010415622779",
     shippingNote:
@@ -1131,7 +1131,7 @@ const PRODUCTS: SeedProduct[] = [
     descriptionEn: `<p><strong>The body-brushing habit, scaled down for the face.</strong> A curved wooden head with very soft bristles and rounded massage nubs on the back. Sweep it over dry, clean skin from the centre of the face outward for a minute: skin looks fresher and a little rosier, and serum spreads more evenly after.</p><h3>Details</h3><ul><li>Wooden head with soft synthetic bristles and massage nubs; comes with a protective cover. Materials as stated by the supplier.</li><li>Cosmetic tool for appearance only. Feather-light pressure; skip active breakouts, broken or sunburnt skin.</li><li>Keep it dry. Tap out after use, brush the bristles with a dry cloth weekly.</li></ul>${FOOTER_HYGIENE_EN}`,
     descriptionFr: `<p><strong>L'habitude du brossage du corps, adaptée au visage.</strong> Une tête de bois courbée aux soies très douces, avec des picots de massage arrondis au dos. On la passe sur la peau sèche et propre, du centre du visage vers l'extérieur, pendant une minute : le teint paraît plus frais, un peu plus rosé, et le sérum s'étale mieux ensuite.</p><h3>Détails</h3><ul><li>Tête de bois, soies synthétiques douces et picots de massage ; livrée avec un étui de protection. Matériaux selon le fournisseur.</li><li>Outil cosmétique, pour l'apparence seulement. Pression légère comme une plume ; évitez les boutons actifs, la peau lésée ou brûlée par le soleil.</li><li>Gardez-la au sec. Tapotez après usage, passez un linge sec sur les soies chaque semaine.</li></ul>${FOOTER_HYGIENE_FR}`,
     options: [],
-    images: [`${SITE}/face-dry-brush-hero.jpg`, ...[4, 1, 3, 2].map((n) => `${SITE}/face-dry-brush-${n}.jpg`)],
+    images: ["https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1791561228/cmac/products/face-dry-brush/cut-0" /* re-cut 2026-10-09 */, ...[4, 1, 3, 2].map((n) => `${SITE}/face-dry-brush-${n}.jpg`)],
     supplierUrl: `${AE}/1005009717850634.html?shipCountry=CA&currency=CAD`,
     supplierSku: "AE-1005009717850634",
     shippingNote:

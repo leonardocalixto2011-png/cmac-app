@@ -14,7 +14,7 @@ export const MEDIA: Record<string, ProductMedia> = {
   // (flood-fill from the border; the other two nail products kept their supplier shots).
   "electric-foot-file": {
     images: [
-      "https://cmacbeauty.ca/products/electric-foot-file-0.jpg",
+      "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1791561232/cmac/products/electric-foot-file/cut-0",
       "https://oss-cf.cjdropshipping.com/product/2024/02/05/09/134127e8-25df-4ef1-b142-b25626479cca_trans.jpeg",
       "https://cf.cjdropshipping.com/17211744/2407170833080326900.jpg",
     ],
@@ -22,7 +22,7 @@ export const MEDIA: Record<string, ProductMedia> = {
   },
   "rose-gold-manicure-kit": {
     images: [
-      "https://cmacbeauty.ca/products/rose-gold-manicure-kit-0.jpg",
+      "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1791561227/cmac/products/rose-gold-manicure-kit/cut-0",
       "https://cmacbeauty.ca/products/rose-gold-manicure-kit-1.jpg",
       "https://cf.cjdropshipping.com/1612319017734.jpg",
     ],
@@ -37,9 +37,8 @@ export const MEDIA: Record<string, ProductMedia> = {
   },
   "microcurrent-facial-lift-device": {
     "images": [
-      "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790013186/cmac/products/microcurrent-facial-lift-device/final-0",
-      "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790013187/cmac/products/microcurrent-facial-lift-device/final-1",
-      "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790011248/cmac/products/microcurrent-facial-lift-device/final-2"
+      "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1791561226/cmac/products/microcurrent-facial-lift-device/cut-0",
+      "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790011248/cmac/products/microcurrent-facial-lift-device/final-2",
     ],
     "videos": []
   },
@@ -110,9 +109,8 @@ export const MEDIA: Record<string, ProductMedia> = {
   },
   "spa-headband": {
     "images": [
-      "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790013199/cmac/products/spa-headband/final-0",
-      "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790011260/cmac/products/spa-headband/final-1",
-      "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790013200/cmac/products/spa-headband/final-2"
+      "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1791561226/cmac/products/spa-headband/cut-0",
+      "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790013200/cmac/products/spa-headband/final-2",
     ],
     "videos": []
   },
@@ -215,5 +213,25 @@ export const MEDIA_PREVIOUS: Record<string, string[]> = {
     "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790013182/cmac/products/facial-ice-roller/colour-red",
     "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790013182/cmac/products/facial-ice-roller/colour-yellow",
     "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790011252/cmac/products/facial-ice-roller/final-1",
+  ],
+  "electric-foot-file": [
+    "https://cmacbeauty.ca/products/electric-foot-file-0.jpg",
+    "https://oss-cf.cjdropshipping.com/product/2024/02/05/09/134127e8-25df-4ef1-b142-b25626479cca_trans.jpeg",
+    "https://cf.cjdropshipping.com/17211744/2407170833080326900.jpg",
+  ],
+  "rose-gold-manicure-kit": [
+    "https://cmacbeauty.ca/products/rose-gold-manicure-kit-0.jpg",
+    "https://cmacbeauty.ca/products/rose-gold-manicure-kit-1.jpg",
+    "https://cf.cjdropshipping.com/1612319017734.jpg",
+  ],
+  "spa-headband": [
+    "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790013199/cmac/products/spa-headband/final-0",
+    "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790011260/cmac/products/spa-headband/final-1",
+    "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790013200/cmac/products/spa-headband/final-2",
+  ],
+  "microcurrent-facial-lift-device": [
+    "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790013186/cmac/products/microcurrent-facial-lift-device/final-0",
+    "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790013187/cmac/products/microcurrent-facial-lift-device/final-1",
+    "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790011248/cmac/products/microcurrent-facial-lift-device/final-2",
   ],
 };
