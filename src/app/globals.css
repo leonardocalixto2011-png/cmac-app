@@ -332,6 +332,7 @@
 .cmac-hero__proof svg { width: 16px; height: 16px; color: var(--color-terra); }
 
 .cmac-hero__visual { position: relative; aspect-ratio: 4 / 5; }
+.cmac-hero__slide.is-on .cmac-hero__photo { opacity: 1; }
 /* The light behind the device. Products are photographed on cream, so the photo
    is multiplied onto the scene: the cream disappears and the light tints it, which
    is what a lit object looks like. */

@@ -100,7 +100,9 @@ export function Hero({ slides }: { slides: HeroSlide[] }) {
           </ul>
         </div>
 
-        <div className="cmac-hero__visual" data-reveal="scale" style={D(200)}>
+        {/* No data-reveal here: its will-change/transform would isolate the photo from
+            the satin behind it and bring the cream square back. The slides fade themselves. */}
+        <div className="cmac-hero__visual">
           {/* The light lives inside the stage: the photo is multiplied onto it, and a
               transformed ancestor between them would isolate the blend. */}
           <div className="cmac-hero__stage">
