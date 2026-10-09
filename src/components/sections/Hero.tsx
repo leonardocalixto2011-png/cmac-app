@@ -8,6 +8,7 @@ import { Icon } from "@/components/Icon";
 import { SHIPPING } from "@/lib/brand";
 import { formatWholeDollars } from "@/lib/utils";
 import { SilkCanvas } from "@/components/motion/SilkCanvas";
+import { cloudinaryLoader } from "@/lib/cloudinary-loader";
 
 /**
  * Opening scene of the evening. A satin surface moves slowly behind three
@@ -116,6 +117,7 @@ export function Hero({ slides }: { slides: HeroSlide[] }) {
                 tabIndex={i === slide ? undefined : -1}
               >
                 <Image
+                  loader={cloudinaryLoader}
                   src={s.image}
                   alt={i === 0 ? t("hero.visualAlt") : s.name}
                   fill

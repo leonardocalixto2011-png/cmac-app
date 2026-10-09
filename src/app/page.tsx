@@ -23,15 +23,18 @@ export default async function HomePage() {
   const homeSets = HOME_SETS.flatMap((slug) => products.filter((p) => p.slug === slug));
   const productNames = Object.fromEntries(products.map((p) => [p.slug, { en: p.nameEn, fr: p.nameFr }]));
   // Three devices take turns on the hero stage, each with its own light.
-  const STAGE: [string, HeroSlide["light"]][] = [
-    ["led-red-light-mask", "led"],
-    ["microcurrent-facial-lift-device", "silver"],
-    ["sonic-silicone-cleansing-brush", "rose"],
+  // Transparent, sharpened cut-outs (alpha-0) so the light and the satin show around
+  // the product with clean edges.
+  const ALPHA = (v: string, slug: string) => `https://res.cloudinary.com/dmlolrov/image/upload/v${v}/cmac/products/${slug}/alpha-0`;
+  const STAGE: [string, HeroSlide["light"], string][] = [
+    ["led-red-light-mask", "led", ALPHA("1791567103", "led-red-light-mask")],
+    ["microcurrent-facial-lift-device", "silver", ALPHA("1791567102", "microcurrent-facial-lift-device")],
+    ["sonic-silicone-cleansing-brush", "rose", ALPHA("1791567127", "sonic-silicone-cleansing-brush")],
   ];
-  const slides: HeroSlide[] = STAGE.flatMap(([slug, light]) => {
+  const slides: HeroSlide[] = STAGE.flatMap(([slug, light, image]) => {
     const p = products.find((x) => x.slug === slug);
-    return p && p.images[0]
-      ? [{ slug, light, image: p.images[0], name: locale === "fr" ? p.nameFr : p.nameEn, price: formatMoneyFromCents(p.priceCents, locale) }]
+    return p
+      ? [{ slug, light, image, name: locale === "fr" ? p.nameFr : p.nameEn, price: formatMoneyFromCents(p.priceCents, locale) }]
       : [];
   });
   // Never an empty stage: if the catalogue is unreachable, the mask alone.
@@ -39,7 +42,7 @@ export default async function HomePage() {
     slides.push({
       slug: "led-red-light-mask",
       light: "led",
-      image: "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790013183/cmac/products/led-red-light-mask/final-0",
+      image: ALPHA("1791567103", "led-red-light-mask"),
       name: locale === "fr" ? "Masque LED lumière rouge" : "LED Red Light Mask",
       price: formatMoneyFromCents(5999, locale),
     });

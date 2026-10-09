@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useLocale } from "@/i18n/LocaleProvider";
+import { cloudinaryLoader } from "@/lib/cloudinary-loader";
 
 /**
  * The evening ritual, told as you scroll. A sticky stage holds the tool of
@@ -11,16 +12,16 @@ import { useLocale } from "@/i18n/LocaleProvider";
  * sage for the contour step, the red of the mask for light, then night. A
  * clock fills from 0 to 15 minutes, which is what the four steps add up to.
  */
-// Transparent versions of the product cut-outs (Cloudinary background removal on the
-// finished photo), so each tool can stand on a dark set without its cream square.
-const CL = (id: string) =>
-  `https://res.cloudinary.com/dmlolrov/image/upload/e_background_removal/c_scale,w_900/f_png/cmac/products/${id}`;
+// Transparent cut-outs (alpha-0), cut from the originals with an eroded, re-feathered
+// matte and sharpened (cmac-store/media recut pipeline), so each tool stands cleanly on
+// a dark set. The loader adds size, sharpening and format.
+const CL = (id: string) => `https://res.cloudinary.com/dmlolrov/image/upload/${id}`;
 
 const STEPS = [
-  { key: "1", slug: "facial-ice-roller", scene: "frost", img: CL("facial-ice-roller/cut-0"), at: 1 },
-  { key: "2", slug: "microcurrent-facial-lift-device", scene: "sage", img: CL("microcurrent-facial-lift-device/cut-0"), at: 5 },
-  { key: "3", slug: "led-red-light-mask", scene: "glow", img: CL("led-red-light-mask/final-0"), at: 15 },
-  { key: "4", slug: "satin-beauty-sleep-set", scene: "night", img: CL("satin-beauty-sleep-set/final-0"), at: 15.5 },
+  { key: "1", slug: "facial-ice-roller", scene: "frost", img: CL("v1791567101/cmac/products/facial-ice-roller/alpha-0"), at: 1 },
+  { key: "2", slug: "microcurrent-facial-lift-device", scene: "sage", img: CL("v1791567102/cmac/products/microcurrent-facial-lift-device/alpha-0"), at: 5 },
+  { key: "3", slug: "led-red-light-mask", scene: "glow", img: CL("v1791567103/cmac/products/led-red-light-mask/alpha-0"), at: 15 },
+  { key: "4", slug: "satin-beauty-sleep-set", scene: "night", img: CL("v1791567104/cmac/products/satin-beauty-sleep-set/alpha-0"), at: 15.5 },
 ] as const;
 const TOTAL = 15.5;
 
@@ -69,7 +70,7 @@ export function Routine({ productNames }: { productNames: Record<string, { en: s
             <span className="cmac-ritual__halo" />
             {STEPS.map((s, i) => (
               <div key={s.key} className={`cmac-ritual__shot${i === active ? " is-on" : ""}`}>
-                <Image src={s.img} alt="" fill sizes="(min-width: 990px) 40vw, 80vw" className="cmac-ritual__img" />
+                <Image loader={cloudinaryLoader} src={s.img} alt="" fill sizes="(min-width: 990px) 40vw, 80vw" className="cmac-ritual__img" />
               </div>
             ))}
             <div className="cmac-ritual__clock" style={{ "--a": `${angle}deg` } as React.CSSProperties}>

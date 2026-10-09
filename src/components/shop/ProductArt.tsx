@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { cn } from "@/lib/utils";
+import { cloudinaryLoader } from "@/lib/cloudinary-loader";
 
 function tone(tags: string[]) {
   if (tags.includes("glow")) return "product-art--glow";
@@ -39,6 +40,7 @@ export function ProductArt({
     return (
       <div className={cn("relative h-full w-full overflow-hidden", className)}>
         <Image
+          loader={cloudinaryLoader}
           src={images[0]}
           alt={name}
           fill
@@ -47,7 +49,7 @@ export function ProductArt({
           sizes={sizes}
         />
         {hoverImage && hoverImage !== images[0] && (
-          <Image src={hoverImage} alt="" aria-hidden="true" fill className={fit === "tile" ? "product-art__hover product-art__tile" : "product-art__hover object-cover"} sizes={sizes} />
+          <Image loader={cloudinaryLoader} src={hoverImage} alt="" aria-hidden="true" fill className={fit === "tile" ? "product-art__hover product-art__tile" : "product-art__hover object-cover"} sizes={sizes} />
         )}
       </div>
     );
