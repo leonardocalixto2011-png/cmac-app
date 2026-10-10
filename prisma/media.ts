@@ -31,16 +31,28 @@ export const MEDIA: Record<string, ProductMedia> = {
   "led-red-light-mask": {
     "images": [
       "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790013183/cmac/products/led-red-light-mask/final-0",
+      "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1791592051/cmac/products/led-red-light-mask/scene-1",
       "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790013185/cmac/products/led-red-light-mask/final-1"
     ],
-    "videos": []
+    "videos": [
+      {
+        "mp4": "https://res.cloudinary.com/dmlolrov/video/upload/q_auto/v1791592055/cmac/videos/led-red-light-mask-studio.mp4",
+        "poster": "https://res.cloudinary.com/dmlolrov/video/upload/so_2/f_jpg/q_auto/v1791592055/cmac/videos/led-red-light-mask-studio.jpg"
+      }
+    ]
   },
   "microcurrent-facial-lift-device": {
     "images": [
       "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1791561226/cmac/products/microcurrent-facial-lift-device/cut-0",
-      "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790011248/cmac/products/microcurrent-facial-lift-device/final-2",
+      "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1791592052/cmac/products/microcurrent-facial-lift-device/scene-1",
+      "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790011248/cmac/products/microcurrent-facial-lift-device/final-2"
     ],
-    "videos": []
+    "videos": [
+      {
+        "mp4": "https://res.cloudinary.com/dmlolrov/video/upload/q_auto/v1791592057/cmac/videos/microcurrent-facial-lift-device-studio.mp4",
+        "poster": "https://res.cloudinary.com/dmlolrov/video/upload/so_2/f_jpg/q_auto/v1791592057/cmac/videos/microcurrent-facial-lift-device-studio.jpg"
+      }
+    ]
   },
   "ems-sculpting-v-roller": {
     "images": [
@@ -66,15 +78,22 @@ export const MEDIA: Record<string, ProductMedia> = {
   "sonic-silicone-cleansing-brush": {
     "images": [
       "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790013197/cmac/products/sonic-silicone-cleansing-brush/final-0",
+      "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1791592053/cmac/products/sonic-silicone-cleansing-brush/scene-1",
       "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790011244/cmac/products/sonic-silicone-cleansing-brush/final-1",
       "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790013198/cmac/products/sonic-silicone-cleansing-brush/final-2",
       "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790011246/cmac/products/sonic-silicone-cleansing-brush/final-3"
     ],
-    "videos": []
+    "videos": [
+      {
+        "mp4": "https://res.cloudinary.com/dmlolrov/video/upload/q_auto/v1791592059/cmac/videos/sonic-silicone-cleansing-brush-studio.mp4",
+        "poster": "https://res.cloudinary.com/dmlolrov/video/upload/so_2/f_jpg/q_auto/v1791592059/cmac/videos/sonic-silicone-cleansing-brush-studio.jpg"
+      }
+    ]
   },
   "facial-ice-roller": {
     "images": [
       "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1791504751/cmac/products/facial-ice-roller/cut-0",
+      "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1791592053/cmac/products/facial-ice-roller/scene-1",
       "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790013180/cmac/products/facial-ice-roller/colour-pink",
       "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790013180/cmac/products/facial-ice-roller/colour-green",
       "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790013181/cmac/products/facial-ice-roller/colour-purple",
@@ -82,7 +101,12 @@ export const MEDIA: Record<string, ProductMedia> = {
       "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790013182/cmac/products/facial-ice-roller/colour-yellow",
       "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790011252/cmac/products/facial-ice-roller/final-1"
     ],
-    "videos": []
+    "videos": [
+      {
+        "mp4": "https://res.cloudinary.com/dmlolrov/video/upload/q_auto/v1791592061/cmac/videos/facial-ice-roller-studio.mp4",
+        "poster": "https://res.cloudinary.com/dmlolrov/video/upload/so_2/f_jpg/q_auto/v1791592061/cmac/videos/facial-ice-roller-studio.jpg"
+      }
+    ]
   },
   "electric-scalp-massager": {
     "images": [
@@ -125,9 +149,15 @@ export const MEDIA: Record<string, ProductMedia> = {
   },
   "satin-beauty-sleep-set": {
     "images": [
-      "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790013193/cmac/products/satin-beauty-sleep-set/final-0"
+      "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790013193/cmac/products/satin-beauty-sleep-set/final-0",
+      "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1791592054/cmac/products/satin-beauty-sleep-set/scene-1"
     ],
-    "videos": []
+    "videos": [
+      {
+        "mp4": "https://res.cloudinary.com/dmlolrov/video/upload/q_auto/v1791592062/cmac/videos/satin-beauty-sleep-set-studio.mp4",
+        "poster": "https://res.cloudinary.com/dmlolrov/video/upload/so_2/f_jpg/q_auto/v1791592062/cmac/videos/satin-beauty-sleep-set-studio.jpg"
+      }
+    ]
   },
   "satin-scrunchie": {
     "images": [
@@ -206,14 +236,6 @@ export const MEDIA_PREVIOUS: Record<string, string[]> = {
       "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790013204/cmac/products/under-eye-glow-wand/final-1",
       "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1791504751/cmac/products/under-eye-glow-wand/cut-2",
   ],
-  "facial-ice-roller": [
-    "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790013180/cmac/products/facial-ice-roller/colour-pink",
-    "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790013180/cmac/products/facial-ice-roller/colour-green",
-    "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790013181/cmac/products/facial-ice-roller/colour-purple",
-    "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790013182/cmac/products/facial-ice-roller/colour-red",
-    "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790013182/cmac/products/facial-ice-roller/colour-yellow",
-    "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790011252/cmac/products/facial-ice-roller/final-1",
-  ],
   "electric-foot-file": [
     "https://cmacbeauty.ca/products/electric-foot-file-0.jpg",
     "https://oss-cf.cjdropshipping.com/product/2024/02/05/09/134127e8-25df-4ef1-b142-b25626479cca_trans.jpeg",
@@ -229,9 +251,42 @@ export const MEDIA_PREVIOUS: Record<string, string[]> = {
     "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790011260/cmac/products/spa-headband/final-1",
     "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790013200/cmac/products/spa-headband/final-2",
   ],
+  "led-red-light-mask": [
+    "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790013183/cmac/products/led-red-light-mask/final-0",
+    "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790013185/cmac/products/led-red-light-mask/final-1",
+  ],
   "microcurrent-facial-lift-device": [
-    "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790013186/cmac/products/microcurrent-facial-lift-device/final-0",
-    "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790013187/cmac/products/microcurrent-facial-lift-device/final-1",
+    "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1791561226/cmac/products/microcurrent-facial-lift-device/cut-0",
     "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790011248/cmac/products/microcurrent-facial-lift-device/final-2",
   ],
+  "sonic-silicone-cleansing-brush": [
+    "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790013197/cmac/products/sonic-silicone-cleansing-brush/final-0",
+    "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790011244/cmac/products/sonic-silicone-cleansing-brush/final-1",
+    "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790013198/cmac/products/sonic-silicone-cleansing-brush/final-2",
+    "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790011246/cmac/products/sonic-silicone-cleansing-brush/final-3",
+  ],
+  "facial-ice-roller": [
+    "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1791504751/cmac/products/facial-ice-roller/cut-0",
+    "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790013180/cmac/products/facial-ice-roller/colour-pink",
+    "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790013180/cmac/products/facial-ice-roller/colour-green",
+    "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790013181/cmac/products/facial-ice-roller/colour-purple",
+    "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790013182/cmac/products/facial-ice-roller/colour-red",
+    "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790013182/cmac/products/facial-ice-roller/colour-yellow",
+    "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790011252/cmac/products/facial-ice-roller/final-1",
+  ],
+  "satin-beauty-sleep-set": [
+    "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1790013193/cmac/products/satin-beauty-sleep-set/final-0",
+  ],
+};
+
+/**
+ * 2026-10-09: studio videos (Blender, real product photo, generated decor) were put
+ * first. The seed swaps a product's videos only while they still equal this exact list.
+ */
+export const MEDIA_PREVIOUS_VIDEOS: Record<string, ProductVideo[]> = {
+  "led-red-light-mask": [],
+  "microcurrent-facial-lift-device": [],
+  "sonic-silicone-cleansing-brush": [],
+  "facial-ice-roller": [],
+  "satin-beauty-sleep-set": []
 };

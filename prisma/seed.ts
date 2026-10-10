@@ -30,7 +30,7 @@
 import { PrismaClient, type Prisma } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import { SET_CONTENTS } from "../src/lib/sets";
-import { MEDIA, MEDIA_PREVIOUS } from "./media";
+import { MEDIA, MEDIA_PREVIOUS, MEDIA_PREVIOUS_VIDEOS } from "./media";
 import { ensureSeasonalCodes } from "../src/lib/stripe-coupons";
 
 const prisma = new PrismaClient();
@@ -2318,6 +2318,10 @@ async function main() {
     if (media?.videos.length && isEmptyJsonArray(existing.videos)) {
       update.videos = videos;
       notes.push("videos");
+    } else if (media?.videos.length && MEDIA_PREVIOUS_VIDEOS[p.slug] && sameJson(existing.videos, MEDIA_PREVIOUS_VIDEOS[p.slug])) {
+      // Exactly the clips a previous seed wrote; a new one (studio video) leads now.
+      update.videos = videos;
+      notes.push("videos updated");
     }
     await prisma.product.update({ where: { slug: p.slug }, data: update });
     console.log(`Product ready: ${p.slug}${notes.length ? ` (${notes.join(", ")})` : ""}`);
