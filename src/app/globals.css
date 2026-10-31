@@ -248,6 +248,8 @@
   .prose h2, .prose h3 { color: var(--color-ink); margin: 1.8em 0 0.6em; font-size: 1.35rem; }
   .prose h3 { font-size: 1.2rem; }
   .prose ul, .prose ol { margin: 0 0 1.2em; padding-left: 1.3em; }
+  .prose ul { list-style: disc; }
+  .prose ol { list-style: decimal; }
   .prose li { margin: 0.35em 0; padding-left: 0.2em; }
   .prose ol li::marker { color: var(--color-terra); font-weight: 600; }
   .prose ul li::marker { color: var(--color-terra); }
@@ -750,4 +752,44 @@ html.js h2[data-reveal].is-in { transform: none; }
 }
 @media (prefers-reduced-motion: reduce) {
   .cmac-popup, .cmac-popup-backdrop { animation: none; }
+}
+
+/* ---- Product page: gallery and details on the left, the buy box stays in view ---- */
+.pdp { display: grid; gap: 2.5rem; }
+.pdp > * { min-width: 0; }
+@media (min-width: 768px) {
+  .pdp { grid-template-columns: 1.05fr 0.95fr; column-gap: clamp(2.5rem, 4vw, 3.5rem); row-gap: 3rem; align-items: start; }
+  .pdp__gallery { grid-area: 1 / 1; }
+  .pdp__details { grid-area: 2 / 1; }
+  .pdp__buy { grid-area: 1 / 2 / 3 / 3; }
+}
+/* On a short window the box would run past the fold and its button could not be reached. */
+@media (min-width: 768px) and (min-height: 700px) {
+  .pdp__buy { position: sticky; top: calc(var(--nav-h) + 1.5rem); }
+}
+
+.pdp-acc { border-top: 1px solid var(--line); interpolate-size: allow-keywords; }
+.pdp-acc__item { border-bottom: 1px solid var(--line); }
+.pdp-acc__item summary { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1.05rem 0; cursor: pointer; list-style: none; font: 500 1.14rem/1.3 var(--font-display); color: var(--color-ink); }
+.pdp-acc__item summary::-webkit-details-marker { display: none; }
+.pdp-acc__item summary::after { content: ""; flex: none; width: 10px; height: 10px; margin-right: 4px; border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor; rotate: 45deg; translate: 0 -2px; transition: rotate 0.3s var(--ease-cmac), translate 0.3s var(--ease-cmac); }
+.pdp-acc__item[open] summary::after { rotate: -135deg; translate: 0 3px; }
+.pdp-acc__body { padding-bottom: 1.25rem; }
+.pdp-acc__body > :last-child { margin-bottom: 0; }
+@supports selector(::details-content) {
+  .pdp-acc__item::details-content { block-size: 0; overflow: clip; transition: block-size 0.35s var(--ease-cmac), content-visibility 0.35s allow-discrete; }
+  .pdp-acc__item[open]::details-content { block-size: auto; }
+}
+
+/* Phones: the buy button follows once the main one has scrolled away. */
+.pdp-bar { position: fixed; inset: auto 0 0; z-index: 90; display: flex; align-items: center; justify-content: space-between; gap: 0.85rem; padding: 0.6rem clamp(1rem, 4vw, 1.5rem) calc(0.6rem + env(safe-area-inset-bottom, 0px)); border-top: 1px solid var(--line); background: color-mix(in srgb, var(--color-cream) 92%, transparent); backdrop-filter: blur(14px); translate: 0 100%; visibility: hidden; transition: translate 0.35s var(--ease-cmac), visibility 0.35s; }
+.pdp-bar.is-shown { translate: 0 0; visibility: visible; }
+@starting-style { .pdp-bar.is-shown { translate: 0 100%; } }
+.pdp-bar__name { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font: 500 0.86rem/1.25 var(--font-ui); color: var(--color-ink-soft); }
+.pdp-bar__price { font: 600 1rem/1.25 var(--font-ui); color: var(--color-ink); font-variant-numeric: tabular-nums; }
+@media (min-width: 768px) { .pdp-bar { display: none; } }
+@media (max-width: 767px) { body:has(.pdp-bar.is-shown) .cmac-toast { bottom: calc(84px + env(safe-area-inset-bottom, 0px)); } }
+@media (prefers-reduced-motion: reduce) {
+  .pdp-bar, .pdp-acc__item summary::after { transition: none; }
+  .pdp-acc__item::details-content { transition: none; }
 }

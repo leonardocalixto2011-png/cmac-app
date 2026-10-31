@@ -18,43 +18,38 @@ export function Footer() {
       title: t("footer.shop"),
       links: [
         { href: "/shop", label: t("nav.shop") },
-        { href: "/collections/the-ritual", label: t("coll.the-ritual.t") },
-        { href: "/collections/gifts", label: t("nav.gifts") },
+        { href: "/collections/devices", label: t("nav.devices") },
         { href: "/collections/sets", label: t("nav.sets") },
-        { href: "/collections/glow", label: t("nav.glow") },
-        { href: "/collections/sculpt", label: t("nav.sculpt") },
-        { href: "/collections/cool", label: t("nav.cool") },
+        { href: "/collections/gifts", label: t("nav.gifts") },
+        { href: "/collections/the-ritual", label: t("coll.the-ritual.t") },
         { href: "/collections/essentials", label: t("nav.essentials") },
-        { href: "/collections/hair", label: t("nav.hair") },
-        { href: "/collections/nails", label: t("nav.nails") },
-        { href: "/collections/body", label: t("nav.body") },
-        { href: "/collections/men", label: t("nav.men") },
-        { href: "/collections/cozy", label: t("nav.cozy") },
+      ],
+    },
+    {
+      title: t("footer.company"),
+      links: [
+        { href: "/about", label: t("nav.about") },
+        { href: "/journal", label: "Journal" },
+        { href: "/glow-club", label: t("footer.glowClub") },
+        { href: "/pro", label: t("nav.pro") },
+        { href: "/entreprises", label: t("nav.corp") },
+        { href: "/convoi", label: t("nav.convoy") },
       ],
     },
     {
       title: t("footer.help"),
       links: [
-        { href: "/about", label: t("nav.about") },
-        { href: "/pro", label: t("nav.pro") },
-        { href: "/entreprises", label: t("nav.corp") },
-        { href: "/convoi", label: t("nav.convoy") },
-        { href: "/journal", label: "Journal" },
-        { href: "/glow-club", label: t("footer.glowClub") },
-        { href: "/account", label: t("footer.account") },
         { href: "/faq", label: t("footer.faq") },
         { href: "/shipping-returns", label: t("footer.shipping") },
         { href: "/contact", label: t("footer.contact") },
+        { href: "/account", label: t("footer.account") },
       ],
     },
-    {
-      title: t("footer.legal"),
-      links: [
-        { href: "/privacy", label: t("footer.privacy") },
-        { href: "/terms", label: t("footer.terms") },
-        { href: "/refund-policy", label: t("footer.refund") },
-      ],
-    },
+  ];
+  const legal = [
+    { href: "/privacy", label: t("footer.privacy") },
+    { href: "/terms", label: t("footer.terms") },
+    { href: "/refund-policy", label: t("footer.refund") },
   ];
 
   return (
@@ -96,9 +91,18 @@ export function Footer() {
 
       <div className="wrap mt-12 flex flex-col gap-4 border-t border-white/10 pt-6 text-[0.78rem] text-ink-faint">
         <p className="max-w-[80ch]">{t("footer.disclaimer")}</p>
-        <p>
-          © {year} {BRAND.name}. {t("footer.rights")}
-        </p>
+        <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
+          <p>
+            © {year} {BRAND.name}. {t("footer.rights")}
+          </p>
+          <nav aria-label={t("footer.legal")} className="flex flex-wrap gap-x-5">
+            {legal.map((l) => (
+              <Link key={l.href} href={l.href} className="inline-block py-1.5 transition-colors hover:text-cream">
+                {l.label}
+              </Link>
+            ))}
+          </nav>
+        </div>
       </div>
     </footer>
   );

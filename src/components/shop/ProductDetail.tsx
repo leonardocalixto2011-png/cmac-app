@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type MouseEvent } from "react";
+import { createPortal } from "react-dom";
 import Link from "next/link";
 import { useLocale } from "@/i18n/LocaleProvider";
 import { useCart } from "./CartProvider";
@@ -8,9 +9,15 @@ import { ProductArt } from "./ProductArt";
 import { Icon } from "@/components/Icon";
 import { formatMoneyFromCents, formatWholeDollars, cn } from "@/lib/utils";
 import { POLICY, SHIPPING } from "@/lib/brand";
+import { splitDescription } from "@/lib/description";
 import type { ProductView, SetComponentView } from "@/lib/shop";
 import { trackAddToCart, trackViewContent } from "@/lib/pixels";
 import { announceAdded, flyToCart, useReducedMotion } from "@/lib/motion-fx";
+
+// The honest spec section stays open: the page promises it, so it should not hide behind a click.
+const SPEC_SECTION = /what we know|ce qu'on sait/i;
+// A set's photo grid already shows its pieces, so its written list would say the same thing twice.
+const INSIDE_SECTION = /^(what's inside|dans le coffret)/i;
 
 export function ProductDetail({ product, components = [] }: { product: ProductView; components?: SetComponentView[] }) {
   const { t, locale } = useLocale();
@@ -36,10 +43,31 @@ export function ProductDetail({ product, components = [] }: { product: ProductVi
   const reduceMotion = useReducedMotion();
   const addBtn = useRef<HTMLButtonElement>(null);
   const [activeImage, setActiveImage] = useState(0);
+  // null until the observer has run: the phone bar is portaled to <body>, which only exists on the client.
+  const [barShown, setBarShown] = useState<boolean | null>(null);
+
+  // The phone bar stands in for the main button, so it shows only while that button
+  // and the footer are both out of view.
+  useEffect(() => {
+    const btn = addBtn.current;
+    if (!btn) return;
+    const inView = new Set<Element>();
+    const io = new IntersectionObserver((entries) => {
+      for (const e of entries) {
+        if (e.isIntersecting) inView.add(e.target);
+        else inView.delete(e.target);
+      }
+      setBarShown(inView.size === 0);
+    });
+    io.observe(btn);
+    const footer = document.querySelector("footer");
+    if (footer) io.observe(footer);
+    return () => io.disconnect();
+  }, []);
 
   const missingOption = product.options.some((o) => !selected[o.nameEn]);
 
-  function addToCart() {
+  function addToCart(e: MouseEvent<HTMLButtonElement>) {
     if (missingOption) return;
     const labelsFr: Record<string, string> = {};
     const labelsEn: Record<string, string> = {};
@@ -63,7 +91,7 @@ export function ProductDetail({ product, components = [] }: { product: ProductVi
       optionLabelsEn: labelsEn,
     });
     trackAddToCart({ id: product.slug, name: product.nameEn, priceCents: product.priceCents, qty });
-    flyToCart(addBtn.current);
+    flyToCart(e.currentTarget);
     announceAdded(locale === "fr" ? product.nameFr : product.nameEn);
     setAdded(true);
     setTimeout(() => setAdded(false), 1400);
@@ -76,9 +104,17 @@ export function ProductDetail({ product, components = [] }: { product: ProductVi
   const gallery: Slide[] = [...imageSlides.slice(0, 1), ...videoSlides, ...imageSlides.slice(1)];
   const active = gallery[activeImage];
 
+  const addLabel = added
+    ? t("shop.added")
+    : missingOption
+      ? t("shop.chooseOption", { name: locale === "fr" ? product.options[0]?.nameFr : product.options[0]?.nameEn })
+      : t("shop.addToCart");
+  const { intro, sections: allSections } = splitDescription(description ?? "");
+  const sections = components.length > 0 ? allSections.filter((s) => !INSIDE_SECTION.test(s.title)) : allSections;
+
   return (
-    <div className="grid gap-10 md:grid-cols-[1.05fr_0.95fr] md:gap-14">
-      <div>
+    <div className="pdp">
+      <div className="pdp__gallery">
         <Link href="/shop" className="mb-2 inline-block py-2 text-sm text-ink-soft hover:text-terra">
           {t("shop.backToShop")}
         </Link>
@@ -135,7 +171,7 @@ export function ProductDetail({ product, components = [] }: { product: ProductVi
         )}
       </div>
 
-      <div>
+      <div className="pdp__buy">
         <span className="eyebrow">{t("shop.eyebrow")}</span>
         <h1 className="mt-3 text-[clamp(1.9rem,1.4rem+2vw,3rem)]">{name}</h1>
         {tagline && <p className="mt-2 text-[1.05rem] text-sage">{tagline}</p>}
@@ -199,7 +235,7 @@ export function ProductDetail({ product, components = [] }: { product: ProductVi
                   aria-pressed={selected[o.nameEn] === v.value}
                   onClick={() => {
                     setSelected((s) => ({ ...s, [o.nameEn]: v.value }));
-                    const idx = v.image ? product.images.indexOf(v.image) : -1;
+                    const idx = gallery.findIndex((g) => g.kind === "image" && g.src === v.image);
                     if (idx >= 0) setActiveImage(idx);
                   }}
                 >
@@ -211,7 +247,7 @@ export function ProductDetail({ product, components = [] }: { product: ProductVi
           </fieldset>
         ))}
 
-        <div className="mt-6 flex flex-wrap items-center gap-3">
+        <div className="mt-6 flex items-center gap-3">
           <label className="flex items-center gap-2 font-ui text-[0.8rem] font-semibold text-ink-soft" htmlFor="qty">
             {t("shop.qty")}
             <input
@@ -224,9 +260,9 @@ export function ProductDetail({ product, components = [] }: { product: ProductVi
               className="field w-[76px] text-center"
             />
           </label>
-          <button ref={addBtn} type="button" onClick={addToCart} disabled={missingOption} className="btn flex-1 sm:flex-none">
+          <button ref={addBtn} type="button" onClick={addToCart} disabled={missingOption} className="btn flex-1">
             <Icon name={added ? "check" : "plus"} />
-            {added ? t("shop.added") : missingOption ? t("shop.chooseOption", { name: locale === "fr" ? product.options[0]?.nameFr : product.options[0]?.nameEn }) : t("shop.addToCart")}
+            {addLabel}
           </button>
         </div>
         {cart.count > 0 && (
@@ -235,8 +271,28 @@ export function ProductDetail({ product, components = [] }: { product: ProductVi
           </Link>
         )}
 
+        <ul className="mt-5 flex flex-col gap-1.5 text-[0.88rem] text-ink-soft">
+          <li className="flex gap-2">
+            <Icon name="check" className="mt-1 h-3.5 w-3.5 flex-none text-terra" />
+            {t("shop.deliveryShort", { wmin: SHIPPING.totalWeeks.min, wmax: SHIPPING.totalWeeks.max })}
+          </li>
+          <li className="flex gap-2">
+            <Icon name="check" className="mt-1 h-3.5 w-3.5 flex-none text-terra" />
+            {t("shop.shippingRule", {
+              flat: formatMoneyFromCents(SHIPPING.flatCents, locale),
+              free: formatWholeDollars(SHIPPING.freeThresholdCents, locale),
+            })}
+          </li>
+          <li className="flex gap-2">
+            <Icon name="check" className="mt-1 h-3.5 w-3.5 flex-none text-terra" />
+            {t(product.tags.includes("hygiene") ? "shop.returnsShortHygiene" : "shop.returnsShort", { days: POLICY.returnDays })}
+          </li>
+        </ul>
+      </div>
+
+      <div className="pdp__details flex flex-col gap-8">
         {components.length > 0 && (
-          <div className="mt-8 border-t border-[var(--line)] pt-6">
+          <div>
             <h2 className="mb-3 text-[1.25rem]">{t("shop.inside")}</h2>
             <ul className="grid grid-cols-2 gap-3 sm:grid-cols-4">
               {components.map((c) => {
@@ -259,49 +315,67 @@ export function ProductDetail({ product, components = [] }: { product: ProductVi
           </div>
         )}
 
-        {description && (
+        {intro && (
           <div
-            className="prose mt-8 border-t border-[var(--line)] pt-6"
+            className="prose"
             // Description HTML is authored by the owner in /admin (trusted).
-            dangerouslySetInnerHTML={{ __html: description }}
+            dangerouslySetInnerHTML={{ __html: intro }}
           />
         )}
 
-        <div className="mt-8 rounded-[var(--radius-card)] bg-warm-white p-5 text-[0.92rem] text-ink-soft">
-          <h3 className="mb-3 text-[1.1rem] text-ink">{t("shop.deliveryTitle")}</h3>
-          <ul className="flex flex-col gap-2">
-            <li className="flex gap-2">
-              <Icon name="check" className="mt-1 h-4 w-4 flex-none text-terra" />
-              {t("shop.delivery", {
-                pmin: SHIPPING.processingDays.min,
-                pmax: SHIPPING.processingDays.max,
-                dmin: SHIPPING.deliveryBusinessDays.min,
-                dmax: SHIPPING.deliveryBusinessDays.max,
-                wmin: SHIPPING.totalWeeks.min,
-                wmax: SHIPPING.totalWeeks.max,
-              })}
-            </li>
-            <li className="flex gap-2">
-              <Icon name="check" className="mt-1 h-4 w-4 flex-none text-terra" />
-              {t("shop.shippingRule", {
-                flat: formatMoneyFromCents(SHIPPING.flatCents, locale),
-                free: formatWholeDollars(SHIPPING.freeThresholdCents, locale),
-              })}
-            </li>
-            <li className="flex gap-2">
-              <Icon name="check" className="mt-1 h-4 w-4 flex-none text-terra" />
-              {t("shop.returns", { days: POLICY.returnDays })}
-            </li>
-            {!product.tags.includes("hygiene") && (
-              <li className="flex gap-2">
-                <Icon name="check" className="mt-1 h-4 w-4 flex-none text-terra" />
-                {t("shop.warranty", { months: POLICY.warrantyMonths })}
-              </li>
-            )}
-          </ul>
-          <p className="mt-4 text-[0.8rem] text-ink-faint">{t("shop.cosmeticNote")}</p>
+        <div className="pdp-acc">
+          {sections.map((s, i) => (
+            <details key={s.title} className="pdp-acc__item" open={i === 0 || SPEC_SECTION.test(s.title)}>
+              <summary>{s.title}</summary>
+              <div className="pdp-acc__body prose" dangerouslySetInnerHTML={{ __html: s.html }} />
+            </details>
+          ))}
+          <details className="pdp-acc__item">
+            <summary>{t("shop.deliveryTitle")}</summary>
+            <div className="pdp-acc__body text-[0.95rem] text-ink-soft">
+              <ul className="flex flex-col gap-2">
+                <li className="flex gap-2">
+                  <Icon name="check" className="mt-1 h-4 w-4 flex-none text-terra" />
+                  {t("shop.delivery", {
+                    pmin: SHIPPING.processingDays.min,
+                    pmax: SHIPPING.processingDays.max,
+                    dmin: SHIPPING.deliveryBusinessDays.min,
+                    dmax: SHIPPING.deliveryBusinessDays.max,
+                    wmin: SHIPPING.totalWeeks.min,
+                    wmax: SHIPPING.totalWeeks.max,
+                  })}
+                </li>
+                <li className="flex gap-2">
+                  <Icon name="check" className="mt-1 h-4 w-4 flex-none text-terra" />
+                  {t("shop.returns", { days: POLICY.returnDays })}
+                </li>
+                {!product.tags.includes("hygiene") && (
+                  <li className="flex gap-2">
+                    <Icon name="check" className="mt-1 h-4 w-4 flex-none text-terra" />
+                    {t("shop.warranty", { months: POLICY.warrantyMonths })}
+                  </li>
+                )}
+              </ul>
+              <p className="mt-4 text-[0.8rem] text-ink-faint">{t("shop.cosmeticNote")}</p>
+            </div>
+          </details>
         </div>
       </div>
+
+      {barShown !== null &&
+        createPortal(
+          <div className={cn("pdp-bar", barShown && "is-shown")}>
+            <div className="min-w-0">
+              <p className="pdp-bar__name">{name}</p>
+              <p className="pdp-bar__price">{formatMoneyFromCents(product.priceCents, locale)}</p>
+            </div>
+            <button type="button" onClick={addToCart} disabled={missingOption} className="btn btn--sm flex-none">
+              <Icon name={added ? "check" : "plus"} />
+              {addLabel}
+            </button>
+          </div>,
+          document.body,
+        )}
     </div>
   );
 }
