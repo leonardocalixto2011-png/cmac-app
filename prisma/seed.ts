@@ -1862,8 +1862,8 @@ const SETS: SeedSet[] = [
     slug: "set-christmas-glow",
     nameEn: "The Christmas Glow Box",
     nameFr: "Le coffret Éclat de Noël",
-    tagline: "The LED mask, wrapped for the tree. Christmas edition",
-    taglineFr: "Le masque LED, emballé pour le sapin. Édition de Noël",
+    tagline: "The LED mask, for under the tree. Christmas edition",
+    taglineFr: "Le masque LED, pour sous le sapin. Édition de Noël",
     priceCents: 7599,
     prevPriceCents: 7499,
     tags: ["sets", "glow", "christmas", "gift", "limited", "new"],
@@ -2276,6 +2276,12 @@ async function main() {
     if (review) {
       update.priceCents = review[2];
       notes.push(`price ${review[1] / 100} → ${review[2] / 100} (market review)`);
+    }
+    // No gift wrapping exists: the parcel comes as CJ ships it. /admin edits win, as for copy.
+    if (existing.tagline === "The LED mask, wrapped for the tree. Christmas edition") {
+      update.tagline = p.tagline;
+      update.taglineFr = p.taglineFr;
+      notes.push("tagline");
     }
     const prevCopy = COPY_REVIEW[p.slug];
     if (prevCopy && existing.descriptionEn === prevCopy.en && existing.descriptionFr === prevCopy.fr) {

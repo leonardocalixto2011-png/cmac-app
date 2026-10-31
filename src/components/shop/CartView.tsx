@@ -12,6 +12,7 @@ import { Icon } from "@/components/Icon";
 import { formatMoneyFromCents, formatWholeDollars, cn } from "@/lib/utils";
 import { BRAND, GIFT, SHIPPING, giftEarned } from "@/lib/brand";
 import { PICKUP } from "@/lib/pickup";
+import { christmasOrderDay, christmasPhase } from "@/lib/season";
 import { getTier, pointsFor, type TierId } from "@/lib/loyalty-rules";
 import { trackAddToCart, trackInitiateCheckout } from "@/lib/pixels";
 
@@ -46,6 +47,7 @@ export function CartView({
   convoy?: { code: string; closesAt: string; deliveryFrom: string; deliveryTo: string; members: number } | null;
 }) {
   const { t, locale } = useLocale();
+  const christmas = christmasPhase();
   const cart = useCart();
   const [pending, start] = useTransition();
   const [error, setError] = useState<string | null>(null);
@@ -171,6 +173,9 @@ export function CartView({
           </dl>
 
           <div className="mt-3 flex flex-col gap-1 rounded-2xl bg-warm-white px-4 py-3 text-[0.85rem] text-sage">
+            {christmas && !pickup && (
+              <p className="font-semibold text-ink">{christmas === "order" ? t("xmas.line", { date: christmasOrderDay(locale) }) : t("xmas.late")}</p>
+            )}
             {member && member.tier !== "glow" && (
               <p className="font-semibold text-ink">
                 {freeFrom === 0

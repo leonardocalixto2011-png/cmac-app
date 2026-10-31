@@ -793,3 +793,52 @@ html.js h2[data-reveal].is-in { transform: none; }
   .pdp-bar, .pdp-acc__item summary::after { transition: none; }
   .pdp-acc__item::details-content { transition: none; }
 }
+
+/* Christmas (src/lib/season.ts): the hero at night, in fir green and gold. */
+.cmac-snow { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.cmac-hero--xmas { background: linear-gradient(160deg, #10241d 0%, #16302a 55%, #234a3c 100%); color: var(--color-cream); }
+.cmac-hero--xmas .cmac-snow { z-index: -1; }
+.cmac-hero--xmas .cmac-hero__veil { background: linear-gradient(90deg, rgb(14 30 24 / 0.72) 0%, rgb(14 30 24 / 0.32) 44%, rgb(14 30 24 / 0) 66%); }
+.cmac-hero--xmas .eyebrow { color: var(--color-gold); }
+.cmac-hero--xmas .cmac-hero__title { color: var(--color-cream); }
+.cmac-hero--xmas .cmac-hero__swap em { color: var(--color-gold); }
+.cmac-hero--xmas .cmac-hero__lead { color: #dfe5de; }
+.cmac-hero--xmas .cmac-hero__link { color: var(--color-cream); }
+.cmac-hero--xmas .cmac-hero__proof { color: #cfd9d0; }
+.cmac-hero--xmas .cmac-hero__proof li:first-child { color: var(--color-cream); font-weight: 600; }
+.cmac-hero--xmas .cmac-hero__proof svg { color: var(--color-gold); }
+.cmac-hero--xmas .cmac-hero__photo { filter: drop-shadow(0 22px 22px rgb(0 0 0 / 0.42)); }
+.cmac-hero--xmas .cmac-hero__slide--led .cmac-hero__photo { filter: drop-shadow(0 0 16px rgba(255, 80, 60, 0.5)); }
+.cmac-hero--xmas .cmac-hero__dots button::before { background: rgb(245 241 234 / 0.26); }
+.cmac-hero--xmas .cmac-hero__dots button::after { background: var(--color-gold); }
+.cmac-hero--xmas .cmac-hero__pause { border-color: rgb(245 241 234 / 0.3); background: rgb(16 36 29 / 0.6); color: var(--color-cream); }
+.cmac-hero--xmas .cmac-hero__pause:hover { background: #1b3a2e; }
+.xmas-dates { background: #10241d; color: var(--color-cream); padding: clamp(22px, 3vw, 34px) 0; border-top: 1px solid rgb(217 179 112 / 0.28); }
+.xmas-dates__list { list-style: none; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px 18px; margin-block: 0; }
+.xmas-dates__list li { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.xmas-dates__list strong { font-family: var(--font-display); font-size: clamp(1.1rem, 1rem + 0.5vw, 1.4rem); font-weight: 500; color: var(--color-gold); }
+.xmas-dates__list span { font-size: 0.88rem; line-height: 1.4; color: #cfd9d0; }
+.xmas-dates__note { margin-top: 16px; margin-bottom: 0; font-size: 0.82rem; color: #a9b7ad; }
+.xmas-guide__grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 12px; }
+.xmas-guide__item { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.xmas-guide__item:first-child { grid-column: 1 / -1; }
+.xmas-guide__for { margin: 0; font: 600 0.72rem var(--font-ui); letter-spacing: 0.14em; text-transform: uppercase; color: #2f5a48; }
+.xmas-head { position: relative; overflow: hidden; isolation: isolate; background: linear-gradient(160deg, #10241d 0%, #16302a 60%, #234a3c 100%); color: var(--color-cream); padding: clamp(44px, 7vw, 92px) 0; }
+.xmas-head .cmac-snow { z-index: -1; }
+.xmas-head .eyebrow { color: var(--color-gold); }
+.xmas-head h1 { margin: 12px 0 14px; color: var(--color-cream); font-size: clamp(2.2rem, 1.5rem + 3vw, 3.8rem); }
+.xmas-head p:last-child { max-width: 58ch; margin: 0; color: #dfe5de; line-height: 1.6; }
+@media (min-width: 768px) {
+  .xmas-dates__list { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .xmas-guide__grid { grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 36px 20px; }
+  .xmas-guide__item { grid-column: span 2; }
+  .xmas-guide__item:first-child, .xmas-guide__item:nth-child(2) { grid-column: span 3; }
+}
+@media (min-width: 1180px) {
+  .xmas-guide__grid { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 40px 18px; }
+  .xmas-guide__item, .xmas-guide__item:first-child, .xmas-guide__item:nth-child(2) { grid-column: auto; }
+}
+@media (max-width: 989px) {
+  .cmac-hero--xmas .cmac-hero__veil { background: linear-gradient(180deg, rgb(14 30 24 / 0) 0%, rgb(14 30 24 / 0) 38%, rgb(14 30 24 / 0.72) 60%); }
+}
+.xmas-guide--compact h2 { font-size: clamp(1.75rem, 1.2rem + 2vw, 2.6rem); margin-top: 12px; }

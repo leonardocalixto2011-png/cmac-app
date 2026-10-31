@@ -9,6 +9,7 @@ import { Icon } from "./Icon";
 import { LangToggle } from "./LangToggle";
 import { BRAND } from "@/lib/brand";
 import { cn } from "@/lib/utils";
+import { christmasPhase } from "@/lib/season";
 
 const LINKS = [
   { href: "/shop", key: "nav.shop" },
@@ -22,6 +23,9 @@ export function Nav({ signedIn = false }: { signedIn?: boolean }) {
   const { t } = useLocale();
   const pathname = usePathname();
   const cart = useCart();
+  const links = christmasPhase()
+    ? LINKS.map((l) => (l.href === "/collections/gifts" ? ({ href: "/collections/christmas", key: "nav.christmas" } as const) : l))
+    : LINKS;
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const toggleRef = useRef<HTMLButtonElement>(null);
@@ -63,7 +67,7 @@ export function Nav({ signedIn = false }: { signedIn?: boolean }) {
           </Link>
 
           <nav aria-label={t("nav.home")} className="hidden items-center gap-[0.8rem] lg:flex xl:gap-[clamp(0.9rem,2vw,1.7rem)]">
-            {LINKS.map((l) => (
+            {links.map((l) => (
               <Link
                 key={l.href}
                 href={l.href}
@@ -122,7 +126,7 @@ export function Nav({ signedIn = false }: { signedIn?: boolean }) {
           open ? "translate-y-0" : "-translate-y-[110%]",
         )}
       >
-        {LINKS.map((l) => (
+        {links.map((l) => (
           <Link
             key={l.href}
             href={l.href}

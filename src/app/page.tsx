@@ -1,5 +1,6 @@
 import { listProducts } from "@/lib/shop";
 import { HOME_PICKS, HOME_SETS } from "@/lib/sets";
+import { christmasPhase } from "@/lib/season";
 import { serverLocale } from "@/i18n/server";
 import { faqItems } from "@/content/faq";
 import { SHIPPING } from "@/lib/brand";
@@ -8,6 +9,7 @@ import { JsonLd, faqLd } from "@/components/JsonLd";
 import { Hero, type HeroSlide } from "@/components/sections/Hero";
 import { Sky } from "@/components/motion/Sky";
 import { FeaturedProducts } from "@/components/sections/FeaturedProducts";
+import { ChristmasDates, ChristmasGuide } from "@/components/sections/Christmas";
 import { Routine } from "@/components/sections/Routine";
 import { FounderNote } from "@/components/sections/FounderNote";
 import { Faq } from "@/components/sections/Faq";
@@ -26,12 +28,15 @@ export default async function HomePage() {
   // Transparent, sharpened cut-outs (alpha-0) so the light and the satin show around
   // the product with clean edges.
   const ALPHA = (v: string, slug: string) => `https://res.cloudinary.com/dmlolrov/image/upload/v${v}/cmac/products/${slug}/alpha-0`;
-  const STAGE: [string, HeroSlide["light"], string][] = [
-    ["led-red-light-mask", "led", ALPHA("1791567103", "led-red-light-mask")],
-    ["microcurrent-facial-lift-device", "silver", ALPHA("1791567102", "microcurrent-facial-lift-device")],
-    ["sonic-silicone-cleansing-brush", "rose", ALPHA("1791567127", "sonic-silicone-cleansing-brush")],
+  // At Christmas each device stands for the box built around it, and the caption sells the box.
+  const christmas = christmasPhase();
+  const STAGE: [string, HeroSlide["light"], string, string][] = [
+    ["led-red-light-mask", "led", ALPHA("1791567103", "led-red-light-mask"), "set-christmas-glow"],
+    ["microcurrent-facial-lift-device", "silver", ALPHA("1791567102", "microcurrent-facial-lift-device"), "set-for-mom"],
+    ["sonic-silicone-cleansing-brush", "rose", ALPHA("1791567127", "sonic-silicone-cleansing-brush"), "set-first-glow"],
   ];
-  const slides: HeroSlide[] = STAGE.flatMap(([slug, light, image]) => {
+  const slides: HeroSlide[] = STAGE.flatMap(([device, light, image, box]) => {
+    const slug = christmas ? box : device;
     const p = products.find((x) => x.slug === slug);
     return p
       ? [{ slug, light, image, name: locale === "fr" ? p.nameFr : p.nameEn, price: formatMoneyFromCents(p.priceCents, locale) }]
@@ -53,8 +58,10 @@ export default async function HomePage() {
       <Sky />
       <JsonLd data={faqLd(faq)} />
       <Hero slides={slides} />
+      {christmas && <ChristmasDates />}
+      {christmas && <ChristmasGuide products={products} />}
       <FeaturedProducts products={picks} />
-      <FeaturedProducts products={homeSets} variant="sets" />
+      {!christmas && <FeaturedProducts products={homeSets} variant="sets" />}
       <PriceProof products={products} locale={locale} />
       <FounderNote />
       <Faq limit={4} />

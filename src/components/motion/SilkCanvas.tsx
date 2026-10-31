@@ -68,7 +68,8 @@ export function SilkCanvas({
     if (!canvas) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const gl = canvas.getContext("webgl", { antialias: false, alpha: false, powerPreference: "low-power" });
-    if (!gl) return;
+    // Remounting (React's strict mode in dev) hands back the context the cleanup below lost.
+    if (!gl || gl.isContextLost()) return;
 
     const sh = (type: number, src: string) => {
       const s = gl.createShader(type)!;
@@ -146,6 +147,7 @@ export function SilkCanvas({
       canvas.removeEventListener("webglcontextlost", lost);
       ro.disconnect();
       io.disconnect();
+      delete canvas.dataset.running;
       gl.getExtension("WEBGL_lose_context")?.loseContext();
     };
     // colours are static per mount

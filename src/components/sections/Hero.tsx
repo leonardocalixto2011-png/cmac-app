@@ -8,8 +8,10 @@ import { Icon } from "@/components/Icon";
 import { SHIPPING } from "@/lib/brand";
 import { formatWholeDollars } from "@/lib/utils";
 import { SilkCanvas } from "@/components/motion/SilkCanvas";
+import { Snow } from "@/components/motion/Snow";
 import { cloudinaryLoader } from "@/lib/cloudinary-loader";
 import { useReducedMotion } from "@/lib/motion-fx";
+import { christmasOrderDay, christmasPhase } from "@/lib/season";
 
 /**
  * Opening scene of the evening. A satin surface moves slowly behind three
@@ -19,6 +21,9 @@ import { useReducedMotion } from "@/lib/motion-fx";
  *
  * The rotation pauses while the pointer or focus is on the stage, can be
  * paused with a button (WCAG 2.2.2), and stops by itself after two rounds.
+ *
+ * From Nov 1 to Christmas (src/lib/season.ts) the same scene plays at night: fir-green
+ * satin, snow, and each device stands for the Christmas box built around it.
  */
 export type HeroSlide = {
   slug: string;
@@ -34,9 +39,14 @@ const D = (ms: number) => ({ "--d": `${ms}ms` }) as React.CSSProperties;
 
 export function Hero({ slides }: { slides: HeroSlide[] }) {
   const { t, locale } = useLocale();
-  const words = t("hero.words").split(",").map((w) => w.trim());
-  const titleWords = t("hero.title").split(" ");
+  const christmas = christmasPhase();
+  const copy = (key: string) => (christmas ? `xmas.${key}` : `hero.${key}`);
+  const words = t(copy("words")).split(",").map((w) => w.trim());
+  const titleWords = t(copy("title")).split(" ");
   const free = formatWholeDollars(SHIPPING.freeThresholdCents, locale);
+  const proofs = christmas
+    ? [christmas === "order" ? t("xmas.proofOrder", { date: christmasOrderDay(locale) }) : t("xmas.proofLate"), t("hero.proof1", { free }), t("hero.proof2")]
+    : [t("hero.proof1", { free }), t("hero.proof2"), t("hero.proof3")];
   const [slide, setSlide] = useState(0);
   const [steps, setSteps] = useState(0);
   const [hold, setHold] = useState(false); // pointer or focus on the stage
@@ -61,13 +71,14 @@ export function Hero({ slides }: { slides: HeroSlide[] }) {
   const word = words[slide % words.length] ?? words[0];
 
   return (
-    <section className={`cmac-hero${running ? " is-running" : ""}`} id="top" data-sky="dusk">
-      <SilkCanvas className="cmac-hero__silk" colors={["#efe4d9", "#e2c9b7", "#d6a28d"]} />
+    <section className={`cmac-hero${running ? " is-running" : ""}${christmas ? " cmac-hero--xmas" : ""}`} id="top" data-sky="dusk">
+      <SilkCanvas className="cmac-hero__silk" colors={christmas ? ["#10241d", "#1b3a2e", "#2f5a48"] : ["#efe4d9", "#e2c9b7", "#d6a28d"]} />
       <div className="cmac-hero__veil" aria-hidden="true" />
+      {christmas && <Snow className="cmac-snow" />}
       <div className="wrap cmac-hero__grid">
         <div className="cmac-hero__copy">
           <p className="eyebrow" style={D(0)}>
-            {t("hero.eyebrow")}
+            {t(copy("eyebrow"))}
           </p>
           <h1 className="cmac-hero__title" style={D(80)}>
             {titleWords.map((w, i) => (
@@ -89,20 +100,20 @@ export function Hero({ slides }: { slides: HeroSlide[] }) {
             <span className="sr-only-text">{words[0]}</span>
           </h1>
           <p className="cmac-hero__lead" style={D(200)}>
-            {t("hero.lead")}
+            {t(copy("lead"))}
           </p>
           <div className="cmac-hero__actions" style={D(280)}>
-            <Link className="btn" href="/collections/the-ritual">
-              {t("hero.cta1")}
+            <Link className={christmas ? "btn btn--cream" : "btn"} href={christmas ? "/collections/christmas" : "/collections/the-ritual"}>
+              {t(copy("cta1"))}
               <Icon name="arrow" />
             </Link>
-            <Link className="cmac-hero__link" href="#routine">
-              {t("hero.cta2")}
+            <Link className="cmac-hero__link" href={christmas ? "#dates" : "#routine"}>
+              {t(copy("cta2"))}
               <Icon name="arrow" />
             </Link>
           </div>
           <ul className="cmac-hero__proof" style={D(360)}>
-            {[t("hero.proof1", { free }), t("hero.proof2"), t("hero.proof3")].map((p) => (
+            {proofs.map((p) => (
               <li key={p}>
                 <Icon name="check" />
                 {p}

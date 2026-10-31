@@ -7,7 +7,8 @@ import type { Locale } from "@/i18n/messages";
  *
  * Honesty rules baked in:
  * - A campaign always states what it gives and when it ends. No "today only"
- *   that runs for three weeks, no countdown that resets.
+ *   that runs for three weeks, no countdown that resets. A notice with no code gives
+ *   nothing and so ends nothing: it shows the date that matters in its own text.
  * - Discounts happen through a Stripe promotion code the customer types at
  *   checkout. Listed prices never move, so no "was" price is ever invented
  *   (Competition Act, ordinary selling price).
@@ -33,6 +34,17 @@ export type Promo = {
 
 export const PROMOS: Promo[] = [
   {
+    // No code: the news here is the date. Black Friday week takes over on Nov 20.
+    id: "christmas-order-by-2026",
+    code: null,
+    percentOff: 0,
+    startsAt: "2026-11-01T04:00:00Z",
+    endsAt: "2026-11-20T05:00:00Z",
+    href: "/collections/christmas",
+    en: { label: "Christmas 2026", detail: "Order by November 26 for delivery before Christmas", cta: "See the boxes" },
+    fr: { label: "Noël 2026", detail: "Commandez d'ici le 26 novembre pour une livraison avant Noël", cta: "Voir les coffrets" },
+  },
+  {
     // A week, not a day: Black Friday itself (Nov 27) falls after the Christmas cutoff
     // (Nov 26, from a 2-4 week delivery), so a one-day sale would have discounted
     // exactly the orders that can no longer arrive in time. Starting Nov 20 gives a
@@ -45,7 +57,7 @@ export const PROMOS: Promo[] = [
     percentOff: 20,
     startsAt: "2026-11-20T05:00:00Z",
     endsAt: "2026-11-27T05:00:00Z",
-    href: "/collections/gifts",
+    href: "/collections/christmas",
     en: {
       label: "Black Friday week",
       detail: "20% off every gift set with code BF20. Order by Nov 26 for delivery before Christmas",
@@ -63,7 +75,7 @@ export const PROMOS: Promo[] = [
     percentOff: 20,
     startsAt: "2026-11-27T05:00:00Z",
     endsAt: "2026-12-02T05:00:00Z",
-    href: "/collections/gifts",
+    href: "/collections/christmas",
     en: {
       label: "Black Friday",
       detail: "20% off every gift set with code BF20. Delivery before Christmas is no longer guaranteed",
@@ -74,6 +86,17 @@ export const PROMOS: Promo[] = [
       detail: "20 % de rabais sur tous les coffrets avec le code BF20. Livraison avant Noël non garantie",
       cta: "Voir les coffrets",
     },
+  },
+  {
+    // Still gift shoppers on the site, and we would rather say it than let them find out.
+    id: "christmas-late-2026",
+    code: null,
+    percentOff: 0,
+    startsAt: "2026-12-02T05:00:00Z",
+    endsAt: "2026-12-26T05:00:00Z",
+    href: "/shipping-returns",
+    en: { label: "Christmas", detail: "Orders placed now may arrive after Christmas: delivery takes 2 to 4 weeks", cta: "Delivery details" },
+    fr: { label: "Noël", detail: "Les commandes passées maintenant pourraient arriver après Noël : la livraison prend 2 à 4 semaines", cta: "Détails de livraison" },
   },
   {
     id: "boxing-day-2026",

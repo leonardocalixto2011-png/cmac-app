@@ -70,7 +70,7 @@ export const JOURNAL: Record<Locale, Article[]> = {
         { q: "Can I pay for faster shipping?", a: "No. We offer one shipping speed and we say so plainly, rather than selling an express option we cannot guarantee from an overseas warehouse." },
         { q: "What if it arrives damaged?", a: "Write to us within 7 days with a photo and we replace it or refund it. Our phone number and address are on the Contact page." },
       ],
-      related: ["set-fall-basket", "set-bestie-duo", "set-pink-pop", "set-7am-reset"],
+      related: ["set-christmas-glow", "set-cozy-night", "set-for-mom", "set-silky-hair"],
     },
     {
       slug: "led-mask-canada-price-guide",
@@ -763,7 +763,7 @@ export const JOURNAL: Record<Locale, Article[]> = {
         { q: "Puis-je payer pour une livraison plus rapide ?", a: "Non. Nous offrons une seule vitesse de livraison et nous le disons clairement, plutôt que de vendre une option express que nous ne pourrions pas garantir depuis un entrepôt outre-mer." },
         { q: "Et si le colis arrive endommagé ?", a: "Écrivez-nous dans les 7 jours avec une photo : nous remplaçons ou remboursons. Notre numéro de téléphone et notre adresse sont sur la page Contact." },
       ],
-      related: ["set-fall-basket", "set-bestie-duo", "set-pink-pop", "set-7am-reset"],
+      related: ["set-christmas-glow", "set-cozy-night", "set-for-mom", "set-silky-hair"],
     },
     {
       slug: "led-mask-canada-price-guide",

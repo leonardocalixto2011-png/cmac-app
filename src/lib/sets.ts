@@ -122,7 +122,9 @@ export const SET_CONTENTS: Record<string, SetComponent[]> = {
   ],
 };
 
-/** Order of the four sets featured on the homepage. */
+/** The Christmas boxes, in the order the Christmas guide shows them. */
+export const CHRISTMAS_SETS = ["set-christmas-glow", "set-for-mom", "set-cozy-night", "set-first-glow", "set-silky-hair"] as const;
+
 /** The three sets on the homepage, in order. */
 export const HOME_SETS = ["set-christmas-glow", "set-full-ritual", "set-midnight-glow"] as const;
 

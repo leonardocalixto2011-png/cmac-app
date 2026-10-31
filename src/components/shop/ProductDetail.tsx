@@ -10,6 +10,7 @@ import { Icon } from "@/components/Icon";
 import { formatMoneyFromCents, formatWholeDollars, cn } from "@/lib/utils";
 import { POLICY, SHIPPING } from "@/lib/brand";
 import { splitDescription } from "@/lib/description";
+import { christmasOrderDay, christmasPhase } from "@/lib/season";
 import type { ProductView, SetComponentView } from "@/lib/shop";
 import { trackAddToCart, trackViewContent } from "@/lib/pixels";
 import { announceAdded, flyToCart, useReducedMotion } from "@/lib/motion-fx";
@@ -21,6 +22,7 @@ const INSIDE_SECTION = /^(what's inside|dans le coffret)/i;
 
 export function ProductDetail({ product, components = [] }: { product: ProductView; components?: SetComponentView[] }) {
   const { t, locale } = useLocale();
+  const christmas = christmasPhase();
   const cart = useCart();
 
   useEffect(() => {
@@ -179,7 +181,7 @@ export function ProductDetail({ product, components = [] }: { product: ProductVi
           <>
             <span className="mt-3 inline-flex flex-wrap gap-2">
               <span className="inline-block rounded-full border border-terra px-3 py-0.5 font-ui text-[0.72rem] font-semibold uppercase tracking-[0.12em] text-terra">
-                {t("shop.limited")}
+                {t(product.tags.includes("christmas") ? "shop.limitedChristmas" : "shop.limited")}
               </span>
               <Link
                 href="/glow-club"
@@ -272,6 +274,12 @@ export function ProductDetail({ product, components = [] }: { product: ProductVi
         )}
 
         <ul className="mt-5 flex flex-col gap-1.5 text-[0.88rem] text-ink-soft">
+          {christmas && (
+            <li className="flex gap-2 font-semibold text-ink">
+              <Icon name="gift" className="mt-0.5 h-4 w-4 flex-none text-terra" />
+              {christmas === "order" ? t("xmas.line", { date: christmasOrderDay(locale) }) : t("xmas.late")}
+            </li>
+          )}
           <li className="flex gap-2">
             <Icon name="check" className="mt-1 h-3.5 w-3.5 flex-none text-terra" />
             {t("shop.deliveryShort", { wmin: SHIPPING.totalWeeks.min, wmax: SHIPPING.totalWeeks.max })}
