@@ -1,7 +1,7 @@
 import { BRAND, POLICY, SHIPPING, siteUrl } from "@/lib/brand";
 import { listProducts } from "@/lib/shop";
 import { SET_TAG } from "@/lib/sets";
-import { productReviews } from "@/lib/reviews";
+import { ratingsBySlug } from "@/lib/reviews";
 
 // Rendered per request, cached at the edge for 10 minutes. A build-time prerender kept
 // serving pre-repricing set prices to assistants while the product pages were already
@@ -23,10 +23,7 @@ export async function GET() {
   const singles = products.filter((p) => !p.tags.includes(SET_TAG));
   const sets = products.filter((p) => p.tags.includes(SET_TAG));
 
-  const ratings = await Promise.all(
-    products.map(async (p) => [p.slug, await productReviews(p.slug, 0).catch(() => ({ count: 0, average: 0, reviews: [] }))] as const),
-  );
-  const ratingOf = new Map(ratings);
+  const ratingOf = await ratingsBySlug(products.map((p) => p.slug)).catch(() => new Map<string, { count: number; average: number }>());
 
   const line = (p: (typeof products)[number]) => {
     const r = ratingOf.get(p.slug);

@@ -1,3 +1,4 @@
+import { unstable_cache } from "next/cache";
 import { prisma } from "./prisma";
 import { shippingCentsForTier, type Tier } from "./loyalty-rules";
 import { applyBundle } from "./bundle";
@@ -33,7 +34,7 @@ export type ProductView = {
   active: boolean;
 };
 
-export const COLLECTIONS = ["devices", "gifts", "sets", "hair", "nails", "body", "men", "cozy", "glow", "sculpt", "cool", "essentials", "the-ritual"] as const;
+export const COLLECTIONS = ["devices", "christmas", "gifts", "sets", "hair", "nails", "body", "men", "cozy", "glow", "sculpt", "cool", "essentials", "the-ritual"] as const;
 export type CollectionHandle = (typeof COLLECTIONS)[number];
 
 export function isCollectionHandle(h: string): h is CollectionHandle {
@@ -103,26 +104,41 @@ export function gridReady(products: ProductView[]): ProductView[] {
   return products.filter((p) => !GRID_HIDDEN.has(p.slug));
 }
 
+/** Invalidated by every /admin product edit. */
+export const CATALOG_TAG = "catalog";
+
+/**
+ * The whole active catalogue, read from the database once a day and then served
+ * from Vercel's Data Cache. The layout's locale cookie makes every page dynamic, so
+ * this is the one place that can stop visits (and crawlers) from reading the database:
+ * on Neon's free plan any query keeps the compute awake for 5 minutes, which used up
+ * the 100 CU-hours in October and took the shop down. It also means a shop already
+ * cached keeps showing its products if the database stops answering.
+ *
+ * The commit in the key makes each deploy start from what its seed wrote. Prices at
+ * checkout never come from here: validateCart reads the database.
+ */
+const catalog = unstable_cache(
+  async () => {
+    const rows = await prisma.product.findMany({ where: { active: true }, orderBy: { sortOrder: "asc" } });
+    return rows.map(toView);
+  },
+  ["catalog", process.env.VERCEL_GIT_COMMIT_SHA ?? "local"],
+  { revalidate: 86400, tags: [CATALOG_TAG] },
+);
+
 export async function listProducts(collection?: CollectionHandle): Promise<ProductView[]> {
-  const rows = await prisma.product.findMany({
-    where: {
-      active: true,
-      // "the-ritual" = every single product (bundles excluded); the others are tag-based.
-      // "gifts" reads the singular "gift" tag used on products.
-      ...(collection === "the-ritual"
-        ? { NOT: { tags: { has: SET_TAG } } }
-        : collection
-          ? { tags: { has: collection === "gifts" ? "gift" : collection } }
-          : {}),
-    },
-    orderBy: { sortOrder: "asc" },
-  });
-  return rows.map(toView);
+  const products = await catalog();
+  if (!collection) return products;
+  // "the-ritual" = every single product (bundles excluded); the others are tag-based.
+  if (collection === "the-ritual") return products.filter((p) => !p.tags.includes(SET_TAG));
+  // "gifts" reads the singular "gift" tag used on products.
+  const tag = collection === "gifts" ? "gift" : collection;
+  return products.filter((p) => p.tags.includes(tag));
 }
 
 export async function getProduct(slug: string): Promise<ProductView | null> {
-  const p = await prisma.product.findUnique({ where: { slug } });
-  return p && p.active ? toView(p) : null;
+  return (await catalog()).find((p) => p.slug === slug) ?? null;
 }
 
 export type SetComponentView = {
@@ -137,12 +153,11 @@ export type SetComponentView = {
 export async function getSetComponents(slug: string): Promise<SetComponentView[]> {
   const contents = SET_CONTENTS[slug];
   if (!contents?.length) return [];
-  const rows = await prisma.product.findMany({ where: { slug: { in: contents.map((c) => c.slug) }, active: true } });
+  const products = await catalog();
   return contents.flatMap((c) => {
-    const r = rows.find((x) => x.slug === c.slug);
+    const r = products.find((x) => x.slug === c.slug);
     if (!r) return [];
-    const images = Array.isArray(r.images) ? (r.images as string[]) : [];
-    return [{ slug: r.slug, nameEn: r.nameEn, nameFr: r.nameFr, image: images[0] ?? null, qty: c.qty }];
+    return [{ slug: r.slug, nameEn: r.nameEn, nameFr: r.nameFr, image: r.images[0] ?? null, qty: c.qty }];
   });
 }
 

@@ -3,7 +3,7 @@ import Link from "next/link";
 import { serverT } from "@/i18n/server";
 import { BRAND } from "@/lib/brand";
 import { holidayCutoff } from "@/lib/brand";
-import { openDrop } from "@/lib/drops";
+import { openDropCached } from "@/lib/drops";
 import { activePromo, promoText } from "@/lib/promos";
 
 export const dynamic = "force-dynamic";
@@ -26,7 +26,7 @@ export async function generateMetadata(): Promise<Metadata> {
  */
 export default async function LinksPage() {
   const { t, locale } = await serverT();
-  const drop = await openDrop().catch(() => null);
+  const drop = await openDropCached().catch(() => null);
   const promo = activePromo();
   const cutoff = holidayCutoff();
   const fmt = (d: Date) => d.toLocaleDateString(locale === "fr" ? "fr-CA" : "en-CA", { month: "long", day: "numeric", timeZone: "America/Toronto" });

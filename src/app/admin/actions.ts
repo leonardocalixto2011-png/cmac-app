@@ -1,6 +1,6 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/admin";
 import { signOut } from "@/auth";
@@ -9,6 +9,7 @@ import { normalizeLocale } from "@/i18n/messages";
 import { slugify } from "@/lib/utils";
 import type { OrderStatus } from "@prisma/client";
 import { adjustPoints, creditOrder, reverseOrder } from "@/lib/loyalty";
+import { CATALOG_TAG } from "@/lib/shop";
 
 const ORDER_STATUSES: OrderStatus[] = ["PENDING", "PAID", "FULFILLED", "CANCELLED", "REFUNDED"];
 
@@ -151,6 +152,7 @@ function parseProductInput(data: ProductInput) {
 }
 
 function revalidateShop() {
+  revalidateTag(CATALOG_TAG, { expire: 0 });
   revalidatePath("/");
   revalidatePath("/shop");
   revalidatePath("/shop/[slug]", "page");

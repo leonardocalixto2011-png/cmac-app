@@ -6,6 +6,7 @@
  * content: negative reviews are published too (Competition Act: no curated
  * or fake reviews). Products never show made-up ratings.
  */
+import { unstable_cache } from "next/cache";
 import { prisma } from "./prisma";
 import { orderItems } from "./shop";
 
@@ -22,30 +23,46 @@ export type PublicReview = {
 
 export type ReviewSummary = { count: number; average: number; reviews: PublicReview[] };
 
-export async function productReviews(slug: string, take = 20): Promise<ReviewSummary> {
-  const where = { productSlug: slug, status: "APPROVED" as const };
-  const [agg, reviews] = await Promise.all([
-    prisma.review.aggregate({ where, _avg: { rating: true }, _count: { _all: true } }),
+/** Invalidated when a review is moderated in /admin. */
+export const REVIEWS_TAG = "reviews";
+
+// Every approved review in one cached read, for the same reason as the catalogue in
+// shop.ts: a product page must not wake the database. The cache stores JSON, so
+// createdAt comes back as a string.
+const approvedReviews = unstable_cache(
+  () =>
     prisma.review.findMany({
-      where,
+      where: { status: "APPROVED" },
       orderBy: { createdAt: "desc" },
-      take,
-      select: { id: true, rating: true, title: true, body: true, authorName: true, locale: true, incentivized: true, createdAt: true },
+      select: { id: true, productSlug: true, rating: true, title: true, body: true, authorName: true, locale: true, incentivized: true, createdAt: true },
     }),
-  ]);
-  return { count: agg._count._all, average: Math.round((agg._avg.rating ?? 0) * 10) / 10, reviews };
+  ["approved-reviews"],
+  { revalidate: 86400, tags: [REVIEWS_TAG] },
+);
+
+function averageOf(rows: { rating: number }[]) {
+  return rows.length ? Math.round((rows.reduce((sum, r) => sum + r.rating, 0) / rows.length) * 10) / 10 : 0;
+}
+
+export async function productReviews(slug: string, take = 20): Promise<ReviewSummary> {
+  const rows = (await approvedReviews()).filter((r) => r.productSlug === slug);
+  return {
+    count: rows.length,
+    average: averageOf(rows),
+    reviews: rows.slice(0, take).map(({ productSlug: _slug, ...r }) => ({ ...r, createdAt: new Date(r.createdAt) })),
+  };
 }
 
 /** Ratings for many products at once (product cards). */
 export async function ratingsBySlug(slugs: string[]): Promise<Map<string, { count: number; average: number }>> {
   if (!slugs.length) return new Map();
-  const rows = await prisma.review.groupBy({
-    by: ["productSlug"],
-    where: { productSlug: { in: slugs }, status: "APPROVED" },
-    _avg: { rating: true },
-    _count: { _all: true },
-  });
-  return new Map(rows.map((r) => [r.productSlug, { count: r._count._all, average: Math.round((r._avg.rating ?? 0) * 10) / 10 }]));
+  const rows = await approvedReviews();
+  return new Map(
+    slugs.flatMap((slug) => {
+      const own = rows.filter((r) => r.productSlug === slug);
+      return own.length ? [[slug, { count: own.length, average: averageOf(own) }] as const] : [];
+    }),
+  );
 }
 
 /** The order behind a review link, with its reviewable products (one per slug). */

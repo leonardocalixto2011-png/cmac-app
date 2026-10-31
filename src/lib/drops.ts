@@ -14,6 +14,7 @@
  * Convoys close on the 1st and the 15th at 23:59 Montréal time, and the
  * supplier order goes out the next morning.
  */
+import { unstable_cache } from "next/cache";
 import { prisma } from "./prisma";
 import { SHIPPING } from "./brand";
 
@@ -103,6 +104,21 @@ export async function openDrop(now: Date = new Date()): Promise<DropView | null>
     console.error("[drops] openDrop failed", err);
     return null;
   }
+}
+
+const cachedDrop = unstable_cache(() => openDrop(), ["open-drop"], { revalidate: 3600 });
+
+/**
+ * openDrop for public pages crawlers visit (/convoi, /liens): an hour old at most, so
+ * those pages do not wake the database. Falls through to the live one once the cached
+ * drop has closed. The cart and checkout keep calling openDrop.
+ */
+export async function openDropCached(now: Date = new Date()): Promise<DropView | null> {
+  const drop = await cachedDrop();
+  if (!drop) return null;
+  const closesAt = new Date(drop.closesAt);
+  if (closesAt <= now) return openDrop(now);
+  return { ...drop, closesAt, ordersOn: new Date(drop.ordersOn), deliveryFrom: new Date(drop.deliveryFrom), deliveryTo: new Date(drop.deliveryTo) };
 }
 
 /** Same as openDrop but never creates anything (used where a read-only view is enough). */

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { serverLocale } from "@/i18n/server";
-import { openDrop } from "@/lib/drops";
+import { openDropCached } from "@/lib/drops";
 import { SHIPPING } from "@/lib/brand";
 import { formatMoneyFromCents } from "@/lib/utils";
 import { JsonLd, breadcrumbLd, faqLd } from "@/components/JsonLd";
@@ -71,7 +71,7 @@ export default async function ConvoyPage() {
   const locale = await serverLocale();
   const fr = locale === "fr";
   const c = COPY[locale];
-  const drop = await openDrop().catch(() => null);
+  const drop = await openDropCached().catch(() => null);
   // Always Montréal time: a convoy closes at 23:59 local, and UTC would show the next day.
   const date = (d: Date) => d.toLocaleDateString(fr ? "fr-CA" : "en-CA", { month: "long", day: "numeric", timeZone: "America/Toronto" });
   const fee = formatMoneyFromCents(SHIPPING.flatCents, locale);

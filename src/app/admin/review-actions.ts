@@ -1,8 +1,9 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/admin";
+import { REVIEWS_TAG } from "@/lib/reviews";
 
 export async function moderateReview(id: string, status: "APPROVED" | "REJECTED", incentivized: boolean) {
   await requireAdmin();
@@ -11,6 +12,7 @@ export async function moderateReview(id: string, status: "APPROVED" | "REJECTED"
     where: { id },
     data: { status, incentivized, approvedAt: status === "APPROVED" ? new Date() : null },
   });
+  revalidateTag(REVIEWS_TAG, { expire: 0 });
   revalidatePath("/admin/reviews");
   revalidatePath(`/shop/${r.productSlug}`);
 }
