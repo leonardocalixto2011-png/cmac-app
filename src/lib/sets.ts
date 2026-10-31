@@ -125,6 +125,21 @@ export const SET_CONTENTS: Record<string, SetComponent[]> = {
 /** The Christmas boxes, in the order the Christmas guide shows them. */
 export const CHRISTMAS_SETS = ["set-christmas-glow", "set-for-mom", "set-cozy-night", "set-first-glow", "set-silky-hair"] as const;
 
+/**
+ * The January page, in order. By then people shop for themselves, with Christmas money.
+ * Only products with a photo that passes gridReady, or they vanish from the page.
+ */
+export const NEW_YEAR_PICKS = [
+  "set-7am-reset",
+  "set-midnight-glow",
+  "led-red-light-mask",
+  "sonic-silicone-cleansing-brush",
+  "electric-scalp-massager",
+  "satin-beauty-sleep-set",
+  "electric-makeup-brush-cleaner",
+  "gel-manicure-gloves",
+] as const;
+
 /** The three sets on the homepage, in order. */
 export const HOME_SETS = ["set-christmas-glow", "set-full-ritual", "set-midnight-glow"] as const;
 

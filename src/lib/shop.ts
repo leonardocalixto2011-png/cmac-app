@@ -2,7 +2,7 @@ import { unstable_cache } from "next/cache";
 import { prisma } from "./prisma";
 import { shippingCentsForTier, type Tier } from "./loyalty-rules";
 import { applyBundle } from "./bundle";
-import { SET_CONTENTS, SET_TAG } from "./sets";
+import { NEW_YEAR_PICKS, SET_CONTENTS, SET_TAG } from "./sets";
 
 export type ProductOptionValue = {
   value: string;
@@ -34,7 +34,7 @@ export type ProductView = {
   active: boolean;
 };
 
-export const COLLECTIONS = ["devices", "christmas", "gifts", "sets", "hair", "nails", "body", "men", "cozy", "glow", "sculpt", "cool", "essentials", "the-ritual"] as const;
+export const COLLECTIONS = ["devices", "christmas", "new-year", "gifts", "sets", "hair", "nails", "body", "men", "cozy", "glow", "sculpt", "cool", "essentials", "the-ritual"] as const;
 export type CollectionHandle = (typeof COLLECTIONS)[number];
 
 export function isCollectionHandle(h: string): h is CollectionHandle {
@@ -132,6 +132,7 @@ export async function listProducts(collection?: CollectionHandle): Promise<Produ
   if (!collection) return products;
   // "the-ritual" = every single product (bundles excluded); the others are tag-based.
   if (collection === "the-ritual") return products.filter((p) => !p.tags.includes(SET_TAG));
+  if (collection === "new-year") return NEW_YEAR_PICKS.flatMap((slug) => products.filter((p) => p.slug === slug));
   // "gifts" reads the singular "gift" tag used on products.
   const tag = collection === "gifts" ? "gift" : collection;
   return products.filter((p) => p.tags.includes(tag));

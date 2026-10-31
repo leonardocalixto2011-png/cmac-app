@@ -2,6 +2,8 @@ import { describe, expect, it } from "vitest";
 import { holidayCutoff } from "@/lib/brand";
 import { activePromo, PROMOS } from "@/lib/promos";
 import { CHRISTMAS, christmasOrderDay, christmasPhase } from "@/lib/season";
+import { GRID_HIDDEN } from "@/lib/shop";
+import { NEW_YEAR_PICKS } from "@/lib/sets";
 
 describe("christmasPhase", () => {
   it("stays off for Halloween and switches on at midnight in Montréal", () => {
@@ -41,6 +43,11 @@ describe("the campaign bar through the season", () => {
     expect(at("2026-11-28T12:00:00Z")).toBe("black-friday-2026");
     expect(at("2026-12-10T12:00:00Z")).toBe("christmas-late-2026");
     expect(at("2026-12-27T12:00:00Z")).toBe("boxing-day-2026");
+    expect(at("2027-01-10T12:00:00Z")).toBe("new-year-2027");
+  });
+
+  it("sends the January bars to a page that has something on it", () => {
+    expect(NEW_YEAR_PICKS.filter((slug) => GRID_HIDDEN.has(slug))).toEqual([]);
   });
 
   it("asks Stripe only for campaigns that have a code", () => {

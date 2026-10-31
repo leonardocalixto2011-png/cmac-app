@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { gridReady, isCollectionHandle, listProducts } from "@/lib/shop";
+import { christmasPhase } from "@/lib/season";
 import { serverT } from "@/i18n/server";
 import { ProductGrid } from "@/components/shop/ProductGrid";
 import { ChristmasDates, ChristmasGuide } from "@/components/sections/Christmas";
@@ -27,10 +28,12 @@ export default async function CollectionPage({ params }: { params: Promise<{ han
   const { handle } = await params;
   if (!isCollectionHandle(handle)) notFound();
   const { t, locale } = await serverT();
-  const products = gridReady(await listProducts(handle));
+  const listed = gridReady(await listProducts(handle));
+  // Fall pieces stay on sale until they retire, but no pumpkins in a Christmas gift guide.
+  const products = handle === "gifts" && christmasPhase() ? listed.filter((p) => !p.tags.includes("fall")) : listed;
 
   if (handle === "christmas") {
-    const stocking = gridReady(await listProducts("gifts")).filter((p) => p.priceCents < 2500);
+    const stocking = gridReady(await listProducts("gifts")).filter((p) => p.priceCents < 2500 && !p.tags.includes("fall"));
     return (
       <>
         <JsonLd data={itemListLd(t(`coll.${handle}.t`), products, locale)} />

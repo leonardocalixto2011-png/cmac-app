@@ -104,7 +104,7 @@ export const PROMOS: Promo[] = [
     percentOff: 25,
     startsAt: "2026-12-26T05:00:00Z",
     endsAt: "2027-01-05T05:00:00Z",
-    href: "/collections/gifts",
+    href: "/collections/new-year",
     en: {
       label: "Boxing Week",
       detail: "25% off sets, and the new-year restock starts here — code BOXING25",
@@ -115,6 +115,17 @@ export const PROMOS: Promo[] = [
       detail: "25 % de rabais sur les coffrets, et on repart l'année du bon pied — code BOXING25",
       cta: "Voir la vente",
     },
+  },
+  {
+    // January is when people buy for themselves. Nothing off: the sale ended on the 4th.
+    id: "new-year-2027",
+    code: null,
+    percentOff: 0,
+    startsAt: "2027-01-05T05:00:00Z",
+    endsAt: "2027-01-28T05:00:00Z",
+    href: "/collections/new-year",
+    en: { label: "New year", detail: "A short routine to start the year, done at home", cta: "See the routine" },
+    fr: { label: "Nouvelle année", detail: "Une routine courte pour commencer l'année, à la maison", cta: "Voir la routine" },
   },
   {
     id: "galentines-2027",
