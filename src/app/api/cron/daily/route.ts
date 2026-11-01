@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { timingSafeEqual } from "node:crypto";
 import { runBirthdayRewards } from "@/lib/birthdays";
 import { runCheckoutReminders, runReviewRequests } from "@/lib/followups";
+import { runGiftCards } from "@/lib/gift-cards";
 import { submitIndexNow } from "@/lib/indexnow";
 
 export const dynamic = "force-dynamic";
@@ -26,7 +27,7 @@ async function step<T>(name: string, fn: () => Promise<T>): Promise<T | { error:
 
 /**
  * Daily jobs (vercel.json cron, one run a day on the Hobby plan): Glow Club
- * birthday rewards, checkout reminders, review requests, and an IndexNow ping
+ * birthday rewards, gift cards, checkout reminders, review requests, and an IndexNow ping
  * so Bing — and the assistants that search through it — see price and guide
  * changes in hours rather than whenever a recrawl happens to come round. Each
  * job is isolated so one failure doesn't block the others, which matters most
@@ -39,6 +40,7 @@ export async function GET(req: NextRequest) {
   if (!authorized(req, secret)) return NextResponse.json({ error: "unauthorized" }, { status: 401 });
   const result = {
     birthdays: await step("birthdays", () => runBirthdayRewards()),
+    giftCards: await step("gift cards", () => runGiftCards()),
     checkoutReminders: await step("checkout reminders", () => runCheckoutReminders()),
     reviewRequests: await step("review requests", () => runReviewRequests()),
     indexNow: await step("indexnow", () => submitIndexNow()),

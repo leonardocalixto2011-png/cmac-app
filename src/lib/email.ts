@@ -23,6 +23,9 @@ import { TIERS, merchandiseCents, pointsFor, tierFor } from "./loyalty-rules";
 import { C, SANS, esc, eyebrow, h1, layout, panel, transactionalFooter } from "./email-kit";
 import {
   renderAccountWelcome,
+  renderGiftCard,
+  renderGiftCardBalance,
+  renderGiftCardReceipt,
   renderOrderConfirmation,
   renderOwnerOrder,
   renderPasswordReset,
@@ -382,6 +385,48 @@ export async function sendReferralBonus(
 ): Promise<boolean> {
   const m = renderReferralBonus({ locale, ...data });
   return sendEmail({ to, subject: m.subject, html: m.html, text: m.text, replyTo: BRAND.email });
+}
+
+export async function sendGiftCard(
+  to: string,
+  locale: Locale,
+  data: { toName: string | null; fromName: string | null; message: string | null; balanceCents: number; code: string },
+): Promise<boolean> {
+  const m = renderGiftCard({ locale, ...data });
+  return sendEmail({ to, subject: m.subject, html: m.html, text: m.text, replyTo: BRAND.email });
+}
+
+export async function sendGiftCardReceipt(
+  to: string,
+  locale: Locale,
+  data: { name: string | null; toName: string | null; toEmail: string; amountCents: number; code: string; sendAt: Date | null },
+): Promise<boolean> {
+  const m = renderGiftCardReceipt({ locale, ...data });
+  return sendEmail({ to, subject: m.subject, html: m.html, text: m.text, replyTo: BRAND.email });
+}
+
+export async function sendGiftCardBalance(to: string, locale: Locale, data: { code: string; balanceCents: number }): Promise<boolean> {
+  const m = renderGiftCardBalance({ locale, ...data });
+  return sendEmail({ to, subject: m.subject, html: m.html, text: m.text, replyTo: BRAND.email });
+}
+
+/** A short note, no code: the owner has no need for it in an inbox, and /admin/gift-cards shows it. */
+export async function sendOwnerGiftCardNotice(i: { amountCents: number; buyerEmail: string | null; toEmail: string | null; sendAt: Date | null }): Promise<boolean> {
+  const to = ownerNotifyAddresses();
+  if (to.length === 0) return false;
+  const amount = `$${(i.amountCents / 100).toFixed(2)}`;
+  const subject = `Gift card sold: ${amount}`;
+  const lines = [`Buyer: ${i.buyerEmail ?? "unknown"}`, `Goes to: ${i.toEmail ?? "the buyer"}`, `Send date: ${i.sendAt ? i.sendAt.toISOString().slice(0, 10) : "right away"}`];
+  return sendEmail({ to, subject, html: frame("en", subject, lines.map((l) => `<p>${esc(l)}</p>`).join("")), text: lines.join("\n") });
+}
+
+/** The balance on a card could not be updated after a paid order: needs a human. */
+export async function sendOwnerGiftCardProblem(reference: string): Promise<boolean> {
+  const to = ownerNotifyAddresses();
+  if (to.length === 0) return false;
+  const subject = `Gift card problem on order ${reference.slice(-8).toUpperCase()}`;
+  const text = "An order was paid with a gift card, but its balance could not be updated. Check the card in /admin/gift-cards against the order.";
+  return sendEmail({ to, subject, html: frame("en", subject, `<p>${esc(text)}</p>`), text });
 }
 
 export async function sendRewardCode(

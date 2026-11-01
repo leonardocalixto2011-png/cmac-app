@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
+import { cookies } from "next/headers";
 import { serverT } from "@/i18n/server";
 import { CartView } from "@/components/shop/CartView";
 import { currentMemberTier } from "@/lib/account";
 import { subscriberStatus } from "@/lib/newsletter";
 import { listProducts, restoreCartLines } from "@/lib/shop";
 import { openDrop } from "@/lib/drops";
+import { REFERRAL_COOKIE } from "@/lib/referrals";
 import type { CartAddon } from "@/components/shop/CartView";
 
 export const dynamic = "force-dynamic";
@@ -20,6 +22,7 @@ export default async function CartPage({ searchParams }: { searchParams: Promise
   const drop = await openDrop().catch(() => null);
   // Member perks are resolved server-side from the session; checkout re-checks them.
   const member = await currentMemberTier().catch(() => null);
+  const referred = (await cookies()).has(REFERRAL_COOKIE);
   const sub = member ? await subscriberStatus(member.email).catch(() => null) : null;
   // One-click add-ons for the free-shipping nudge: single products without options, under $40.
   const addons: CartAddon[] = (await listProducts("the-ritual").catch(() => []))
@@ -33,6 +36,7 @@ export default async function CartPage({ searchParams }: { searchParams: Promise
           subscribed={sub === "CONFIRMED" || sub === "PENDING"}
           addons={addons}
           restore={restored}
+          referred={referred}
           convoy={
             drop
               ? {

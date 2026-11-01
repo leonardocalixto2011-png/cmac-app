@@ -107,8 +107,8 @@ export function Hero({ slides }: { slides: HeroSlide[] }) {
               {t(copy("cta1"))}
               <Icon name="arrow" />
             </Link>
-            <Link className="cmac-hero__link" href={christmas ? "#dates" : "#routine"}>
-              {t(copy("cta2"))}
+            <Link className="cmac-hero__link" href={christmas === "late" ? "/gift-card" : christmas ? "#dates" : "#routine"}>
+              {christmas === "late" ? t("gift.heroLink") : t(copy("cta2"))}
               <Icon name="arrow" />
             </Link>
           </div>

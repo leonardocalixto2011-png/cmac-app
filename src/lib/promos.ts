@@ -89,14 +89,15 @@ export const PROMOS: Promo[] = [
   },
   {
     // Still gift shoppers on the site, and we would rather say it than let them find out.
+    // The card is what they can still give in time, so that's where the bar leads.
     id: "christmas-late-2026",
     code: null,
     percentOff: 0,
     startsAt: "2026-12-02T05:00:00Z",
     endsAt: "2026-12-26T05:00:00Z",
-    href: "/shipping-returns",
-    en: { label: "Christmas", detail: "Orders placed now may arrive after Christmas: delivery takes 2 to 4 weeks", cta: "Delivery details" },
-    fr: { label: "Noël", detail: "Les commandes passées maintenant pourraient arriver après Noël : la livraison prend 2 à 4 semaines", cta: "Détails de livraison" },
+    href: "/gift-card",
+    en: { label: "Christmas", detail: "Parcels may arrive after Christmas: delivery takes 2 to 4 weeks. A gift card arrives by email", cta: "See the gift card" },
+    fr: { label: "Noël", detail: "Les colis pourraient arriver après Noël : la livraison prend 2 à 4 semaines. La carte-cadeau, elle, arrive par courriel", cta: "Voir la carte-cadeau" },
   },
   {
     id: "boxing-day-2026",

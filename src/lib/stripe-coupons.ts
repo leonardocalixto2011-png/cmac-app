@@ -62,15 +62,18 @@ export async function createSingleUseCode(
   stripe: Stripe,
   couponId: string,
   code: string,
-  opts: { expiresAt?: Date; metadata?: Record<string, string> } = {},
+  opts: { expiresAt?: Date; metadata?: Record<string, string>; idempotencyKey?: string } = {},
 ): Promise<Stripe.PromotionCode> {
-  return stripe.promotionCodes.create({
-    promotion: { type: "coupon", coupon: couponId },
-    code,
-    max_redemptions: 1,
-    expires_at: opts.expiresAt ? Math.floor(opts.expiresAt.getTime() / 1000) : undefined,
-    metadata: opts.metadata,
-  });
+  return stripe.promotionCodes.create(
+    {
+      promotion: { type: "coupon", coupon: couponId },
+      code,
+      max_redemptions: 1,
+      expires_at: opts.expiresAt ? Math.floor(opts.expiresAt.getTime() / 1000) : undefined,
+      metadata: opts.metadata,
+    },
+    opts.idempotencyKey ? { idempotencyKey: opts.idempotencyKey } : undefined,
+  );
 }
 
 /**

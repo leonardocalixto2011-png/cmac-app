@@ -4,7 +4,7 @@ import { gridReady, isCollectionHandle, listProducts } from "@/lib/shop";
 import { christmasPhase } from "@/lib/season";
 import { serverT } from "@/i18n/server";
 import { ProductGrid } from "@/components/shop/ProductGrid";
-import { ChristmasDates, ChristmasGuide } from "@/components/sections/Christmas";
+import { ChristmasDates, ChristmasGuide, GiftCardBand } from "@/components/sections/Christmas";
 import { Snow } from "@/components/motion/Snow";
 import { JsonLd, breadcrumbLd, itemListLd } from "@/components/JsonLd";
 
@@ -34,6 +34,7 @@ export default async function CollectionPage({ params }: { params: Promise<{ han
 
   if (handle === "christmas") {
     const stocking = gridReady(await listProducts("gifts")).filter((p) => p.priceCents < 2500 && !p.tags.includes("fall"));
+    const late = christmasPhase() === "late";
     return (
       <>
         <JsonLd data={itemListLd(t(`coll.${handle}.t`), products, locale)} />
@@ -49,10 +50,12 @@ export default async function CollectionPage({ params }: { params: Promise<{ han
         <ChristmasDates />
         <section className="section-pad">
           <div className="wrap flex flex-col gap-16">
+            {late && <GiftCardBand />}
             <ChristmasGuide products={products} compact />
             {stocking.length > 0 && (
               <ProductGrid products={stocking} title={t("gifts.band.small")} intro={t("gifts.band.smallD")} eyebrow={t("coll.christmas.t")} showFilters={false} />
             )}
+            {!late && <GiftCardBand />}
           </div>
         </section>
       </>
@@ -93,6 +96,7 @@ export default async function CollectionPage({ params }: { params: Promise<{ han
                   showFilters={false}
                 />
               ))}
+            <GiftCardBand />
           </div>
         ) : (
           <ProductGrid

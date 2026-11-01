@@ -37,6 +37,7 @@ export function CartView({
   addons = [],
   restore = null,
   convoy = null,
+  referred = false,
 }: {
   member?: CartMember;
   subscribed?: boolean;
@@ -45,6 +46,8 @@ export function CartView({
   restore?: CartItem[] | null;
   /** The convoy customers can join right now (shared dispatch date, no shipping fee). */
   convoy?: { code: string; closesAt: string; deliveryFrom: string; deliveryTo: string; members: number } | null;
+  /** A friend's code applies itself at checkout, which hides the field a gift card code goes in. */
+  referred?: boolean;
 }) {
   const { t, locale } = useLocale();
   const christmas = christmasPhase();
@@ -55,6 +58,7 @@ export function CartView({
   const [email, setEmail] = useState("");
   const [joinConvoy, setJoinConvoy] = useState(false);
   const [pickup, setPickup] = useState(false);
+  const [giftCard, setGiftCard] = useState(false);
   const router = useRouter();
 
   // Restore link: replace the cart once, then drop the query string.
@@ -76,7 +80,7 @@ export function CartView({
       const res = await checkout(
         cart.items.map((i) => ({ slug: i.slug, qty: i.qty, selected: i.selected })),
         locale,
-        { newsletter: optIn, email: optIn && !member ? email.trim() : undefined, convoy: joinConvoy && !pickup, pickup },
+        { newsletter: optIn, email: optIn && !member ? email.trim() : undefined, convoy: joinConvoy && !pickup, pickup, giftCard },
       );
       if (res.ok) {
         window.location.href = res.url;
@@ -174,7 +178,17 @@ export function CartView({
 
           <div className="mt-3 flex flex-col gap-1 rounded-2xl bg-warm-white px-4 py-3 text-[0.85rem] text-sage">
             {christmas && !pickup && (
-              <p className="font-semibold text-ink">{christmas === "order" ? t("xmas.line", { date: christmasOrderDay(locale) }) : t("xmas.late")}</p>
+              <p className="font-semibold text-ink">
+                {christmas === "order" ? t("xmas.line", { date: christmasOrderDay(locale) }) : t("xmas.late")}
+                {christmas === "late" && (
+                  <>
+                    {" "}
+                    <Link href="/gift-card" className="text-terra underline underline-offset-2">
+                      {t("gift.lateLink")}
+                    </Link>
+                  </>
+                )}
+              </p>
             )}
             {member && member.tier !== "glow" && (
               <p className="font-semibold text-ink">
@@ -259,6 +273,14 @@ export function CartView({
                 })}
           </p>
           <p className="mt-2 text-[0.8rem] text-ink-faint">{t("shop.taxNote")}</p>
+          {referred ? (
+            <label className="mt-2 flex items-center gap-2 text-[0.82rem] text-ink-soft">
+              <input type="checkbox" checked={giftCard} onChange={(e) => setGiftCard(e.target.checked)} />
+              {t("gift.cartReferred")}
+            </label>
+          ) : (
+            <p className="mt-1 text-[0.8rem] text-ink-faint">{t("gift.cartNote")}</p>
+          )}
           {error && (
             <p className="mt-3 rounded-2xl bg-terra/10 px-4 py-3 text-sm text-terra" role="alert">
               {error}

@@ -4,6 +4,7 @@ import { getStripe } from "@/lib/stripe";
 import { prisma } from "@/lib/prisma";
 import { sendOrderConfirmation, sendOwnerOrderNotice } from "@/lib/email";
 import { normalizeLocale } from "@/i18n/messages";
+import { fulfilGiftCard, redeemGiftCodeSafely } from "@/lib/gift-cards";
 import { creditOrder, markCodesRedeemed } from "@/lib/loyalty";
 import { creditReferrer } from "@/lib/referrals";
 import { subscribeEmail } from "@/lib/newsletter";
@@ -45,6 +46,13 @@ export async function POST(req: NextRequest) {
 
   if (event.type === "checkout.session.completed") {
     const session = event.data.object as Stripe.Checkout.Session;
+    // A gift card is not an order: nothing ships, and points are earned when it's spent.
+    // A 500 makes Stripe retry within the hour, which beats waiting for the daily cron.
+    const giftCardId = session.metadata?.giftCardId;
+    if (giftCardId) {
+      const done = await fulfilGiftCard(giftCardId, session);
+      return NextResponse.json({ received: true }, { status: done ? 200 : 500 });
+    }
     const orderId = session.metadata?.orderId;
     if (!orderId) return NextResponse.json({ received: true });
 
@@ -93,6 +101,7 @@ export async function POST(req: NextRequest) {
     const promoIds = (session.discounts ?? [])
       .map((d) => (typeof d.promotion_code === "string" ? d.promotion_code : d.promotion_code?.id))
       .filter((x): x is string => Boolean(x));
+    await redeemGiftCodeSafely(promoIds, { reference: updated.reference, contactEmail: updated.contactEmail }, discountCents);
     // Glow Club — never let loyalty bookkeeping break the payment webhook.
     try {
       const points = await creditOrder(updated.id);

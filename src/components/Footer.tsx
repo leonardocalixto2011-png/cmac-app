@@ -21,6 +21,7 @@ export function Footer() {
         { href: "/collections/devices", label: t("nav.devices") },
         { href: "/collections/sets", label: t("nav.sets") },
         { href: "/collections/gifts", label: t("nav.gifts") },
+        { href: "/gift-card", label: t("footer.giftCard") },
         { href: "/collections/the-ritual", label: t("coll.the-ritual.t") },
         { href: "/collections/essentials", label: t("nav.essentials") },
       ],

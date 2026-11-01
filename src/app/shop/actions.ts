@@ -36,7 +36,7 @@ async function siteOrigin(): Promise<string> {
 export async function checkout(
   lines: CartLineInput[],
   rawLocale: string,
-  opts: { newsletter?: boolean; email?: string; convoy?: boolean; pickup?: boolean } = {},
+  opts: { newsletter?: boolean; email?: string; convoy?: boolean; pickup?: boolean; giftCard?: boolean } = {},
 ): Promise<CheckoutResult> {
   const locale = normalizeLocale(rawLocale);
   const member = await currentMemberTier().catch(() => null);
@@ -114,10 +114,13 @@ export async function checkout(
   // Referral: a friend who arrived through /r/<code> gets the member's 10 % applied
   // without typing anything. Stripe refuses `discounts` together with
   // `allow_promotion_codes`, and rejects the code for a returning customer, so
-  // we try with it first and fall back to the normal promo-code field.
-  const referral = await cookies()
-    .then((c) => resolveReferral(c.get(REFERRAL_COOKIE)?.value))
-    .catch(() => null);
+  // we try with it first and fall back to the normal promo-code field. A customer who
+  // says they hold a gift card needs that field, so the referral steps aside.
+  const referral = opts.giftCard
+    ? null
+    : await cookies()
+        .then((c) => resolveReferral(c.get(REFERRAL_COOKIE)?.value))
+        .catch(() => null);
   const referredBy = referral && referral.customerId !== member?.customerId ? referral : null;
 
   try {

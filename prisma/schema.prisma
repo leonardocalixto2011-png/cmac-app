@@ -191,6 +191,53 @@ model RewardCode {
 }
 
 // ----------------------------------------------------------------------------
+// Gift cards — stored value, spent as a single-use Stripe promotion code. A card
+// has one balance and one live code at a time: a partial use retires the code and
+// issues a new one for what is left, so the balance can't be spent twice.
+// ----------------------------------------------------------------------------
+
+enum GiftCardStatus {
+  PENDING // checkout started, not paid
+  ACTIVE
+  USED // balance is zero
+  CANCELLED // refunded or voided in /admin/gift-cards
+}
+
+model GiftCard {
+  id                      String         @id @default(cuid())
+  status                  GiftCardStatus @default(PENDING)
+  amountCents             Int
+  balanceCents            Int
+  // Written before Stripe is called, so a retry reuses it (idempotency key)
+  code                    String?        @unique
+  // Null while a code still has to be issued: the daily cron picks those up
+  stripePromotionCodeId   String?        @unique
+  buyerEmail              String?
+  buyerName               String?
+  // What the buyer typed for the card itself
+  fromName                String?
+  toName                  String?
+  toEmail                 String? // empty = the card goes to the buyer
+  message                 String?
+  locale                  String         @default("en")
+  // Null = as soon as it's paid
+  sendAt                  DateTime?
+  sentAt                  DateTime?
+  receiptSentAt           DateTime?
+  // Who to tell about the remaining balance after a partial use
+  balanceNoticeTo         String?
+  // [{ reference, amountCents, at }]
+  uses                    Json           @default("[]")
+  stripeCheckoutSessionId String?
+  stripePaymentIntentId   String?
+  paidAt                  DateTime?
+  createdAt               DateTime       @default(now())
+  updatedAt               DateTime       @updatedAt
+
+  @@index([status])
+}
+
+// ----------------------------------------------------------------------------
 // Convoy ("Le Convoi") — a shared dispatch date. Everyone who joins the same
 // drop is ordered from the supplier on the same day, at quantity prices, and
 // pays no shipping. Parcels stay individual (different addresses); what is

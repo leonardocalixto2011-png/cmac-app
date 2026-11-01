@@ -11,7 +11,7 @@ export type PageContent = { title: string; lead?: string; blocks: Block[]; updat
 
 const FREE = { en: `$${SHIPPING.freeThresholdCents / 100} CAD`, fr: `${SHIPPING.freeThresholdCents / 100} $ CA` };
 const FLAT = { en: `$${(SHIPPING.flatCents / 100).toFixed(2)} CAD`, fr: `${(SHIPPING.flatCents / 100).toFixed(2).replace(".", ",")} $ CA` };
-const LAST_UPDATED = { en: "Last updated: September 2026", fr: "Dernière mise à jour : septembre 2026" };
+const LAST_UPDATED = { en: "Last updated: November 2026", fr: "Dernière mise à jour : novembre 2026" };
 
 export const PAGES: Record<string, Record<Locale, PageContent>> = {
   about: {
@@ -165,6 +165,14 @@ export const PAGES: Record<string, Record<Locale, PageContent>> = {
           ],
         },
         {
+          h: "Gift cards",
+          ul: [
+            `An unused gift card is refunded on request within ${POLICY.returnDays} days of purchase, to the original payment method.`,
+            "A balance of $5 or less is refunded on request at any time.",
+            "A gift card has no expiry date and no fees. An order paid with one is refunded to the gift card.",
+          ],
+        },
+        {
           h: "Refunds",
           ul: [
             `Once we receive and inspect the item, the refund is issued to the original payment method within ${POLICY.refundProcessingDays} business days. Your bank may take a few more days to post it.`,
@@ -215,6 +223,14 @@ export const PAGES: Record<string, Record<Locale, PageContent>> = {
           h: "Comment démarrer un retour",
           p: [
             `Écrivez à ${BRAND.email} avec votre référence de commande et la raison du retour. On vous répond avec les instructions et l'adresse de retour. Les articles retournés sans nous avoir contactés au préalable peuvent être retardés ou refusés.`,
+          ],
+        },
+        {
+          h: "Cartes-cadeaux",
+          ul: [
+            `Une carte-cadeau qui n'a pas servi se rembourse sur demande dans les ${POLICY.returnDays} jours suivant l'achat, sur le mode de paiement d'origine.`,
+            "Un solde de 5 $ ou moins se rembourse sur demande, en tout temps.",
+            "Une carte-cadeau n'a aucune date d'expiration et aucuns frais. Une commande payée avec une carte-cadeau est remboursée sur la carte.",
           ],
         },
         {

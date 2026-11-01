@@ -14,6 +14,8 @@ export const LIMITS = {
   subscribeEmail: { limit: 3, windowMs: 60 * 60_000 },
   subscribeIp: { limit: 12, windowMs: 60 * 60_000 },
   redeem: { limit: 10, windowMs: 60 * 60_000 },
+  giftCardIp: { limit: 10, windowMs: 60 * 60_000 },
+  giftBalanceIp: { limit: 15, windowMs: 60 * 60_000 },
 } as const;
 
 /** Returns true when the call is allowed (and counts it). Fails open if the DB errors. */

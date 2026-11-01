@@ -1102,6 +1102,172 @@ ${sig.html}`;
 }
 
 // ---------------------------------------------------------------------------
+// 4c-bis. Gift cards
+// ---------------------------------------------------------------------------
+
+const giftAmount = (cents: number, l: Locale) => (cents % 100 === 0 ? formatWholeDollars(cents, l) : formatMoneyFromCents(cents, l));
+
+/** The card itself. Names and the message are the buyer's own words: escaped, never styled. */
+export function renderGiftCard(i: {
+  locale: Locale;
+  toName: string | null;
+  fromName: string | null;
+  message: string | null;
+  balanceCents: number;
+  code: string;
+}): RenderedEmail {
+  const l = i.locale;
+  const first = firstNameOf(i.toName);
+  const amount = giftAmount(i.balanceCents, l);
+  const T = fr(l)
+    ? {
+        subject: i.fromName ? `${i.fromName} vous offre une carte-cadeau CMAC Beauty` : "Votre carte-cadeau CMAC Beauty",
+        preheader: `${amount} à dépenser chez CMAC Beauty. Le code est à l'intérieur.`,
+        eyebrow: "Carte-cadeau",
+        hero: first ? `Pour vous, ${NB(first)}.` : "Pour vous.",
+        lead: i.fromName ? `${i.fromName} vous offre ${amount} chez CMAC Beauty.` : `Voici ${amount} à dépenser chez CMAC Beauty.`,
+        label: "Votre carte-cadeau",
+        how: "Au paiement, touchez « Ajouter un code promotionnel » et entrez ce code.",
+        fine: "Aucune date d'expiration · aucuns frais · une carte ou un code promo par commande.",
+        terms: `La carte s'applique aux produits, pas à la livraison, et les produits arrivent en ${SHIPPING.totalWeeks.min} à ${SHIPPING.totalWeeks.max} semaines. S'il reste un solde après une commande, on vous envoie un nouveau code pour le reste. Pour vérifier un solde : ${siteUrl()}/gift-card.`,
+        cta: "Voir la boutique",
+      }
+    : {
+        subject: i.fromName ? `${i.fromName} sent you a CMAC Beauty gift card` : "Your CMAC Beauty gift card",
+        preheader: `${amount} to spend at CMAC Beauty. The code is inside.`,
+        eyebrow: "Gift card",
+        hero: first ? `For you, ${NB(first)}.` : "For you.",
+        lead: i.fromName ? `${i.fromName} is giving you ${amount} at CMAC Beauty.` : `Here's ${amount} to spend at CMAC Beauty.`,
+        label: "Your gift card",
+        how: "At checkout, tap “Add promotion code” and enter this code.",
+        fine: "No expiry date · no fees · one card or promo code per order.",
+        terms: `The card covers products, not shipping, and products arrive in ${SHIPPING.totalWeeks.min} to ${SHIPPING.totalWeeks.max} weeks. If an order leaves a balance, we email you a new code for the rest. To check a balance: ${siteUrl()}/gift-card.`,
+        cta: "See the shop",
+      };
+  const sig = signOff(l);
+  const foot = transactionalFooter(l, "gift-card");
+  const url = utm("/shop", "gift-card");
+  const note = i.message
+    ? panel(para(esc(i.message).replace(/\n/g, "<br>"), { margin: i.fromName ? "0 0 8px" : "0" }) + (i.fromName ? para(esc(i.fromName), { size: 14, margin: "0" }) : ""), { margin: "0 0 26px" })
+    : "";
+  const body = `
+${eyebrow(T.eyebrow)}
+${h1(T.hero)}
+${para(esc(T.lead), { margin: "0 0 26px" })}
+${note}
+${ticket({ label: T.label, headline: amount, code: i.code, note: T.how, fine: T.fine })}
+${para(esc(T.terms), { size: 14, margin: "0 0 26px" })}
+${button(url, T.cta)}
+${spacer(32)}
+${sig.html}`;
+  return {
+    subject: T.subject,
+    preheader: T.preheader,
+    html: layout({ locale: l, title: T.subject, preheader: T.preheader, body, footer: foot.html }),
+    text: [T.hero, "", T.lead, ...(i.message ? ["", i.message, ...(i.fromName ? [`— ${i.fromName}`] : [])] : []), "", `CODE: ${i.code}`, amount, T.how, T.fine, "", T.terms, "", `${T.cta}: ${url}`, "", sig.text, "", foot.text].join("\n"),
+  };
+}
+
+/** To the buyer when the card goes to someone else: proof, and the code in case the card goes astray. */
+export function renderGiftCardReceipt(i: {
+  locale: Locale;
+  name: string | null;
+  toName: string | null;
+  toEmail: string;
+  amountCents: number;
+  code: string;
+  sendAt: Date | null;
+}): RenderedEmail {
+  const l = i.locale;
+  const first = firstNameOf(i.name);
+  const amount = giftAmount(i.amountCents, l);
+  const who = i.toName ? `${i.toName} (${i.toEmail})` : i.toEmail;
+  const day = i.sendAt?.toLocaleDateString(fr(l) ? "fr-CA" : "en-CA", { month: "long", day: "numeric", timeZone: "America/Toronto" });
+  const T = fr(l)
+    ? {
+        subject: `Votre carte-cadeau de ${amount} est confirmée`,
+        preheader: day ? `Elle partira le ${day}.` : "Elle vient de partir.",
+        eyebrow: "Carte-cadeau",
+        hero: first ? `Merci, ${NB(first)}.` : "Merci.",
+        lead: day ? `Votre carte de ${amount} partira le ${day} vers 9 h, à ${who}.` : `Votre carte de ${amount} vient de partir, à ${who}.`,
+        label: "Le code, au cas où",
+        how: "Si le courriel n'arrive pas, vous pouvez transmettre ce code vous-même. Il ne fonctionne qu'une fois.",
+        fine: "Aucune date d'expiration · aucuns frais.",
+      }
+    : {
+        subject: `Your ${amount} gift card is confirmed`,
+        preheader: day ? `It leaves on ${day}.` : "It's on its way.",
+        eyebrow: "Gift card",
+        hero: first ? `Thank you, ${NB(first)}.` : "Thank you.",
+        lead: day ? `Your ${amount} card leaves on ${day} around 9 a.m., to ${who}.` : `Your ${amount} card just left, to ${who}.`,
+        label: "The code, just in case",
+        how: "If the email doesn't arrive, you can pass this code on yourself. It only works once.",
+        fine: "No expiry date · no fees.",
+      };
+  const sig = signOff(l);
+  const foot = transactionalFooter(l, "gift-card");
+  const body = `
+${eyebrow(T.eyebrow)}
+${h1(T.hero)}
+${para(esc(T.lead), { margin: "0 0 26px" })}
+${ticket({ label: T.label, headline: amount, code: i.code, note: T.how, fine: T.fine })}
+${spacer(32)}
+${sig.html}`;
+  return {
+    subject: T.subject,
+    preheader: T.preheader,
+    html: layout({ locale: l, title: T.subject, preheader: T.preheader, body, footer: foot.html }),
+    text: [T.hero, "", T.lead, "", `CODE: ${i.code}`, T.how, T.fine, "", sig.text, "", foot.text].join("\n"),
+  };
+}
+
+/** After a partial use: what's left, under a new code, because the old one is spent. */
+export function renderGiftCardBalance(i: { locale: Locale; code: string; balanceCents: number }): RenderedEmail {
+  const l = i.locale;
+  const amount = giftAmount(i.balanceCents, l);
+  const T = fr(l)
+    ? {
+        subject: `Il vous reste ${amount} sur votre carte-cadeau`,
+        preheader: "Voici votre nouveau code pour le solde.",
+        eyebrow: "Carte-cadeau",
+        hero: `Il vous reste ${amount}.`,
+        lead: "Voici le nouveau code pour le solde de votre carte-cadeau. Il remplace l'ancien, qui ne fonctionne plus.",
+        label: "Votre solde",
+        how: "Au paiement, touchez « Ajouter un code promotionnel » et entrez ce code.",
+        fine: "Aucune date d'expiration · aucuns frais · une carte ou un code promo par commande.",
+        cta: "Voir la boutique",
+      }
+    : {
+        subject: `You have ${amount} left on your gift card`,
+        preheader: "Here's your new code for the balance.",
+        eyebrow: "Gift card",
+        hero: `You have ${amount} left.`,
+        lead: "Here's the new code for the balance on your gift card. It replaces the old one, which no longer works.",
+        label: "Your balance",
+        how: "At checkout, tap “Add promotion code” and enter this code.",
+        fine: "No expiry date · no fees · one card or promo code per order.",
+        cta: "See the shop",
+      };
+  const sig = signOff(l);
+  const foot = transactionalFooter(l, "gift-card");
+  const url = utm("/shop", "gift-card-balance");
+  const body = `
+${eyebrow(T.eyebrow)}
+${h1(T.hero)}
+${para(esc(T.lead), { margin: "0 0 26px" })}
+${ticket({ label: T.label, headline: amount, code: i.code, note: T.how, fine: T.fine })}
+${button(url, T.cta)}
+${spacer(32)}
+${sig.html}`;
+  return {
+    subject: T.subject,
+    preheader: T.preheader,
+    html: layout({ locale: l, title: T.subject, preheader: T.preheader, body, footer: foot.html }),
+    text: [T.hero, "", T.lead, "", `CODE: ${i.code}`, T.how, T.fine, "", `${T.cta}: ${url}`, "", sig.text, "", foot.text].join("\n"),
+  };
+}
+
+// ---------------------------------------------------------------------------
 // 4d. Birthday (15%)
 // ---------------------------------------------------------------------------
 

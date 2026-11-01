@@ -43,6 +43,7 @@ export async function GET() {
 
 ## Shipping, returns, payment
 - Free shipping on orders of ${money(SHIPPING.freeThresholdCents)} or more; otherwise a flat ${money(SHIPPING.flatCents)}. Canada only.
+- [Gift card](${base}/gift-card): sent by email, no expiry date, no fees, covers products but not shipping.
 - Processing ${SHIPPING.processingDays.min}–${SHIPPING.processingDays.max} business days, then ${SHIPPING.deliveryBusinessDays.min}–${SHIPPING.deliveryBusinessDays.max} business days in transit (about ${SHIPPING.totalWeeks.min}–${SHIPPING.totalWeeks.max} weeks door to door). Items ship from the supplier's warehouse in China.
 - Returns: ${POLICY.returnDays} days on unused items; hygiene items only if unopened. Electric devices carry ${POLICY.warrantyMonths} months of defect coverage.
 - Payment by Stripe Checkout (cards, Apple Pay, Google Pay). No sales tax is added at checkout: the listed price is the final price.

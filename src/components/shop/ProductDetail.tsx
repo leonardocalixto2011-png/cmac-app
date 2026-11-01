@@ -277,7 +277,17 @@ export function ProductDetail({ product, components = [] }: { product: ProductVi
           {christmas && (
             <li className="flex gap-2 font-semibold text-ink">
               <Icon name="gift" className="mt-0.5 h-4 w-4 flex-none text-terra" />
-              {christmas === "order" ? t("xmas.line", { date: christmasOrderDay(locale) }) : t("xmas.late")}
+              <span>
+                {christmas === "order" ? t("xmas.line", { date: christmasOrderDay(locale) }) : t("xmas.late")}
+                {christmas === "late" && (
+                  <>
+                    {" "}
+                    <Link href="/gift-card" className="text-terra underline underline-offset-2">
+                      {t("gift.lateLink")}
+                    </Link>
+                  </>
+                )}
+              </span>
             </li>
           )}
           <li className="flex gap-2">

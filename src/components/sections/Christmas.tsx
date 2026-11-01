@@ -33,6 +33,24 @@ export function ChristmasDates() {
   );
 }
 
+/** The way out for a late or undecided buyer. Everything else here ships in weeks. */
+export function GiftCardBand() {
+  const { t } = useLocale();
+  return (
+    <aside className="gift-band">
+      <div>
+        <p className="eyebrow">{t("gift.band.eyebrow")}</p>
+        <h2>{t("gift.band.title")}</h2>
+        <p>{t("gift.band.body")}</p>
+      </div>
+      <Link className="btn" href="/gift-card">
+        {t("gift.band.cta")}
+        <Icon name="arrow" />
+      </Link>
+    </aside>
+  );
+}
+
 /** One box per person on the list. Each card says who it is for before what it is. */
 export function ChristmasGuide({ products, compact = false }: { products: ProductView[]; compact?: boolean }) {
   const { t } = useLocale();
