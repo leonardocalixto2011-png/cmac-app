@@ -73,6 +73,20 @@ const FEED_EXCLUDE = new Set([
   "cozy-fleece-socks",
   "hooded-sherpa-blanket",
   "facial-ice-roller",
+  // Chantelle's Edit stays off the feeds until the samples are in hand.
+  "wine-bow-phone-case",
+  "ornate-hand-mirror",
+  "tortoise-claw-clip",
+  "lace-ruffle-socks",
+  "sunset-glow-lamp",
+  "mini-glow-lamp",
+  "cherry-pearl-phone-chain",
+  "long-ribbon-hair-bow",
+  "pearl-ribbon-choker",
+  "lace-flower-choker",
+  "cherry-drop-earrings",
+  "satin-lace-chemise",
+  "pearl-handle-clutch",
 ]);
 
 /**
