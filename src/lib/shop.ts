@@ -36,6 +36,7 @@ export type ProductView = {
 
 export const COLLECTIONS = ["devices", "christmas", "new-year", "gifts", "sets", "hair", "nails", "body", "men", "cozy", "chantelle", "glow", "sculpt", "cool", "essentials", "the-ritual"] as const;
 export type CollectionHandle = (typeof COLLECTIONS)[number];
+export const UNLISTED_TAG = "chantelle";
 
 export function isCollectionHandle(h: string): h is CollectionHandle {
   return (COLLECTIONS as readonly string[]).includes(h);
@@ -129,9 +130,11 @@ const catalog = unstable_cache(
 
 export async function listProducts(collection?: CollectionHandle): Promise<ProductView[]> {
   const products = await catalog();
-  if (!collection) return products;
+  // Unlisted pieces are reached from their own collection only: never in the shop, feeds, sitemap or llms.txt.
+  const listed = products.filter((p) => !p.tags.includes(UNLISTED_TAG));
+  if (!collection) return listed;
   // "the-ritual" = every single product (bundles excluded); the others are tag-based.
-  if (collection === "the-ritual") return products.filter((p) => !p.tags.includes(SET_TAG));
+  if (collection === "the-ritual") return listed.filter((p) => !p.tags.includes(SET_TAG));
   if (collection === "new-year") return NEW_YEAR_PICKS.flatMap((slug) => products.filter((p) => p.slug === slug));
   // "gifts" reads the singular "gift" tag used on products.
   const tag = collection === "gifts" ? "gift" : collection;
