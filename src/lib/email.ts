@@ -164,7 +164,14 @@ export type OrderEmailData = {
   promoCode?: string | null;
 };
 
-type ProductInfo = { nameEn: string; nameFr: string; image: string | null; supplierSku: string | null; shippingNote: string | null };
+type ProductInfo = {
+  nameEn: string;
+  nameFr: string;
+  image: string | null;
+  supplierSku: string | null;
+  supplierUrl: string | null;
+  shippingNote: string | null;
+};
 
 async function productInfo(slugs: string[]): Promise<Map<string, ProductInfo>> {
   const unique = [...new Set(slugs)];
@@ -172,7 +179,7 @@ async function productInfo(slugs: string[]): Promise<Map<string, ProductInfo>> {
   try {
     const rows = await prisma.product.findMany({
       where: { slug: { in: unique } },
-      select: { slug: true, nameEn: true, nameFr: true, images: true, supplierSku: true, shippingNote: true },
+      select: { slug: true, nameEn: true, nameFr: true, images: true, supplierSku: true, supplierUrl: true, shippingNote: true },
     });
     return new Map(
       rows.map((r) => [
@@ -182,6 +189,7 @@ async function productInfo(slugs: string[]): Promise<Map<string, ProductInfo>> {
           nameFr: r.nameFr,
           image: Array.isArray(r.images) ? ((r.images as string[])[0] ?? null) : null,
           supplierSku: r.supplierSku,
+          supplierUrl: r.supplierUrl,
           shippingNote: r.shippingNote,
         },
       ]),
@@ -326,6 +334,7 @@ export async function sendOwnerOrderNotice(d: OrderEmailData): Promise<void> {
         unitCents: i.priceCents,
         sku: p?.supplierSku ?? null,
         note: p?.shippingNote ?? null,
+        url: p?.supplierUrl ?? null,
         components: (SET_CONTENTS[i.slug] ?? []).map((c) => ({
           name: products.get(c.slug)?.nameEn ?? c.slug,
           qty: c.qty,

@@ -2,7 +2,7 @@ import Link from "next/link";
 import { adminListOrders } from "@/lib/admin";
 import { fmtDateTime } from "@/lib/fmt";
 import { formatMoneyFromCents, cn } from "@/lib/utils";
-import { orderItems, setRecipes, shippingLines } from "@/lib/shop";
+import { orderItems, fulfilmentNotes, shippingLines } from "@/lib/shop";
 import { OrderStatusControl, FulfilForm, ORDER_LABEL } from "@/components/admin/ui";
 
 export const dynamic = "force-dynamic";
@@ -13,8 +13,8 @@ export default async function AdminOrders({ searchParams }: { searchParams: Prom
   const { status } = await searchParams;
   const current = status && FILTERS.includes(status) ? status : "ALL";
   const orders = await adminListOrders({ status: current });
-  // Sets are fulfilled as separate CJ items: show each set’s recipe (its shippingNote).
-  const recipes = await setRecipes(orders.flatMap((o) => orderItems(o.items).map((i) => i.slug)));
+  // What to order from the supplier: a set’s recipe, or a product’s exact option, plus the listing link.
+  const notes = await fulfilmentNotes(orders.flatMap((o) => orderItems(o.items).map((i) => i.slug)));
 
   return (
     <div className="flex flex-col gap-6">
@@ -59,19 +59,31 @@ export default async function AdminOrders({ searchParams }: { searchParams: Prom
                 </div>
 
                 <div className="text-[0.88rem]">
-                  {items.map((it, idx) => (
-                    <p key={idx}>
-                      {it.qty}× {it.nameEn}
-                      {it.optionsEn && Object.values(it.optionsEn).length > 0 && (
-                        <span className="text-ink-faint"> ({Object.values(it.optionsEn).join(", ")})</span>
-                      )}
-                      {recipes.has(it.slug) && (
-                        <span className="mt-1 block rounded-lg bg-cream-2 px-2 py-1 text-[0.75rem] leading-snug text-ink-soft">
-                          <strong>Set: order on CJ ×{it.qty}</strong> · {recipes.get(it.slug)}
-                        </span>
-                      )}
-                    </p>
-                  ))}
+                  {items.map((it, idx) => {
+                    const f = notes.get(it.slug);
+                    return (
+                      <p key={idx}>
+                        {it.qty}× {it.nameEn}
+                        {it.optionsEn && Object.values(it.optionsEn).length > 0 && (
+                          <span className="text-ink-faint"> ({Object.values(it.optionsEn).join(", ")})</span>
+                        )}
+                        {f && (f.note || f.supplierUrl) && (
+                          <span className="mt-1 block rounded-lg bg-cream-2 px-2 py-1 text-[0.75rem] leading-snug text-ink-soft">
+                            {f.isSet && <strong>Set: order on CJ ×{it.qty} · </strong>}
+                            {f.note}
+                            {f.supplierUrl && (
+                              <>
+                                {f.note && " · "}
+                                <a href={f.supplierUrl} target="_blank" rel="noopener" className="text-terra underline">
+                                  Supplier listing ↗
+                                </a>
+                              </>
+                            )}
+                          </span>
+                        )}
+                      </p>
+                    );
+                  })}
                   <p className="mt-2 text-ink-soft">
                     {formatMoneyFromCents(o.subtotalCents, "en")} + {o.shippingCents === 0 ? "free shipping" : formatMoneyFromCents(o.shippingCents, "en")} ={" "}
                     <strong className="text-ink">{formatMoneyFromCents(o.totalCents, "en")}</strong>

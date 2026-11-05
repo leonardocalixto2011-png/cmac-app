@@ -120,7 +120,7 @@ function ProductForm({ initial, slug, onDone }: { initial: ProductInput; slug?: 
           <Area label="Images (URLs, one per line — first is the main image)" value={f.imagesCsv} onChange={(v) => set({ imagesCsv: v })} rows={3} mono />
           <Area label='Options (JSON — [] if none). Example: [{"nameEn":"Colour","nameFr":"Couleur","values":[{"value":"pink","labelEn":"Pink","labelFr":"Rose"}]}]' value={f.optionsJson} onChange={(v) => set({ optionsJson: v })} rows={4} mono />
           <div className="grid gap-3 sm:grid-cols-2">
-            <Field label="Supplier URL (CJ listing)" value={f.supplierUrl} onChange={(v) => set({ supplierUrl: v })} />
+            <Field label="Supplier URL (CJ or AliExpress listing)" value={f.supplierUrl} onChange={(v) => set({ supplierUrl: v })} />
             <Field label="Supplier SKU / variant id" value={f.supplierSku} onChange={(v) => set({ supplierSku: v })} />
           </div>
           <Field label="Internal shipping note (admin only)" value={f.shippingNote} onChange={(v) => set({ shippingNote: v })} />

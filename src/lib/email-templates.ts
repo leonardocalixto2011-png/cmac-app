@@ -1340,6 +1340,8 @@ export type OwnerOrderView = {
     sku: string | null;
     /** Product shippingNote (colour → CJ SKU / set recipe). */
     note: string | null;
+    /** Supplier listing (CJ or AliExpress). */
+    url?: string | null;
     components: { name: string; qty: number; variant: string }[];
   }[];
   subtotalCents: number;
@@ -1372,6 +1374,7 @@ export function renderOwnerOrder(o: OwnerOrderView): RenderedEmail {
 <td valign="top" style="padding:12px 8px 12px 0;${td}white-space:nowrap;"><strong>${i.qty} ×</strong></td>
 <td valign="top" style="padding:12px 8px 12px 0;${td}"><strong>${esc(i.name)}</strong>${i.options.length ? ` <span style="color:${C.faint};">(${esc(i.options.join(", "))})</span>` : ""}
 ${skuLine ? `<br><span style="font-family:'Courier New',Menlo,monospace;font-size:12px;color:${C.soft};">${esc(skuLine)}</span>` : ""}
+${i.url && !i.components.length ? `<br><a href="${esc(i.url)}" style="font-family:${SANS};font-size:12px;color:${C.terraDeep};">Supplier listing ↗</a>` : ""}
 ${i.components.length ? `<p style="margin:8px 0 0;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;font-weight:600;color:${C.terra};">Order on CJ — one order, China warehouse</p>${cj}` : ""}</td>
 <td valign="top" align="right" style="padding:12px 0;${td}white-space:nowrap;">${esc(m(i.unitCents * i.qty))}</td>
 </tr>`;
@@ -1395,7 +1398,7 @@ ${h1(`${m(o.totalCents)} · #${ref}`)}
 <td class="stack" width="50%" valign="top">${eyebrow("Ship to")}<p style="margin:0;font-family:${SANS};font-size:13px;line-height:1.7;color:${C.ink};">${o.address.length ? o.address.map(esc).join("<br>") : "—"}</p></td>
 </tr></table>
 ${button(`${siteUrl()}/admin/orders`, "Open /admin/orders", { width: 230 })}
-${para("Place the CJ order, then click Mark fulfilled with the tracking number — the customer gets the shipping email in their language.", { size: 12, color: C.faint, margin: "20px 0 0" })}`;
+${para("Place each supplier order (CJ or AliExpress, as noted on each line), then click Mark fulfilled with the tracking number — the customer gets the shipping email in their language.", { size: 12, color: C.faint, margin: "20px 0 0" })}`;
   const text = [
     subject,
     `Ref ${o.reference}`,
@@ -1404,6 +1407,7 @@ ${para("Place the CJ order, then click Mark fulfilled with the tracking number �
       `${i.qty} × ${i.name}${i.options.length ? ` (${i.options.join(", ")})` : ""} — ${m(i.unitCents * i.qty)}`,
       ...(i.sku && i.sku !== "SET" ? [`   SKU ${i.sku}`] : []),
       ...(!i.components.length && i.note ? [`   ${i.note}`] : []),
+      ...(!i.components.length && i.url ? [`   ${i.url}`] : []),
       ...(i.components.length ? ["   ORDER ON CJ (one order, China warehouse):", ...i.components.map((c) => `   - ${c.qty * i.qty} × ${c.name}: ${c.variant}`)] : []),
     ]),
     "",

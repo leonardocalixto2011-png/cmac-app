@@ -165,15 +165,26 @@ export async function getSetComponents(slug: string): Promise<SetComponentView[]
   });
 }
 
-/** Fulfilment recipes (shippingNote) of ordered items that are sets: slug → recipe. Owner-facing only. */
-export async function setRecipes(slugs: string[]): Promise<Map<string, string>> {
+export type FulfilmentNote = { isSet: boolean; note: string | null; supplierUrl: string | null };
+
+/**
+ * How to order each item from its supplier: slug → set recipe or exact option (shippingNote) and listing link.
+ * Owner-facing only.
+ */
+export async function fulfilmentNotes(slugs: string[]): Promise<Map<string, FulfilmentNote>> {
   const unique = [...new Set(slugs)];
   if (!unique.length) return new Map();
   const rows = await prisma.product.findMany({
-    where: { slug: { in: unique }, tags: { has: SET_TAG } },
-    select: { slug: true, shippingNote: true },
+    where: { slug: { in: unique } },
+    select: { slug: true, tags: true, shippingNote: true, supplierUrl: true },
   });
-  return new Map(rows.map((r) => [r.slug, r.shippingNote || "Set: see /admin/products for its contents."]));
+  return new Map(
+    rows.map((r) => {
+      const isSet = r.tags.includes(SET_TAG);
+      const note = r.shippingNote || (isSet ? "Set: see /admin/products for its contents." : null);
+      return [r.slug, { isSet, note, supplierUrl: r.supplierUrl }];
+    }),
+  );
 }
 
 export type CartLineInput = { slug: string; qty: number; selected: Record<string, string> };
