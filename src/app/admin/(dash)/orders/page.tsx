@@ -85,9 +85,16 @@ export default async function AdminOrders({ searchParams }: { searchParams: Prom
                     );
                   })}
                   <p className="mt-2 text-ink-soft">
-                    {formatMoneyFromCents(o.subtotalCents, "en")} + {o.shippingCents === 0 ? "free shipping" : formatMoneyFromCents(o.shippingCents, "en")} ={" "}
-                    <strong className="text-ink">{formatMoneyFromCents(o.totalCents, "en")}</strong>
+                    {formatMoneyFromCents(o.subtotalCents, "en")} + {o.shippingCents === 0 ? "free shipping" : formatMoneyFromCents(o.shippingCents, "en")}
+                    {o.discountCents > 0 && <> − {formatMoneyFromCents(o.discountCents, "en")} code</>} ={" "}
+                    <strong className="text-ink">{formatMoneyFromCents(Math.max(0, o.totalCents - o.discountCents), "en")}</strong>
+                    {o.discountCents > 0 && <span className="text-ink-faint"> paid</span>}
                   </p>
+                  {o.drop && (
+                    <p className="mt-1 text-[0.82rem] text-ink-soft">
+                      Convoy {o.drop.code}: place the supplier order on <strong className="text-ink">{fmtDateTime(o.drop.ordersOn, "en")}</strong>, not before.
+                    </p>
+                  )}
                   {o.trackingNumber && (
                     <p className="mt-2 text-[0.82rem]">
                       Tracking:{" "}

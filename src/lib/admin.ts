@@ -34,6 +34,7 @@ export async function adminListOrders(filter: { status?: string } = {}) {
     where: status ? { status: status as never } : { status: { not: "PENDING" } },
     orderBy: { createdAt: "desc" },
     take: 200,
+    include: { drop: { select: { code: true, ordersOn: true } } },
   });
 }
 
