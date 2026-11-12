@@ -92,7 +92,7 @@ export default async function AdminOrders({ searchParams }: { searchParams: Prom
                   </p>
                   {o.drop && (
                     <p className="mt-1 text-[0.82rem] text-ink-soft">
-                      Convoy {o.drop.code}: place the supplier order on <strong className="text-ink">{fmtDateTime(o.drop.ordersOn, "en")}</strong>, not before.
+                      Convoy {o.drop.code}: supplier order due by <strong className="text-ink">{fmtDateTime(o.drop.ordersOn, "en")}</strong>.
                     </p>
                   )}
                   {o.trackingNumber && (
