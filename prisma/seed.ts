@@ -724,14 +724,14 @@ const PRODUCTS: SeedProduct[] = [
     descriptionFr: `<p><strong>La trousse qui met fin à la chasse au coupe-ongles.</strong> Coupe-ongles, ciseaux, repousse-cuticules, lime et petits outils de soin en acier inoxydable fini or rose, chacun dans sa fente d'un étui à fermeture éclair. Elle vit dans un tiroir, un sac de sport ou un bagage de cabine.</p><h3>Mode d'emploi</h3><ol><li>Coupez, puis limez dans un seul sens.</li><li>Assouplissez les cuticules dans l'eau tiède et repoussez-les doucement. On ne coupe pas la peau vivante.</li><li>Essuyez chaque outil à l'alcool à friction avant de le ranger.</li></ol><h3>Bon à savoir</h3><ul><li>Outils de soin personnel. Tranchants : gardez hors de la portée des enfants.</li><li>En avion, mettez-la dans les bagages enregistrés (lames).</li><li>Pour des raisons d'hygiène, les retours sont acceptés seulement si l'article est non ouvert.</li></ul>${FOOTER_HYGIENE_FR}`,
     options: [],
     images: [
-      "https://cmacbeauty.ca/products/rose-gold-manicure-kit-0.jpg",
-      "https://cmacbeauty.ca/products/rose-gold-manicure-kit-1.jpg",
+      // 2026-11-13: Style A (18 pieces) only. The -0.jpg (Style C) and -1.jpg (Style B) files show other kits.
+      "https://res.cloudinary.com/dmlolrov/image/upload/c_fill,w_1200,h_1500/f_auto/q_auto/v1791561227/cmac/products/rose-gold-manicure-kit/cut-0",
       `${CF}/1612319017734.jpg`,
     ],
     supplierUrl: `${CJ}/-p-1356053588002082816.html`,
-    supplierSku: "CJJT100243006FU",
+    supplierSku: "CJJT100243004DW",
     shippingNote:
-      "CJ Household Manicure Tool Set, Colour Rose Gold + Style C = CJJT100243006FU, $1.42 USD, 170 g, 30,000 in stock. Shipping From: China. CJPacket Sensitive Pro+ to CA $8.25 alone, 6-11 days. Landed $9.67 USD alone. Confirm with CJ which style (A/B/C) matches the photo before the first order.",
+      "CJ Household Manicure Tool Set, Colour Rose Gold + Style A (18 pieces) = CJJT100243004DW, $2.09 USD, 570 g listed, 30,000 in stock (seen 2026-11-13). Style A is the kit in the site photos; Style B is 12 pieces and Style C 10 pieces, do not order those. Shipping From: China. Shipping to CA not re-quoted for the 570 g weight.",
   },
   {
     slug: "gel-manicure-gloves",
