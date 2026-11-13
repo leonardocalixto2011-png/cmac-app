@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useLocale } from "@/i18n/LocaleProvider";
 import { useCart } from "./CartProvider";
 import { Icon } from "@/components/Icon";
@@ -21,11 +22,27 @@ export function OrderThanks({
   const { t } = useLocale();
   const cart = useCart();
 
+  const router = useRouter();
+  const tries = useRef(0);
+  const paid = Boolean(purchase);
+
   useEffect(() => {
     if (found) cart.clear();
-    if (purchase) trackPurchase(reference, purchase.totalCents, purchase.items);
+    if (purchase) {
+      trackPurchase(reference, purchase.totalCents, purchase.items);
+      return;
+    }
+    // Stripe's redirect can land before its webhook marks the order paid: look again
+    // a few times so the purchase still reaches the ad pixels.
+    if (!found) return;
+    const id = setInterval(() => {
+      tries.current += 1;
+      if (tries.current > 6) clearInterval(id);
+      else router.refresh();
+    }, 2500);
+    return () => clearInterval(id);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [found]);
+  }, [found, paid]);
 
   return (
     <div className="mx-auto max-w-[520px] text-center">
