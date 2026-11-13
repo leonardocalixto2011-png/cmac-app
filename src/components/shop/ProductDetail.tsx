@@ -117,9 +117,14 @@ export function ProductDetail({ product, components = [] }: { product: ProductVi
   return (
     <div className="pdp">
       <div className="pdp__gallery">
-        <Link href="/shop" className="mb-2 inline-block py-2 text-sm text-ink-soft hover:text-terra">
+        <Link href="/shop" className="mb-2 hidden py-2 text-sm text-ink-soft hover:text-terra md:inline-block">
           {t("shop.backToShop")}
         </Link>
+        {/* Phones: a visitor from an ad sees what it is and what it costs before the photo. */}
+        <p className="mb-3 flex items-baseline justify-between gap-3 md:hidden" aria-hidden="true">
+          <span className="font-display text-[1.35rem] font-medium leading-tight text-ink">{name}</span>
+          <span className="flex-none font-ui text-[1.15rem] font-semibold tabular-nums text-ink">{formatMoneyFromCents(product.priceCents, locale)}</span>
+        </p>
         <div className="relative aspect-[4/5] overflow-hidden rounded-[var(--radius-card)] bg-warm-white" data-reveal="scale">
           {active?.kind === "video" ? (
             <video
@@ -185,12 +190,12 @@ export function ProductDetail({ product, components = [] }: { product: ProductVi
               </span>
               <Link
                 href="/glow-club"
-                className="inline-block rounded-full bg-ink px-3 py-0.5 font-ui text-[0.72rem] font-semibold uppercase tracking-[0.12em] text-cream hover:bg-terra"
+                className="hidden rounded-full bg-ink px-3 py-0.5 font-ui text-[0.72rem] font-semibold uppercase tracking-[0.12em] text-cream hover:bg-terra md:inline-block"
               >
                 {t("shop.membersFirstBadge")}
               </Link>
             </span>
-            <p className="mt-2 text-[0.85rem] text-ink-soft">{t("shop.membersFirst")}</p>
+            <p className="mt-2 hidden text-[0.85rem] text-ink-soft md:block">{t("shop.membersFirst")}</p>
           </>
         )}
 
@@ -300,6 +305,19 @@ export function ProductDetail({ product, components = [] }: { product: ProductVi
               flat: formatMoneyFromCents(SHIPPING.flatCents, locale),
               free: formatWholeDollars(SHIPPING.freeThresholdCents, locale),
             })}
+          </li>
+          <li className="flex gap-2">
+            <Icon name="check" className="mt-1 h-3.5 w-3.5 flex-none text-terra" />
+            <span>
+              {locale === "fr" ? "Ou livraison gratuite avec le Convoi, à choisir au panier. " : "Or free shipping with the Convoy, chosen in the cart. "}
+              <Link href="/convoi" className="text-terra underline underline-offset-2">
+                {locale === "fr" ? "Comment ça marche" : "How it works"}
+              </Link>
+            </span>
+          </li>
+          <li className="flex gap-2">
+            <Icon name="check" className="mt-1 h-3.5 w-3.5 flex-none text-terra" />
+            {locale === "fr" ? "Paiement sécurisé par Stripe : Visa, Mastercard, Apple Pay." : "Secure payment by Stripe: Visa, Mastercard, Apple Pay."}
           </li>
           <li className="flex gap-2">
             <Icon name="check" className="mt-1 h-3.5 w-3.5 flex-none text-terra" />

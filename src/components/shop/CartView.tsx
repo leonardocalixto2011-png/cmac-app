@@ -98,6 +98,8 @@ export function CartView({
   const freeFrom = member ? member.freeShippingFromCents : SHIPPING.freeThresholdCents;
   const baseShippingCents = cart.items.length && cart.subtotalCents < freeFrom ? SHIPPING.flatCents : 0;
   const shippingCents = pickup || joinConvoy ? 0 : baseShippingCents;
+  // A convoy whose window ends after Dec 24 cannot carry the "in time for Christmas" promise.
+  const convoyAfterChristmas = convoy ? new Date(convoy.deliveryTo) > new Date(new Date(convoy.deliveryTo).getFullYear(), 11, 24) : false;
   const totalCents = cart.subtotalCents + shippingCents;
   const remaining = freeFrom - cart.subtotalCents;
   const tierName = member ? t(`tier.${member.tier}`) : "";
@@ -176,8 +178,14 @@ export function CartView({
             </div>
           </dl>
 
+          <button type="button" onClick={pay} disabled={pending} className="btn btn--block mt-4">
+            <Icon name="arrow" />
+            {pending ? "…" : t("shop.checkout")}
+          </button>
+          <p className="mt-2 text-center text-[0.78rem] text-ink-faint">{t("shop.checkoutNote")}</p>
+
           <div className="mt-3 flex flex-col gap-1 rounded-2xl bg-warm-white px-4 py-3 text-[0.85rem] text-sage">
-            {christmas && !pickup && (
+            {christmas && !pickup && !(joinConvoy && convoyAfterChristmas) && (
               <p className="font-semibold text-ink">
                 {christmas === "order" ? t("xmas.line", { date: christmasOrderDay(locale) }) : t("xmas.late")}
                 {christmas === "late" && (
@@ -355,7 +363,7 @@ export function CartView({
                 autoComplete="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="you@email.com"
+                placeholder={locale === "fr" ? "vous@courriel.com" : "you@email.com"}
                 className="field w-full"
               />
             </label>

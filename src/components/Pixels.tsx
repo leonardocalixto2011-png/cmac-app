@@ -39,9 +39,15 @@ export function Pixels() {
       role="dialog"
       aria-live="polite"
       aria-label={fr ? "Témoins" : "Cookies"}
-      className="fixed inset-x-3 bottom-3 z-[150] mx-auto max-w-[560px] rounded-2xl bg-ink p-4 text-[0.85rem] text-cream shadow-xl md:inset-x-auto md:left-4"
+      className="fixed inset-x-3 bottom-[calc(76px+env(safe-area-inset-bottom,0px))] z-[150] mx-auto max-w-[560px] rounded-2xl bg-ink p-3 text-[0.85rem] text-cream shadow-xl md:inset-x-auto md:bottom-3 md:left-4 md:p-4"
     >
-      <p className="leading-relaxed text-sage-light">
+      <p className="text-[0.8rem] leading-snug text-sage-light md:hidden">
+        {fr ? "Témoins publicitaires pour mesurer nos pubs : d'accord?" : "Advertising cookies to measure our ads: OK?"}{" "}
+        <Link href="/privacy#cookies" className="underline underline-offset-2">
+          {fr ? "En savoir plus" : "Learn more"}
+        </Link>
+      </p>
+      <p className="hidden leading-relaxed text-sage-light md:block">
         {fr
           ? "Nous utilisons les témoins essentiels au fonctionnement du site. Avec votre accord, nous utilisons aussi des témoins publicitaires (TikTok, Meta, Pinterest) pour mesurer nos publicités et vous montrer des offres pertinentes."
           : "We use the cookies the site needs to work. With your OK, we also use advertising cookies (TikTok, Meta, Pinterest) to measure our ads and show you relevant offers."}{" "}
@@ -49,7 +55,7 @@ export function Pixels() {
           {fr ? "En savoir plus" : "Learn more"}
         </Link>
       </p>
-      <div className="mt-3 flex flex-wrap gap-2">
+      <div className="mt-2 flex flex-wrap gap-2 md:mt-3">
         <button type="button" onClick={() => save("all")} className="btn btn--sm">
           {fr ? "Tout accepter" : "Accept all"}
         </button>
