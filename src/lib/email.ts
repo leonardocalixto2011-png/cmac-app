@@ -16,8 +16,10 @@
 import type { Locale } from "@/i18n/messages";
 import { BRAND } from "./brand";
 import { prisma } from "./prisma";
-import { orderItems, type ShippingAddress } from "./shop";
-import { SET_CONTENTS } from "./sets";
+import { UNLISTED_TAG, orderItems, type ShippingAddress } from "./shop";
+import { SET_CONTENTS, SET_TAG } from "./sets";
+import { mailingAddress } from "./integrations";
+import { promoToMention } from "./promos";
 import { deliveryWindow } from "./drops";
 import { TIERS, merchandiseCents, pointsFor, tierFor } from "./loyalty-rules";
 import { C, SANS, esc, eyebrow, h1, layout, panel, transactionalFooter } from "./email-kit";
@@ -32,6 +34,7 @@ import {
   renderReferralBonus,
   renderRewardCode,
   renderShipped,
+  type CardProduct,
   type ItemView,
   type LoyaltyView,
   type OrderView,
@@ -304,9 +307,44 @@ export async function sendOrderConfirmation(d: OrderEmailData): Promise<void> {
   await sendEmail({ to: d.contactEmail, subject: m.subject, html: m.html, text: m.text, replyTo: BRAND.email });
 }
 
-export async function sendShippingNotice(d: OrderEmailData): Promise<void> {
+/** Tags that say nothing about what a product is for. */
+const GENERIC_TAGS = new Set(["new", "gift", "essentials", "sets", "limited", "christmas", "hygiene", UNLISTED_TAG]);
+
+/** Up to three active products that share a purpose tag with what was ordered, sets first. */
+async function relatedProducts(d: OrderEmailData): Promise<CardProduct[]> {
+  try {
+    const bought = new Set(allSlugs(orderItems(d.items)));
+    const rows = await prisma.product.findMany({ where: { active: true }, orderBy: { sortOrder: "asc" } });
+    const want = new Set(rows.filter((r) => bought.has(r.slug)).flatMap((r) => r.tags.filter((t) => !GENERIC_TAGS.has(t))));
+    if (!want.size) return [];
+    return rows
+      .filter((r) => !bought.has(r.slug) && !r.tags.includes(UNLISTED_TAG) && r.tags.some((t) => want.has(t)))
+      .sort((a, b) => Number(b.tags.includes(SET_TAG)) - Number(a.tags.includes(SET_TAG)) || b.priceCents - a.priceCents)
+      .slice(0, 3)
+      .map((r) => ({
+        slug: r.slug,
+        name: d.locale === "fr" ? r.nameFr : r.nameEn,
+        priceCents: r.priceCents,
+        compareAtCents: r.compareAtCents,
+        image: Array.isArray(r.images) ? ((r.images as string[])[0] ?? null) : null,
+        isSet: r.tags.includes(SET_TAG),
+      }));
+  } catch (err) {
+    console.error("[email] related products lookup failed", err);
+    return [];
+  }
+}
+
+/** The shipping notice, with suggestions only when the CASL mailing address is configured. */
+export async function shippingNoticeEmail(d: OrderEmailData) {
   const { view } = await buildOrderView(d);
-  const m = renderShipped(view);
+  const address = mailingAddress();
+  const products = address ? await relatedProducts(d) : [];
+  return renderShipped(view, address && products.length ? { products, promo: promoToMention(d.locale), mailingAddress: address } : null);
+}
+
+export async function sendShippingNotice(d: OrderEmailData): Promise<void> {
+  const m = await shippingNoticeEmail(d);
   await sendEmail({ to: d.contactEmail, subject: m.subject, html: m.html, text: m.text, replyTo: BRAND.email });
 }
 

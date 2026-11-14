@@ -140,6 +140,10 @@ export const TIPS: Record<string, Tip> = {
   "satin-sleep-mask": SATIN,
   "satin-beauty-sleep-set": SATIN,
   "satin-scrunchie": SATIN,
+  "satin-bonnet": {
+    en: "Tuck your hair in loosely, wrap the tie band and knot it at the front. Wash it cold, by hand or in a laundry bag, and let it air-dry.",
+    fr: "Rentrez vos cheveux sans les serrer, enroulez le ruban et nouez-le à l'avant. Lavage à l'eau froide, à la main ou dans un sac à lessive, puis séchage à l'air.",
+  },
   "spa-headband": {
     en: "Keep it by the sink — slipping it on becomes the first gesture of your ritual.",
     fr: "Gardez-le près du lavabo : l'enfiler deviendra le premier geste de votre rituel.",
@@ -583,7 +587,7 @@ export function carrierFromUrl(url: string | null | undefined): string | null {
     return null;
   }
   if (host.includes("canadapost") || host.includes("postescanada")) return "Canada Post";
-  if (host.includes("17track")) return "17TRACK";
+  if (host.includes("17track")) return null; // a tracking site, not a carrier
   if (host.includes("cjpacket") || host.includes("cjdropshipping")) return "CJPacket";
   if (host.includes("ups.")) return "UPS";
   if (host.includes("fedex")) return "FedEx";
@@ -593,7 +597,19 @@ export function carrierFromUrl(url: string | null | undefined): string | null {
   return host.replace(/^www\./, "");
 }
 
-export function renderShipped(o: OrderView): RenderedEmail {
+/**
+ * Optional "goes with your order" block for the shipping notice. It makes the email
+ * partly commercial (CASL), so it is only passed when a mailing address is configured,
+ * and the footer then carries that address and a way to stop the suggestions.
+ */
+export type ShippedExtras = {
+  products: CardProduct[];
+  /** A code the customer can really use: live now, or starting within two weeks. */
+  promo: { code: string; percentOff: number; startsLabel: string | null; endsLabel: string } | null;
+  mailingAddress: string;
+};
+
+export function renderShipped(o: OrderView, extras: ShippedExtras | null = null): RenderedEmail {
   const l = o.locale;
   const ref = shortRef(o.reference);
   const first = firstNameOf(o.name);
@@ -635,9 +651,39 @@ export function renderShipped(o: OrderView): RenderedEmail {
   const items = itemsBlock(o.items, l, { prices: false });
   const care = tipsBlock(o.items, l, T.careTitle, T.careIntro);
   const sig = signOff(l);
-  const foot = transactionalFooter(l, "shipping-notice");
+  const baseFoot = transactionalFooter(l, "shipping-notice");
   const hello = greeting(o.name, l);
   const num = o.trackingNumber ?? "";
+  const show = extras && extras.products.length > 0 ? extras : null;
+  type Promo = NonNullable<ShippedExtras["promo"]>;
+  const X = fr(l)
+    ? {
+        title: "En attendant votre colis",
+        lead: "Quelques pièces qui vont bien avec ce que vous avez commandé.",
+        promoNow: (p: Promo) => `Bon à savoir : ${p.endsLabel}, le code ${p.code} retire ${p.percentOff} % de tout le panier au paiement.`,
+        promoSoon: (p: Promo) => `Bon à savoir : du ${p.startsLabel} ${p.endsLabel}, le code ${p.code} retire ${p.percentOff} % de tout le panier au paiement.`,
+        why: "Ce courriel de suivi contient des suggestions de CMAC Beauty parce que vous avez commandé sur cmacbeauty.ca.",
+        stop: "Ne plus recevoir de suggestions",
+        stopSubject: "Plus de suggestions",
+      }
+    : {
+        title: "While it's on its way",
+        lead: "A few pieces that go well with what you ordered.",
+        promoNow: (p: Promo) => `Good to know: ${p.endsLabel}, code ${p.code} takes ${p.percentOff}% off your whole cart at checkout.`,
+        promoSoon: (p: Promo) => `Good to know: from ${p.startsLabel} ${p.endsLabel}, code ${p.code} takes ${p.percentOff}% off your whole cart at checkout.`,
+        why: "This shipping email includes suggestions from CMAC Beauty because you ordered at cmacbeauty.ca.",
+        stop: "Stop suggestions",
+        stopSubject: "No more suggestions",
+      };
+  const promoLine = show?.promo ? (show.promo.startsLabel ? X.promoSoon(show.promo) : X.promoNow(show.promo)) : "";
+  const cards = show ? productCards(show.products, l, "shipping-notice", X.title) : { html: "", text: "" };
+  const stopUrl = `mailto:${BRAND.email}?subject=${encodeURIComponent(X.stopSubject)}`;
+  const foot: Block = show
+    ? {
+        html: `${baseFoot.html}<br><br>${esc(X.why)}<br>${esc(BRAND.name)} · ${esc(show.mailingAddress)}<br><a href="${esc(stopUrl)}" style="color:${C.soft};text-decoration:underline;">${esc(X.stop)}</a>`,
+        text: [baseFoot.text, X.why, `${BRAND.name} · ${show.mailingAddress}`, `${X.stop}: ${stopUrl}`].join("\n"),
+      }
+    : baseFoot;
   const track = panel(
     `${eyebrow(T.tracking)}
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 20px;"><tr>
@@ -659,6 +705,7 @@ ${items.html}
 ${hasMultipleParcels(o.items) ? para(esc(T.separate), { size: 13, margin: "22px 0 0" }) : ""}
 ${rule("30px 0 30px")}
 ${care.html}
+${show ? `${rule("30px 0 30px")}${cards.html}${para(esc(X.lead), { size: 14, margin: "18px 0 0" })}${promoLine ? para(`<strong style="color:${C.ink};">${esc(promoLine)}</strong>`, { size: 14, margin: "10px 0 0" }) : ""}` : ""}
 ${spacer(4)}
 ${sig.html}`;
   const html = layout({ locale: l, title: T.subject, preheader: T.preheader, body, footer: foot.html });
@@ -678,6 +725,7 @@ ${sig.html}`;
     ...(hasMultipleParcels(o.items) ? ["", T.separate] : []),
     "",
     care.text,
+    ...(show ? ["", cards.text, X.lead, ...(promoLine ? [promoLine] : [])] : []),
     "",
     sig.text,
     "",

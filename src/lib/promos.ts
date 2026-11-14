@@ -160,6 +160,30 @@ export function activePromo(now: Date = new Date()): Promo | null {
   return live.sort((a, b) => Date.parse(a.endsAt) - Date.parse(b.endsAt))[0] ?? null;
 }
 
+/**
+ * A code worth telling a customer about: the one live now, or the next one starting
+ * within `withinDays`. `endsLabel` is the last day of that code across all its entries.
+ */
+export function promoToMention(
+  locale: Locale,
+  now: Date = new Date(),
+  withinDays = 14,
+): { code: string; percentOff: number; startsLabel: string | null; endsLabel: string } | null {
+  const t = now.getTime();
+  const coded = PROMOS.filter((p) => p.code && Date.parse(p.endsAt) > t);
+  const live = coded.find((p) => Date.parse(p.startsAt) <= t);
+  const next = coded
+    .filter((p) => Date.parse(p.startsAt) > t && Date.parse(p.startsAt) - t <= withinDays * 864e5)
+    .sort((a, b) => Date.parse(a.startsAt) - Date.parse(b.startsAt))[0];
+  const pick = live ?? next;
+  if (!pick || !pick.code) return null;
+  const last = coded.filter((p) => p.code === pick.code).sort((a, b) => Date.parse(b.endsAt) - Date.parse(a.endsAt))[0];
+  const startsLabel = live
+    ? null
+    : new Date(Date.parse(pick.startsAt)).toLocaleDateString(locale === "fr" ? "fr-CA" : "en-CA", { month: "long", day: "numeric", timeZone: "America/Toronto" });
+  return { code: pick.code, percentOff: pick.percentOff, startsLabel, endsLabel: promoEndLabel(last, locale) };
+}
+
 export function promoText(p: Promo, locale: Locale) {
   return locale === "fr" ? p.fr : p.en;
 }
