@@ -588,6 +588,7 @@ export function carrierFromUrl(url: string | null | undefined): string | null {
   }
   if (host.includes("canadapost") || host.includes("postescanada")) return "Canada Post";
   if (host.includes("17track")) return null; // a tracking site, not a carrier
+  if (host.includes("cainiao")) return "Cainiao";
   if (host.includes("cjpacket") || host.includes("cjdropshipping")) return "CJPacket";
   if (host.includes("ups.")) return "UPS";
   if (host.includes("fedex")) return "FedEx";
